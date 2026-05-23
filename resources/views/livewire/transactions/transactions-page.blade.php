@@ -179,6 +179,9 @@
                             </td>
                         </tr>
                     @endforelse
+                    <button x-data x-on:click="$dispatch('open-pos-modal')" class="...">
+                        Buka Modal Transaksi
+                    </button>
                 </tbody>
             </table>
         </div>
@@ -247,4 +250,5 @@
             </div>
         </div>
     </div>
+    <x-pos-modal />
 </div>
