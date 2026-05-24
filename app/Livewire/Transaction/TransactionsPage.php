@@ -128,6 +128,7 @@ class TransactionsPage extends Component
 
         $this->fromDate = $from->format('Y-m-d');
         $this->toDate = $to->format('Y-m-d');
+
         $this->rangePreset = $preset;
         $this->resetPage();
     }

@@ -11,7 +11,7 @@
     <x-transaction.history-metrics :stats="$stats" />
 
     <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div class="custom-scrollbar overflow-x-auto border-b border-gray-200 px-5 py-4 dark:border-gray-800">
+        <div class="custom-scrollbar overflow-x-auto border-b border-gray-200 px-3 py-4 dark:border-gray-800">
             <div class="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
                 <div class="relative flex-1 xl:flex-none">
                     <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
@@ -33,8 +33,9 @@
                             class="shadow-theme-xs h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                             <option value="">Semua Status</option>
                             @foreach ($paymentStatusOptions as $status)
-                                <option value="{{ $status }}">
-                                    {{ \App\Helpers\DataLabelHelper::enum($status, 'payment_status') }}</option>
+                            <option value="{{ $status }}">
+                                {{ \App\Helpers\DataLabelHelper::enum($status, 'payment_status') }}
+                            </option>
                             @endforeach
                         </select>
 
@@ -42,8 +43,9 @@
                             class="shadow-theme-xs h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                             <option value="">Semua Metode</option>
                             @foreach ($paymentMethodOptions as $method)
-                                <option value="{{ $method }}">
-                                    {{ \App\Helpers\DataLabelHelper::enum($method, 'payment_method') }}</option>
+                            <option value="{{ $method }}">
+                                {{ \App\Helpers\DataLabelHelper::enum($method, 'payment_method') }}
+                            </option>
                             @endforeach
                         </select>
 
@@ -51,8 +53,8 @@
                             class="shadow-theme-xs h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                             <option value="">Semua Tipe</option>
                             @foreach ($orderTypeOptions as $type)
-                                <option value="{{ $type }}">{{ $type === 'dine_in' ? 'Dine in' : 'Take away' }}
-                                </option>
+                            <option value="{{ $type }}">{{ $type === 'dine_in' ? 'Dine in' : 'Take away' }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -61,127 +63,97 @@
         </div>
 
         @php
-            $canActions =
-                (bool) (auth()->user()?->can('transactions.details') || auth()->user()?->can('transactions.print'));
+        $canActions =
+        (bool) (auth()->user()?->can('transactions.details') || auth()->user()?->can('transactions.print'));
         @endphp
-        <div class="custom-scrollbar overflow-x-auto">
+        <div class="custom-scrollbar overflow-x-auto px-3">
             <table class="w-full table-auto">
                 <thead>
                     <tr class="border-b border-gray-200 dark:divide-gray-800 dark:border-gray-800">
-                        <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                            <button type="button" wire:click="sortBy('created_at')" class="flex items-center gap-2">
-                                Tanggal
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Transaction Number</th>
+                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            <button type="button" wire:click="sortBy('created_at')" class="flex w-full justify-center items-center gap-2">
+                                Date
                             </button>
                         </th>
-                        <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Kode</th>
-                        <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Pelanggan
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Customer
                         </th>
-                        <th class="px-5 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Tipe</th>
-                        <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Pembayaran
-                        </th>
-                        <th class="px-5 py-4 text-right text-xs font-medium text-gray-500 dark:text-gray-400">
+                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Table</th>
+                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Visit Purpose</th>
+                        <th class="py-2 px-2 text-right text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
                             <button type="button" wire:click="sortBy('total')"
                                 class="ml-auto flex items-center justify-end gap-2">
-                                Total
+                                Grand Total
                             </button>
                         </th>
-                        @if ($canActions)
-                            <th class="px-5 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Aksi
-                            </th>
-                        @endif
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Status</th>
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment Method</th>
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment Time</th>
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment By</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     @forelse ($transactions as $transaction)
-                        @php
-                            $customer = (string) ($transaction->member?->name ?? ($transaction->name ?? '-'));
-                            $orderType = (string) ($transaction->order_type ?? '');
-                            $paymentMethodKey = (string) ($transaction->payment_method ?? '');
-                            $paymentMethodLabel = \App\Helpers\DataLabelHelper::enum(
-                                $paymentMethodKey,
-                                'payment_method',
-                            );
-                            $paymentStatusKey = (string) ($transaction->payment_status ?? '');
-                            $paymentStatusLabel = \App\Helpers\DataLabelHelper::enum(
-                                $paymentStatusKey,
-                                'payment_status',
-                            );
-                        @endphp
-                        <tr>
-                            <td class="px-5 py-4">
-                                <div class="space-y-1">
-                                    <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                        {{ optional($transaction->created_at)->format('d M Y') }}</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        {{ optional($transaction->created_at)->format('H:i') }}</p>
-                                </div>
-                            </td>
-                            <td class="px-5 py-4">
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    {{ $transaction->code }}
+                    @php
+                    $customer = (string) ($transaction->member?->name ?? ($transaction->name ?? '-'));
+                    $orderType = (string) ($transaction->order_type ?? '');
+                    $paymentMethodKey = (string) ($transaction->payment_method ?? '');
+                    $paymentMethodLabel = \App\Helpers\DataLabelHelper::enum(
+                    $paymentMethodKey,
+                    'payment_method',
+                    );
+                    $paymentStatusKey = (string) ($transaction->payment_status ?? '');
+                    $paymentStatusLabel = \App\Helpers\DataLabelHelper::enum(
+                    $paymentStatusKey,
+                    'payment_status',
+                    );
+                    @endphp
+                    <tr class="hover:bg-gray-200">
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p>
+                                {{ $transaction->code }}
+                            </p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                            <div class="space-y-1">
+                                <p>
+                                    {{ optional($transaction->created_at)->format('d-m-Y') }}
                                 </p>
-                            </td>
-                            <td class="px-5 py-4">
-                                <p class="text-sm text-gray-800 dark:text-white/90">{{ $customer }}</p>
-                                @can('transactions.pii.view')
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        {{ $transaction->phone ?? $transaction->email }}</p>
-                                @else
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">-</p>
-                                @endcan
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-center">
-                                <span
-                                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-gray-50 text-gray-600 dark:bg-gray-500/15 dark:text-gray-400">
-                                    {{ $orderType === 'dine_in' ? 'Dine in' : 'Take away' }}
-                                </span>
-                            </td>
-                            <td class="px-5 py-4">
-                                <div class="space-y-1">
-                                    <p class="text-sm text-gray-800 dark:text-white/90">{{ $paymentMethodLabel }}</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ $paymentStatusLabel }}</p>
-                                    @if ((int) ($transaction->manual_discount_amount ?? 0) > 0)
-                                        <p class="text-xs font-semibold text-error-700 dark:text-error-400">Diskon
-                                            Manual</p>
-                                    @endif
-                                </div>
-                            </td>
-
-                            <td class="px-5 py-4 text-right">
-                                <p class="text-sm font-semibold text-gray-800 dark:text-white/90">
-                                    Rp{{ number_format((int) $transaction->total, 0, ',', '.') }}</p>
-                            </td>
-                            @if ($canActions)
-                                <td class="px-5 py-4 text-center">
-                                    <div class="inline-flex items-center gap-2">
-                                        @can('transactions.print')
-                                            <button type="button"
-                                                wire:click="printTransaction({{ (int) $transaction->id }})"
-                                                class="shadow-theme-xs inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
-                                                Cetak Struk
-                                            </button>
-                                        @endcan
-                                        @can('transactions.details')
-                                            <a href="{{ route('transactions.show', $transaction) }}" wire:navigate
-                                                class="shadow-theme-xs inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
-                                                Detail
-                                            </a>
-                                        @endcan
-                                    </div>
-                                </td>
-                            @endif
-                        </tr>
+                            </div>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p>{{ $customer }}</p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                            <p>{{ $transaction->dining_table_id ? $transaction->dining_table_id : 'Quick Service' }}</p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                            <p>{{ $orderType === 'dine_in' ? 'Dine in' : 'Take away' }}</p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-right">
+                            <p">Rp{{ number_format((int) $transaction->total, 0, ',', '.') }}</p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p>{{ $paymentStatusLabel }}</p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p>{{ $paymentMethodLabel }}</p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p>{{ $transaction->paid_at ? $transaction->paid_at->format('H:i:s') : '-' }}</p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p>Kasir</p>
+                        </td>
+                    </tr>
                     @empty
-                        <tr>
-                            <td colspan="{{ $canActions ? 10 : 9 }}" class="px-5 py-10">
-                                <p class="text-center text-sm text-gray-500 dark:text-gray-400">Transaksi tidak
-                                    ditemukan.</p>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td colspan="{{ $canActions ? 10 : 9 }}" class="px-5 py-10">
+                            <p class="text-center text-sm text-gray-500 dark:text-gray-400">Transaksi tidak
+                                ditemukan.</p>
+                        </td>
+                    </tr>
                     @endforelse
-                    <button x-data x-on:click="$dispatch('open-pos-modal')" class="...">
-                        Buka Modal Transaksi
-                    </button>
                 </tbody>
             </table>
         </div>
@@ -213,42 +185,41 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                         @forelse($deletedItemLogs as $log)
-                            <tr>
-                                <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                                    {{ $log->created_at->format('d/m/Y H:i') }}
-                                </td>
-                                <td
-                                    class="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-800 dark:text-white">
-                                    {{ $log->causer->name ?? 'System' }}
-                                </td>
-                                <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                    {{ $log->getExtraProperty('product') }}
-                                </td>
-                                <td class="px-5 py-4 text-center">
-                                    <div class="inline-flex items-center gap-2">
-                                        <span
-                                            class="text-gray-400 line-through">{{ $log->getExtraProperty('old_qty') }}</span>
-                                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                        </svg>
-                                        <span class="font-black text-orange-600 dark:text-orange-400 text-lg">
-                                            {{ $log->getExtraProperty('new_qty') }}
-                                        </span>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400 text-center">
+                                {{ $log->created_at->format('d/m/Y H:i') }}
+                            </td>
+                            <td
+                                class="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-800 dark:text-white">
+                                {{ $log->causer->name ?? 'System' }}
+                            </td>
+                            <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
+                                {{ $log->getExtraProperty('product') }}
+                            </td>
+                            <td class="px-5 py-4 text-center">
+                                <div class="inline-flex items-center gap-2">
+                                    <span
+                                        class="text-gray-400 line-through">{{ $log->getExtraProperty('old_qty') }}</span>
+                                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                    <span class="font-black text-orange-600 dark:text-orange-400 text-lg">
+                                        {{ $log->getExtraProperty('new_qty') }}
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="4" class="px-5 py-10 text-center text-gray-500">Tidak ada item yang
-                                    dikurangi atau dihapus.</td>
-                            </tr>
+                        <tr>
+                            <td colspan="4" class="px-5 py-10 text-center text-gray-500">Tidak ada item yang
+                                dikurangi atau dihapus.</td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <x-pos-modal />
 </div>

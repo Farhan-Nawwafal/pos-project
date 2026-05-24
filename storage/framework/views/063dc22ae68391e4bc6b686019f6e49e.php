@@ -52,7 +52,7 @@
 <?php endif; ?>
 
     <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div class="custom-scrollbar overflow-x-auto border-b border-gray-200 px-5 py-4 dark:border-gray-800">
+        <div class="custom-scrollbar overflow-x-auto border-b border-gray-200 px-3 py-4 dark:border-gray-800">
             <div class="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
                 <div class="relative flex-1 xl:flex-none">
                     <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
@@ -74,8 +74,10 @@
                             class="shadow-theme-xs h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                             <option value="">Semua Status</option>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $paymentStatusOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                                <option value="<?php echo e($status); ?>">
-                                    <?php echo e(\App\Helpers\DataLabelHelper::enum($status, 'payment_status')); ?></option>
+                            <option value="<?php echo e($status); ?>">
+                                <?php echo e(\App\Helpers\DataLabelHelper::enum($status, 'payment_status')); ?>
+
+                            </option>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                         </select>
 
@@ -83,8 +85,10 @@
                             class="shadow-theme-xs h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                             <option value="">Semua Metode</option>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $paymentMethodOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $method): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                                <option value="<?php echo e($method); ?>">
-                                    <?php echo e(\App\Helpers\DataLabelHelper::enum($method, 'payment_method')); ?></option>
+                            <option value="<?php echo e($method); ?>">
+                                <?php echo e(\App\Helpers\DataLabelHelper::enum($method, 'payment_method')); ?>
+
+                            </option>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                         </select>
 
@@ -92,9 +96,9 @@
                             class="shadow-theme-xs h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                             <option value="">Semua Tipe</option>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $orderTypeOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                                <option value="<?php echo e($type); ?>"><?php echo e($type === 'dine_in' ? 'Dine in' : 'Take away'); ?>
+                            <option value="<?php echo e($type); ?>"><?php echo e($type === 'dine_in' ? 'Dine in' : 'Take away'); ?>
 
-                                </option>
+                            </option>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                         </select>
                     </div>
@@ -103,125 +107,98 @@
         </div>
 
         <?php
-            $canActions =
-                (bool) (auth()->user()?->can('transactions.details') || auth()->user()?->can('transactions.print'));
+        $canActions =
+        (bool) (auth()->user()?->can('transactions.details') || auth()->user()?->can('transactions.print'));
         ?>
-        <div class="custom-scrollbar overflow-x-auto">
+        <div class="custom-scrollbar overflow-x-auto px-3">
             <table class="w-full table-auto">
                 <thead>
                     <tr class="border-b border-gray-200 dark:divide-gray-800 dark:border-gray-800">
-                        <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                            <button type="button" wire:click="sortBy('created_at')" class="flex items-center gap-2">
-                                Tanggal
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Transaction Number</th>
+                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            <button type="button" wire:click="sortBy('created_at')" class="flex w-full justify-center items-center gap-2">
+                                Date
                             </button>
                         </th>
-                        <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Kode</th>
-                        <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Pelanggan
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Customer
                         </th>
-                        <th class="px-5 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Tipe</th>
-                        <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Pembayaran
-                        </th>
-                        <th class="px-5 py-4 text-right text-xs font-medium text-gray-500 dark:text-gray-400">
+                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Table</th>
+                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Visit Purpose</th>
+                        <th class="py-2 px-2 text-right text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
                             <button type="button" wire:click="sortBy('total')"
                                 class="ml-auto flex items-center justify-end gap-2">
-                                Total
+                                Grand Total
                             </button>
                         </th>
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($canActions): ?>
-                            <th class="px-5 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Aksi
-                            </th>
-                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Status</th>
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment Method</th>
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment Time</th>
+                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment By</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $transactions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $transaction): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                        <?php
-                            $customer = (string) ($transaction->member?->name ?? ($transaction->name ?? '-'));
-                            $orderType = (string) ($transaction->order_type ?? '');
-                            $paymentMethodKey = (string) ($transaction->payment_method ?? '');
-                            $paymentMethodLabel = \App\Helpers\DataLabelHelper::enum(
-                                $paymentMethodKey,
-                                'payment_method',
-                            );
-                            $paymentStatusKey = (string) ($transaction->payment_status ?? '');
-                            $paymentStatusLabel = \App\Helpers\DataLabelHelper::enum(
-                                $paymentStatusKey,
-                                'payment_status',
-                            );
-                        ?>
-                        <tr>
-                            <td class="px-5 py-4">
-                                <div class="space-y-1">
-                                    <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                        <?php echo e(optional($transaction->created_at)->format('d M Y')); ?></p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        <?php echo e(optional($transaction->created_at)->format('H:i')); ?></p>
-                                </div>
-                            </td>
-                            <td class="px-5 py-4">
-                                <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                    <?php echo e($transaction->code); ?>
+                    <?php
+                    $customer = (string) ($transaction->member?->name ?? ($transaction->name ?? '-'));
+                    $orderType = (string) ($transaction->order_type ?? '');
+                    $paymentMethodKey = (string) ($transaction->payment_method ?? '');
+                    $paymentMethodLabel = \App\Helpers\DataLabelHelper::enum(
+                    $paymentMethodKey,
+                    'payment_method',
+                    );
+                    $paymentStatusKey = (string) ($transaction->payment_status ?? '');
+                    $paymentStatusLabel = \App\Helpers\DataLabelHelper::enum(
+                    $paymentStatusKey,
+                    'payment_status',
+                    );
+                    ?>
+                    <tr class="hover:bg-gray-200">
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p>
+                                <?php echo e($transaction->code); ?>
+
+                            </p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                            <div class="space-y-1">
+                                <p>
+                                    <?php echo e(optional($transaction->created_at)->format('d-m-Y')); ?>
 
                                 </p>
-                            </td>
-                            <td class="px-5 py-4">
-                                <p class="text-sm text-gray-800 dark:text-white/90"><?php echo e($customer); ?></p>
-                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('transactions.pii.view')): ?>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                                        <?php echo e($transaction->phone ?? $transaction->email); ?></p>
-                                <?php else: ?>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">-</p>
-                                <?php endif; ?>
-                            </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-center">
-                                <span
-                                    class="rounded-full px-2 py-0.5 text-theme-xs font-medium bg-gray-50 text-gray-600 dark:bg-gray-500/15 dark:text-gray-400">
-                                    <?php echo e($orderType === 'dine_in' ? 'Dine in' : 'Take away'); ?>
-
-                                </span>
-                            </td>
-                            <td class="px-5 py-4">
-                                <div class="space-y-1">
-                                    <p class="text-sm text-gray-800 dark:text-white/90"><?php echo e($paymentMethodLabel); ?></p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400"><?php echo e($paymentStatusLabel); ?></p>
-                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if((int) ($transaction->manual_discount_amount ?? 0) > 0): ?>
-                                        <p class="text-xs font-semibold text-error-700 dark:text-error-400">Diskon
-                                            Manual</p>
-                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                                </div>
-                            </td>
-
-                            <td class="px-5 py-4 text-right">
-                                <p class="text-sm font-semibold text-gray-800 dark:text-white/90">
-                                    Rp<?php echo e(number_format((int) $transaction->total, 0, ',', '.')); ?></p>
-                            </td>
-                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($canActions): ?>
-                                <td class="px-5 py-4 text-center">
-                                    <div class="inline-flex items-center gap-2">
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('transactions.print')): ?>
-                                            <button type="button"
-                                                wire:click="printTransaction(<?php echo e((int) $transaction->id); ?>)"
-                                                class="shadow-theme-xs inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
-                                                Cetak Struk
-                                            </button>
-                                        <?php endif; ?>
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('transactions.details')): ?>
-                                            <a href="<?php echo e(route('transactions.show', $transaction)); ?>" wire:navigate
-                                                class="shadow-theme-xs inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
-                                                Detail
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
-                                </td>
-                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                        </tr>
+                            </div>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p><?php echo e($customer); ?></p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                            <p><?php echo e($transaction->dining_table_id ? $transaction->dining_table_id : 'Quick Service'); ?></p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                            <p><?php echo e($orderType === 'dine_in' ? 'Dine in' : 'Take away'); ?></p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-right">
+                            <p">Rp<?php echo e(number_format((int) $transaction->total, 0, ',', '.')); ?></p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p><?php echo e($paymentStatusLabel); ?></p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p><?php echo e($paymentMethodLabel); ?></p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p><?php echo e($transaction->paid_at ? $transaction->paid_at->format('H:i:s') : '-'); ?></p>
+                        </td>
+                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                            <p>Kasir</p>
+                        </td>
+                    </tr>
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-                        <tr>
-                            <td colspan="<?php echo e($canActions ? 10 : 9); ?>" class="px-5 py-10">
-                                <p class="text-center text-sm text-gray-500 dark:text-gray-400">Transaksi tidak
-                                    ditemukan.</p>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td colspan="<?php echo e($canActions ? 10 : 9); ?>" class="px-5 py-10">
+                            <p class="text-center text-sm text-gray-500 dark:text-gray-400">Transaksi tidak
+                                ditemukan.</p>
+                        </td>
+                    </tr>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </tbody>
             </table>
@@ -276,46 +253,45 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $deletedItemLogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                            <tr>
-                                <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                                    <?php echo e($log->created_at->format('d/m/Y H:i')); ?>
+                        <tr>
+                            <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400 text-center">
+                                <?php echo e($log->created_at->format('d/m/Y H:i')); ?>
 
-                                </td>
-                                <td
-                                    class="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-800 dark:text-white">
-                                    <?php echo e($log->causer->name ?? 'System'); ?>
+                            </td>
+                            <td
+                                class="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-800 dark:text-white">
+                                <?php echo e($log->causer->name ?? 'System'); ?>
 
-                                </td>
-                                <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                    <?php echo e($log->getExtraProperty('product')); ?>
+                            </td>
+                            <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
+                                <?php echo e($log->getExtraProperty('product')); ?>
 
-                                </td>
-                                <td class="px-5 py-4 text-center">
-                                    <div class="inline-flex items-center gap-2">
-                                        <span
-                                            class="text-gray-400 line-through"><?php echo e($log->getExtraProperty('old_qty')); ?></span>
-                                        <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                        </svg>
-                                        <span class="font-black text-orange-600 dark:text-orange-400 text-lg">
-                                            <?php echo e($log->getExtraProperty('new_qty')); ?>
+                            </td>
+                            <td class="px-5 py-4 text-center">
+                                <div class="inline-flex items-center gap-2">
+                                    <span
+                                        class="text-gray-400 line-through"><?php echo e($log->getExtraProperty('old_qty')); ?></span>
+                                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                    </svg>
+                                    <span class="font-black text-orange-600 dark:text-orange-400 text-lg">
+                                        <?php echo e($log->getExtraProperty('new_qty')); ?>
 
-                                        </span>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-                            <tr>
-                                <td colspan="4" class="px-5 py-10 text-center text-gray-500">Tidak ada item yang
-                                    dikurangi atau dihapus.</td>
-                            </tr>
+                        <tr>
+                            <td colspan="4" class="px-5 py-10 text-center text-gray-500">Tidak ada item yang
+                                dikurangi atau dihapus.</td>
+                        </tr>
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-</div>
-<?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/transactions/transactions-page.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/transactions/transactions-page.blade.php ENDPATH**/ ?>
