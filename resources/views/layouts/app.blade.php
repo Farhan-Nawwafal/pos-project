@@ -167,7 +167,7 @@ window.addEventListener('resize', checkResponsive);" class="antialiased">
 
             @include('layouts.app-header')
 
-            <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+            <div class="md:p-6">
                 {{ $slot }}
             </div>
         </div>

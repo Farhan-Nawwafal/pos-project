@@ -235,7 +235,7 @@ unset($__split);
 
             <?php echo $__env->make('layouts.app-header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-            <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+            <div class="md:p-6">
                 <?php echo e($slot); ?>
 
             </div>
