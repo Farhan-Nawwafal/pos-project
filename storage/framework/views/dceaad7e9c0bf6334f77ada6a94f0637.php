@@ -1,4 +1,4 @@
-<div class="space-y-2">
+<div>
     
     <div>
         <?php if (isset($component)) { $__componentOriginal7a8ebae80cb620ff53481da70e35e7fd = $component; } ?>

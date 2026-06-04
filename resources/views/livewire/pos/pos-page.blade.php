@@ -3,19 +3,19 @@
     @if ($orderType === 'dine_in' && !$selectedTableId)
 
         {{-- HEADER SELECTION --}}
-        <div class="flex flex-wrap items-center gap-2 mb-4 flex-shrink-0">
+        <div class="flex flex-wrap items-center gap-2 mb-2 flex-shrink-0">
             <button type="button" wire:click="chooseOrderType('take_away')"
-                class="px-4 py-2 text-lg font-bold bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+                class="px-13 py-2 text-xs font-bold bg-brand-500 border border-gray-300 rounded-xs text-white  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
                 Quick Service
             </button>
             <button type="button" wire:click="$set('tableRange', '1-50')" @class([
-                'px-4 py-2 text-lg font-bold rounded-lg transition-all',
+                'px-13 py-2 text-xs font-bold rounded-xs transition-all',
                 'bg-brand-500 text-white border border-brand-600' => $tableRange === '1-50',
                 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300' =>
                     $tableRange !== '1-50',
             ])>1 - 50</button>
             <button type="button" wire:click="$set('tableRange', '51-100')" @class([
-                'px-4 py-2 text-lg font-bold rounded-lg transition-all',
+                'px-13 py-2 text-xs font-bold rounded-xs transition-all',
                 'bg-brand-500 text-white border border-brand-600' =>
                     $tableRange === '51-100',
                 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300' =>
@@ -25,11 +25,11 @@
         </div>
 
         <div
-            class="flex flex-col flex-1 min-h-0 bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-800 shadow-sm">
+            class="flex flex-col flex-1 min-h-0 bg-white dark:bg-gray-900 p-15 border border-gray-200 dark:border-gray-800 shadow-sm">
 
             {{-- KONTEN UTAMA (LIST TABLE) --}}
             <div class="flex-1 min-h-0 overflow-y-auto">
-                <div class="grid grid-cols-10 gap-3 md:gap-4 lg:gap-5 xl:gap-6">
+                <div class="grid grid-cols-10 gap-3 md:gap-3 lg:gap-14 xl:gap-18">
                     @foreach ($this->tables as $t)
                         @php
                             $tableNumber = (int) filter_var($t['label'], FILTER_SANITIZE_NUMBER_INT);
@@ -60,7 +60,7 @@
                                             }
                                         }" @endif
                                 @class([
-                                    'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-sm aspect-[4/3]',
+                                    'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-[4/3]',
                                     'bg-[#1086e1] border-[#0f75c7] hover:bg-[#0f75c7] text-white' =>
                                         $status === 'available',
                                     'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' =>
@@ -84,34 +84,34 @@
             </div>
 
             {{-- 3. FOOTER LEGEND --}}
-            <div class="flex-shrink-0 pt-4 border-t border-gray-200 dark:border-gray-800">
-                <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <div class="flex-shrink-0 pt-3 border-t border-gray-200 dark:border-gray-800 mt-10">
+                 <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 text-xs font-bold bg-yellow-400 text-white "> > 0 minute</span>
+                        <span class="px-2.5 py-1 text-xs font-bold bg-red-600 text-white "> > 0 minute</span>
+                     <div class="flex flex-wrap items-center gap-x-45 gap-y-3">
                     {{-- Waktu --}}
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-1 text-xs font-bold bg-yellow-400 text-white rounded-md">>0 minute</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="px-2.5 py-1 text-xs font-bold bg-red-600 text-white rounded-md">>0 minute</span>
-                    </div>
-
+                   
                     {{-- Keterangan Status --}}
-                    <div class="flex items-center gap-1.5">
-                        <div class="w-4 h-4 bg-[#1086e1] rounded border border-[#0f75c7]"></div>
+                    <div class="flex items-center gap-4 pl-20">
+                        <div class="w-4 h-4 bg-[#1086e1]  border-[#0f75c7]"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Available</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <div class="w-4 h-4 bg-yellow-400 rounded border border-yellow-500"></div>
+                        <div class="w-4 h-4 bg-yellow-400  border-yellow-500"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Booked</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <div class="w-4 h-4 bg-red-600 rounded border border-red-700"></div>
+                        <div class="w-4 h-4 bg-red-600  border-red-700"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Occupied</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <div class="w-4 h-4 bg-green-500 rounded border border-green-600"></div>
+                        <div class="w-4 h-4 bg-green-500  border-green-600"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Billed</span>
                     </div>
                 </div>
+                </div>
+                   
+               
             </div>
         </div>
 
@@ -124,15 +124,7 @@
                 <input wire:model.live.debounce.300ms="search" type="text" placeholder="Information will be printed"
                 class="w-full border border-gray-300 bg-white text-sm dark:bg-gray-900 dark:text-white p-2"
                 />
-                <img
-                    src="/assets/icons/arrow-left-icon.svg"
-                />
-                <img
-                    src="/assets/icons/arrow-left-icon.svg"
-                />
-                <img
-                    src="/assets/icons/arrow-left-icon.svg"
-                />
+                
             </div>
             <div>
 
@@ -142,7 +134,7 @@
         <div class="grid grid-cols-1 gap-6 p-2 md:grid-cols-12">
 
             {{-- KIRI: List Produk --}}
-            <div class="md:col-span-6">
+            <div class="md:col-span-7">
 
                 {{-- Tombol kembali ke pilih meja (khusus dine in) --}}
                 @if ($orderType === 'dine_in' && $selectedTableId)
@@ -171,7 +163,7 @@
                     $displayProducts = array_slice($this->productCards, ($productPage - 1) * $perPage, $perPage);
                 @endphp
                 <div wire:init="loadVariantStockStatuses"
-                    class="grid grid-cols-4 gap-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
+                    class="grid grid-cols-4 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
                     @forelse ($displayProducts as $product)
                         @php
                             $firstVariant = $product['variants'][0] ?? null;
@@ -180,10 +172,10 @@
                             );
                         @endphp
                         <button type="button" wire:click="addToCart({{ (int) $product['id'] }})"
-                            class="group flex min-h-[100px] w-full flex-col items-center justify-center overflow-hidden rounded-xl border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
+                            class="group flex min-h-[120px] w-full flex-col items-center justify-center overflow-hidden rounded-xs border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
                             style="background-color: #F07600;">
                             <div class="text-center flex flex-col items-center justify-center gap-1 p-3 w-full h-full">
-                                <p class="text-sm font-bold text-white line-clamp-2 uppercase leading-snug">
+                                <p class="text-xs font-bold text-white line-clamp-2 uppercase leading-snug">
                                     {{ $product['name'] }}
                                 </p>
                                 <p class="text-sm font-bold text-white/90 mt-1">
@@ -201,19 +193,16 @@
             </div>
 
             {{-- KANAN: Area Keranjang --}}
-            <div class="md:col-span-6">
+            <div class="md:col-span-5">
                 <div
-                    class="md:sticky md:top-20 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
+                    class="md:sticky md:top-20 overflow-hidden border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
                     {{-- Header Keranjang --}}
                     <div
-                        class="flex items-center justify-between border-b border-gray-200 px-5 py-3 dark:border-gray-800">
-                        <h3 class="text-base font-bold text-gray-800 dark:text-white/90">Pesanan</h3>
+                        class="flex items-center justify-between border-b border-gray-200 px-3 py-2 bg-gray-200 dark:border-gray-800">
+                        <h3 class="text-sm font-bold text-gray-800 dark:text-white/90">Pesanan</h3>
                         <button wire:click="$set('pendingOrdersModalOpen', true)"
                             class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                            
                             @if ($this->pendingTransactions->count() > 0)
                                 <span
                                     class="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">{{ $this->pendingTransactions->count() }}</span>
@@ -223,7 +212,7 @@
 
                     <div class="p-4">
                         {{-- DAFTAR ITEM (TAMPILAN KHUSUS TABLET/SENTUH) --}}
-                        <div class="custom-scrollbar max-h-[190px] min-h-[190px] overflow-y-auto mb-4 pr-1">
+                        <div class="custom-scrollbar max-h-[440px] min-h-[450px] overflow-y-auto mb-4 pr-1">
                             <div class="space-y-3">
                                 @forelse ($cartItems as $idx => $item)
                                     @php
@@ -294,7 +283,7 @@
 
                         {{-- SUMMARY BAR (HORIZONTAL 1 BARIS) --}}
                         @php $totalQty = collect($cartItems)->sum('quantity'); @endphp
-                        <div class="bg-gray-100 dark:bg-gray-900 rounded-xl p-3 mb-4 shadow-inner">
+                        <div class=" dark:bg-gray-900   ">
                             <div class="grid grid-cols-3 divide-x divide-white/10 text-center items-center">
                                 <div>
                                     <p class="text-[9px] uppercase font-bold text-black">Qty</p>
@@ -336,24 +325,21 @@
                                         </svg>
                                     </button>
                                 @else
-                                    <button wire:click="clearCart"
-                                        class="flex-1 h-12 bg-white border border-gray-300 text-gray-500 font-bold rounded-xl text-xs hover:bg-gray-50 transition">
-                                        Reset Keranjang
-                                    </button>
+                                    
                                 @endif
                             </div>
-
-                            <button wire:click="openCheckout" @disabled(count($cartItems) === 0)
+                        </div>
+                        
+                    </div>
+                </div>
+                <button wire:click="openCheckout" @disabled(count($cartItems) === 0)
                                 @class([
-                                    'w-full h-14 rounded-xl font-black text-white shadow-lg transition tracking-widest text-base active:scale-[0.98]',
+                                    'w-full h-14  font-black text-white shadow-lg transition tracking-widest text-base active:scale-[0.98]',
                                     'bg-[#1086e1] hover:bg-[#0f75c7]' => $isDineIn && $isEditing,
                                     'bg-brand-500 hover:bg-brand-600' => !($isDineIn && $isEditing),
                                 ])>
                                 {{ $isDineIn ? ($isEditing ? 'Bayar Sekarang' : 'Kirim Ke Dapur') : 'Proses Bayar' }}
                             </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     @endif

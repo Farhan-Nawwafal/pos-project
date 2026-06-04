@@ -1,9 +1,11 @@
-<div class="mb-8 w-full">
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-bold text-gray-800 dark:text-white">ESB Order Dashboard</h3>
+<div class="w-full bg-gray-200 mb-8">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <h3 class="text-lg font-bold text-gray-500">ESB Order Dashboard</h3>
         <span class="text-xs text-gray-500">Last Fetch: {{ now()->format('d-m-Y H:i') }}</span>
     </div>
+</div>
 
+<div class="max-w-7xl mx-auto px-4 mb-8">
     <div class="grid grid-cols-12 gap-4 items-end">
         
         <div class="col-span-2">
@@ -18,12 +20,12 @@
             </select>
         </div>
 
-        <div class="col-span-5 grid grid-cols-1">
+        <div class="col-span-5">
             <label class="block text-xs font-semibold text-gray-500 mb-1">Filter</label>
             <input type="text" class="w-full rounded-md border border-gray-300 bg-white p-1.5 text-xs" placeholder="Search...">
         </div>
 
-        <div class="col-span-3 grid grid-cols-4 gap-1">
+        <div class="col-span-3 grid grid-cols-3 gap-2">
             <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Payment</label>
                 <select class="w-full rounded-md border border-gray-300 bg-white p-1.5 text-xs">
@@ -37,7 +39,7 @@
                 </select>
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1 ">Sync</label>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Sync</label>
                 <select class="w-full rounded-md border border-gray-300 bg-white p-1.5 text-xs">
                     <option>New</option>
                 </select>

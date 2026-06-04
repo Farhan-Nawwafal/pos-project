@@ -1,4 +1,4 @@
-<div class="space-y-2">
+<div>
     {{-- 1. FILTER: Full Width, Paling Atas --}}
     <div>
         <x-ecommerce.filter />
