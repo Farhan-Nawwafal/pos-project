@@ -21,7 +21,9 @@ class TransactionsPage extends Component
 
     public string $title = 'Riwayat Transaksi';
 
-    public string $search = '';
+    public string $searchNumber = '';
+    public string $searchCustomer = '';
+    public string $searchTable = '';
 
     public ?string $fromDate = null;
 
@@ -49,7 +51,17 @@ class TransactionsPage extends Component
         $this->setRange('today');
     }
 
-    public function updatedSearch(): void
+    public function updatedSearchNumber(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSearchCustomer(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSearchTable(): void
     {
         $this->resetPage();
     }
@@ -128,6 +140,7 @@ class TransactionsPage extends Component
 
         $this->fromDate = $from->format('Y-m-d');
         $this->toDate = $to->format('Y-m-d');
+
         $this->rangePreset = $preset;
         $this->resetPage();
     }
@@ -138,19 +151,32 @@ class TransactionsPage extends Component
 
         $query = Transaction::query()
             ->with(['member', 'diningTable'])
-            ->when($this->search !== '', function (Builder $query) use ($canViewPii): void {
-                $term = '%' . $this->search . '%';
-                $query->where(function (Builder $q) use ($term, $canViewPii): void {
-                    $q->where('code', 'like', $term)
-                        ->orWhere('name', 'like', $term);
 
+            // Search Code
+            ->when($this->searchNumber !== '', function (Builder $query) {
+                $query->where('code', 'like', '%' . $this->searchNumber . '%');
+            })
+            
+            // Seacrh Nama Pelanggan
+            ->when($this->searchCustomer !== '', function (Builder $query) use ($canViewPii) {
+                $term = '%' . $this->searchCustomer . '%';
+                $query->where(function (Builder $q) use ($term, $canViewPii) {
+                    $q->where('name', 'like', $term);
+                    
                     if ($canViewPii) {
                         $q->orWhere('phone', 'like', $term)
-                            ->orWhere('email', 'like', $term)
-                            ->orWhere('external_id', 'like', $term);
+                          ->orWhere('email', 'like', $term);
                     }
                 });
             })
+            
+            // Search No Meja
+            ->when($this->searchTable !== '', function (Builder $query) {
+                $query->whereHas('dining_table_id', function (Builder $q) {
+                    $q->where('name', 'like', '%' . $this->searchTable . '%');
+                });
+            })
+
             ->when($this->paymentStatus !== '', fn(Builder $query) => $query->where('payment_status', $this->paymentStatus))
             ->when($this->paymentMethod !== '', fn(Builder $query) => $query->where('payment_method', $this->paymentMethod))
             ->when($this->orderType !== '', fn(Builder $query) => $query->where('order_type', $this->orderType));
