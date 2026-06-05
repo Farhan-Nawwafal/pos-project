@@ -49,6 +49,12 @@ class MenuHelper
                 'permission' => 'reports.expenses.manage',
             ],
             [
+                'name' => 'Shift Log',
+                'icon' => 'default',
+                'path' => self::path('shift-logs.index'),
+                // 'permission' => 'shift-logs.view', masih bingung buat ini butuh arahan parhan
+            ],
+            [
                 'name' => 'Member',
                 'icon' => 'members',
                 'permission' => 'members.view',

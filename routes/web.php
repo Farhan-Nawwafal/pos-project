@@ -4,6 +4,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ReportExcelController;
 use App\Http\Controllers\TableQrController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ShiftLogController;
 use App\Http\Middleware\CheckTableNumber;
 use App\Livewire\Auth\InitialSetupPage;
 use App\Livewire\Auth\SignInPage;
@@ -46,6 +47,7 @@ use App\Livewire\SelfOrder\Pages\ScanPage;
 use App\Livewire\SelfOrder\Pages\StartPage;
 use App\Livewire\SelfOrder\Pages\VerifyEmailPage;
 use App\Livewire\Settings\SettingsPage;
+use App\Livewire\ShiftLogs\ShiftLogsPage;
 use App\Livewire\Transaction\TransactionShowPage;
 use App\Livewire\Transaction\TransactionsPage;
 use App\Livewire\Users\UsersPage;
@@ -522,6 +524,8 @@ if ($adminDomain !== '') {
             Route::get('/roles/create', RoleForm::class)->middleware('permission:roles.manage')->name('roles.create');
             Route::get('/roles/{role}/edit', RoleForm::class)->middleware('permission:roles.manage')->name('roles.edit');
             Route::get('/cabang', CabangPage::class)->middleware('permission:cabang.view|cabang.manage')->name('cabang.index');
+
+            Route::get('/shift-logs', ShiftLogsPage::class)->name('shift-logs.index');
         });
     });
 }
