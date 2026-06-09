@@ -9,8 +9,8 @@
 'dataClass' => 'flatpickr-right',
 'placeholder' => 'Pilih tanggal',
 'showPresets' => true,
-'selectClass' => 'shadow-theme-xs h-8 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
-'inputClass' => 'h-8 w-full xl:w-[240px] xl:min-w-[180px] text-center rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-sm font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
+'selectClass' => 'shadow-theme-xs h-7 rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
+'inputClass' => 'h-7 w-full xl:w-[240px] xl:min-w-[180px] text-center rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-xs font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
 ])
 
 <div
