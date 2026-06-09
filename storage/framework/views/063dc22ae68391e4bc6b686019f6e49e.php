@@ -55,8 +55,8 @@
         <div class="custom-scrollbar overflow-x-auto border-b border-gray-200 px-3 py-4 dark:border-gray-800">
             <div class="flex flex-col xl:flex-row gap-3 w-full">
 
-                <div class="flex flex-col gap-1.5 flex-1">
-                    <label class="text-md font-bold text-gray-700 dark:text-gray-300">Date</label>
+                <div class="flex flex-col gap-1.5 flex-1 xl:flex-none xl:w-[210px]">
+                    <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Date</label>
                     <div class="relative w-full">
                         <?php if (isset($component)) { $__componentOriginal797345413d8076d7d3469b479240e9ad = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal797345413d8076d7d3469b479240e9ad = $attributes; } ?>
@@ -83,11 +83,11 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-1.5 flex-1">
-                    <label class="text-md font-bold text-gray-700 dark:text-gray-300">Transaction Number</label>
+                <div class="flex flex-col gap-1.5 flex-1 xl:flex-none">
+                    <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Transaction Number</label>
                     <div class="relative w-full">
                         <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                            <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            <svg class="fill-current" width="16" height="16" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M3.04199 9.37363C3.04199 5.87693 5.87735 3.04199 9.37533 3.04199C12.8733 3.04199 15.7087 5.87693 15.7087 9.37363C15.7087 12.8703 12.8733 15.7053 9.37533 15.7053C5.87735 15.7053 3.04199 12.8703 3.04199 9.37363ZM9.37533 1.54199C5.04926 1.54199 1.54199 5.04817 1.54199 9.37363C1.54199 13.6991 5.04926 17.2053 9.37533 17.2053C11.2676 17.2053 13.0032 16.5344 14.3572 15.4176L17.1773 18.238C17.4702 18.5309 17.945 18.5309 18.2379 18.238C18.5308 17.9451 18.5309 17.4703 18.238 17.1773L15.4182 14.3573C16.5367 13.0033 17.2087 11.2669 17.2087 9.37363C17.2087 5.04817 13.7014 1.54199 9.37533 1.54199Z"
@@ -95,16 +95,16 @@
                             </svg>
                         </span>
                         <input wire:model.live.debounce.400ms="searchNumber" type="text"
-                            placeholder="Cari Nomor Transaksi..."
-                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[220px] xl:min-w-[150px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                            placeholder="Cari Transaksi..."
+                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-7 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-10 text-xs text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[145px] xl:min-w-[100px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-1.5 flex-1">
-                    <label class="text-md font-bold text-gray-700 dark:text-gray-300">Customer</label>
+                <div class="flex flex-col gap-1.5 flex-1 xl:flex-none">
+                    <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Customer</label>
                     <div class="relative w-full">
                         <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                            <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            <svg class="fill-current" width="16" height="16" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M3.04199 9.37363C3.04199 5.87693 5.87735 3.04199 9.37533 3.04199C12.8733 3.04199 15.7087 5.87693 15.7087 9.37363C15.7087 12.8703 12.8733 15.7053 9.37533 15.7053C5.87735 15.7053 3.04199 12.8703 3.04199 9.37363ZM9.37533 1.54199C5.04926 1.54199 1.54199 5.04817 1.54199 9.37363C1.54199 13.6991 5.04926 17.2053 9.37533 17.2053C11.2676 17.2053 13.0032 16.5344 14.3572 15.4176L17.1773 18.238C17.4702 18.5309 17.945 18.5309 18.2379 18.238C18.5308 17.9451 18.5309 17.4703 18.238 17.1773L15.4182 14.3573C16.5367 13.0033 17.2087 11.2669 17.2087 9.37363C17.2087 5.04817 13.7014 1.54199 9.37533 1.54199Z"
@@ -112,16 +112,16 @@
                             </svg>
                         </span>
                         <input wire:model.live.debounce.400ms="searchCustomer" type="text"
-                            placeholder="Cari Nama Pelanggan..."
-                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[220px] xl:min-w-[150px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                            placeholder="Cari Pelanggan..."
+                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-7 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-10 text-xs text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[145px] xl:min-w-[100px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-1.5 flex-1">
-                    <label class="text-md font-bold text-gray-700 dark:text-gray-300">Table</label>
+                <div class="flex flex-col gap-1.5 flex-1 xl:flex-none">
+                    <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Table</label>
                     <div class="relative w-full">
                         <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                            <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            <svg class="fill-current" width="16" height="16" viewBox="0 0 20 20" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M3.04199 9.37363C3.04199 5.87693 5.87735 3.04199 9.37533 3.04199C12.8733 3.04199 15.7087 5.87693 15.7087 9.37363C15.7087 12.8703 12.8733 15.7053 9.37533 15.7053C5.87735 15.7053 3.04199 12.8703 3.04199 9.37363ZM9.37533 1.54199C5.04926 1.54199 1.54199 5.04817 1.54199 9.37363C1.54199 13.6991 5.04926 17.2053 9.37533 17.2053C11.2676 17.2053 13.0032 16.5344 14.3572 15.4176L17.1773 18.238C17.4702 18.5309 17.945 18.5309 18.2379 18.238C18.5308 17.9451 18.5309 17.4703 18.238 17.1773L15.4182 14.3573C16.5367 13.0033 17.2087 11.2669 17.2087 9.37363C17.2087 5.04817 13.7014 1.54199 9.37533 1.54199Z"
@@ -129,8 +129,8 @@
                             </svg>
                         </span>
                         <input wire:model.live.debounce.400ms="searchTable" type="text"
-                            placeholder="Cari Nomor Meja..."
-                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[220px] xl:min-w-[150px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                            placeholder="Cari Meja..."
+                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-7 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-10 text-xs text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[145px] xl:min-w-[100px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
                     </div>
                 </div>
 
@@ -138,9 +138,9 @@
                     <div class="flex flex-col gap-3 sm:flex-row w-full">
 
                         <div class="flex flex-col gap-1.5 flex-1 sm:flex-none">
-                            <label class="text-md font-bold text-gray-700 dark:text-gray-300">Status</label>
+                            <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Status</label>
                             <select wire:model.live="paymentStatus"
-                                class="shadow-theme-xs h-9 w-full rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[160px] xl:min-w-[100px]">
+                                class="shadow-theme-xs h-7 w-full rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[125px] xl:min-w-[100px]">
                                 <option value="">Semua Status</option>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $paymentStatusOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                 <option value="<?php echo e($status); ?>">
@@ -152,9 +152,9 @@
                         </div>
 
                         <div class="flex flex-col gap-1.5 flex-1 sm:flex-none">
-                            <label class="text-md font-bold text-gray-700 dark:text-gray-300">Payment Method</label>
+                            <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Payment Method</label>
                             <select wire:model.live="paymentMethod"
-                                class="shadow-theme-xs h-9 w-full rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[160px] xl:min-w-[100px]">
+                                class="shadow-theme-xs h-7 w-full rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[125px] xl:min-w-[100px]">
                                 <option value="">Semua Metode</option>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $paymentMethodOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $method): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                 <option value="<?php echo e($method); ?>">
@@ -166,9 +166,9 @@
                         </div>
 
                         <div class="flex flex-col gap-1.5 flex-1 sm:flex-none">
-                            <label class="text-md font-bold text-gray-700 dark:text-gray-300">Visit Purpose</label>
+                            <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Visit Purpose</label>
                             <select wire:model.live="orderType"
-                                class="shadow-theme-xs h-9 w-full rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[160px] xl:min-w-[100px]">
+                                class="shadow-theme-xs h-7 w-full rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[125px] xl:min-w-[100px]">
                                 <option value="">Semua Tipe</option>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $orderTypeOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                 <option value="<?php echo e($type); ?>"><?php echo e($type === 'dine_in' ? 'Dine in' : 'Take away'); ?>
@@ -191,26 +191,26 @@
             <table class="w-full table-auto">
                 <thead>
                     <tr class="border-b border-gray-200 dark:divide-gray-800 dark:border-gray-800">
-                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Transaction Number</th>
-                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                        <th class="text-xs font-extrabold py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Transaction Number</th>
+                        <th class="text-xs font-extrabold py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
                             <button type="button" wire:click="sortBy('created_at')" class="flex w-full justify-center items-center gap-2">
                                 Date
                             </button>
                         </th>
-                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Customer
+                        <th class="text-xs font-extrabold py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Customer
                         </th>
-                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Table</th>
-                        <th class="py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Visit Purpose</th>
-                        <th class="py-2 px-2 text-right text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                        <th class="text-xs font-extrabold py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Table</th>
+                        <th class="text-xs font-extrabold py-2 px-2 text-center text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Visit Purpose</th>
+                        <th class="text-xs font-extrabold py-2 px-2 text-right text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
                             <button type="button" wire:click="sortBy('total')"
                                 class="ml-auto flex items-center justify-end gap-2">
                                 Grand Total
                             </button>
                         </th>
-                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Status</th>
-                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment Method</th>
-                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment Time</th>
-                        <th class="py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment By</th>
+                        <th class="text-xs font-extrabold py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Status</th>
+                        <th class="text-xs font-extrabold py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment Method</th>
+                        <th class="text-xs font-extrabold py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment Time</th>
+                        <th class="text-xs font-extrabold py-2 px-2 text-left text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Payment By</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -230,13 +230,13 @@
                     );
                     ?>
                     <tr class="hover:bg-gray-200 hover:dark:bg-gray-900">
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
                             <p>
                                 <?php echo e($transaction->code); ?>
 
                             </p>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90 text-center">
                             <div class="space-y-1">
                                 <p>
                                     <?php echo e(optional($transaction->created_at)->format('d-m-Y')); ?>
@@ -244,28 +244,28 @@
                                 </p>
                             </div>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
                             <p><?php echo e($customer); ?></p>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90 text-center">
                             <p><?php echo e($transaction->dining_table_id ? $transaction->dining_table_id : 'Quick Service'); ?></p>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-center">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90 text-center">
                             <p><?php echo e($orderType === 'dine_in' ? 'Dine in' : 'Take away'); ?></p>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90 text-right">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90 text-right">
                             <p">Rp<?php echo e(number_format((int) $transaction->total, 0, ',', '.')); ?></p>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
                             <p><?php echo e($paymentStatusLabel); ?></p>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
                             <p><?php echo e($paymentMethodLabel); ?></p>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
                             <p><?php echo e($transaction->paid_at ? $transaction->paid_at->format('H:i:s') : '-'); ?></p>
                         </td>
-                        <td class="px-2 py-2 font-medium text-gray-800 dark:text-white/90">
+                        <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
                             <p>Kasir</p>
                         </td>
                     </tr>
