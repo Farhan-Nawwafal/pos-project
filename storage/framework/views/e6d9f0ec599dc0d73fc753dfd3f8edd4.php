@@ -15,17 +15,17 @@
             initializeActiveMenus() {
                 this.openSubmenus = {};
 
-                @foreach($menuGroups as $groupIndex => $menuGroup)
-                @foreach($menuGroup['items'] as $itemIndex => $item)
-                @if(isset($item['subItems']))
-                @foreach($item['subItems'] as $subItem)
-                if (this.isActive('{{ $subItem['path'] }}', {{ json_encode($subItem['exact'] ?? false) }}, {{ json_encode($subItem['exclude'] ?? []) }})) {
-                    this.openSubmenus['{{ $groupIndex }}-{{ $itemIndex }}'] = true;
+                <?php $__currentLoopData = $menuGroups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $groupIndex => $menuGroup): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php $__currentLoopData = $menuGroup['items']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $itemIndex => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php if(isset($item['subItems'])): ?>
+                <?php $__currentLoopData = $item['subItems']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                if (this.isActive('<?php echo e($subItem['path']); ?>', <?php echo e(json_encode($subItem['exact'] ?? false)); ?>, <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>)) {
+                    this.openSubmenus['<?php echo e($groupIndex); ?>-<?php echo e($itemIndex); ?>'] = true;
                 }
-                @endforeach
-                @endif
-                @endforeach
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             },
             toggleSubmenu(groupIndex, itemIndex) {
                 const key = groupIndex + '-' + itemIndex;
@@ -67,28 +67,26 @@
             'w-0 -translate-x-full': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen
         }"
-        {{-- @mouseenter="window.innerWidth >= 1024 && !$store.sidebar.isExpanded ? $store.sidebar.setHovered(true) : null"
-        @mouseleave="$store.sidebar.setHovered(false)"
-        @click.outside="$store.sidebar.isMobileOpen ? $store.sidebar.toggleMobileOpen() : null">  --}} <!-- Logo Section -->
+         <!-- Logo Section -->
         <div class="pt-6 pb-4 flex items-center gap-3"
             :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
             'justify-center' :
             'justify-start'">
 
-            <a href="{{ route('dashboard', [], false) }}">
+            <a href="<?php echo e(route('dashboard', [], false)); ?>">
 
                 <!-- Logo FULL -->
                 <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                    x-transition class="dark:hidden" src="{{ asset('assets/images/esb-removebg.png') }}" alt="Logo"
+                    x-transition class="dark:hidden" src="<?php echo e(asset('assets/images/esb-removebg.png')); ?>" alt="Logo"
                     width="140" />
 
                 <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                    x-transition class="hidden dark:block" src="{{ asset('assets/images/esb-removebg.png') }}"
+                    x-transition class="hidden dark:block" src="<?php echo e(asset('assets/images/esb-removebg.png')); ?>"
                     alt="Logo" width="140" />
 
                 <!-- Logo ICON (WAJIB beda file) -->
                 <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                    x-transition src="{{ asset('assets/images/logoesb.png') }}" alt="Logo Icon" width="100"/>
+                    x-transition src="<?php echo e(asset('assets/images/logoesb.png')); ?>" alt="Logo Icon" width="100"/>
 
             </a>
 
@@ -97,14 +95,14 @@
             </div>
         </div>
 
-        @if ($canAccessPos)
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($canAccessPos): ?>
             <div class="pb-3 mt-1" x-data="{ showTooltip: false }"
                 x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen || window.innerWidth >= 1024">
-                <a href="{{ route('pos.index') }}" wire:navigate @mouseenter="showTooltip = true"
+                <a href="<?php echo e(route('pos.index')); ?>" wire:navigate @mouseenter="showTooltip = true"
                     @mouseleave="showTooltip= false"
                     class="relative flex items-center w-full px-3 py-3 transition-all duration-300 ease-in-out rounded-xl group focus:outline-none focus:ring-2 focus:ring-offset-2"
                     :class="[
-                        isActive('{{ route('pos.index', [], false) }}') ?
+                        isActive('<?php echo e(route('pos.index', [], false)); ?>') ?
                         ' text-white' :
                         ' hover:text-white ',
                         (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
@@ -112,7 +110,7 @@
                     ]">
 
                     <span class="flex items-center justify-center"
-                        :class="isActive('{{ route('pos.index', [], false) }}') ? 'text-white' : 'text-gray-500'">
+                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-calculator" viewBox="0 0 16 16">
                             <path
@@ -140,22 +138,22 @@
                     </div>
                 </a>
             </div>
-        @endif
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
         <!-- Navigation Menu -->
         <div class="flex flex-1 min-h-0 flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
             <nav class="pb-6">
                 <div class="flex flex-col gap-4">
-                    @foreach ($menuGroups as $groupIndex => $menuGroup)
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $menuGroups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $groupIndex => $menuGroup): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                         <div>
-                            @if (trim((string) ($menuGroup['title'] ?? '')) !== '')
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(trim((string) ($menuGroup['title'] ?? '')) !== ''): ?>
                                 <h2 class="mb-4 text-xs uppercase flex leading-[20px] text-gray-500"
                                     :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                                         .isMobileOpen) ?
                                     'lg:justify-center' : 'justify-start'">
                                     <template
                                         x-if="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen">
-                                        <span>{{ $menuGroup['title'] }}</span>
+                                        <span><?php echo e($menuGroup['title']); ?></span>
                                     </template>
                                     <template
                                         x-if="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen">
@@ -167,18 +165,18 @@
                                         </svg>
                                     </template>
                                 </h2>
-                            @endif
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                             <!-- Menu Items -->
                             <ul class="flex flex-col gap-1">
-                                @foreach ($menuGroup['items'] as $itemIndex => $item)
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $menuGroup['items']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $itemIndex => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                     <li>
-                                        @if (isset($item['subItems']))
+                                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(isset($item['subItems'])): ?>
                                             <!-- Menu Item with Submenu -->
-                                            <button @click="toggleSubmenu({{ $groupIndex }}, {{ $itemIndex }})"
+                                            <button @click="toggleSubmenu(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>)"
                                                 class="menu-item group w-full"
                                                 :class="[
-                                                    isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ?
+                                                    isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) ?
                                                     'menu-item-active' : 'menu-item-inactive',
                                                     !$store.sidebar.isExpanded && !$store.sidebar.isHovered ?
                                                     'xl:justify-center' : 'xl:justify-start'
@@ -186,33 +184,35 @@
 
                                                 <!-- Icon -->
                                                 <span
-                                                    :class="isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ?
+                                                    :class="isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) ?
                                                         'menu-item-icon-active' : 'menu-item-icon-inactive'">
-                                                    {!! \App\Helpers\MenuHelper::getIconSvg($item['icon']) !!}
+                                                    <?php echo \App\Helpers\MenuHelper::getIconSvg($item['icon']); ?>
+
                                                 </span>
 
                                                 <!-- Text -->
                                                 <span
                                                     x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                                                     class="menu-item-text flex items-center gap-2">
-                                                    {{ $item['name'] }}
-                                                    @if (!empty($item['new']))
+                                                    <?php echo e($item['name']); ?>
+
+                                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($item['new'])): ?>
                                                         <span class="absolute right-10"
-                                                            :class="isActive('{{ $item['path'] ?? '' }}',
-                                                                    {{ json_encode($item['exact'] ?? false) }}) ?
+                                                            :class="isActive('<?php echo e($item['path'] ?? ''); ?>',
+                                                                    <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
                                                                 'menu-dropdown-badge menu-dropdown-badge-active' :
                                                                 'menu-dropdown-badge menu-dropdown-badge-inactive'">
                                                             new
                                                         </span>
-                                                    @endif
+                                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                                 </span>
 
                                                 <!-- Chevron Down Icon -->
                                                 <svg x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                                                     class="ml-auto w-1 h-1 transition-transform duration-200"
                                                     :class="{
-                                                        'rotate-180 text-gray-500': isSubmenuOpen({{ $groupIndex }},
-                                                            {{ $itemIndex }})
+                                                        'rotate-180 text-gray-500': isSubmenuOpen(<?php echo e($groupIndex); ?>,
+                                                            <?php echo e($itemIndex); ?>)
                                                     }"
                                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -222,53 +222,56 @@
 
                                             <!-- Submenu -->
                                             <div
-                                                x-show="isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) && ($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)">
+                                                x-show="isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) && ($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)">
                                                 <ul class="mt-2 space-y-1 ml-9">
-                                                    @foreach ($item['subItems'] as $subItem)
+                                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $item['subItems']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                                         <li>
-                                                            <a href="{{ $subItem['path'] }}" wire:navigate
+                                                            <a href="<?php echo e($subItem['path']); ?>" wire:navigate
                                                                 class="menu-dropdown-item"
-                                                                :class="isActive('{{ $subItem['path'] }}',
-                                                                        {{ json_encode($subItem['exact'] ?? false) }},
-                                                                        {{ json_encode($subItem['exclude'] ?? []) }}) ?
+                                                                :class="isActive('<?php echo e($subItem['path']); ?>',
+                                                                        <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
+                                                                        <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>) ?
                                                                     'menu-dropdown-item-active' :
                                                                     'menu-dropdown-item-inactive'">
-                                                                {{ $subItem['name'] }}
+                                                                <?php echo e($subItem['name']); ?>
+
                                                                 <span class="flex items-center gap-1 ml-auto">
-                                                                    @if (!empty($subItem['new']))
+                                                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($subItem['new'])): ?>
                                                                         <span
-                                                                            :class="isActive('{{ $subItem['path'] }}',
-                                                                                    {{ json_encode($subItem['exact'] ?? false) }},
-                                                                                    {{ json_encode($subItem['exclude'] ?? []) }}
+                                                                            :class="isActive('<?php echo e($subItem['path']); ?>',
+                                                                                    <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
+                                                                                    <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>
+
                                                                                 ) ?
                                                                                 'menu-dropdown-badge menu-dropdown-badge-active' :
                                                                                 'menu-dropdown-badge menu-dropdown-badge-inactive'">
                                                                             new
                                                                         </span>
-                                                                    @endif
-                                                                    @if (!empty($subItem['pro']))
+                                                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                                                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($subItem['pro'])): ?>
                                                                         <span
-                                                                            :class="isActive('{{ $subItem['path'] }}',
-                                                                                    {{ json_encode($subItem['exact'] ?? false) }},
-                                                                                    {{ json_encode($subItem['exclude'] ?? []) }}
+                                                                            :class="isActive('<?php echo e($subItem['path']); ?>',
+                                                                                    <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
+                                                                                    <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>
+
                                                                                 ) ?
                                                                                 'menu-dropdown-badge-pro menu-dropdown-badge-pro-active' :
                                                                                 'menu-dropdown-badge-pro menu-dropdown-badge-pro-inactive'">
                                                                             pro
                                                                         </span>
-                                                                    @endif
+                                                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                                                 </span>
                                                             </a>
                                                         </li>
-                                                    @endforeach
+                                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                                 </ul>
                                             </div>
-                                        @else
+                                        <?php else: ?>
                                             <!-- Simple Menu Item -->
-                                            <a href="{{ $item['path'] }}" wire:navigate class="menu-item group"
+                                            <a href="<?php echo e($item['path']); ?>" wire:navigate class="menu-item group"
                                                 :class="[
-                                                    isActive('{{ $item['path'] }}',
-                                                        {{ json_encode($item['exact'] ?? false) }}) ?
+                                                    isActive('<?php echo e($item['path']); ?>',
+                                                        <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
                                                     'menu-item-active' :
                                                     'menu-item-inactive',
                                                     (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store
@@ -279,32 +282,34 @@
 
                                                 <!-- Icon -->
                                                 <span
-                                                    :class="isActive('{{ $item['path'] }}',
-                                                            {{ json_encode($item['exact'] ?? false) }}) ?
+                                                    :class="isActive('<?php echo e($item['path']); ?>',
+                                                            <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
                                                         'menu-item-icon-active' :
                                                         'menu-item-icon-inactive'">
-                                                    {!! \App\Helpers\MenuHelper::getIconSvg($item['icon']) !!}
+                                                    <?php echo \App\Helpers\MenuHelper::getIconSvg($item['icon']); ?>
+
                                                 </span>
 
                                                 <!-- Text -->
                                                 <span
                                                     x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                                                     class="menu-item-text flex items-center gap-2">
-                                                    {{ $item['name'] }}
-                                                    @if (!empty($item['new']))
+                                                    <?php echo e($item['name']); ?>
+
+                                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($item['new'])): ?>
                                                         <span
                                                             class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-brand-500 text-white">
                                                             new
                                                         </span>
-                                                    @endif
+                                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                                 </span>
                                             </a>
-                                        @endif
+                                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                     </li>
-                                @endforeach
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                             </ul>
                         </div>
-                    @endforeach
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                 </div>
             </nav>
 
@@ -322,8 +327,9 @@
                     <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                         class="min-w-0 flex-1">
                         <p class="font-semibold text-sm text-gray-500 truncate dark:text-white">
-                            {{ auth()->user()?->name ?? 'Pengguna' }}</p>
-                        <p class="text-xs text-gray-500 truncate dark:text-gray-400">{{ auth()->user()?->email ?? '' }}
+                            <?php echo e(auth()->user()?->name ?? 'Pengguna'); ?></p>
+                        <p class="text-xs text-gray-500 truncate dark:text-gray-400"><?php echo e(auth()->user()?->email ?? ''); ?>
+
                         </p>
                     </div>
                     <div x-show="!($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
@@ -337,7 +343,7 @@
 
                 <!-- END SHIFT BUTTON -->
                 <div class="mt-3 px-3">
-                    {{-- Ubah <a> menjadi <button> dan tambahkan wire:click --}}
+                    
                     <button type="button" wire:click="processEndShift"
                         wire:confirm="Yakin ingin menutup shift? Laporan akan dicetak dan Anda akan keluar dari aplikasi."
                         class="relative group w-full flex items-center justify-center gap-1 py-2 px-1 text-sm font-semibold text-orange-600  rounded-lg transition-colors dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/30 dark:hover:bg-orange-500/20"
@@ -367,16 +373,16 @@
                     </button>
                 </div>
 
-                {{-- Pastikan Form Logout ini ada di dalam file yang sama (di bawah) --}}
-                <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
-                    @csrf
+                
+                <form id="logout-form" method="POST" action="<?php echo e(route('logout')); ?>" class="hidden">
+                    <?php echo csrf_field(); ?>
                 </form>
 
                 <!-- Logout Only -->
                 <script>
                     function endShift() {
                         if (confirm(
-                                'Tutup shift dan cetak laporan tutup kasir? (nama kasir: {{ auth()->user()?->name }}, hari ini)')) {
+                                'Tutup shift dan cetak laporan tutup kasir? (nama kasir: <?php echo e(auth()->user()?->name); ?>, hari ini)')) {
                             // Demo end-shift data (real data in production)
                             const endShiftData = {
                                 store: {
@@ -384,7 +390,7 @@
                                     address: 'Jl. Raya Ciawi Prapatan No.6',
                                     logo_url: '/assets/images/logoesb.png'
                                 },
-                                cashier: '{{ auth()->user()?->name ?? 'Kasir' }}',
+                                cashier: '<?php echo e(auth()->user()?->name ?? 'Kasir'); ?>',
                                 shift_open: '08:00',
                                 shift_close: new Date().toLocaleTimeString('id-ID'),
                                 total_sales: 1250000,
@@ -446,7 +452,7 @@
                             // POST logout (for admin domain)
                             const logoutForm = document.createElement('form');
                             logoutForm.method = 'POST';
-                            logoutForm.action = '{{ route('logout') }}';
+                            logoutForm.action = '<?php echo e(route('logout')); ?>';
                             logoutForm.style.display = 'none';
 
                             const csrfInput = document.createElement('input');
@@ -467,10 +473,10 @@
                 
             </div>
         </div>
-        @php
+        <?php
             $canGuides = auth()->user()?->can('guides.view') ?? false;
-        @endphp
-        @if ($canGuides)
+        ?>
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($canGuides): ?>
             <div x-cloak x-show="$store.sidebar.isExpanded || $store.sidebar.isMobileOpen"
                 class="mx-auto mb-6 mt-4 w-full max-w-60 rounded-2xl border border-gray-200 bg-white px-4 py-5 dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="flex flex-col items-center justify-center gap-3 text-center">
@@ -492,12 +498,12 @@
                     </div>
                 </div>
 
-                <a href="{{ route('guides.index') }}" wire:navigate
+                <a href="<?php echo e(route('guides.index')); ?>" wire:navigate
                     class="bg-brand-500 text-theme-sm hover:bg-brand-600 mt-4 flex items-center justify-center rounded-lg p-3 font-medium text-white">
                     Buka Buku Panduan
                 </a>
             </div>
-        @endif
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     </aside>
 
     <div x-show="($store.sidebar.isExpanded || $store.sidebar.isMobileOpen) && window.innerWidth < 1024"
@@ -516,3 +522,4 @@
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
     </div>
 </div>
+<?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
