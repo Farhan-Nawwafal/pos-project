@@ -59,6 +59,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+// Progres IDIN day start/end: 2024-06-20
+use App\Livewire\DayStartEnd\DayStartEndPage;
+
 $landingDomain = parse_url(config('app.url'), PHP_URL_HOST);
 
 $rootRedirect = function () {
@@ -77,6 +80,9 @@ if (is_string($landingDomain) && $landingDomain !== '') {
 } else {
     Route::get('/', $rootRedirect)->name('landing');
 }
+
+// Progres IDIN day start/end: 2024-06-20
+Route::get('/day-start-end', DayStartEndPage::class)->name('day-start-end.index');
 
 Route::get('/t/{code}', TableQrController::class)->name('tables.qr');
 Route::prefix('order')->name('self-order.')->group(function () {
