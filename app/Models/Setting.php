@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     protected $fillable = [
+        'cabang_id',
         'store_name',
         'phone',
         'address',
@@ -57,7 +58,17 @@ class Setting extends Model
 
     public static function current(): self
     {
-        static $cached;
+        $currentCabangId = auth()->user()?->cabang_id;
+
+        if (!$currentCabangId) {
+            throw new \Exception("Cabang tidak terdeteksi. Pengaturan tidak dapat dimuat.");
+        }
+        static $cached = [];
+
+        if (isset($cached[$currentCabangId]) && $cached[$currentCabangId] instanceof self) {
+            return $cached[$currentCabangId];
+        }
+
         if ($cached instanceof self) {
             $key = $cached->getKey();
             if ($key !== null && self::query()->whereKey($key)->exists()) {
@@ -65,9 +76,12 @@ class Setting extends Model
             }
             $cached = null;
         }
-        $cached = self::query()->first();
-        if (! $cached) {
-            $cached = self::query()->create([
+
+        $setting = self::query()->where('cabang_id', $currentCabangId)->first();
+
+        if (!$setting) {
+            $setting = self::query()->create([
+                'cabang_id' => $currentCabangId,
                 'store_name' => (string) config('app.name'),
                 'phone' => null,
                 'address' => null,
@@ -94,6 +108,8 @@ class Setting extends Model
             ]);
         }
 
-        return $cached;
+        $cached[$currentCabangId] = $setting;
+
+        return $cached[$currentCabangId];
     }
 }
