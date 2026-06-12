@@ -1,1 +1,0 @@
-<?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views\livewire/shift-logs/index.blade.php ENDPATH**/ ?>

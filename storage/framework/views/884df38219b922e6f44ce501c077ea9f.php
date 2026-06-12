@@ -13,7 +13,7 @@ $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
 'placeholder' => 'Pilih tanggal',
 'showPresets' => true,
 'selectClass' => 'shadow-theme-xs h-7 rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
-'inputClass' => 'h-7 w-full text-center rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-xs font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
+'inputClass' => 'h-7 w-full xl:w-[240px] xl:min-w-[180px] text-center rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-xs font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
 ]));
 
 foreach ($attributes->all() as $__key => $__value) {
@@ -41,7 +41,7 @@ foreach (array_filter(([
 'placeholder' => 'Pilih tanggal',
 'showPresets' => true,
 'selectClass' => 'shadow-theme-xs h-7 rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
-'inputClass' => 'h-7 w-full text-center rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-xs font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
+'inputClass' => 'h-7 w-full xl:w-[240px] xl:min-w-[180px] text-center rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-xs font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
@@ -149,4 +149,4 @@ unset($__defined_vars, $__key, $__value); ?>
             </svg>
         </div>
     </div>
-</div><?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/components/common/date-range-picker-transaction.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/common/date-range-picker-shift-log.blade.php ENDPATH**/ ?>

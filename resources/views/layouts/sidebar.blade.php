@@ -1,6 +1,6 @@
 <div>
     <aside id="sidebar"
-        class="fixed flex flex-col mt-0 top-0 px-3 left-0 bg-gray-900 dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
+        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-gray-900 dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
         x-data="{
             openSubmenus: {},
             init() {
@@ -70,7 +70,7 @@
         {{-- @mouseenter="window.innerWidth >= 1024 && !$store.sidebar.isExpanded ? $store.sidebar.setHovered(true) : null"
         @mouseleave="$store.sidebar.setHovered(false)"
         @click.outside="$store.sidebar.isMobileOpen ? $store.sidebar.toggleMobileOpen() : null">  --}} <!-- Logo Section -->
-        <div class="pt-6 pb-4 flex items-center gap-3"
+        <div class="pt-1.5 pb-2 flex items-center gap-3"
             :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
             'justify-center' :
             'justify-start'">
@@ -88,7 +88,7 @@
 
                 <!-- Logo ICON (WAJIB beda file) -->
                 <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                    x-transition src="{{ asset('assets/images/logoesb.png') }}" alt="Logo Icon" width="100"/>
+                    x-transition src="{{ asset('assets/images/logoesb.png') }}" alt="Logo Icon" width="40"/>
 
             </a>
 
@@ -311,9 +311,9 @@
             <!-- User Profile Section - Minimal -->
             <div class="mt-2 pt-4 pb-2 border-t border-gray-200 dark:border-gray-800">
                 <!-- Profile Header - No hover effects -->
-                <div class="flex items-center gap-3 p-3 rounded-xl">
+                <div class="flex items-center gap-3 p-3 rounded-xl justify-center">
                     <div class="flex-shrink-0">
-                        <svg class="w-3 h-3 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        <svg class="w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -321,18 +321,18 @@
                     </div>
                     <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                         class="min-w-0 flex-1">
-                        <p class="font-semibold text-sm text-gray-500 truncate dark:text-white">
+                        <p class="font-semibold text-sm text-gray-500 truncate dark:text-white jus">
                             {{ auth()->user()?->name ?? 'Pengguna' }}</p>
                         <p class="text-xs text-gray-500 truncate dark:text-gray-400">{{ auth()->user()?->email ?? '' }}
                         </p>
                     </div>
-                    <div x-show="!($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
+                    {{-- <div x-show="!($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
                         class="ml-auto">
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 01 8 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- END SHIFT BUTTON -->

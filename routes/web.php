@@ -526,6 +526,8 @@ if ($adminDomain !== '') {
             Route::get('/cabang', CabangPage::class)->middleware('permission:cabang.view|cabang.manage')->name('cabang.index');
 
             Route::get('/shift-logs', ShiftLogsPage::class)->name('shift-logs.index');
+
+            
         });
     });
 }

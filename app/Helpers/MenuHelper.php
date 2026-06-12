@@ -25,7 +25,7 @@ class MenuHelper
                 'exact' => true,
             ],
             [
-                'name' => 'Transaksi',
+                'name' => 'Sales Recapitulation',
                 'path' => self::path('transactions.index'),
                 'icon' => 'transactions',
                 'permission' => 'transactions.view',

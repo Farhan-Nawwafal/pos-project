@@ -1,6 +1,6 @@
 <header
     class="sticky flex w-full bg-[#1086e1] border-[#0f75c7] z-[99999] dark:border-[#0c5fa3] dark:bg-[#0f75c7] xl:border-b"
-    style="height: 60px;" x-data="{
+    style="height: 45px;" x-data="{
 
         isApplicationMenuOpen: false,
         toggleApplicationMenu() {
@@ -17,15 +17,14 @@
                 aria-label="Toggle Sidebar">
 
                 <!-- Plain white 3-lines hamburger (always, no X toggle) -->
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
 
             <div class="flex items-center justify-between w-full">
                 <div class="flex items-center gap-3">
-                    <button
-                        class="hidden lg:flex items-center justify-center rounded-lg p-2 transition-colors"
+                    <button class="hidden lg:flex items-center justify-center rounded-lg p-2 transition-colors"
                         @click="$store.sidebar.toggleExpanded()" aria-label="Toggle Sidebar">
                         <svg width="22" height="16" viewBox="0 0 20 14" fill="none">
                             <path d="M1 1H19" stroke="white" stroke-width="2" stroke-linecap="round" />
@@ -42,47 +41,63 @@
                         </div>
 
                     </div>
-                    <div class="flex flex-col">
-                        <span class="text-sm text-white">ESB Order Notification</span>
+                    <div class="flex items-center gap-1 ml-1">
+                        <i class="bi bi-exclamation-triangle-fill text-white text-sm "></i>
+
+                        <button @click="$dispatch('open-esb-modal')" class="btn text-white text-sm">
+                            ESB Order Notification
+                        </button>
                     </div>
-                    <div class="absolute inset-x-0 gap-7 flex items-center justify-end mr-30 pointer-events-none">
+
+                    
+                    <i class="bi bi-bell-fill text-white justify-end absolute inset-x-0  flex items-center justify-end mr-146"></i>
+
+                    <div class="absolute inset-x-0 gap-3 flex items-center justify-end mr-30 pointer-events-none">
                         <div x-data="{ now: new Date() }" x-init="setInterval(() => now = new Date(), 1000)"
                             class="text-sm text-white text-right">
-
+                            <i class="bi bi-clock text-xs gap-0.5"></i>
                             <span
                                 x-text="now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })"></span>
                             <span x-text="now.toLocaleTimeString('id-ID', { hour12: false })"
                                 class="font-mono ml-2"></span>
                         </div>
-                        <div>
-                            <span class="flex flex-col text-sm text-white">
+                        <div class="flex items-center gap-1 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z" />
+                            </svg>
+
+                            <span class="text-sm">
                                 Cabang <?php echo e(auth()->user()->cabang->name ?? ''); ?>
 
                             </span>
                         </div>
-                        <div>
-
+                        <div class="flex items-center gap-1 text-white text-xs">
+                            <i class="bi bi-display"></i>
                             <span class="flex flex-col text-sm text-white">
                                 <?php echo e(auth()->user()->role); ?>
 
                             </span>
                         </div>
-                        
+
 
                     </div>
 
 
                     
                 </div>
-                <div class="flex items-center gap-2">
-                            <form method="POST" action="<?php echo e(route('logout')); ?>" class="flex items-center">
-                                <?php echo csrf_field(); ?>
-                                <button type="submit"
-                                    class="text-white/90 hover:text-white text-sm font-semibold px-3 py-2 rounded-lg  transition-colors">
-                                    Sign Out
-                                </button>
-                            </form>
-                        </div>
+                <div class="flex items-center gap-1">
+                    <i class="bi bi-power text-white "></i>
+
+                    <form method="POST" action="<?php echo e(route('logout')); ?>" class="flex items-center">
+                        <?php echo csrf_field(); ?>
+                        <button type="submit"
+                            class="text-white/90 hover:text-white text-sm   py-2 rounded-lg  transition-colors">
+                            Sign Out
+                        </button>
+                    </form>
+                </div>
                 
         </div>
 </header>

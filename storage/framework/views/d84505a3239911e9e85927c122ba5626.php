@@ -113,4 +113,4 @@
             </table>
         </div>
     </div>
-</div><?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/shift-logs/index.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/livewire/shift-logs/index.blade.php ENDPATH**/ ?>
