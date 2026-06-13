@@ -1,40 +1,53 @@
-<div class="space-y-6">
+<div class="space-y-3">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Manajemen Produk</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Kelola produk dan kategori dalam satu halaman.</p>
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Branch Menu Management</h2>
+            
         </div>
-
-        <div
-            class="grid grid-cols-2 justify-center rounded-lg border border-gray-200 bg-white p-1 shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03]">
-            <button type="button" wire:click="setTab('products')" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                'rounded-md px-4 py-2 text-sm font-medium transition',
-                'bg-brand-500 text-white' => $tab === 'products',
-                'text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-white/[0.03]' =>
-                    $tab !== 'products',
-            ]); ?>">
-                Produk
-            </button>
-            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('categories.view')): ?>
-                <button type="button" wire:click="setTab('categories')" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                    'rounded-md px-4 py-2 text-sm font-medium transition',
-                    'bg-brand-500 text-white' => $tab === 'categories',
-                    'text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-white/[0.03]' =>
-                        $tab !== 'categories',
-                ]); ?>">
-                    Kategori
-                </button>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <div class="flex flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+        
+        <div class="flex flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
         <button type="button" wire:click="openCopyMenuModal"
-            class="bg-white border border-gray-300 shadow-theme-xs hover:bg-gray-50 inline-flex h-11 items-center justify-center rounded-lg px-4 text-sm font-semibold text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+            class="bg-white border border-gray-300 shadow-theme-xs hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-lg px-4 text-xs font-semibold text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
             Copy Menu Cabang
+        </button>
+        <div class="relative flex-1 sm:flex-auto">
+                <span class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                </span>
+                <input wire:model.live.debounce.400ms="search" type="text" placeholder="Search menu in selected category" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-8 w-full rounded-sm border border-gray-300 bg-transparent py-1 pr-4 pl-3 text-xs text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden sm:w-[350px] sm:min-w-[350px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/50" />
+            </div>
+    </div>
+        
+    </div>
+    <div class="flex flex-col gap-2 sm:w-auto sm:flex-row sm:items-center pb-6">
+        <button type="button" wire:click="openCopyMenuModal"
+            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+            All Menu
+        </button>
+        <button type="button" wire:click="openCopyMenuModal"
+            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+            Soul Out Menu
+        </button>
+        <button type="button" wire:click="openCopyMenuModal"
+            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+            Limit Quantity Menu
         </button>
 
     </div>
+    <div class="flex justify-start rounded-lg p-1 shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03] gap-2">
+    
+    <button type="button" wire:click="setTab('products')" 
+        class="rounded-md px-25 py-5 text-sm font-medium transition bg-brand-500 text-white">
+        Produk
+    </button>
+
+    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('categories.view')): ?>
+        <button type="button" wire:click="setTab('categories')" 
+            class="rounded-md px-25 py-5 text-sm font-medium transition bg-brand-500 text-white">
+            Kategori
+        </button>
+    <?php endif; ?>
+
+</div>
 
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($copyMenuModalOpen): ?>
         <div class="fixed inset-0 z-[100000] flex items-center justify-center p-4" aria-modal="true" role="dialog">
