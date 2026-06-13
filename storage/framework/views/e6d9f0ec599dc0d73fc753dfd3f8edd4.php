@@ -16,15 +16,15 @@
                 this.openSubmenus = {};
 
                 <?php $__currentLoopData = $menuGroups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $groupIndex => $menuGroup): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <?php $__currentLoopData = $menuGroup['items']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $itemIndex => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <?php if(isset($item['subItems'])): ?>
-                <?php $__currentLoopData = $item['subItems']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                if (this.isActive('<?php echo e($subItem['path']); ?>', <?php echo e(json_encode($subItem['exact'] ?? false)); ?>, <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>)) {
-                    this.openSubmenus['<?php echo e($groupIndex); ?>-<?php echo e($itemIndex); ?>'] = true;
-                }
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                <?php endif; ?>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $menuGroup['items']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $itemIndex => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if(isset($item['subItems'])): ?>
+                            <?php $__currentLoopData = $item['subItems']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                if (this.isActive('<?php echo e($subItem['path']); ?>', <?php echo e(json_encode($subItem['exact'] ?? false)); ?>, <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>)) {
+                                    this.openSubmenus['<?php echo e($groupIndex); ?>-<?php echo e($itemIndex); ?>'] = true;
+                                }
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             },
             toggleSubmenu(groupIndex, itemIndex) {
@@ -58,18 +58,16 @@
                 }
                 return window.location.pathname.startsWith(path);
             }
-        }"
-        :class="{
+        }" :class="{
             'lg:w-[60px] lg:translate-x-0': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen,
             'w-[290px] translate-x-0 lg:w-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered || $store
                 .sidebar.isMobileOpen,
             'w-0 -translate-x-full': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen
-        }"
-         <!-- Logo Section -->
-        <div class="pt-1.5 pb-2 flex items-center gap-3"
-            :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
+        }" 
+        <!-- Logo Section -->
+        <div class="pt-1.5 pb-2 flex items-center gap-3" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
             'justify-center' :
             'justify-start'">
 
@@ -86,7 +84,7 @@
 
                 <!-- Logo ICON (WAJIB beda file) -->
                 <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                    x-transition src="<?php echo e(asset('assets/images/logoesb.png')); ?>" alt="Logo Icon" width="40"/>
+                    x-transition src="<?php echo e(asset('assets/images/logoesb.png')); ?>" alt="Logo Icon" width="40" />
 
             </a>
 
@@ -96,21 +94,19 @@
         </div>
 
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($canAccessPos): ?>
-            <div class="pb-3 mt-1" x-data="{ showTooltip: false }"
+            <div class="pb-0 mt-3" x-data="{ showTooltip: false }"
                 x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen || window.innerWidth >= 1024">
+
                 <a href="<?php echo e(route('pos.index')); ?>" wire:navigate @mouseenter="showTooltip = true"
-                    @mouseleave="showTooltip= false"
+                    @mouseleave="showTooltip = false"
                     class="relative flex items-center w-full px-3 py-3 transition-all duration-300 ease-in-out rounded-xl group focus:outline-none focus:ring-2 focus:ring-offset-2"
                     :class="[
-                        isActive('<?php echo e(route('pos.index', [], false)); ?>') ?
-                        ' text-white' :
-                        ' hover:text-white ',
-                        (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
-                        'justify-center' : 'justify-start'
-                    ]">
+                    isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'hover:text-white',
+                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'justify-center' : 'justify-start'
+                ]">
 
                     <span class="flex items-center justify-center"
-                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500'">
+                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 group-hover:text-white'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-calculator" viewBox="0 0 16 16">
                             <path
@@ -122,9 +118,10 @@
 
                     <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                         x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 translate-x-"
+                        x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
-                        class="ml-3 text-sm font-bold tracking-wide whitespace-nowrap">
+                        class="ml-3 text-sm font-bold tracking-wide whitespace-nowrap"
+                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 group-hover:text-white'">
                         Masuk Kasir
                     </span>
 
@@ -147,10 +144,9 @@
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $menuGroups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $groupIndex => $menuGroup): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                         <div>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(trim((string) ($menuGroup['title'] ?? '')) !== ''): ?>
-                                <h2 class="mb-4 text-xs uppercase flex leading-[20px] text-gray-500"
-                                    :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
-                                        .isMobileOpen) ?
-                                    'lg:justify-center' : 'justify-start'">
+                                <h2 class="mb-4 text-xs uppercase flex leading-[20px] text-gray-500" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
+                                                .isMobileOpen) ?
+                                            'lg:justify-center' : 'justify-start'">
                                     <template
                                         x-if="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen">
                                         <span><?php echo e($menuGroup['title']); ?></span>
@@ -174,18 +170,16 @@
                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(isset($item['subItems'])): ?>
                                             <!-- Menu Item with Submenu -->
                                             <button @click="toggleSubmenu(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>)"
-                                                class="menu-item group w-full"
-                                                :class="[
-                                                    isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) ?
-                                                    'menu-item-active' : 'menu-item-inactive',
-                                                    !$store.sidebar.isExpanded && !$store.sidebar.isHovered ?
-                                                    'xl:justify-center' : 'xl:justify-start'
-                                                ]">
+                                                class="menu-item group w-full" :class="[
+                                                                isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) ?
+                                                                'menu-item-active' : 'menu-item-inactive',
+                                                                !$store.sidebar.isExpanded && !$store.sidebar.isHovered ?
+                                                                'xl:justify-center' : 'xl:justify-start'
+                                                            ]">
 
                                                 <!-- Icon -->
-                                                <span
-                                                    :class="isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) ?
-                                                        'menu-item-icon-active' : 'menu-item-icon-inactive'">
+                                                <span :class="isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) ?
+                                                                    'menu-item-icon-active' : 'menu-item-icon-inactive'">
                                                     <?php echo \App\Helpers\MenuHelper::getIconSvg($item['icon']); ?>
 
                                                 </span>
@@ -197,11 +191,10 @@
                                                     <?php echo e($item['name']); ?>
 
                                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($item['new'])): ?>
-                                                        <span class="absolute right-10"
-                                                            :class="isActive('<?php echo e($item['path'] ?? ''); ?>',
-                                                                    <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
-                                                                'menu-dropdown-badge menu-dropdown-badge-active' :
-                                                                'menu-dropdown-badge menu-dropdown-badge-inactive'">
+                                                        <span class="absolute right-10" :class="isActive('<?php echo e($item['path'] ?? ''); ?>',
+                                                                                    <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
+                                                                                'menu-dropdown-badge menu-dropdown-badge-active' :
+                                                                                'menu-dropdown-badge menu-dropdown-badge-inactive'">
                                                             new
                                                         </span>
                                                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -209,14 +202,12 @@
 
                                                 <!-- Chevron Down Icon -->
                                                 <svg x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                                                    class="ml-auto w-1 h-1 transition-transform duration-200"
-                                                    :class="{
-                                                        'rotate-180 text-gray-500': isSubmenuOpen(<?php echo e($groupIndex); ?>,
-                                                            <?php echo e($itemIndex); ?>)
-                                                    }"
-                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                    class="ml-auto w-1 h-1 transition-transform duration-200" :class="{
+                                                                    'rotate-180 text-gray-500': isSubmenuOpen(<?php echo e($groupIndex); ?>,
+                                                                        <?php echo e($itemIndex); ?>)
+                                                                }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 9l-7 7-7-7"></path>
                                                 </svg>
                                             </button>
 
@@ -226,37 +217,36 @@
                                                 <ul class="mt-2 space-y-1 ml-9">
                                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $item['subItems']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                                         <li>
-                                                            <a href="<?php echo e($subItem['path']); ?>" wire:navigate
-                                                                class="menu-dropdown-item"
+                                                            <a href="<?php echo e($subItem['path']); ?>" wire:navigate class="menu-dropdown-item"
                                                                 :class="isActive('<?php echo e($subItem['path']); ?>',
-                                                                        <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
-                                                                        <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>) ?
-                                                                    'menu-dropdown-item-active' :
-                                                                    'menu-dropdown-item-inactive'">
+                                                                                        <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
+                                                                                        <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>) ?
+                                                                                    'menu-dropdown-item-active' :
+                                                                                    'menu-dropdown-item-inactive'">
                                                                 <?php echo e($subItem['name']); ?>
 
                                                                 <span class="flex items-center gap-1 ml-auto">
                                                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($subItem['new'])): ?>
                                                                         <span
                                                                             :class="isActive('<?php echo e($subItem['path']); ?>',
-                                                                                    <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
-                                                                                    <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>
+                                                                                                        <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
+                                                                                                        <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>
 
-                                                                                ) ?
-                                                                                'menu-dropdown-badge menu-dropdown-badge-active' :
-                                                                                'menu-dropdown-badge menu-dropdown-badge-inactive'">
+                                                                                                    ) ?
+                                                                                                    'menu-dropdown-badge menu-dropdown-badge-active' :
+                                                                                                    'menu-dropdown-badge menu-dropdown-badge-inactive'">
                                                                             new
                                                                         </span>
                                                                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($subItem['pro'])): ?>
                                                                         <span
                                                                             :class="isActive('<?php echo e($subItem['path']); ?>',
-                                                                                    <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
-                                                                                    <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>
+                                                                                                        <?php echo e(json_encode($subItem['exact'] ?? false)); ?>,
+                                                                                                        <?php echo e(json_encode($subItem['exclude'] ?? [])); ?>
 
-                                                                                ) ?
-                                                                                'menu-dropdown-badge-pro menu-dropdown-badge-pro-active' :
-                                                                                'menu-dropdown-badge-pro menu-dropdown-badge-pro-inactive'">
+                                                                                                    ) ?
+                                                                                                    'menu-dropdown-badge-pro menu-dropdown-badge-pro-active' :
+                                                                                                    'menu-dropdown-badge-pro menu-dropdown-badge-pro-inactive'">
                                                                             pro
                                                                         </span>
                                                                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -268,24 +258,22 @@
                                             </div>
                                         <?php else: ?>
                                             <!-- Simple Menu Item -->
-                                            <a href="<?php echo e($item['path']); ?>" wire:navigate class="menu-item group"
-                                                :class="[
-                                                    isActive('<?php echo e($item['path']); ?>',
-                                                        <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
-                                                    'menu-item-active' :
-                                                    'menu-item-inactive',
-                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store
-                                                        .sidebar.isMobileOpen) ?
-                                                    'xl:justify-center' :
-                                                    'justify-start'
-                                                ]">
+                                            <a href="<?php echo e($item['path']); ?>" wire:navigate class="menu-item group" :class="[
+                                                                isActive('<?php echo e($item['path']); ?>',
+                                                                    <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
+                                                                'menu-item-active' :
+                                                                'menu-item-inactive',
+                                                                (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store
+                                                                    .sidebar.isMobileOpen) ?
+                                                                'xl:justify-center' :
+                                                                'justify-start'
+                                                            ]">
 
                                                 <!-- Icon -->
-                                                <span
-                                                    :class="isActive('<?php echo e($item['path']); ?>',
-                                                            <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
-                                                        'menu-item-icon-active' :
-                                                        'menu-item-icon-inactive'">
+                                                <span :class="isActive('<?php echo e($item['path']); ?>',
+                                                                        <?php echo e(json_encode($item['exact'] ?? false)); ?>) ?
+                                                                    'menu-item-icon-active' :
+                                                                    'menu-item-icon-inactive'">
                                                     <?php echo \App\Helpers\MenuHelper::getIconSvg($item['icon']); ?>
 
                                                 </span>
@@ -327,7 +315,9 @@
                     <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                         class="min-w-0 flex-1">
                         <p class="font-semibold text-sm text-gray-500 truncate dark:text-white jus">
-                            <?php echo e(auth()->user()?->name ?? 'Pengguna'); ?></p>
+                            <?php echo e(auth()->user()?->name ?? 'Pengguna'); ?>
+
+                        </p>
                         <p class="text-xs text-gray-500 truncate dark:text-gray-400"><?php echo e(auth()->user()?->email ?? ''); ?>
 
                         </p>
@@ -338,33 +328,33 @@
                 <!-- END SHIFT BUTTON -->
                 <div class="mt-3 px-3">
                     
-                    <button type="button" wire:click="processEndShift"
-                        wire:confirm="Yakin ingin menutup shift? Laporan akan dicetak dan Anda akan keluar dari aplikasi."
-                        class="relative group w-full flex items-center justify-center gap-1 py-2 px-1 text-sm font-semibold text-orange-600  rounded-lg transition-colors dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/30 dark:hover:bg-orange-500/20"
-                        x-data="{ showTooltip: false }" @mouseenter="showTooltip = true" @mouseleave="showTooltip = false">
+                            <button type="button" wire:click="processEndShift"
+                                wire:confirm="Yakin ingin menutup shift? Laporan akan dicetak dan Anda akan keluar dari aplikasi."
+                                class="relative group w-full flex items-center justify-center gap-1 py-2 px-1 text-sm font-semibold text-orange-600  rounded-lg transition-colors dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/30 dark:hover:bg-orange-500/20"
+                                x-data="{ showTooltip: false }" @mouseenter="showTooltip = true"
+                                @mouseleave="showTooltip = false">
 
-                        <svg class="w-4 h-4 flex-shrink-0"  stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                                <svg class="w-4 h-4 flex-shrink-0" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
 
-                        <span
-                            x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                            x-transition:enter="transition ease-out duration-300"
-                            x-transition:enter-start="opacity-0 translate-x-1"
-                            x-transition:enter-end="opacity-100 translate-x-0" class="whitespace-nowrap">Tutup
-                            Shift</span>
+                                <span
+                                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 translate-x-1"
+                                    x-transition:enter-end="opacity-100 translate-x-0" class="whitespace-nowrap">Tutup
+                                    Shift</span>
 
-                        <!-- Tooltip for collapsed state -->
-                        <div x-show="showTooltip && !($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            class="absolute left-full ml-2 z-[50] px-3 py-2 text-xs font-semibold text-white bg-gray-800 rounded-lg shadow-xl whitespace-nowrap">
-                            Tutup Shift
-                            <div class="absolute w-2 h-2 bg-gray-800 -left-1 top-2 rotate-45"></div>
-                        </div>
-                    </button>
+                                <!-- Tooltip for collapsed state -->
+                                <div x-show="showTooltip && !($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
+                                    x-transition:enter="transition ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 translate-y-1"
+                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                    class="absolute left-full ml-2 z-[50] px-3 py-2 text-xs font-semibold text-white bg-gray-800 rounded-lg shadow-xl whitespace-nowrap">
+                                    Tutup Shift
+                                    <div class="absolute w-2 h-2 bg-gray-800 -left-1 top-2 rotate-45"></div>
+                                </div>
+                            </button>
                 </div>
 
                 
@@ -376,7 +366,7 @@
                 <script>
                     function endShift() {
                         if (confirm(
-                                'Tutup shift dan cetak laporan tutup kasir? (nama kasir: <?php echo e(auth()->user()?->name); ?>, hari ini)')) {
+                            'Tutup shift dan cetak laporan tutup kasir? (nama kasir: <?php echo e(auth()->user()?->name); ?>, hari ini)')) {
                             // Demo end-shift data (real data in production)
                             const endShiftData = {
                                 store: {
@@ -390,47 +380,47 @@
                                 total_sales: 1250000,
                                 total_items: 85,
                                 top_products: [{
-                                        name: 'Nasi Goreng Spesial',
-                                        qty: 12,
-                                        total: 180000
-                                    },
-                                    {
-                                        name: 'Ayam Bakar Madu',
-                                        qty: 8,
-                                        total: 120000
-                                    },
-                                    {
-                                        name: 'Es Teh Manis',
-                                        qty: 25,
-                                        total: 62500
-                                    },
-                                    {
-                                        name: 'Mie Goreng',
-                                        qty: 6,
-                                        total: 48000
-                                    },
-                                    {
-                                        name: 'Tumis Kangkung',
-                                        qty: 5,
-                                        total: 35000
-                                    }
+                                    name: 'Nasi Goreng Spesial',
+                                    qty: 12,
+                                    total: 180000
+                                },
+                                {
+                                    name: 'Ayam Bakar Madu',
+                                    qty: 8,
+                                    total: 120000
+                                },
+                                {
+                                    name: 'Es Teh Manis',
+                                    qty: 25,
+                                    total: 62500
+                                },
+                                {
+                                    name: 'Mie Goreng',
+                                    qty: 6,
+                                    total: 48000
+                                },
+                                {
+                                    name: 'Tumis Kangkung',
+                                    qty: 5,
+                                    total: 35000
+                                }
                                 ],
                                 items: [{
-                                        product: {
-                                            name: 'Nasi Goreng Spesial'
-                                        },
-                                        quantity: 12,
-                                        price: 15000,
-                                        subtotal: 180000
+                                    product: {
+                                        name: 'Nasi Goreng Spesial'
                                     },
-                                    {
-                                        product: {
-                                            name: 'Ayam Bakar Madu'
-                                        },
-                                        quantity: 8,
-                                        price: 15000,
-                                        subtotal: 120000
-                                    }
+                                    quantity: 12,
+                                    price: 15000,
+                                    subtotal: 180000
+                                },
+                                {
+                                    product: {
+                                        name: 'Ayam Bakar Madu'
+                                    },
+                                    quantity: 8,
+                                    price: 15000,
+                                    subtotal: 120000
+                                }
                                 ]
                             };
 
@@ -464,7 +454,7 @@
                 </script>
 
                 <!-- Logout Only -->
-                
+
             </div>
         </div>
         <?php
@@ -476,8 +466,7 @@
                 <div class="flex flex-col items-center justify-center gap-3 text-center">
                     <span
                         class="mt-0.5 hidden md:inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white">
-                        <svg class="h-1 w-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="2">
+                        <svg class="h-1 w-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" />
                         </svg>
@@ -515,5 +504,4 @@
         x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
     </div>
-</div>
-<?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
