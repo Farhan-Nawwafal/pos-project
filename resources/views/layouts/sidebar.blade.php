@@ -1,6 +1,6 @@
 <div>
     <aside id="sidebar"
-        class="fixed flex flex-col mt-0 top-0 px-3 left-0 bg-gray-900 dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
+        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-gray-900 dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
         x-data="{
             openSubmenus: {},
             init() {
@@ -16,15 +16,15 @@
                 this.openSubmenus = {};
 
                 @foreach($menuGroups as $groupIndex => $menuGroup)
-                @foreach($menuGroup['items'] as $itemIndex => $item)
-                @if(isset($item['subItems']))
-                @foreach($item['subItems'] as $subItem)
-                if (this.isActive('{{ $subItem['path'] }}', {{ json_encode($subItem['exact'] ?? false) }}, {{ json_encode($subItem['exclude'] ?? []) }})) {
-                    this.openSubmenus['{{ $groupIndex }}-{{ $itemIndex }}'] = true;
-                }
-                @endforeach
-                @endif
-                @endforeach
+                    @foreach($menuGroup['items'] as $itemIndex => $item)
+                        @if(isset($item['subItems']))
+                            @foreach($item['subItems'] as $subItem)
+                                if (this.isActive('{{ $subItem['path'] }}', {{ json_encode($subItem['exact'] ?? false) }}, {{ json_encode($subItem['exclude'] ?? []) }})) {
+                                    this.openSubmenus['{{ $groupIndex }}-{{ $itemIndex }}'] = true;
+                                }
+                            @endforeach
+                        @endif
+                    @endforeach
                 @endforeach
             },
             toggleSubmenu(groupIndex, itemIndex) {
@@ -58,20 +58,19 @@
                 }
                 return window.location.pathname.startsWith(path);
             }
-        }"
-        :class="{
+        }" :class="{
             'lg:w-[60px] lg:translate-x-0': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen,
             'w-[290px] translate-x-0 lg:w-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered || $store
                 .sidebar.isMobileOpen,
             'w-0 -translate-x-full': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen
-        }"
-        {{-- @mouseenter="window.innerWidth >= 1024 && !$store.sidebar.isExpanded ? $store.sidebar.setHovered(true) : null"
+        }" {{--
+        @mouseenter="window.innerWidth >= 1024 && !$store.sidebar.isExpanded ? $store.sidebar.setHovered(true) : null"
         @mouseleave="$store.sidebar.setHovered(false)"
-        @click.outside="$store.sidebar.isMobileOpen ? $store.sidebar.toggleMobileOpen() : null">  --}} <!-- Logo Section -->
-        <div class="pt-6 pb-4 flex items-center gap-3"
-            :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
+        @click.outside="$store.sidebar.isMobileOpen ? $store.sidebar.toggleMobileOpen() : null"> --}}
+        <!-- Logo Section -->
+        <div class="pt-1.5 pb-2 flex items-center gap-3" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
             'justify-center' :
             'justify-start'">
 
@@ -88,7 +87,7 @@
 
                 <!-- Logo ICON (WAJIB beda file) -->
                 <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                    x-transition src="{{ asset('assets/images/logoesb.png') }}" alt="Logo Icon" width="100"/>
+                    x-transition src="{{ asset('assets/images/logoesb.png') }}" alt="Logo Icon" width="40" />
 
             </a>
 
@@ -98,21 +97,19 @@
         </div>
 
         @if ($canAccessPos)
-            <div class="pb-3 mt-1" x-data="{ showTooltip: false }"
+            <div class="pb-0 mt-3" x-data="{ showTooltip: false }"
                 x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen || window.innerWidth >= 1024">
+
                 <a href="{{ route('pos.index') }}" wire:navigate @mouseenter="showTooltip = true"
-                    @mouseleave="showTooltip= false"
+                    @mouseleave="showTooltip = false"
                     class="relative flex items-center w-full px-3 py-3 transition-all duration-300 ease-in-out rounded-xl group focus:outline-none focus:ring-2 focus:ring-offset-2"
                     :class="[
-                        isActive('{{ route('pos.index', [], false) }}') ?
-                        ' text-white' :
-                        ' hover:text-white ',
-                        (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
-                        'justify-center' : 'justify-start'
-                    ]">
+                    isActive('{{ route('pos.index', [], false) }}') ? 'text-white' : 'hover:text-white',
+                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'justify-center' : 'justify-start'
+                ]">
 
                     <span class="flex items-center justify-center"
-                        :class="isActive('{{ route('pos.index', [], false) }}') ? 'text-white' : 'text-gray-500'">
+                        :class="isActive('{{ route('pos.index', [], false) }}') ? 'text-white' : 'text-gray-500 group-hover:text-white'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-calculator" viewBox="0 0 16 16">
                             <path
@@ -124,9 +121,10 @@
 
                     <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                         x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 translate-x-"
+                        x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
-                        class="ml-3 text-sm font-bold tracking-wide whitespace-nowrap">
+                        class="ml-3 text-sm font-bold tracking-wide whitespace-nowrap"
+                        :class="isActive('{{ route('pos.index', [], false) }}') ? 'text-white' : 'text-gray-500 group-hover:text-white'">
                         Masuk Kasir
                     </span>
 
@@ -149,10 +147,9 @@
                     @foreach ($menuGroups as $groupIndex => $menuGroup)
                         <div>
                             @if (trim((string) ($menuGroup['title'] ?? '')) !== '')
-                                <h2 class="mb-4 text-xs uppercase flex leading-[20px] text-gray-500"
-                                    :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
-                                        .isMobileOpen) ?
-                                    'lg:justify-center' : 'justify-start'">
+                                <h2 class="mb-4 text-xs uppercase flex leading-[20px] text-gray-500" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
+                                                .isMobileOpen) ?
+                                            'lg:justify-center' : 'justify-start'">
                                     <template
                                         x-if="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen">
                                         <span>{{ $menuGroup['title'] }}</span>
@@ -176,18 +173,16 @@
                                         @if (isset($item['subItems']))
                                             <!-- Menu Item with Submenu -->
                                             <button @click="toggleSubmenu({{ $groupIndex }}, {{ $itemIndex }})"
-                                                class="menu-item group w-full"
-                                                :class="[
-                                                    isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ?
-                                                    'menu-item-active' : 'menu-item-inactive',
-                                                    !$store.sidebar.isExpanded && !$store.sidebar.isHovered ?
-                                                    'xl:justify-center' : 'xl:justify-start'
-                                                ]">
+                                                class="menu-item group w-full" :class="[
+                                                                isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ?
+                                                                'menu-item-active' : 'menu-item-inactive',
+                                                                !$store.sidebar.isExpanded && !$store.sidebar.isHovered ?
+                                                                'xl:justify-center' : 'xl:justify-start'
+                                                            ]">
 
                                                 <!-- Icon -->
-                                                <span
-                                                    :class="isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ?
-                                                        'menu-item-icon-active' : 'menu-item-icon-inactive'">
+                                                <span :class="isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ?
+                                                                    'menu-item-icon-active' : 'menu-item-icon-inactive'">
                                                     {!! \App\Helpers\MenuHelper::getIconSvg($item['icon']) !!}
                                                 </span>
 
@@ -197,11 +192,10 @@
                                                     class="menu-item-text flex items-center gap-2">
                                                     {{ $item['name'] }}
                                                     @if (!empty($item['new']))
-                                                        <span class="absolute right-10"
-                                                            :class="isActive('{{ $item['path'] ?? '' }}',
-                                                                    {{ json_encode($item['exact'] ?? false) }}) ?
-                                                                'menu-dropdown-badge menu-dropdown-badge-active' :
-                                                                'menu-dropdown-badge menu-dropdown-badge-inactive'">
+                                                        <span class="absolute right-10" :class="isActive('{{ $item['path'] ?? '' }}',
+                                                                                    {{ json_encode($item['exact'] ?? false) }}) ?
+                                                                                'menu-dropdown-badge menu-dropdown-badge-active' :
+                                                                                'menu-dropdown-badge menu-dropdown-badge-inactive'">
                                                             new
                                                         </span>
                                                     @endif
@@ -209,14 +203,12 @@
 
                                                 <!-- Chevron Down Icon -->
                                                 <svg x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                                                    class="ml-auto w-1 h-1 transition-transform duration-200"
-                                                    :class="{
-                                                        'rotate-180 text-gray-500': isSubmenuOpen({{ $groupIndex }},
-                                                            {{ $itemIndex }})
-                                                    }"
-                                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                    class="ml-auto w-1 h-1 transition-transform duration-200" :class="{
+                                                                    'rotate-180 text-gray-500': isSubmenuOpen({{ $groupIndex }},
+                                                                        {{ $itemIndex }})
+                                                                }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 9l-7 7-7-7"></path>
                                                 </svg>
                                             </button>
 
@@ -226,34 +218,33 @@
                                                 <ul class="mt-2 space-y-1 ml-9">
                                                     @foreach ($item['subItems'] as $subItem)
                                                         <li>
-                                                            <a href="{{ $subItem['path'] }}" wire:navigate
-                                                                class="menu-dropdown-item"
+                                                            <a href="{{ $subItem['path'] }}" wire:navigate class="menu-dropdown-item"
                                                                 :class="isActive('{{ $subItem['path'] }}',
-                                                                        {{ json_encode($subItem['exact'] ?? false) }},
-                                                                        {{ json_encode($subItem['exclude'] ?? []) }}) ?
-                                                                    'menu-dropdown-item-active' :
-                                                                    'menu-dropdown-item-inactive'">
+                                                                                        {{ json_encode($subItem['exact'] ?? false) }},
+                                                                                        {{ json_encode($subItem['exclude'] ?? []) }}) ?
+                                                                                    'menu-dropdown-item-active' :
+                                                                                    'menu-dropdown-item-inactive'">
                                                                 {{ $subItem['name'] }}
                                                                 <span class="flex items-center gap-1 ml-auto">
                                                                     @if (!empty($subItem['new']))
                                                                         <span
                                                                             :class="isActive('{{ $subItem['path'] }}',
-                                                                                    {{ json_encode($subItem['exact'] ?? false) }},
-                                                                                    {{ json_encode($subItem['exclude'] ?? []) }}
-                                                                                ) ?
-                                                                                'menu-dropdown-badge menu-dropdown-badge-active' :
-                                                                                'menu-dropdown-badge menu-dropdown-badge-inactive'">
+                                                                                                        {{ json_encode($subItem['exact'] ?? false) }},
+                                                                                                        {{ json_encode($subItem['exclude'] ?? []) }}
+                                                                                                    ) ?
+                                                                                                    'menu-dropdown-badge menu-dropdown-badge-active' :
+                                                                                                    'menu-dropdown-badge menu-dropdown-badge-inactive'">
                                                                             new
                                                                         </span>
                                                                     @endif
                                                                     @if (!empty($subItem['pro']))
                                                                         <span
                                                                             :class="isActive('{{ $subItem['path'] }}',
-                                                                                    {{ json_encode($subItem['exact'] ?? false) }},
-                                                                                    {{ json_encode($subItem['exclude'] ?? []) }}
-                                                                                ) ?
-                                                                                'menu-dropdown-badge-pro menu-dropdown-badge-pro-active' :
-                                                                                'menu-dropdown-badge-pro menu-dropdown-badge-pro-inactive'">
+                                                                                                        {{ json_encode($subItem['exact'] ?? false) }},
+                                                                                                        {{ json_encode($subItem['exclude'] ?? []) }}
+                                                                                                    ) ?
+                                                                                                    'menu-dropdown-badge-pro menu-dropdown-badge-pro-active' :
+                                                                                                    'menu-dropdown-badge-pro menu-dropdown-badge-pro-inactive'">
                                                                             pro
                                                                         </span>
                                                                     @endif
@@ -265,24 +256,22 @@
                                             </div>
                                         @else
                                             <!-- Simple Menu Item -->
-                                            <a href="{{ $item['path'] }}" wire:navigate class="menu-item group"
-                                                :class="[
-                                                    isActive('{{ $item['path'] }}',
-                                                        {{ json_encode($item['exact'] ?? false) }}) ?
-                                                    'menu-item-active' :
-                                                    'menu-item-inactive',
-                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store
-                                                        .sidebar.isMobileOpen) ?
-                                                    'xl:justify-center' :
-                                                    'justify-start'
-                                                ]">
+                                            <a href="{{ $item['path'] }}" wire:navigate class="menu-item group" :class="[
+                                                                isActive('{{ $item['path'] }}',
+                                                                    {{ json_encode($item['exact'] ?? false) }}) ?
+                                                                'menu-item-active' :
+                                                                'menu-item-inactive',
+                                                                (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store
+                                                                    .sidebar.isMobileOpen) ?
+                                                                'xl:justify-center' :
+                                                                'justify-start'
+                                                            ]">
 
                                                 <!-- Icon -->
-                                                <span
-                                                    :class="isActive('{{ $item['path'] }}',
-                                                            {{ json_encode($item['exact'] ?? false) }}) ?
-                                                        'menu-item-icon-active' :
-                                                        'menu-item-icon-inactive'">
+                                                <span :class="isActive('{{ $item['path'] }}',
+                                                                        {{ json_encode($item['exact'] ?? false) }}) ?
+                                                                    'menu-item-icon-active' :
+                                                                    'menu-item-icon-inactive'">
                                                     {!! \App\Helpers\MenuHelper::getIconSvg($item['icon']) !!}
                                                 </span>
 
@@ -311,9 +300,9 @@
             <!-- User Profile Section - Minimal -->
             <div class="mt-2 pt-4 pb-2 border-t border-gray-200 dark:border-gray-800">
                 <!-- Profile Header - No hover effects -->
-                <div class="flex items-center gap-3 p-3 rounded-xl">
+                <div class="flex items-center gap-3 p-3 rounded-xl justify-center">
                     <div class="flex-shrink-0">
-                        <svg class="w-3 h-3 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                        <svg class="w-4 h-4 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -321,50 +310,52 @@
                     </div>
                     <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                         class="min-w-0 flex-1">
-                        <p class="font-semibold text-sm text-gray-500 truncate dark:text-white">
-                            {{ auth()->user()?->name ?? 'Pengguna' }}</p>
+                        <p class="font-semibold text-sm text-gray-500 truncate dark:text-white jus">
+                            {{ auth()->user()?->name ?? 'Pengguna' }}
+                        </p>
                         <p class="text-xs text-gray-500 truncate dark:text-gray-400">{{ auth()->user()?->email ?? '' }}
                         </p>
                     </div>
-                    <div x-show="!($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
+                    {{-- <div
+                        x-show="!($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
                         class="ml-auto">
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 01 8 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- END SHIFT BUTTON -->
                 <div class="mt-3 px-3">
                     {{-- Ubah <a> menjadi <button> dan tambahkan wire:click --}}
-                    <button type="button" wire:click="processEndShift"
-                        wire:confirm="Yakin ingin menutup shift? Laporan akan dicetak dan Anda akan keluar dari aplikasi."
-                        class="relative group w-full flex items-center justify-center gap-1 py-2 px-1 text-sm font-semibold text-orange-600  rounded-lg transition-colors dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/30 dark:hover:bg-orange-500/20"
-                        x-data="{ showTooltip: false }" @mouseenter="showTooltip = true" @mouseleave="showTooltip = false">
+                            <button type="button" wire:click="processEndShift"
+                                wire:confirm="Yakin ingin menutup shift? Laporan akan dicetak dan Anda akan keluar dari aplikasi."
+                                class="relative group w-full flex items-center justify-center gap-1 py-2 px-1 text-sm font-semibold text-orange-600  rounded-lg transition-colors dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/30 dark:hover:bg-orange-500/20"
+                                x-data="{ showTooltip: false }" @mouseenter="showTooltip = true"
+                                @mouseleave="showTooltip = false">
 
-                        <svg class="w-4 h-4 flex-shrink-0"  stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                                <svg class="w-4 h-4 flex-shrink-0" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
 
-                        <span
-                            x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                            x-transition:enter="transition ease-out duration-300"
-                            x-transition:enter-start="opacity-0 translate-x-1"
-                            x-transition:enter-end="opacity-100 translate-x-0" class="whitespace-nowrap">Tutup
-                            Shift</span>
+                                <span
+                                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 translate-x-1"
+                                    x-transition:enter-end="opacity-100 translate-x-0" class="whitespace-nowrap">Tutup
+                                    Shift</span>
 
-                        <!-- Tooltip for collapsed state -->
-                        <div x-show="showTooltip && !($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            class="absolute left-full ml-2 z-[50] px-3 py-2 text-xs font-semibold text-white bg-gray-800 rounded-lg shadow-xl whitespace-nowrap">
-                            Tutup Shift
-                            <div class="absolute w-2 h-2 bg-gray-800 -left-1 top-2 rotate-45"></div>
-                        </div>
-                    </button>
+                                <!-- Tooltip for collapsed state -->
+                                <div x-show="showTooltip && !($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
+                                    x-transition:enter="transition ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 translate-y-1"
+                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                    class="absolute left-full ml-2 z-[50] px-3 py-2 text-xs font-semibold text-white bg-gray-800 rounded-lg shadow-xl whitespace-nowrap">
+                                    Tutup Shift
+                                    <div class="absolute w-2 h-2 bg-gray-800 -left-1 top-2 rotate-45"></div>
+                                </div>
+                            </button>
                 </div>
 
                 {{-- Pastikan Form Logout ini ada di dalam file yang sama (di bawah) --}}
@@ -376,7 +367,7 @@
                 <script>
                     function endShift() {
                         if (confirm(
-                                'Tutup shift dan cetak laporan tutup kasir? (nama kasir: {{ auth()->user()?->name }}, hari ini)')) {
+                            'Tutup shift dan cetak laporan tutup kasir? (nama kasir: {{ auth()->user()?->name }}, hari ini)')) {
                             // Demo end-shift data (real data in production)
                             const endShiftData = {
                                 store: {
@@ -390,47 +381,47 @@
                                 total_sales: 1250000,
                                 total_items: 85,
                                 top_products: [{
-                                        name: 'Nasi Goreng Spesial',
-                                        qty: 12,
-                                        total: 180000
-                                    },
-                                    {
-                                        name: 'Ayam Bakar Madu',
-                                        qty: 8,
-                                        total: 120000
-                                    },
-                                    {
-                                        name: 'Es Teh Manis',
-                                        qty: 25,
-                                        total: 62500
-                                    },
-                                    {
-                                        name: 'Mie Goreng',
-                                        qty: 6,
-                                        total: 48000
-                                    },
-                                    {
-                                        name: 'Tumis Kangkung',
-                                        qty: 5,
-                                        total: 35000
-                                    }
+                                    name: 'Nasi Goreng Spesial',
+                                    qty: 12,
+                                    total: 180000
+                                },
+                                {
+                                    name: 'Ayam Bakar Madu',
+                                    qty: 8,
+                                    total: 120000
+                                },
+                                {
+                                    name: 'Es Teh Manis',
+                                    qty: 25,
+                                    total: 62500
+                                },
+                                {
+                                    name: 'Mie Goreng',
+                                    qty: 6,
+                                    total: 48000
+                                },
+                                {
+                                    name: 'Tumis Kangkung',
+                                    qty: 5,
+                                    total: 35000
+                                }
                                 ],
                                 items: [{
-                                        product: {
-                                            name: 'Nasi Goreng Spesial'
-                                        },
-                                        quantity: 12,
-                                        price: 15000,
-                                        subtotal: 180000
+                                    product: {
+                                        name: 'Nasi Goreng Spesial'
                                     },
-                                    {
-                                        product: {
-                                            name: 'Ayam Bakar Madu'
-                                        },
-                                        quantity: 8,
-                                        price: 15000,
-                                        subtotal: 120000
-                                    }
+                                    quantity: 12,
+                                    price: 15000,
+                                    subtotal: 180000
+                                },
+                                {
+                                    product: {
+                                        name: 'Ayam Bakar Madu'
+                                    },
+                                    quantity: 8,
+                                    price: 15000,
+                                    subtotal: 120000
+                                }
                                 ]
                             };
 
@@ -464,7 +455,7 @@
                 </script>
 
                 <!-- Logout Only -->
-                
+
             </div>
         </div>
         @php
@@ -476,8 +467,7 @@
                 <div class="flex flex-col items-center justify-center gap-3 text-center">
                     <span
                         class="mt-0.5 hidden md:inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white">
-                        <svg class="h-1 w-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="2">
+                        <svg class="h-1 w-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" />
                         </svg>
