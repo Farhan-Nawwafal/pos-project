@@ -44,7 +44,7 @@
                         ?>
 
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($shouldShow): ?>
-                            <button type="button" wire:click="selectTable(<?php echo e((int) $t['id']); ?>)"
+                            <button type="button" wire:click="openSelectTableModal(<?php echo e((int) $t['id']); ?>)"
                                 <?php if(in_array($status, ['occupied', 'booked', 'billed']) && isset($t['occupied_at'])): ?> x-data="{
                                             start: new Date('<?php echo e($t['occupied_at']); ?>').getTime(),
                                             display: '00:00',
@@ -110,8 +110,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
 
@@ -159,6 +157,7 @@
                         Search
                     </h3>
                     <div class="flex items-center gap-2">
+                        
                         <div class="relative flex-1">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <img src="/assets/icons/search.png" alt="Search"
@@ -168,7 +167,10 @@
                                 placeholder="Search menu / code"
                                 class="w-full h-11 border border-gray-300 rounded-lg bg-white pl-10 pr-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700" />
                         </div>
+
+                        
                         <div class="flex items-center gap-2 shrink-0">
+                            
                             <button type="button"
                                 class="w-11 h-11 flex items-center justify-center bg-white border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition shadow-sm"
                                 title="Refresh">
@@ -178,24 +180,37 @@
                                         d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                                 </svg>
                             </button>
+
+                            
                             <div
                                 class="flex items-center justify-between h-11 bg-white border border-gray-300 rounded-lg px-2 dark:bg-gray-900 dark:border-gray-700 shadow-sm gap-3">
-                                <button type="button"
-                                    class="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 transition"><svg
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                
+                                
+                                <button type="button" wire:click="previousPage"
+                                    class="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M15.75 19.5L8.25 12l7.5-7.5" />
-                                    </svg></button>
-                                <span class="text-sm font-bold text-gray-800 dark:text-white whitespace-nowrap">Meja
-                                    12</span>
-                                <button type="button"
-                                    class="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 transition"><svg
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    </svg>
+                                </button>
+
+                                
+                                <span class="text-sm font-bold text-gray-800 dark:text-white whitespace-nowrap">
+                                    <?php echo e($productPage); ?> of <?php echo e(ceil(count($this->productCards) / 16)); ?>
+
+                                </span>
+
+                                
+                                
+                                <button type="button" wire:click="nextPage"
+                                    class="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                    </svg></button>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1205,6 +1220,7 @@
             </div>
         </template>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
     
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($voidItemModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
@@ -1331,6 +1347,121 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             Hapus Menu Sekarang
                         </button>
                     </div>
+                </div>
+            </div>
+        </template>
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selectTableModalOpen): ?>
+        <template x-teleport="<?php echo e('body'); ?>">
+            <div class="fixed inset-0 z-[100005] flex items-center justify-center p-4" aria-modal="true" role="dialog">
+
+                
+                <div class="absolute inset-0 bg-black/40 transition-opacity"
+                    wire:click="$set('selectTableModalOpen', false)"></div>
+
+                
+                <div
+                    class="relative w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
+
+                    
+                    <div class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
+                        <h3 class="text-base font-bold text-gray-800 dark:text-white">
+                            Book Table (<?php echo e('Table ' . $tableToSelectLabel ?? 'Table 1'); ?>)
+                        </h3>
+                        <button type="button" wire:click="$set('selectTableModalOpen', false)"
+                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    
+                    <div class="p-5 space-y-5">
+
+                        
+                        <div>
+                            <label
+                                class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
+                                Number of pax
+                            </label>
+                            <input wire:model.defer="numberOfPax" type="number" min="1"
+                                class="w-full h-11 border border-gray-300 rounded-lg bg-white px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700"
+                                placeholder="1" />
+
+                            
+                            <div class="flex items-center gap-1.5 my-2 rounded-lg w-full overflow-x-auto custom-scrollbar">
+                                
+                                <button type="button" wire:click="decrementPax"
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                                    &lt;
+                                </button>
+
+                                
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = [1, 2, 3, 4, 5]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                                    <button type="button" wire:click="$set('numberOfPax', <?php echo e($amt); ?>)"
+                                        class="<?php echo \Illuminate\Support\Arr::toCssClasses([
+                                            'w-10 h-10 flex items-center justify-center text-sm font-bold rounded-md transition shrink-0 active:scale-95',
+                                            'bg-brand-500 text-white shadow-xs' => $numberOfPax == $amt,
+                                            'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 shadow-xs' =>
+                                                $numberOfPax != $amt,
+                                        ]); ?>">
+                                        <?php echo e($amt); ?>
+
+                                    </button>
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+
+                                
+                                <button type="button" wire:click="incrementPax"
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                                    &gt;
+                                </button>
+                            </div>
+                        </div>
+
+                        
+                        <div>
+                            <span
+                                class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                                Sales Mode: <span class="text-gray-800 dark:text-white font-bold">Dine In</span>
+                            </span>
+
+                            
+                            <button type="button"
+                                class="h-11 px-6 font-bold text-xs rounded-lg border-2 border-[#1086e1] bg-blue-50 text-[#1086e1] dark:bg-blue-950/30 dark:text-blue-400 transition cursor-default">
+                                Dine In
+                            </button>
+                        </div>
+
+                    </div>
+
+                    
+                    <div
+                        class="border-t border-gray-200 bg-gray-50 px-5 py-3 dark:border-gray-800 dark:bg-gray-950 flex items-center justify-between">
+
+                        
+                        <button type="button" wire:click="$set('selectTableModalOpen', false)"
+                            class="h-10 px-4 text-xs font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition">
+                            Close
+                        </button>
+
+                        
+                        <div class="flex items-center gap-2">
+                            <button type="button" wire:click="confirmSelectTable('booking')"
+                                class="h-10 px-4 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 transition">
+                                Book Table
+                            </button>
+
+                            <button type="button" wire:click="confirmSelectTable('order')"
+                                class="h-10 px-4 bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
+                                Book & Order
+                            </button>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </template>

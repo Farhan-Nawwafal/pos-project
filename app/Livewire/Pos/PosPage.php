@@ -169,6 +169,11 @@ class PosPage extends Component
 
     public $productPage = 1;
 
+    public $selectTableModalOpen = false;
+    public $tableToSelect = null;
+    public $tableToSelectLabel = '';
+    public $numberOfPax = 1; // Default pax diisi 1
+
 
     public function mount(): void
     {
@@ -214,6 +219,61 @@ class PosPage extends Component
         }
 
         $this->recalculateTotals();
+    }
+
+    public function nextPage()
+    {
+        // Hitung total halaman maksimum berdasarkan batasan array produk
+        $maxPage = ceil(count($this->productCards) / 16);
+
+        if ($this->productPage < $maxPage) {
+            $this->productPage++;
+        }
+    }
+
+    public function previousPage()
+    {
+        if ($this->productPage > 1) {
+            $this->productPage--;
+        }
+    }
+
+    public function incrementPax()
+    {
+        $this->numberOfPax++;
+    }
+
+    public function decrementPax()
+    {
+        if ($this->numberOfPax > 1) {
+            $this->numberOfPax--;
+        }
+    }
+
+    public function openSelectTableModal($tableId)
+    {
+        $table = collect($this->tables)->firstWhere('id', $tableId);
+        if ($table) {
+            $this->tableToSelect = $tableId;
+            $this->tableToSelectLabel = $table['label'];
+            $this->numberOfPax = 1; // Reset ke 1
+            $this->selectTableModalOpen = true;
+        }
+    }
+
+    // 2. Method eksekusi akhir setelah kasir memilih tipe alurnya
+    public function confirmSelectTable($actionType)
+    {
+        $this->selectTableModalOpen = false;
+
+        if ($actionType === 'order') {
+            // Alur A: Masuk ke halaman kasir pilih menu produk
+            $this->selectedTableId = $this->tableToSelect;
+        } else {
+            // Alur B: Hit API booking / simpan status meja ke backend, lalu refresh denah
+            // $this->bookTableWithoutMenu($this->tableToSelect);
+            $this->tableToSelect = null;
+        }
     }
 
     public function updatedSearch(): void
