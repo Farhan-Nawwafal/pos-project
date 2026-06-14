@@ -14,6 +14,7 @@
     <title><?php echo e($title ?? 'Dashboard'); ?> | Restaurant - Alas Bu Yanti</title>
     <link rel="icon" href="<?php echo e(asset('assets/images/logoesb.png')); ?>" type="image/png">
     <link rel="manifest" href="<?php echo e(route('admin.manifest')); ?>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
@@ -59,6 +60,17 @@
                         if (body) body.classList.remove('dark', 'bg-gray-900');
                     }
                 }
+            });
+
+            Alpine.store('sidebar', {
+                // ... properti lama lainnya ...
+                isEsbModalOpen: false, // Tambahkan ini
+
+                toggleEsbModal() {
+                    this.isEsbModalOpen = !this.isEsbModalOpen;
+                },
+
+                // ... properti lama lainnya ...
             });
 
             Alpine.store('sidebar', {
@@ -118,7 +130,7 @@
     </script>
 
     <script>
-        (function() {
+        (function () {
             const savedTheme = localStorage.getItem('theme');
             const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
             const theme = savedTheme || systemTheme;
@@ -223,8 +235,7 @@ unset($__componentSlots);
 unset($__split);
 ?>
 
-        <div class="flex-1 transition-all duration-300 ease-in-out relative z-10 ml-0"
-            :class="{
+        <div class="flex-1 transition-all duration-300 ease-in-out relative z-10 ml-0" :class="{
                 'lg:ml-[60px]': true,
                 'lg:ml-[0px] :ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
                 'sm:translate-x-[0px]': $store.sidebar.isExpanded,
@@ -232,11 +243,8 @@ unset($__split);
             }">
 
             <!-- Desktop overlay/backdrop to close sidebar when clicking outside -->
-            <div
-                x-show="$store.sidebar.isExpanded && window.innerWidth >= 1024"
-                @click="$store.sidebar.toggleExpanded()"
-                class="fixed inset-0 z-[999] bg-gray-900/50"
-            ></div>
+            <div x-show="$store.sidebar.isExpanded && window.innerWidth >= 1024"
+                @click="$store.sidebar.toggleExpanded()" class="fixed inset-0 z-[999] bg-gray-900/50"></div>
 
 
 
@@ -249,8 +257,8 @@ unset($__split);
         </div>
     </div>
 
-    <div x-data="posPrintModal" x-init="init()" x-show="open" class="fixed inset-0 z-[100000]"
-        style="display: none;" aria-modal="true" role="dialog">
+    <div x-data="posPrintModal" x-init="init()" x-show="open" class="fixed inset-0 z-[100000]" style="display: none;"
+        aria-modal="true" role="dialog">
         <template x-if="open">
             <div class="absolute inset-0">
                 <div class="absolute inset-0 bg-black/50" @click="close()"></div>
@@ -365,7 +373,7 @@ unset($__split);
     </div>
 
     <?php app("livewire")->forceAssetInjection(); ?><div x-persist="<?php echo e('toast-center'); ?>">
-        <?php if (isset($component)) { $__componentOriginal10afb6a75a927024643c78d9c8aff657 = $component; } ?>
+    <?php if (isset($component)) { $__componentOriginal10afb6a75a927024643c78d9c8aff657 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal10afb6a75a927024643c78d9c8aff657 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.common.toast-center','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('common.toast-center'); ?>
@@ -463,5 +471,4 @@ unset($__split);
     </script>
 </body>
 
-</html>
-<?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+</html><?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/layouts/app.blade.php ENDPATH**/ ?>
