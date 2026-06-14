@@ -31,6 +31,12 @@ class MenuHelper
                 'permission' => 'transactions.view',
             ],
             [
+                'name' => 'Day Start/End',
+                'path' => self::path('day-start-end.index'),
+                'icon' => 'clock',
+                // 'permission' => 'day-start-end.manage', // Pastikan permission ini didaftarkan di Spatie
+            ],
+            [
                 'name' => 'Produk',
                 'path' => self::path('products.index'),
                 'icon' => 'products',
@@ -162,7 +168,7 @@ class MenuHelper
             [
                 'name' => 'Cabang',
                 'path' => self::path('cabang.index'),
-                'icon' => 'bnanchh' , 
+                'icon' => 'bnanchh',
                 'permission' => 'cabang.view',
             ],
             [
@@ -173,7 +179,7 @@ class MenuHelper
             ],
         ];
 
-        $items = array_values(array_filter(array_map(fn (array $item) => self::filterMenuItem($item, $user), $items)));
+        $items = array_values(array_filter(array_map(fn(array $item) => self::filterMenuItem($item, $user), $items)));
 
         return [
             [
@@ -203,7 +209,7 @@ class MenuHelper
 
             $permAny = Arr::get($item, 'permissionAny');
             if (is_array($permAny)) {
-                if (! $user || ! method_exists($user, 'can')) {
+                if (!$user || !method_exists($user, 'can')) {
                     return null;
                 }
                 foreach ($permAny as $p) {
@@ -217,7 +223,7 @@ class MenuHelper
             }
 
             $perm = (string) Arr::get($item, 'permission', '');
-            if ($perm !== '' && $user && method_exists($user, 'can') && ! $user->can($perm)) {
+            if ($perm !== '' && $user && method_exists($user, 'can') && !$user->can($perm)) {
                 return null;
             }
 
@@ -226,7 +232,7 @@ class MenuHelper
 
         $permAny = Arr::get($item, 'permissionAny');
         if (is_array($permAny)) {
-            if (! $user || ! method_exists($user, 'can')) {
+            if (!$user || !method_exists($user, 'can')) {
                 return null;
             }
             foreach ($permAny as $p) {
@@ -240,11 +246,11 @@ class MenuHelper
         }
 
         $perm = (string) Arr::get($item, 'permission', '');
-        if ($perm !== '' && $user && method_exists($user, 'can') && ! $user->can($perm)) {
+        if ($perm !== '' && $user && method_exists($user, 'can') && !$user->can($perm)) {
             return null;
         }
 
-        if ($perm !== '' && ! $user) {
+        if ($perm !== '' && !$user) {
             return null;
         }
 

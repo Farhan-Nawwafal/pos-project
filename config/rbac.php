@@ -45,6 +45,7 @@ return [
         'dashboard.access' => 'Akses Dashboard',
 
         'pos.access' => 'Akses POS',
+        'day-start-end.manage' => 'Kelola Day Start/End',
 
         'guides.view' => 'Buku Panduan',
 

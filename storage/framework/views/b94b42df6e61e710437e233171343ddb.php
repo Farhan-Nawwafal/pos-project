@@ -28,6 +28,9 @@ foreach ($attributes->all() as $__key => $__value) {
 
 unset($__defined_vars, $__key, $__value); ?>
 
+<!-- BUAT MODAL SALES RECAPITULATION NITIP DISINI DULU -->
+<?php echo $__env->make('components.pos-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
 <div
     class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
     <div class="flex items-center justify-between mb-4">
@@ -35,6 +38,11 @@ unset($__defined_vars, $__key, $__value); ?>
         <span
             class="rounded-full bg-error-50 px-2 py-0.5 text-[10px] font-bold text-error-600 dark:bg-error-500/15">SENSITIF</span>
     </div>
+
+    <!-- BUAT MODAL SALES RECAPITULATION NITIP DISINI DULU -->
+    <button onclick="window.dispatchEvent(new Event('open-pos-modal'))">
+        Buka Modal
+    </button>
 
     <div class="max-w-full overflow-x-auto custom-scrollbar">
         <table class="min-w-full">
@@ -59,7 +67,9 @@ unset($__defined_vars, $__key, $__value); ?>
                     <tr class="border-t border-gray-100 dark:border-gray-800">
                         <td class="py-3 whitespace-nowrap">
                             <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                <?php echo e($item['product_name']); ?></p>
+                                <?php echo e($item['product_name']); ?>
+
+                            </p>
                             <p class="text-gray-500 text-[10px]"><?php echo e($item['code']); ?> · <?php echo e($item['variant']); ?></p>
                         </td>
                         <td class="py-3">
@@ -83,5 +93,4 @@ unset($__defined_vars, $__key, $__value); ?>
             </tbody>
         </table>
     </div>
-</div>
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views/components/ecommerce/void-items-history.blade.php ENDPATH**/ ?>
+</div><?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views/components/ecommerce/void-items-history.blade.php ENDPATH**/ ?>
