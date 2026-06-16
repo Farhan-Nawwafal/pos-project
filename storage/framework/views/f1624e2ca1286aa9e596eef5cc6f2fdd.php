@@ -106,7 +106,7 @@
                 ]">
 
                     <span class="flex items-center justify-center"
-                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 '">
+                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 group-hover:text-white'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-calculator" viewBox="0 0 16 16">
                             <path
@@ -504,4 +504,4 @@
         x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
     </div>
-</div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>

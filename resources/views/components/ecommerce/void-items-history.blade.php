@@ -1,5 +1,8 @@
 @props(['items' => []])
 
+<!-- BUAT MODAL SALES RECAPITULATION NITIP DISINI DULU -->
+@include('components.pos-modal')
+
 <div
     class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
     <div class="flex items-center justify-between mb-4">
@@ -7,6 +10,11 @@
         <span
             class="rounded-full bg-error-50 px-2 py-0.5 text-[10px] font-bold text-error-600 dark:bg-error-500/15">SENSITIF</span>
     </div>
+
+    <!-- BUAT MODAL SALES RECAPITULATION NITIP DISINI DULU -->
+    <button onclick="window.dispatchEvent(new Event('open-pos-modal'))">
+        Buka Modal
+    </button>
 
     <div class="max-w-full overflow-x-auto custom-scrollbar">
         <table class="min-w-full">
@@ -31,7 +39,8 @@
                     <tr class="border-t border-gray-100 dark:border-gray-800">
                         <td class="py-3 whitespace-nowrap">
                             <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                {{ $item['product_name'] }}</p>
+                                {{ $item['product_name'] }}
+                            </p>
                             <p class="text-gray-500 text-[10px]">{{ $item['code'] }} · {{ $item['variant'] }}</p>
                         </td>
                         <td class="py-3">
