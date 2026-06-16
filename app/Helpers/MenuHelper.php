@@ -18,7 +18,7 @@ class MenuHelper
 
         $items = [
             [
-                'name' => 'Dashboard',
+                'name' => 'ESB Order Dashboard',
                 'path' => self::path('dashboard'),
                 'icon' => 'dashboard',
                 'permission' => 'dashboard.access',
@@ -31,7 +31,13 @@ class MenuHelper
                 'permission' => 'transactions.view',
             ],
             [
-                'name' => 'Produk',
+                'name' => 'Shift Log',
+                'icon' => 'default',
+                'path' => self::path('shift-logs.index'),
+                // 'permission' => 'shift-logs.view', masih bingung buat ini butuh arahan parhan
+            ],
+            [
+                'name' => 'Branch Menu',
                 'path' => self::path('products.index'),
                 'icon' => 'products',
                 'permission' => 'products.view',
@@ -47,12 +53,6 @@ class MenuHelper
                 'icon' => 'expenses',
                 'path' => self::path('reports.operating-expenses'),
                 'permission' => 'reports.expenses.manage',
-            ],
-            [
-                'name' => 'Shift Log',
-                'icon' => 'default',
-                'path' => self::path('shift-logs.index'),
-                // 'permission' => 'shift-logs.view', masih bingung buat ini butuh arahan parhan
             ],
             [
                 'name' => 'Member',
@@ -166,7 +166,7 @@ class MenuHelper
                 'permission' => 'cabang.view',
             ],
             [
-                'name' => 'Pengaturan',
+                'name' => 'Tools',
                 'path' => self::path('settings.index'),
                 'icon' => 'settings',
                 'permission' => 'settings.view',
