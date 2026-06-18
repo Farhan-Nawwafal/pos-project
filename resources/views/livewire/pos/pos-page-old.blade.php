@@ -1,4 +1,4 @@
-<div class="space-y-6">
+ <div class="space-y-6">
     {{-- HEADER MASUK KASIR START --}}
     <div class="px-2 pb-3 rounded-2xl">
         <div class="mt-2 rounded-2xl border border-gray-200 bg-gray-50 p-2 dark:border-gray-800 dark:bg-gray-950">
