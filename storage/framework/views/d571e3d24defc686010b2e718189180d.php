@@ -106,7 +106,7 @@
                 ]">
 
                     <span class="flex items-center justify-center"
-                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 group-hover:text-white'">
+                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 '">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-calculator" viewBox="0 0 16 16">
                             <path

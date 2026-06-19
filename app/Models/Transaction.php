@@ -70,6 +70,7 @@ class Transaction extends Model
         'refund_reason',
         'kitchen_processed_at',
         'kitchen_processed_by_user_id',
+        'payment_processed_by',
     ];
 
     protected function casts(): array
@@ -102,6 +103,7 @@ class Transaction extends Model
             'receipt_emailed_at' => 'datetime',
             'midtrans_payload' => 'array',
             'kitchen_processed_at' => 'datetime',
+            'payment_processed_by' => 'integer',
         ];
     }
 
