@@ -215,7 +215,7 @@
                                 <p>{{ $transaction->paid_at ? $transaction->paid_at->format('H:i:s') : '-' }}</p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
-                                <p>Kasir</p>
+                                <p>{{ $transaction->cashier->name ?? '-' }}</p>
                             </td>
                         </tr>
                         @empty
@@ -229,7 +229,6 @@
                     </tbody>
                 </table>
             </div>
-
             <div class="border-t border-gray-200 px-5 py-4 dark:border-gray-800">
                 {{ $transactions->links('livewire.pagination.admin') }}
             </div>
