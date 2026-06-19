@@ -189,4 +189,9 @@ class Transaction extends Model
 
         return Str::upper(Str::random($length - 4)) . now()->format('His');
     }
+
+    public function cashier()
+    {
+        return $this->belongsTo(User::class, 'payment_processed_by');
+    }
 }
