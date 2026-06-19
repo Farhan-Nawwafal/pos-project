@@ -23,6 +23,7 @@
                 ])>51 -
                     100</button>
             </div>
+
             {{-- KONTEN UTAMA (LIST TABLE) --}}
             <div class="flex-1 min-h-0 overflow-y-auto  border border-gray-200 pb-8 pr-14 pl-3 ">
                 <div class="grid grid-cols-10 gap-3 md:gap-3 lg:gap-9 xl:gap-20">
@@ -41,6 +42,7 @@
 
                         @if ($shouldShow)
                             <button type="button" wire:click="openSelectTableModal({{ (int) $t['id'] }})"
+                                wire:key="table-item-{{ $t['id'] }}-{{ $status }}"
                                 @if (in_array($status, ['occupied', 'booked', 'billed']) && isset($t['occupied_at'])) x-data="{
                                 start: new Date('{{ $t['occupied_at'] }}').getTime(),
                                 display: '00:00',
@@ -292,7 +294,7 @@
                         </div>
 
                         {{-- Tombol Pending Transaksi di Ujung Kanan --}}
-                        <button wire:click="$set('pendingOrdersModalOpen', true)"
+                        {{-- <button wire:click="$set('pendingOrdersModalOpen', true)"
                             class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                             @if ($this->pendingTransactions->count() > 0)
                                 <span
@@ -300,7 +302,7 @@
                                     {{ $this->pendingTransactions->count() }}
                                 </span>
                             @endif
-                        </button>
+                        </button> --}}
                     </div>
 
                     <div class="p-4">
@@ -400,52 +402,58 @@
                             </div>
                         </div>
 
-                        {{-- INTERNAL ACTIONS BOX (PINDAH KE DALAM DIV KOTAK SEKARANG) --}}
+                        {{-- INTERNAL ACTIONS BOX (DENGAN TIGA TOMBOL RATA SAAT EDITING MODE) --}}
                         <div class="space-y-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
                             @php
                                 $isEditing = $editingTransactionId !== null;
                                 $isDineIn = $orderType === 'dine_in';
                             @endphp
 
-                            {{-- Tiga Tombol Utama Sebaris --}}
+                            {{-- BARIS ATAS: Tiga Tombol Rata (Panah Atas, Panah Bawah, Save Order/Kirim Ke Dapur) --}}
                             <div class="grid grid-cols-3 gap-2 w-full">
                                 {{-- 1. Button Panah Atas --}}
                                 <button type="button"
                                     class="h-12 w-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
-                                    <img src="/assets/icons/arrow-up.png" width="30" height="30" alt="">
+                                    <img src="/assets/icons/arrow-up.png" width="30" height="30"
+                                        alt="">
                                 </button>
 
                                 {{-- 2. Button Panah Bawah --}}
                                 <button type="button"
                                     class="h-12 w-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
-                                   <img src="/assets/icons/arrow-down.png" width="30" height="30" alt="">
+                                    <img src="/assets/icons/arrow-down.png" width="30" height="30"
+                                        alt="">
                                 </button>
 
-                                {{-- 3. Button Utama: Save Order / Kirim Ke Dapur / Bayar Sekarang --}}
-                                <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
-                                    @class([
-                                        'w-full h-12 font-bold text-white rounded-lg shadow-sm transition text-xs uppercase tracking-wider active:scale-95',
-                                        'bg-[#1086e1] hover:bg-[#0f75c7]' => $isDineIn && $isEditing,
-                                        'bg-brand-500 hover:bg-brand-600' => !($isDineIn && $isEditing),
-                                    ])>
-                                    {{ $isDineIn ? ($isEditing ? 'Bayar Sekarang' : 'Save Order') : 'Proses Bayar' }}
+                                {{-- 3. Button Utama: Save Order (Menyimpan pesanan gantung & kembali ke list denah meja) --}}
+                                <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
+                                    class="w-full h-12 font-bold text-white rounded-lg bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs uppercase tracking-wider active:scale-95">
+                                    Save Order
                                 </button>
                             </div>
 
-                            {{-- Opsi Baris Cadangan: Hanya Muncul Jika Status Transaksi Sedang Mengedit --}}
+                            {{-- BARIS BAWAH CADANGAN: HANYA MUNCUL JIKA STATUS TRANSAKSI SEDANG MENGEDIT (OCCUPIED) --}}
                             @if ($isEditing)
-                                <div class="flex gap-2 w-full mt-2">
-                                    <button wire:click="saveOrder"
-                                        class="flex-1 h-11 bg-white border border-blue-600 text-blue-600 font-bold rounded-lg text-xs hover:bg-blue-50 transition active:scale-95">
-                                        Simpan Perubahan
-                                    </button>
+                                {{-- REVISI: Menggunakan grid-cols-3 agar Split Bill, Print Bill, dan Payment terbagi rata sebaris --}}
+                                <div class="grid grid-cols-3 gap-2 w-full mt-2">
+                                    {{-- 1. Button Print Bill --}}
                                     <button type="button" wire:click="printBill"
-                                        class="w-12 h-11 flex items-center justify-center bg-gray-100 text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-200 transition active:scale-95">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                                        </svg>
+                                        class="w-full h-11 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg text-xs hover:bg-gray-50 transition active:scale-95 shadow-sm uppercase tracking-wide">
+                                        Print Bill
+                                    </button>
+
+                                    {{-- 2. Button Split Bill --}}
+                                    {{-- Silakan hubungkan wire:click ke method split bill kamu jika sudah ada --}}
+                                    <button type="button" wire:click="$set('splitBillModalOpen', true)"
+                                        class="w-full h-11 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg text-xs hover:bg-gray-50 transition active:scale-95 shadow-sm uppercase tracking-wide">
+                                        Split Bill
+                                    </button>
+
+
+                                    {{-- 3. Button Payment --}}
+                                    <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
+                                        class="w-full h-11 flex items-center justify-center bg-[#1086e1] hover:bg-[#0f75c7] text-white font-bold rounded-lg text-xs transition active:scale-95 shadow-sm uppercase tracking-wide">
+                                        Payment
                                     </button>
                                 </div>
                             @endif
