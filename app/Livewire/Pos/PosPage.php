@@ -1911,6 +1911,7 @@ class PosPage extends Component
                 'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
                 'payment_status' => $isFinalPayment ? 'paid' : 'pending',
                 'paid_at' => $isFinalPayment ? now() : null,
+                'payment_processed_by' => $isFinalPayment ? auth()->id() : null,
                 'checkout_link' => '',
                 'external_id' => $trx->external_id ?? Transaction::generateUniqueCode(10),
                 'tax_percentage' => $this->taxRate,
