@@ -174,6 +174,9 @@ class PosPage extends Component
     public $tableToSelectLabel = '';
     public $numberOfPax = 1; // Default pax diisi 1
 
+    public string $viewMode = 'menu'; // Pilihan value: 'menu' atau 'payment'
+    public $paymentPage = 1;          // Pagination metode bayar
+
 
     public function mount(): void
     {
@@ -283,6 +286,16 @@ class PosPage extends Component
                 $this->dispatch('toast', type: 'success', message: 'Memuat pesanan aktif ' . ($table['label'] ?? ''));
                 return; // Selesai, hentikan baris kodingan agar modal tidak mencuat keluar
             }
+
+            // Wajib bersihkan data sisa keranjang dan transaksi lama agar tidak bocor ke meja baru ini!
+            $this->cartItems = [];
+            $this->editingTransactionId = null;
+            $this->subtotal = 0;
+            $this->total = 0;
+            $this->voucherDiscountAmount = 0;
+            $this->manualDiscountAmount = 0;
+            $this->voucherCodeInput = null;
+            $this->voucherValid = false;
 
             // JIKA MEJA KOSONG / AVAILABLE (Picu Modal Number of Pax Seperti Biasa)
             $this->tableToSelect = $tableId;
@@ -1268,6 +1281,11 @@ class PosPage extends Component
 
     public function openCheckout(): void
     {
+        if (count($this->cartItems) === 0) {
+            $this->dispatch('toast', type: 'error', message: 'Keranjang belanja kosong.');
+            return;
+        }
+
         $this->resetValidation();
         $this->cashReceived = null;
         $this->cashChange = 0;
@@ -1276,20 +1294,18 @@ class PosPage extends Component
         $isEditing = $this->editingTransactionId !== null;
 
         if ($isDineIn) {
-            // LANGSUNG KE STEP 3 sesuai permintaan client
             $this->checkoutStep = 3;
-
-            // AUTO-NAME: Jika pesanan baru, set nama = Nomor Meja
             if (!$isEditing && $this->selectedTableId) {
                 $table = collect($this->tables)->firstWhere('id', $this->selectedTableId);
                 $this->customerName = $table['label'] ?? 'Meja';
             }
         } else {
-            //  tetap dari Step 1
             $this->checkoutStep = 1;
         }
 
-        $this->checkoutModalOpen = true;
+        // KUNCI ALUR: Nonaktifkan modal pop-up lama, alihkan view ke halaman full screen payment
+        $this->checkoutModalOpen = false;
+        $this->viewMode = 'payment';
     }
 
     public function saveOrder(): void
@@ -1418,6 +1434,122 @@ class PosPage extends Component
             $this->dispatch('toast', type: 'success', message: 'Pesanan meja berhasil diperbarui');
             $this->resetOrderForNewTransaction();
         });
+    }
+
+    public function savePayment(): void
+    {
+        if (count($this->cartItems) === 0) return;
+
+        $isDineIn = $this->orderType === 'dine_in';
+        $isEditing = $this->editingTransactionId !== null;
+        $isFinalPayment = ($this->orderType === 'take_away' || ($isDineIn && $isEditing));
+
+        $this->recalculateTotals();
+
+        // Validasi rules dasar dari transaksi lama kamu
+        $rules = [
+            'customerName' => ['required', 'string', 'max:255'],
+            'customerPhone' => ['nullable', 'string', 'max:50'],
+            'taxRate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+        ];
+
+        if ($isFinalPayment) {
+            $rules['paymentMethod'] = ['required', 'string', 'max:50'];
+            if ($this->paymentMethod === 'cash') {
+                // Gunakan cash received mentah tanpa format rupiah untuk validasi nominal minimal
+                $rawCash = (int) preg_replace('/\D+/', '', (string)($this->cashReceived ?? '0'));
+                if ($rawCash < $this->total) {
+                    $this->addError('cashReceived', 'Uang diterima kurang dari total tagihan.');
+                    return;
+                }
+            }
+        }
+
+        $validated = $this->validate($rules);
+        $trxId = null;
+
+        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId) {
+            $trx = $this->editingTransactionId
+                ? Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first()
+                : new Transaction();
+
+            $cashReceivedValue = $isFinalPayment && $this->paymentMethod === 'cash'
+                ? (int) preg_replace('/\D+/', '', (string)$this->cashReceived)
+                : null;
+
+            $cabangId = auth()->user()->cabang_id ?? 1;
+
+            $trx->fill([
+                'code' => $trx->code ?? Transaction::generateUniqueCode(),
+                'cabang_id' => $cabangId,
+                'member_id' => $this->memberId,
+                'name' => $this->customerName,
+                'phone' => $this->customerPhone,
+                'order_type' => $this->orderType,
+                'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
+                'subtotal' => $this->subtotal,
+                'service_percentage' => $this->serviceRate,
+                'service_amount' => $this->serviceAmount,
+                'voucher_discount_amount' => $this->voucherDiscountAmount,
+                'manual_discount_amount' => $this->manualDiscountAmount,
+                'discount_total_amount' => $isFinalPayment ? $this->discountTotalAmount : 0,
+                'tax_percentage' => $this->taxRate,
+                'tax_amount' => $this->taxAmount,
+                'rounding_amount' => $this->roundingAmount,
+                'cash_received' => $cashReceivedValue,
+                'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
+                'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
+                'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
+                'payment_status' => $isFinalPayment ? 'paid' : 'pending',
+                'paid_at' => $isFinalPayment ? now() : null,
+                'payment_processed_by' => $isFinalPayment ? auth()->id() : null,
+                'checkout_link' => '',
+                'external_id' => $trx->external_id ?? Transaction::generateUniqueCode(10),
+            ]);
+
+            $trx->save();
+
+            // Sinkronisasi ulang data item pesanan makanan
+            TransactionItem::where('transaction_id', $trx->id)->delete();
+            foreach ($this->cartItems as $item) {
+                TransactionItem::create([
+                    'cabang_id' => $cabangId,
+                    'transaction_id' => $trx->id,
+                    'product_id' => $item['product_id'],
+                    'product_variant_id' => $item['variant_id'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['quantity'] * $item['price'],
+                    'note' => $item['note'] ?? null,
+                ]);
+            }
+
+            // Kembalikan status meja makan Dine In menjadi kosong/tersedia kembali (Warna Biru)
+            if ($isDineIn) {
+                $targetTableId = $this->selectedTableId ?? $trx->dining_table_id;
+                if ($isFinalPayment) {
+                    DiningTable::where('id', $targetTableId)->update(['status' => 'available', 'occupied_at' => null]);
+                } else {
+                    DiningTable::where('id', $targetTableId)->update(['status' => 'occupied', 'occupied_at' => now()]);
+                }
+            }
+
+            $trxId = (int) $trx->id;
+        });
+
+        $this->dispatch('toast', type: 'success', message: $isFinalPayment ? 'Transaksi Berhasil Dilunasi!' : 'Pesanan Disimpan');
+
+        // Picu perintah cetak nota bill lunas final ke printer kasir bluetooth
+        if ($isFinalPayment) {
+            $payload = $this->buildPrintPayload($trxId);
+            if ($payload) {
+                $this->dispatch('pos-print-modal', payload: $payload, context: 'checkout');
+            }
+        }
+
+        // RESET ALUR: Kembalikan viewMode ke list menu produk utama dan reset status transaksi kasir
+        $this->viewMode = 'menu';
+        $this->resetOrderForNewTransaction();
     }
 
     public function nextStep(): void
