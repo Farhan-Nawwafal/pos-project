@@ -28,12 +28,28 @@
                     <div class="flex flex-col gap-1.5 flex-1 xl:flex-none xl:w-[210px]">
                         <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Date</label>
                         <div class="relative w-full">
-                            <x-common.date-range-picker-transaction
-                                :from="$fromDate"
-                                :to="$toDate"
-                                wire-from-model="fromDate"
-                                wire-to-model="toDate"
-                                class="w-full" />
+                            <?php if (isset($component)) { $__componentOriginal797345413d8076d7d3469b479240e9ad = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal797345413d8076d7d3469b479240e9ad = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.common.date-range-picker-transaction','data' => ['from' => $fromDate,'to' => $toDate,'wireFromModel' => 'fromDate','wireToModel' => 'toDate','class' => 'w-full']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('common.date-range-picker-transaction'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['from' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($fromDate),'to' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($toDate),'wire-from-model' => 'fromDate','wire-to-model' => 'toDate','class' => 'w-full']); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal797345413d8076d7d3469b479240e9ad)): ?>
+<?php $attributes = $__attributesOriginal797345413d8076d7d3469b479240e9ad; ?>
+<?php unset($__attributesOriginal797345413d8076d7d3469b479240e9ad); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal797345413d8076d7d3469b479240e9ad)): ?>
+<?php $component = $__componentOriginal797345413d8076d7d3469b479240e9ad; ?>
+<?php unset($__componentOriginal797345413d8076d7d3469b479240e9ad); ?>
+<?php endif; ?>
                         </div>
                     </div>
 
@@ -96,11 +112,12 @@
                                 <select wire:model.live="paymentStatus"
                                     class="shadow-theme-xs h-7 w-full rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[125px] xl:min-w-[100px]">
                                     <option value="">Semua Status</option>
-                                    @foreach ($paymentStatusOptions as $status)
-                                    <option value="{{ $status }}">
-                                        {{ \App\Helpers\DataLabelHelper::enum($status, 'payment_status') }}
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $paymentStatusOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                                    <option value="<?php echo e($status); ?>">
+                                        <?php echo e(\App\Helpers\DataLabelHelper::enum($status, 'payment_status')); ?>
+
                                     </option>
-                                    @endforeach
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                 </select>
                             </div>
 
@@ -109,11 +126,12 @@
                                 <select wire:model.live="paymentMethod"
                                     class="shadow-theme-xs h-7 w-full rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[125px] xl:min-w-[100px]">
                                     <option value="">Semua Metode</option>
-                                    @foreach ($paymentMethodOptions as $method)
-                                    <option value="{{ $method }}">
-                                        {{ \App\Helpers\DataLabelHelper::enum($method, 'payment_method') }}
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $paymentMethodOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $method): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                                    <option value="<?php echo e($method); ?>">
+                                        <?php echo e(\App\Helpers\DataLabelHelper::enum($method, 'payment_method')); ?>
+
                                     </option>
-                                    @endforeach
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                 </select>
                             </div>
 
@@ -122,10 +140,11 @@
                                 <select wire:model.live="orderType"
                                     class="shadow-theme-xs h-7 w-full rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 xl:w-[125px] xl:min-w-[100px]">
                                     <option value="">Semua Tipe</option>
-                                    @foreach ($orderTypeOptions as $type)
-                                    <option value="{{ $type }}">{{ $type === 'dine_in' ? 'Dine in' : 'Take away' }}
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $orderTypeOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                                    <option value="<?php echo e($type); ?>"><?php echo e($type === 'dine_in' ? 'Dine in' : 'Take away'); ?>
+
                                     </option>
-                                    @endforeach
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                 </select>
                             </div>
 
@@ -134,10 +153,10 @@
                 </div>
             </div>
 
-            @php
+            <?php
             $canActions =
             (bool) (auth()->user()?->can('transactions.details') || auth()->user()?->can('transactions.print'));
-            @endphp
+            ?>
             <div class="custom-scrollbar overflow-x-auto px-3">
                 <table class="w-full table-auto">
                     <thead>
@@ -165,8 +184,8 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                        @forelse ($transactions as $transaction)
-                        @php
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $transactions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $transaction): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                        <?php
                         $customer = (string) ($transaction->member?->name ?? ($transaction->name ?? '-'));
                         $orderType = (string) ($transaction->order_type ?? '');
                         $paymentMethodKey = (string) ($transaction->payment_method ?? '');
@@ -179,61 +198,85 @@
                         $paymentStatusKey,
                         'payment_status',
                         );
-                        @endphp
+                        ?>
                         <tr class="hover:bg-gray-200 hover:dark:bg-gray-900">
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
                                 <p>
-                                    {{ $transaction->code }}
+                                    <?php echo e($transaction->code); ?>
+
                                 </p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90 text-center">
                                 <div class="space-y-1">
                                     <p>
-                                        {{ optional($transaction->created_at)->format('d-m-Y') }}
+                                        <?php echo e(optional($transaction->created_at)->format('d-m-Y')); ?>
+
                                     </p>
                                 </div>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $customer }}</p>
+                                <p><?php echo e($customer); ?></p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90 text-center">
-                                <p>{{ $transaction->dining_table_id ? $transaction->dining_table_id : 'Quick Service' }}</p>
+                                <p><?php echo e($transaction->dining_table_id ? $transaction->dining_table_id : 'Quick Service'); ?></p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90 text-center">
-                                <p>{{ $orderType === 'dine_in' ? 'Dine in' : 'Take away' }}</p>
+                                <p><?php echo e($orderType === 'dine_in' ? 'Dine in' : 'Take away'); ?></p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90 text-right">
-                                <p">Rp{{ number_format((int) $transaction->total, 0, ',', '.') }}</p>
+                                <p">Rp<?php echo e(number_format((int) $transaction->total, 0, ',', '.')); ?></p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $paymentStatusLabel }}</p>
+                                <p><?php echo e($paymentStatusLabel); ?></p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $paymentMethodLabel }}</p>
+                                <p><?php echo e($paymentMethodLabel); ?></p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $transaction->paid_at ? $transaction->paid_at->format('H:i:s') : '-' }}</p>
+                                <p><?php echo e($transaction->paid_at ? $transaction->paid_at->format('H:i:s') : '-'); ?></p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $transaction->cashier->name ?? '-' }}</p>
+                                <p><?php echo e($transaction->cashier->name ?? '-'); ?></p>
                             </td>
                         </tr>
-                        @empty
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                         <tr>
-                            <td colspan="{{ $canActions ? 10 : 9 }}" class="px-5 py-10">
+                            <td colspan="<?php echo e($canActions ? 10 : 9); ?>" class="px-5 py-10">
                                 <p class="text-center text-sm text-gray-500 dark:text-gray-400">Transaksi tidak
                                     ditemukan.</p>
                             </td>
                         </tr>
-                        @endforelse
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </tbody>
                 </table>
             </div>
             <div class="border-t border-gray-200 px-5 py-4 dark:border-gray-800">
-                {{ $transactions->links('livewire.pagination.admin') }}
+                <?php echo e($transactions->links('livewire.pagination.admin')); ?>
+
             </div>
         </div>
-        <x-ecommerce.void-items-history :items="$voidItems" />
+        <?php if (isset($component)) { $__componentOriginalaf938e6bcabbd07203c0496bcf7fb5a6 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalaf938e6bcabbd07203c0496bcf7fb5a6 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ecommerce.void-items-history','data' => ['items' => $voidItems]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ecommerce.void-items-history'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['items' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($voidItems)]); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalaf938e6bcabbd07203c0496bcf7fb5a6)): ?>
+<?php $attributes = $__attributesOriginalaf938e6bcabbd07203c0496bcf7fb5a6; ?>
+<?php unset($__attributesOriginalaf938e6bcabbd07203c0496bcf7fb5a6); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalaf938e6bcabbd07203c0496bcf7fb5a6)): ?>
+<?php $component = $__componentOriginalaf938e6bcabbd07203c0496bcf7fb5a6; ?>
+<?php unset($__componentOriginalaf938e6bcabbd07203c0496bcf7fb5a6); ?>
+<?php endif; ?>
 
         <div class="mt-8">
             <div
@@ -255,39 +298,43 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                            @forelse($deletedItemLogs as $log)
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $deletedItemLogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                             <tr>
                                 <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400 text-center">
-                                    {{ $log->created_at->format('d/m/Y H:i') }}
+                                    <?php echo e($log->created_at->format('d/m/Y H:i')); ?>
+
                                 </td>
                                 <td
                                     class="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-800 dark:text-white">
-                                    {{ $log->causer->name ?? 'System' }}
+                                    <?php echo e($log->causer->name ?? 'System'); ?>
+
                                 </td>
                                 <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                    {{ $log->getExtraProperty('product') }}
+                                    <?php echo e($log->getExtraProperty('product')); ?>
+
                                 </td>
                                 <td class="px-5 py-4 text-center">
                                     <div class="inline-flex items-center gap-2">
                                         <span
-                                            class="text-gray-400 line-through">{{ $log->getExtraProperty('old_qty') }}</span>
+                                            class="text-gray-400 line-through"><?php echo e($log->getExtraProperty('old_qty')); ?></span>
                                         <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                                         </svg>
                                         <span class="font-black text-orange-600 dark:text-orange-400 text-lg">
-                                            {{ $log->getExtraProperty('new_qty') }}
+                                            <?php echo e($log->getExtraProperty('new_qty')); ?>
+
                                         </span>
                                     </div>
                                 </td>
                             </tr>
-                            @empty
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                             <tr>
                                 <td colspan="4" class="px-5 py-10 text-center text-gray-500">Tidak ada item yang
                                     dikurangi atau dihapus.</td>
                             </tr>
-                            @endforelse
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -304,4 +351,4 @@
 
     </div>
 
-</div>
+</div><?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/transactions/transactions-page.blade.php ENDPATH**/ ?>

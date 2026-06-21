@@ -150,7 +150,7 @@ class TransactionsPage extends Component
         $canViewPii = auth()->user()?->can('transactions.pii.view') ?? false;
 
         $query = Transaction::query()
-            ->with(['member', 'diningTable'])
+            ->with(['member', 'diningTable', 'cashier'])
 
             // Search Code
             ->when($this->searchNumber !== '', function (Builder $query) {

@@ -70,6 +70,7 @@ class Transaction extends Model
         'refund_reason',
         'kitchen_processed_at',
         'kitchen_processed_by_user_id',
+        'payment_processed_by',
     ];
 
     protected function casts(): array
@@ -102,6 +103,7 @@ class Transaction extends Model
             'receipt_emailed_at' => 'datetime',
             'midtrans_payload' => 'array',
             'kitchen_processed_at' => 'datetime',
+            'payment_processed_by' => 'integer',
         ];
     }
 
@@ -188,5 +190,10 @@ class Transaction extends Model
         }
 
         return Str::upper(Str::random($length - 4)) . now()->format('His');
+    }
+
+    public function cashier()
+    {
+        return $this->belongsTo(User::class, 'payment_processed_by');
     }
 }
