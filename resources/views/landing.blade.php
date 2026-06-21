@@ -43,7 +43,7 @@
     </head>
     <body class="min-h-screen bg-gradient-to-b from-brand-25 via-white to-gray-50 text-gray-900 antialiased">
         <div class="pointer-events-none fixed inset-0 -z-10">
-            <div class="absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-brand-200/30 blur-3xl"></div>
+            <div class="absolute -top-5 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-brand-200/30 blur-3xl"></div>
             <div class="absolute -bottom-32 left-[-80px] h-[420px] w-[420px] rounded-full bg-orange-200/25 blur-3xl"></div>
             <div class="absolute -bottom-40 right-[-120px] h-[520px] w-[520px] rounded-full bg-brand-300/20 blur-3xl"></div>
         </div>

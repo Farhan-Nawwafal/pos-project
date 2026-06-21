@@ -352,4 +352,4 @@
 
     </div>
 
-</div><?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/transactions/transactions-page.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/livewire/transactions/transactions-page.blade.php ENDPATH**/ ?>
