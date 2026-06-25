@@ -177,6 +177,9 @@ class PosPage extends Component
     public string $viewMode = 'menu'; // Pilihan value: 'menu' atau 'payment'
     public $paymentPage = 1;          // Pagination metode bayar
 
+    public bool $paymentModalOpen = false;
+    public string $selectedPaymentLabel = 'Cash Payment';
+
 
     public function mount(): void
     {
@@ -1376,7 +1379,6 @@ class PosPage extends Component
                         ])
                         ->log($isRemoved ? "Menghapus item" : "Mengurangi jumlah item");
                 }
-
             }
             // --- END LOGIKA AUDIT ---
 

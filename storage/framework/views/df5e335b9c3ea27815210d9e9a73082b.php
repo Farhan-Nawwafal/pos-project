@@ -1,11 +1,11 @@
-<div class="w-full bg-gray-200 mb-8">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+<div class="w-full bg-gray-200 mb-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
         <h3 class="text-lg font-bold text-gray-500">ESB Order Dashboard</h3>
         <span class="text-xs text-gray-500">Last Fetch: <?php echo e(now()->format('d-m-Y H:i')); ?></span>
     </div>
 </div>
 
-<div class="max-w-7xl mx-auto px-4 mb-8">
+<div class="max-w-7xl mx-auto mb-8">
     <div class="grid grid-cols-12 gap-4 items-end">
         
         <div class="col-span-2">

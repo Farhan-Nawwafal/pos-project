@@ -44,11 +44,11 @@ unset($__defined_vars, $__key, $__value); ?>
 
 
 <div
-    class="rounded-3xl border border-gray-200 bg-white/50 p-4 md:p-6 dark:border-gray-800 dark:bg-gray-900/50 backdrop-blur-sm shadow-sm">
-    <div class="space-y-4">
+    class="rounded-3xl border border-gray-200 bg-white/50 p-4 dark:border-gray-800 dark:bg-gray-900/50 backdrop-blur-sm shadow-sm">
+    <div class="space-y-4 ">
         
         <div
-            class="rounded-2xl border border-error-100 bg-error-50/10 p-4 md:p-5 dark:border-error-900/20 dark:bg-error-900/5">
+            class="rounded-2xl border border-error-100 bg-error-50/10 p-4 md:p-6 dark:border-error-900/20 dark:bg-error-900/5">
             
             <div class="flex items-center gap-2 mb-5 border-b border-error-100 dark:border-error-900/20 pb-3">
                 <svg class="w-5 h-5 text-error-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
