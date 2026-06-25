@@ -236,7 +236,7 @@
                                 <p><?php echo e($transaction->paid_at ? $transaction->paid_at->format('H:i:s') : '-'); ?></p>
                             </td>
                             <td class="text-xs px-2 py-2 font-normal text-gray-800 dark:text-white/90">
-                                <p>Kasir</p>
+                                <p><?php echo e($transaction->cashier->name ?? '-'); ?></p>
                             </td>
                         </tr>
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
@@ -250,7 +250,6 @@
                     </tbody>
                 </table>
             </div>
-
             <div class="border-t border-gray-200 px-5 py-4 dark:border-gray-800">
                 <?php echo e($transactions->links('livewire.pagination.admin')); ?>
 
@@ -352,4 +351,4 @@
 
     </div>
 
-</div><?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/transactions/transactions-page.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/livewire/transactions/transactions-page.blade.php ENDPATH**/ ?>

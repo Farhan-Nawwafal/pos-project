@@ -48,7 +48,7 @@ unset($__defined_vars, $__key, $__value); ?>
 
 
 
-<div class="grid grid-cols-1 gap-4 sm:grid-cols-12 md:gap-6">
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-12 md:gap-6 ">
     <div class="sm:col-span-4 rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
         <p class="text-theme-sm text-gray-500 dark:text-gray-400">Transaksi Hari Ini</p>
         <div class="mt-3 flex flex-col items-start gap-2 lg:flex-row lg:items-end lg:justify-between">
