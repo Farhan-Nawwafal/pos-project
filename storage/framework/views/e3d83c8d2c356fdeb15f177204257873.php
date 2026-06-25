@@ -1,7 +1,7 @@
 <div class="w-full bg-gray-200 mb-4">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+    <div class="max-w-7xl  px-2 py-3 flex items-center justify-between">
         <h3 class="text-lg font-bold text-gray-500">ESB Order Dashboard</h3>
-        <span class="text-xs text-gray-500">Last Fetch: <?php echo e(now()->format('d-m-Y H:i')); ?></span>
+        <span class="text-xs text-gray-500 ml-4">Last Fetch: <?php echo e(now()->format('d-m-Y H:i')); ?></span>
     </div>
 </div>
 

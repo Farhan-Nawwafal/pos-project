@@ -10,7 +10,7 @@ new class extends Component {
 <div class="w-full bg-white">
 
     
-    <div class="flex items-center justify-between px-4 py-3 bg-gray-100 border border-gray-300">
+    <div class="flex items-center justify-between px-4 py-3 bg-gray-100 ">
         <span class="text-sm font-semibold text-gray-800">Current Shift</span>
         <div class="flex items-center gap-2">
             <button type="button"

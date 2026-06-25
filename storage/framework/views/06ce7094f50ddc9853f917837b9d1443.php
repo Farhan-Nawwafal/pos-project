@@ -1,8 +1,8 @@
-
 <div>
-    <div class="w-screen bg-gray-200 mb-4 -mt-6 -ml-[calc((100vw-100%)/2)] -mr-[calc((100vw-100%)/2)]">
-    <div class="max-w-7xl mx-auto  py-3 flex items-center justify-between">
-        <h3 class="text-lg font-bold text-gray-500">Branch Menu Management</h3>
+<div class="w-full bg-gray-200 mb-4">
+    <div class="max-w-7xl px-2 py-3 flex items-center justify-between">
+        <h3 class="text-lg font-bold text-gray-500">ESB Order Dashboard</h3>
+       
     </div>
 </div>
     <div class="space-y-3">
