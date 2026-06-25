@@ -218,7 +218,7 @@ if ($adminDomain !== '') {
                 return await fetch(request);
               } catch (e) {
                 return new Response(
-                  '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline</title></head><body style="font-family:system-ui;padding:2400px"><h1>Offline</h1><p>Koneksi internet tidak tersedia.</p></body></html>',
+                  '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline</title></head><body style="font-family:system-ui;padding:24px"><h1>Offline</h1><p>Koneksi internet tidak tersedia.</p></body></html>',
                   { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
                 );
               }

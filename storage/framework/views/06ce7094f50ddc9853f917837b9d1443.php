@@ -1,8 +1,28 @@
-<div class="space-y-3">
+
+<div>
+    <div class="w-screen bg-gray-200 mb-4 -mt-6 -ml-[calc((100vw-100%)/2)] -mr-[calc((100vw-100%)/2)]">
+    <div class="max-w-7xl mx-auto  py-3 flex items-center justify-between">
+        <h3 class="text-lg font-bold text-gray-500">Branch Menu Management</h3>
+    </div>
+</div>
+    <div class="space-y-3">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Branch Menu Management</h2>
             
+            <div class="flex flex-col gap-2 sm:w-auto sm:flex-row sm:items-center pb-6">
+        <button type="button" wire:click="openCopyMenuModal"
+            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+            All Menu
+        </button>
+        <button type="button" wire:click="openCopyMenuModal"
+            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+            Soul Out Menu
+        </button>
+        <button type="button" wire:click="openCopyMenuModal"
+            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
+            Limit Quantity Menu
+        </button>
+    </div>
         </div>
         
         <div class="flex flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
@@ -18,21 +38,7 @@
     </div>
         
     </div>
-    <div class="flex flex-col gap-2 sm:w-auto sm:flex-row sm:items-center pb-6">
-        <button type="button" wire:click="openCopyMenuModal"
-            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
-            All Menu
-        </button>
-        <button type="button" wire:click="openCopyMenuModal"
-            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
-            Soul Out Menu
-        </button>
-        <button type="button" wire:click="openCopyMenuModal"
-            class="bg-white border border-gray-200  hover:bg-gray-50 inline-flex h-9 items-center justify-center rounded-3xl px-3 text-xs text-gray-700 transition dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
-            Limit Quantity Menu
-        </button>
-
-    </div>
+    
     <div class="flex justify-start rounded-lg p-1 shadow-theme-xs dark:border-gray-800 dark:bg-white/[0.03] gap-2">
     
     <button type="button" wire:click="setTab('products')" 
@@ -383,4 +389,4 @@
 <?php unset($__componentOriginald17d2374eec346425c271e2667ac66ae); ?>
 <?php endif; ?>
 </div>
-<?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/livewire/products/products-page.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/livewire/products/products-page.blade.php ENDPATH**/ ?>
