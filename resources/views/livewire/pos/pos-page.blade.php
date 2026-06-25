@@ -560,9 +560,11 @@
                         @endphp
 
                         @foreach ($methods as $method)
-                            <button type="button" wire:click="$set('paymentMethod', '{{ $method['id'] }}')"
+                            {{-- Menggunakan inline array assignment bawaan Livewire agar sekali klik langsung mengubah 3 state sekaligus --}}
+                            <button type="button"
+                                wire:click="$set('paymentMethod', '{{ $method['id'] }}'); $set('selectedPaymentLabel', '{{ $method['name'] }} Payment'); $set('paymentModalOpen', true);"
                                 class="group flex min-h-[120px] w-full flex-col items-center justify-center overflow-hidden rounded-xs border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
-                                style="background-color: {{ $method['color'] }}; text-color: {{ $method['text'] }};">
+                                style="background-color: {{ $method['color'] }};">
                                 <div class="text-center p-3 w-full h-full flex items-center justify-center">
                                     <p class="text-xs font-black uppercase leading-snug tracking-wider"
                                         style="color: {{ $method['text'] }}">
@@ -571,6 +573,66 @@
                                 </div>
                             </button>
                         @endforeach
+                    </div>
+                    <div
+                        class="grid grid-cols-2 gap-4 mt-4 bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-200 dark:border-gray-800">
+
+                        {{-- AREA KIRI --}}
+                        <div class="space-y-3">
+                            {{-- 1. Voucher Purchase --}}
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
+                                    Voucher Purchase
+                                </label>
+                                {{-- Input dipecah menjadi 2 kolom horizontal berjejer --}}
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="text" wire:model.live="voucherPaidCount" placeholder="Qty / Kode"
+                                        class="w-full h-10 border border-gray-300 rounded-lg bg-white px-3 text-xs focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700" />
+                                    <input type="number" wire:model.live="voucherPaidAmount"
+                                        placeholder="Nominal Rp"
+                                        class="w-full h-10 border border-gray-300 rounded-lg bg-white px-3 text-xs focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700" />
+                                </div>
+                            </div>
+
+                            {{-- 3. Total Payment --}}
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
+                                    Total Payment
+                                </label>
+                                <input type="text" disabled
+                                    value="{{ $cashReceived ? 'Rp ' . number_format((int) preg_replace('/\D+/', '', $cashReceived), 0, ',', '.') : '' }}"
+                                    placeholder="Belum ada pembayaran"
+                                    class="w-full h-10 border border-gray-300 font-bold text-gray-700 rounded-lg bg-gray-100 px-3 text-sm dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 cursor-not-allowed" />
+                            </div>
+                        </div>
+
+                        {{-- AREA KANAN --}}
+                        <div class="space-y-3">
+                            {{-- 2. Outstanding --}}
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
+                                    Outstanding
+                                </label>
+                                <input type="text" readonly placeholder="Rp 0"
+                                    value="{{ number_format(max(0, $total - (int) preg_replace('/\D+/', '', $cashReceived ?? '0')), 0, ',', '.') }}"
+                                    class="w-full h-10 border border-gray-300 rounded-lg bg-gray-100 px-3 text-xs font-semibold text-red-600 dark:bg-gray-800 dark:border-gray-700 cursor-not-allowed" />
+                            </div>
+
+                            {{-- 4. Change --}}
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
+                                    Change
+                                </label>
+                                <input type="text" readonly placeholder="Rp 0"
+                                    value="{{ number_format((int) $cashChange, 0, ',', '.') }}"
+                                    class="w-full h-10 border border-gray-300 rounded-lg bg-gray-100 px-3 text-xs font-bold text-green-600 dark:bg-gray-800 dark:border-gray-700 cursor-not-allowed" />
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -1608,6 +1670,137 @@
                             </button>
                         </div>
 
+                    </div>
+
+                </div>
+            </div>
+        @endteleport
+    @endif
+    @if ($paymentModalOpen)
+        @teleport('body')
+            <div class="fixed inset-0 z-[100010] flex items-center justify-center p-4 animate-in fade-in duration-100"
+                aria-modal="true" role="dialog">
+
+                {{-- Backdrop Gelap Transparan --}}
+                <div class="absolute inset-0 bg-black/40 backdrop-blur-xs" wire:click="$set('paymentModalOpen', false)">
+                </div>
+
+                {{-- Box Card Modal --}}
+                <div
+                    class="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transform scale-100 transition-all">
+
+                    {{-- 1. HEADER MODAL (DINAMIS) --}}
+                    <div
+                        class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
+                        <h3
+                            class="text-sm font-black uppercase text-gray-800 dark:text-white tracking-wider flex items-center gap-2">
+                            💳 {{ $selectedPaymentLabel }}
+                        </h3>
+                        <button type="button" wire:click="$set('paymentModalOpen', false)"
+                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {{-- 2. KONTEN UTAMA MODAL --}}
+                    <div class="p-5 space-y-4 bg-white dark:bg-gray-900">
+
+                        {{-- LAYER A: 3 KOLOM KECIL (OUTSTANDING, CASH AMOUNT & REFRESH) --}}
+                        <div class="flex items-end gap-2 w-full">
+                            {{-- Kolom 1: Outstanding Display --}}
+                            <div class="w-1/3 space-y-1">
+                                <label
+                                    class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Outstanding</label>
+                                <input type="text" readonly value="Rp {{ number_format($total, 0, ',', '.') }}"
+                                    class="w-full h-10 border border-gray-200 bg-gray-100 text-red-600 font-bold px-3 text-xs rounded-lg dark:bg-gray-800 dark:border-gray-700 cursor-not-allowed tabular-nums" />
+                            </div>
+
+                            {{-- Kolom 2: Cash Amount Input --}}
+                            <div class="flex-1 space-y-1">
+                                <label
+                                    class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Cash
+                                    Amount</label>
+                                <input type="text" wire:model.live="cashReceived" placeholder="Masukkan Nominal"
+                                    class="w-full h-10 border border-brand-500 font-black text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-950 px-3 rounded-lg focus:ring-1 focus:ring-brand-500 focus:border-brand-500" />
+                            </div>
+
+                            {{-- Kolom 3: Button Refresh --}}
+                            <div class="shrink-0">
+                                <button type="button" wire:click="$set('cashReceived', '{{ $total }}')"
+                                    title="Reset Uang Pas"
+                                    class="h-10 w-11 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-xs">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- LAYER B: 3 KOLOM CARD REKOMENDASI UANG ACUAN (QUICK CASH PRESETS) --}}
+                        <div class="space-y-1">
+                            <label
+                                class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Rekomendasi
+                                Uang Pas</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                @foreach ([50000, 100000, 200000] as $presetAmt)
+                                    <button type="button" wire:click="$set('cashReceived', '{{ $presetAmt }}')"
+                                        class="h-10 flex items-center justify-center border border-gray-200 hover:border-brand-500 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold rounded-lg transition active:scale-95 shadow-xs tabular-nums">
+                                        Rp {{ number_format($presetAmt, 0, ',', '.') }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- LAYER C: REVISI 5 KOLOM 2 BARIS PRESET PECAHAN UANG INDONESIA --}}
+                        <div class="space-y-1">
+                            <label
+                                class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
+                                Pecahan Uang Rupiah
+                            </label>
+                            <div class="grid grid-cols-5 gap-1.5">
+                                @php
+                                    $moneyDenominations = [
+                                        ['value' => 100000, 'label' => '100000'],
+                                        ['value' => 75000, 'label' => '75000'],
+                                        ['value' => 50000, 'label' => '50000'],
+                                        ['value' => 20000, 'label' => '20000'],
+                                        ['value' => 10000, 'label' => '10000'],
+                                        ['value' => 5000, 'label' => '5000'],
+                                        ['value' => 2000, 'label' => '2000'],
+                                        ['value' => 1000, 'label' => '1000'],
+                                        ['value' => 500, 'label' => '500'],
+                                        ['value' => 100, 'label' => '100'],
+                                    ];
+                                @endphp
+
+                                @foreach ($moneyDenominations as $coin)
+                                    {{-- Menggunakan format angka biasa tanpa titik ke properti backend kasir --}}
+                                    <button type="button" wire:click="$set('cashReceived', {{ $coin['value'] }})"
+                                        class="h-11 flex flex-col items-center justify-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 font-extrabold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-brand-500 dark:hover:border-brand-500 transition active:scale-95 shadow-xs">
+                                        <span class="text-xs tracking-tight">{{ $coin['label'] }}</span>
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- 3. FOOTER ACTIONS (DUA TOMBOL DI UJUNG KANAN) --}}
+                    <div
+                        class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950 px-5 py-3 flex items-center justify-end gap-2">
+                        <button type="button" wire:click="$set('paymentModalOpen', false)"
+                            class="h-10 px-5 text-xs font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition uppercase tracking-wide">
+                            Cancel
+                        </button>
+                        <button type="button" wire:click="$set('paymentModalOpen', false)"
+                            class="h-10 px-6 bg-brand-500 hover:bg-brand-600 text-white text-xs font-black rounded-lg shadow-sm transition uppercase tracking-wider active:scale-95">
+                            Apply
+                        </button>
                     </div>
 
                 </div>
