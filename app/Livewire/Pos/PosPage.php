@@ -1376,33 +1376,7 @@ class PosPage extends Component
                         ])
                         ->log($isRemoved ? "Menghapus item" : "Mengurangi jumlah item");
                 }
-                // if (!$newItem) {
-                //     // Kasus Void Total per item
-                //     activity('deleted_item')
-                //         ->performedOn($trx)
-                //         ->causedBy(auth()->user())
-                //         ->withProperties([
-                //             'product' => $oldItem->product?->name ?? 'Produk',
-                //             'old_qty' => $oldItem->quantity,
-                //             'new_qty' => 0,
-                //             'price'   => (int) $oldItem->price ?? 0,
-                //             'type'    => 'removed'
-                //         ])
-                //         ->log("Menghapus item {$oldItem->product?->name} dari pesanan sebelumnya");
-                // } elseif ($newItem['quantity'] < $oldItem->quantity) {
-                //     // Kasus Deleted Item (Pengurangan Qty)
-                //     activity('deleted_item')
-                //         ->performedOn($trx)
-                //         ->causedBy(auth()->user())
-                //         ->withProperties([
-                //             'product' => $oldItem->product?->name ?? 'Produk',
-                //             'old_qty' => $oldItem->quantity,
-                //             'new_qty' => $newItem['quantity'],
-                //             'price'   => (int) $oldItem->price ?? 0,
-                //             'type'    => 'reduced'
-                //         ])
-                //         ->log("Mengurangi jumlah {$oldItem->product?->name} dari {$oldItem->quantity} ke {$newItem['quantity']}");
-                // }
+
             }
             // --- END LOGIKA AUDIT ---
 
