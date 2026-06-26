@@ -221,13 +221,12 @@
                             </span>
                         </div>
                     @else
-                        <div class="mb-4">
-                            <button type="button" wire:click="chooseOrderType('dine_in')"
-                                class="px-3 py-1.5 text-xs font-bold bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                                ← Kembali Dine In
-                            </button>
+                        
+                        <div class="text-brand-500 font-semibold text-sm">
+                            <h3>Menu</h3>
                         </div>
                     @endif
+                        
 
                     {{-- Grid Produk --}}
                     @php
