@@ -2,20 +2,6 @@
 
 $__newAttributes = [];
 $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
-<<<<<<< HEAD:storage/framework/views/3faf0486baa29e17a6b30af464e1e3f2.php
-    'preset' => 'custom',
-    'from' => null,
-    'to' => null,
-    'wireFromModel' => null,
-    'wireToModel' => null,
-    'methodPreset' => 'setRange',
-    'methodRange' => 'setTransactionsRange',
-    'dataClass' => 'flatpickr-right',
-    'placeholder' => 'Pilih tanggal',
-    'showPresets' => true,
-    'selectClass' => 'shadow-theme-xs h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
-    'inputClass' => 'h-9 w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-sm font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
-=======
 'preset' => 'custom',
 'from' => null,
 'to' => null,
@@ -28,7 +14,6 @@ $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
 'showPresets' => true,
 'selectClass' => 'shadow-theme-xs h-7 rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
 'inputClass' => 'h-7 w-full xl:w-[240px] xl:min-w-[180px] text-center rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-xs font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
->>>>>>> 22646719461e95376b50062325f3eed60140b580:storage/framework/views/884df38219b922e6f44ce501c077ea9f.php
 ]));
 
 foreach ($attributes->all() as $__key => $__value) {
@@ -45,20 +30,6 @@ unset($__propNames);
 unset($__newAttributes);
 
 foreach (array_filter(([
-<<<<<<< HEAD:storage/framework/views/3faf0486baa29e17a6b30af464e1e3f2.php
-    'preset' => 'custom',
-    'from' => null,
-    'to' => null,
-    'wireFromModel' => null,
-    'wireToModel' => null,
-    'methodPreset' => 'setRange',
-    'methodRange' => 'setTransactionsRange',
-    'dataClass' => 'flatpickr-right',
-    'placeholder' => 'Pilih tanggal',
-    'showPresets' => true,
-    'selectClass' => 'shadow-theme-xs h-11 rounded-lg border border-gray-300 bg-white px-4 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
-    'inputClass' => 'h-9 w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-sm font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
-=======
 'preset' => 'custom',
 'from' => null,
 'to' => null,
@@ -71,7 +42,6 @@ foreach (array_filter(([
 'showPresets' => true,
 'selectClass' => 'shadow-theme-xs h-7 rounded-lg border border-gray-300 bg-white px-4 text-xs text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400',
 'inputClass' => 'h-7 w-full xl:w-[240px] xl:min-w-[180px] text-center rounded-lg border border-gray-200 bg-white py-2.5 pl-[42px] pr-4 text-xs font-medium text-gray-700 shadow-theme-xs focus:outline-hidden focus:ring-0 focus-visible:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400',
->>>>>>> 22646719461e95376b50062325f3eed60140b580:storage/framework/views/884df38219b922e6f44ce501c077ea9f.php
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }

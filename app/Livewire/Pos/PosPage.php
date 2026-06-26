@@ -180,6 +180,17 @@ class PosPage extends Component
     public bool $paymentModalOpen = false;
     public string $selectedPaymentLabel = 'Cash Payment';
 
+    public $showModal = false;
+
+public function openQuickService()
+{
+    $this->showModal = true;
+}
+
+public function closeModal()
+{
+    $this->showModal = false;
+}
 
     public function mount(): void
     {

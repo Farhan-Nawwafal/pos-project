@@ -1,7 +1,7 @@
 <div>
 <div class="w-full bg-gray-200 mb-4">
     <div class="max-w-7xl px-2 py-3 flex items-center justify-between">
-        <h3 class="text-lg font-bold text-gray-500">ESB Order Dashboard</h3>
+        <h3 class="text-lg font-semibold text-black">Branch Menu Management</h3>
        
     </div>
 </div>

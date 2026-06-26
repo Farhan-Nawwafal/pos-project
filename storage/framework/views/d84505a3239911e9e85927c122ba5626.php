@@ -1,8 +1,8 @@
 <div class="grid grid-cols-1 gap-6">
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Shift Logs</h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Shift Logs List</p>
+    <div class="w-full bg-gray-200">
+        <div class="max-w-7xl px-2 py-3 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-black">Shift Log List</h3>
+
         </div>
     </div>
 
@@ -59,55 +59,71 @@
             <table class="w-full table-auto">
                 <thead>
                     <tr class="border-b border-gray-200 dark:divide-gray-800 dark:border-gray-800">
-                        <th class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">Starting Shift</th>
-                        <th class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Started By</th>
-                        <th class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-right">Starting Cash</th>
-                        <th class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Ending Shift</th>
-                        <th class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">Ended By</th>
-                        <th class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-end">Expected Cash</th>
-                        <th class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-end">Actual Cash</th>
-                        <th class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-end">Difference Total</th>
+                        <th
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">
+                            Starting Shift</th>
+                        <th
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            Started By</th>
+                        <th
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-right">
+                            Starting Cash</th>
+                        <th
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            Ending Shift</th>
+                        <th
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            Ended By</th>
+                        <th
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-end">
+                            Expected Cash</th>
+                        <th
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-end">
+                            Actual Cash</th>
+                        <th
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-end">
+                            Difference Total</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $shiftLogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                    <tr class="hover:bg-gray-200 hover:dark:bg-gray-900">
-                        <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-center">
-                            <p>
-                                <?php echo e($sl['starting_shift']); ?>
+                        <tr class="hover:bg-gray-200 hover:dark:bg-gray-900">
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-center">
+                                <p>
+                                    <?php echo e($sl['starting_shift']); ?>
 
-                            </p>
-                        </td>
-                        </td>
-                        <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
-                            <p><?php echo e($sl['started_by']); ?></p>
-                        </td>
-                        <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                            <p><?php echo e(number_format((int) $sl['starting_cash'], 0, ',', '.')); ?></p>
-                        </td>
-                        <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-center">
-                            <p><?php echo e($sl['ending_shift']); ?></p>
-                        </td>
-                        <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
-                            <p><?php echo e($sl['ended_by']); ?></p>
-                        </td>
-                        <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                            <p><?php echo e(number_format((int) $sl['expected_cash'], 0, ',', '.')); ?></p>
-                        </td>
-                        <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                            <p><?php echo e(number_format((int) $sl['actual_cash'], 0, ',', '.')); ?></p>
-                        </td>
-                        <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                            <p><?php echo e(number_format((int) $sl['difference_total'], 0, ',', '.')); ?></p>
-                        </td>
-                    </tr>
+                                </p>
+                            </td>
+                            </td>
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
+                                <p><?php echo e($sl['started_by']); ?></p>
+                            </td>
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
+                                <p><?php echo e(number_format((int) $sl['starting_cash'], 0, ',', '.')); ?></p>
+                            </td>
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-center">
+                                <p><?php echo e($sl['ending_shift']); ?></p>
+                            </td>
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
+                                <p><?php echo e($sl['ended_by']); ?></p>
+                            </td>
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
+                                <p><?php echo e(number_format((int) $sl['expected_cash'], 0, ',', '.')); ?></p>
+                            </td>
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
+                                <p><?php echo e(number_format((int) $sl['actual_cash'], 0, ',', '.')); ?></p>
+                            </td>
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
+                                <p><?php echo e(number_format((int) $sl['difference_total'], 0, ',', '.')); ?></p>
+                            </td>
+                        </tr>
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-                    <tr>
-                        <td colspan="<?php echo e($canActions ? 10 : 9); ?>" class="px-5 py-10">
-                            <p class="text-center text-sm font-normal text-gray-500 dark:text-gray-400">Transaksi tidak
-                                ditemukan.</p>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="<?php echo e($canActions ? 10 : 9); ?>" class="px-5 py-10">
+                                <p class="text-center text-sm font-normal text-gray-500 dark:text-gray-400">Transaksi tidak
+                                    ditemukan.</p>
+                            </td>
+                        </tr>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </tbody>
             </table>

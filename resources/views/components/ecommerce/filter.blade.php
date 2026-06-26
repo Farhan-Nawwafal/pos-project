@@ -1,6 +1,6 @@
 <div class="w-full bg-gray-200 mb-4">
     <div class="max-w-7xl  px-2 py-3 flex items-center justify-between">
-        <h3 class="text-lg font-bold text-gray-500">ESB Order Dashboard</h3>
+        <h3 class="text-lg font-semibold text-black">ESB Order Dashboard</h3>
         <span class="text-xs text-gray-500 ml-4">Last Fetch: {{ now()->format('d-m-Y H:i') }}</span>
     </div>
 </div>
