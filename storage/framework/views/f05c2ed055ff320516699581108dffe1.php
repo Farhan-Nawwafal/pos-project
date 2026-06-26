@@ -120,24 +120,24 @@
 
                     
                     <div>
-                        <h3 class="text-xs font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300 mb-2">
+                        <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300 ">
                             Order Notes
                         </h3>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1">
                             <div class="relative flex-1">
                                 <input wire:model.live.debounce.300ms="search" type="text"
-                                    placeholder="Information will be printed"
-                                    class="w-full h-11 border border-gray-300 rounded-lg bg-white px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700" />
+                                    placeholder="Information will be printed on checker printout"
+                                    class="w-full h-8 border border-gray-300 rounded-sm bg-white px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700" />
                             </div>
-                            <div class="flex items-center gap-2 shrink-0">
+                            <div class="flex items-center gap-1 shrink-0">
                                 <button type="button"
-                                    class="h-11 px-3 flex items-center justify-center bg-brand-500  text-white text-xs font-semibold rounded-sm border border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white dark:border-gray-600 transition">Btn
+                                    class="h-8 px-3 flex items-center justify-center bg-brand-500  text-white text-xs font-semibold rounded-sm border border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white dark:border-gray-600 transition">Btn
                                     1</button>
                                 <button type="button"
-                                    class="h-11 px-3 flex items-center justify-center bg-brand-500 text-white text-xs font-semibold rounded-sm border border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white dark:border-gray-600 transition">Btn
+                                    class="h-8 px-3 flex items-center justify-center bg-brand-500 text-white text-xs font-semibold rounded-sm border border-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white dark:border-gray-600 transition">Btn
                                     2</button>
                                 <button type="button"
-                                    class="h-11 px-3 flex items-center justify-center bg-brand-500  text-white text-xs font-semibold rounded-sm transition shadow-sm">Btn
+                                    class="h-8 px-3 flex items-center justify-center bg-brand-500  text-white text-xs font-semibold rounded-sm transition shadow-sm">Btn
                                     3</button>
                             </div>
                         </div>
@@ -146,48 +146,48 @@
                     
                     <div>
 
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center ">
                             
                             <div class="relative flex-1">
                                 <div
                                     class="absolute inset-y-0 left-0 flex items-center pl-3 px-4 pointer-events-none bg-gray-200">
-                                    <img src="/assets/icons/search.png" alt="Search" class="w-5 h-5 opacity-50 dark:invert">
+                                    <img src="/assets/icons/search.png" alt="Search" class="w-4 h-4 opacity-50 dark:invert">
                                 </div>
 
                                 <input wire:model.live.debounce.300ms="searchMenu" type="text" placeholder="Search menu / code"
-                                    class="w-full h-11 border border-gray-300 rounded-lg bg-white pl-15 pr-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700" />
-
-                            </div>
-
-                            
-                            <div class="flex items-center gap-2 shrink-0">
+                                    class="w-full h-8 border border-gray-300  bg-white pl-15 pr-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500" />
                                 
-                                <button type="button"
-                                    class="w-11 h-11 flex items-center justify-center bg-white border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition shadow-sm"
+                            </div>
+                            <button type="button"
+                                    class="w-12 h-8 flex items-center justify-center bg-brand-500 border transition shadow-sm"
                                     title="Refresh">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                        stroke="currentColor" class="w-5 h-5">
+                                        stroke="currentColor" class="w-4 h-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                                     </svg>
-                                </button>
+                            </button>
+                            
+                            <div class="flex items-center gap-2 shrink-0">
+                                
+                                
 
                                 
                                 <div
-                                    class="flex items-center justify-between h-11 bg-white border border-gray-300 rounded-lg px-2 dark:bg-gray-900 dark:border-gray-700 shadow-sm gap-3">
+                                    class="flex items-center justify-between h-11 px-2  gap-3">
                                     
                                     
                                     <button type="button" wire:click="previousPage"
-                                        class="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                                        class="p-1.5 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg  transition">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox7="0 0 24 24"
+                                            stroke-width="2.5" stroke="currentColor" class="w-5 h-4">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M15.75 19.5L8.25 12l7.5-7.5" />
                                         </svg>
                                     </button>
 
                                     
-                                    <span class="text-sm font-bold text-gray-800 dark:text-white whitespace-nowrap">
+                                    <span class="text-sm font-semibold text-gray-800 dark:text-white whitespace-nowrap">
                                         <?php echo e($productPage); ?> of <?php echo e(ceil(count($this->productCards) / 16)); ?>
 
                                     </span>
@@ -195,9 +195,9 @@
                                     
                                     
                                     <button type="button" wire:click="nextPage"
-                                        class="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 transition">
+                                        class="p-1.5 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg  transition">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                                            stroke-width="2.5" stroke="currentColor" class="w-5 h-4">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                         </svg>
@@ -207,7 +207,7 @@
                         </div>
                     </div>
 
-                    <hr class="border-gray-200 dark:border-gray-800 my-2" />
+                    
 
                     
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType === 'dine_in' && $selectedTableId): ?>
@@ -217,7 +217,7 @@
                                 ← Ganti Meja
                             </button>
                             <span class="text-sm font-bold text-brand-700">
-                                📍 Meja:
+                                Meja:
                                 <?php echo e(collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? '-'); ?>
 
                             </span>
@@ -275,14 +275,14 @@
                         <div class="w-[10%]">
                             <button type="button"
                                 class="w-full h-11 bg-brand-500 text-white text-xs font-bold rounded-sm hover:bg-blue-700 transition shadow-sm">
-                                Tombol 1
+                                uang
                             </button>
                         </div>
 
                         
                         <div class="w-[90%]">
                             <button type="button"
-                                class="w-full h-11 bg-brand-500 text-white text-xs rounded-sm hover:bg-blue-700 transition shadow-sm">
+                                class="w-full h-11 bg-brand-500 text-white text-xs rounded-sm  transition shadow-sm">
                                 TAKE AWAY
                             </button>
                         </div>
@@ -297,11 +297,11 @@
                             class="flex items-center justify-between border-b border-gray-200 px-3 py-2 bg-gray-200 dark:border-gray-800">
                             <div class="flex items-center gap-3">
                                 <span
-                                    class="text-sm font-black text-gray-800 dark:text-white/90 w-8 text-center tracking-wider">
+                                    class="text-xs font-black text-gray-800 dark:text-white/90 w-8 text-center tracking-wider">
                                     Qty
                                 </span>
-                                <span class="text-gray-400 dark:text-gray-600 font-light">|</span>
-                                <h3 class="text-sm font-black text-gray-800 dark:text-white/90 tracking-wider">
+                                
+                                <h3 class="text-xs font-black text-gray-800 dark:text-white/90 tracking-wider">
                                     Menu
                                 </h3>
                             </div>
@@ -312,7 +312,7 @@
 
                         <div class="p-4">
                             
-                            <div class="custom-scrollbar max-h-[440px] min-h-[450px] overflow-y-auto mb-4 pr-1">
+                            <div class="custom-scrollbar max-h-[420px] min-h-[420px] overflow-y-auto mb-4 pr-1">
                                 <div class="space-y-3">
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $idx => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                         <?php
@@ -320,13 +320,13 @@
                                             $qty = (int) ($item['quantity'] ?? 0);
                                         ?>
                                         <div
-                                            class="pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 flex flex-col gap-2">
+                                            class=" last:border-0 flex flex-col gap-2">
 
                                             
                                             <div class="flex items-start gap-3">
                                                 
                                                 <div class="w-8 shrink-0 text-center">
-                                                    <span class="text-sm font-black text-brand-500 tabular-nums px-2 py-0.5 ">
+                                                    <span class="text-[10px] font-black text-brand-500 tabular-nums px-2 py-0.5 ">
                                                         <?php echo e($qty); ?>
 
                                                     </span>
@@ -337,7 +337,7 @@
                                                     
                                                     <div class="min-w-0 flex-1">
                                                         <p
-                                                            class="text-xs  text-brand-500 dark:text-white uppercase leading-tight truncate mb-1">
+                                                            class="text-[10px]  text-brand-500 dark:text-white uppercase leading-tight truncate mb-1">
                                                             <?php echo e($item['name']); ?>
 
                                                         </p>
@@ -350,11 +350,11 @@
 
                                                         
                                                         <p
-                                                            class="text-[11px]  text-brand-500 dark:text-gray-400 font-medium tracking-wide">
+                                                            class="text-[10px]  text-brand-500 dark:text-gray-400 font-bold tracking-wide">
                                                             @<span><?php echo e(number_format($price, 0, ',', '.')); ?></span>
-                                                            <span class="mx-1  text-gray-300 dark:text-gray-700">|</span>
+                                                            <span class="mx-1  text-brand-500 dark:text-gray-700 font-bold">|</span>
                                                             <span class="font-bold text-gray-700 dark:text-gray-300">Total:
-                                                                Rp
+                                                                
                                                                 <?php echo e(number_format($qty * $price, 0, ',', '.')); ?></span>
                                                         </p>
                                                     </div>
@@ -387,21 +387,21 @@
                             
                             <?php $totalQty = collect($cartItems)->sum('quantity'); ?>
                             <div class="dark:bg-gray-900">
-                                <div class="py-3 grid grid-cols-3 divide-x divide-white/10 text-center items-center border-t">
+                                <div class="gap-40 grid grid-cols-3 divide-x divide-white/10 text-center items-center border-t">
                                     <div>
-                                        <p class="text-[9px] uppercase font-bold text-black">Qty</p>
-                                        <p class="text-base font-bold text-black leading-none"><?php echo e($totalQty); ?></p>
+                                        <p class="text-[10px] font-bold text-black">Qty</p>
+                                        <p class="text-[10px] font-bold text-black leading-none"><?php echo e($totalQty); ?></p>
                                     </div>
                                     <div>
-                                        <p class="text-[9px] uppercase font-bold text-black">Subtotal</p>
-                                        <p class="text-sm font-bold text-black leading-none mt-1">
+                                        <p class="text-[10px] font-bold text-black">Subtotal</p>
+                                        <p class="text-[10px] font-bold text-black leading-none mt-1">
                                             <?php echo e(number_format($subtotal, 0, ',', '.')); ?>
 
                                         </p>
                                     </div>
                                     <div>
-                                        <p class="text-[9px] uppercase font-bold text-black">Billing</p>
-                                        <p class="text-base font-bold text-black leading-none">
+                                        <p class="text-[10px] font-bold text-black">Billing</p>
+                                        <p class="text-[10px] font-bold text-black leading-none">
                                             <?php echo e(number_format($total, 0, ',', '.')); ?>
 
                                         </p>
@@ -410,29 +410,35 @@
                             </div>
 
                             
-                            <div class="space-y-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+                            <div class="space-y-2 mt-3 pt-3  border-gray-100 dark:border-gray-800">
                                 <?php
                                     $isEditing = $editingTransactionId !== null;
                                     $isDineIn = $orderType === 'dine_in';
                                 ?>
 
                                 
-                                <div class="grid grid-cols-3 gap-2 w-full">
+                                <div class="grid grid-cols-3 w-full">
                                     
                                     <button type="button"
-                                        class="h-12 w-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
+                                        class="h-10 w-full flex items-center justify-center bg-brand-500 text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
                                         <img src="/assets/icons/arrow-up.png" width="30" height="30" alt="">
                                     </button>
 
                                     
                                     <button type="button"
-                                        class="h-12 w-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
+                                        class="h-10 w-full flex items-center justify-center bg-brand-500  text-white  rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
                                         <img src="/assets/icons/arrow-down.png" width="30" height="30" alt="">
                                     </button>
 
                                     
                                     <button type="button" wire:click="saveAsPending" <?php if(count($cartItems) === 0): echo 'disabled'; endif; ?>
-                                        class="w-full h-12 font-bold text-white rounded-lg bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs uppercase tracking-wider active:scale-95">
+                                        class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200  shadow-sm transition text-xs  tracking-wider active:scale-95">
+                                        Print Bill
+                                    </button>
+                                </div>
+                                <div>
+                                    <button type="button" wire:click="saveAsPending" <?php if(count($cartItems) === 0): echo 'disabled'; endif; ?>
+                                        class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs  tracking-wider active:scale-95">
                                         Save Order
                                     </button>
                                 </div>
