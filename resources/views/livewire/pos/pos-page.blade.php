@@ -260,6 +260,26 @@
                             </div>
                         @endforelse
                     </div>
+                    <div class="grid grid-cols-3 w-full">
+                                    {{-- 1. Button Panah Atas --}}
+                                    <button type="button"
+                                        class="h-8 w-full flex items-center justify-center bg-gray-200 text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
+                                        <img src="/assets/icons/arrow-up.png" width="30" height="30" alt="">
+                                    </button>
+
+                                    {{-- 2. Button Panah Bawah --}}
+                                    <button type="button"
+                                        class="h-8 w-full flex items-center justify-center bg-gray-200  text-white  rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
+                                        <img src="/assets/icons/arrow-down.png" width="30" height="30" alt="">
+                                    </button>
+
+                                    {{-- 3. Button Utama: Save Order (Menyimpan pesanan gantung & kembali ke list denah meja)
+                                    --}}
+                                    <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
+                                        class="w-full h-8 font-bold text-gray-400 rounded-xs bg-gray-200  shadow-sm transition text-xs  tracking-wider active:scale-95">
+                                        Print Bill
+                                    </button>
+                                </div>
                 </div>
 
                 {{-- SISI KANAN (KOLOM 5): TEMPAT TOMBOL BARU & AREA KERANJANG --}}
@@ -385,7 +405,7 @@
                                     @endforelse
                                 </div>
                             </div>
-
+                            
                             {{-- SUMMARY BAR --}}
                             @php $totalQty = collect($cartItems)->sum('quantity'); @endphp
                             <div class="dark:bg-gray-900">

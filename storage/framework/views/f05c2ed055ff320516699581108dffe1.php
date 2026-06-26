@@ -264,6 +264,25 @@
                             </div>
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </div>
+                    <div class="grid grid-cols-3 w-full">
+                                    
+                                    <button type="button"
+                                        class="h-8 w-full flex items-center justify-center bg-gray-200 text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
+                                        <img src="/assets/icons/arrow-up.png" width="30" height="30" alt="">
+                                    </button>
+
+                                    
+                                    <button type="button"
+                                        class="h-8 w-full flex items-center justify-center bg-gray-200  text-white  rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
+                                        <img src="/assets/icons/arrow-down.png" width="30" height="30" alt="">
+                                    </button>
+
+                                    
+                                    <button type="button" wire:click="saveAsPending" <?php if(count($cartItems) === 0): echo 'disabled'; endif; ?>
+                                        class="w-full h-8 font-bold text-gray-400 rounded-xs bg-gray-200  shadow-sm transition text-xs  tracking-wider active:scale-95">
+                                        Print Bill
+                                    </button>
+                                </div>
                 </div>
 
                 
@@ -383,7 +402,7 @@
                                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                 </div>
                             </div>
-
+                            
                             
                             <?php $totalQty = collect($cartItems)->sum('quantity'); ?>
                             <div class="dark:bg-gray-900">
