@@ -182,15 +182,15 @@ class PosPage extends Component
 
     public $showModal = false;
 
-public function openQuickService()
-{
-    $this->showModal = true;
-}
+    public function openQuickService()
+    {
+        $this->showModal = true;
+    }
 
-public function closeModal()
-{
-    $this->showModal = false;
-}
+    public function closeModal()
+    {
+        $this->showModal = false;
+    }
 
     public function mount(): void
     {
@@ -1278,7 +1278,7 @@ public function closeModal()
         $this->editingTransactionId = null; // Tambahkan ini biar ID transaksi lama hilang
 
         // Kembalikan mode ke Quick Service (Take Away)
-        $this->orderType = $this->orderType === 'dine_in' ? 'dine_in' : 'take_away';
+        $this->orderType = 'dine_in';
         $this->selectedTableId = null;
         $this->memberId = null;
 
@@ -1537,6 +1537,9 @@ public function closeModal()
         // RESET ALUR: Kembalikan viewMode ke list menu produk utama dan reset status transaksi kasir
         $this->viewMode = 'menu';
         $this->resetOrderForNewTransaction();
+
+        $this->cashReceived = null;
+        $this->cashChange = 0;
     }
 
     public function nextStep(): void
