@@ -61,6 +61,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/nama-halaman', [OrderController::class, 'index'])->name('nama.halaman');
+
 // Progres IDIN day start/end: 2024-06-20
 use App\Livewire\DayStartEnd\DayStartEndPage;
 

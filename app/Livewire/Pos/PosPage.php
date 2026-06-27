@@ -180,17 +180,6 @@ class PosPage extends Component
     public bool $paymentModalOpen = false;
     public string $selectedPaymentLabel = 'Cash Payment';
 
-    public $showModal = false;
-
-public function openQuickService()
-{
-    $this->showModal = true;
-}
-
-public function closeModal()
-{
-    $this->showModal = false;
-}
 
     public function mount(): void
     {
@@ -2500,6 +2489,16 @@ public function closeModal()
         $this->cashChange = max(0, $cashReceived - $this->total);
     }
 
+    public function confirmCancel()
+{
+    // Logika hapus
+    $this->selectedTableId = null;
+    $this->showModal = false; 
+
+    // JANGAN gunakan redirect() jika tidak yakin URL-nya benar.
+    // Cukup kembalikan ke halaman saat ini dengan refresh data:
+    return redirect()->back(); 
+}
     public function importTransactionCode(): void
     {
         $this->authorize('transactions.details');
