@@ -2503,6 +2503,16 @@ class PosPage extends Component
         $this->cashChange = max(0, $cashReceived - $this->total);
     }
 
+    public function confirmCancel()
+{
+    // Logika hapus
+    $this->selectedTableId = null;
+    $this->showModal = false;
+
+    // JANGAN gunakan redirect() jika tidak yakin URL-nya benar.
+    // Cukup kembalikan ke halaman saat ini dengan refresh data:
+    return redirect()->back();
+}
     public function importTransactionCode(): void
     {
         $this->authorize('transactions.details');
