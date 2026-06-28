@@ -174,6 +174,13 @@ class PosPage extends Component
     public $tableToSelectLabel = '';
     public $numberOfPax = 1; // Default pax diisi 1
 
+    // State untuk mengontrol buka/tutup modal Scan / Input
+    public $scanInputModalOpen = false;
+
+    // Properti pengikat data (wire:model) di dalam modal Scan / Input
+    public $transactionBarcode = '';
+    public $tableNumberInput = '';
+
     public string $viewMode = 'menu'; // Pilihan value: 'menu' atau 'payment'
     public $paymentPage = 1;          // Pagination metode bayar
 
@@ -190,6 +197,9 @@ class PosPage extends Component
     // --- STATE UNTUK CANCEL TABLE ---
     public bool $cancelTableModalOpen = false; // Mengontrol buka/tutup modal cancel table
     public string $cancelTableReason = '';      // Menampung input alasan pembatalan
+
+    public bool $quickServiceModalOpen = false; // Mengontrol munculnya modal Quick Service otomatis
+    public string $quickServiceSalesMode = 'take_away'; // Menampung pilihan sales mode di modal ('dine_in', 'gofood', 'take_away')
 
     public function openQuickService()
     {
@@ -561,16 +571,24 @@ class PosPage extends Component
             return;
         }
 
-        $this->orderType = $type;
-        if ($type === 'dine_in') {
-            $this->tableModalOpen = true;
+        if ($type === 'take_away') {
+            // ALUR BARU: Set tipe, kosongkan keranjang transaksi lama, dan langsung beralih ke halaman menu sambil memicu modal setup mencuat otomatis
+            $this->orderType = 'take_away';
+            $this->selectedTableId = null;
+            $this->editingTransactionId = null;
+            $this->cartItems = [];
+            $this->numberOfPax = 1; // Reset default pax ke 1
+            $this->quickServiceSalesMode = 'take_away'; // Default select button TAKEAWAY
 
-            return;
+            $this->quickServiceModalOpen = true; // Picu modal otomatis muncul di atas halaman menu
+            $this->viewMode = 'menu';
+        } else {
+            // Alur Dine In bawaan lama kamu
+            $this->orderType = 'dine_in';
+            $this->tableModalOpen = true;
         }
 
         $this->recalculateTotals();
-        $this->selectedTableId = null;
-        $this->tableModalOpen = false;
     }
 
     public function selectTable(int $id): void
@@ -3288,6 +3306,40 @@ class PosPage extends Component
             $this->activeSplitTab = !empty($this->splitBills) ? array_key_first($this->splitBills) : 1;
             $this->recalculateTotals();
         }
+    }
+
+    public function applyScanInput()
+    {
+        // 1. Validasi opsional (misalkan jika nama pelanggan wajib diisi atau format barcode tertentu)
+        $this->validate([
+            'numberOfPax' => 'required|integer|min:1',
+            // 'transactionBarcode' => 'nullable|string', // aktifkan jika ada validasi khusus barcode
+        ]);
+
+        // 2. Logika pencarian atau pemrosesan pesanan berdasarkan Barcode/Nomor Transaksi (jika ada)
+        if (trim($this->transactionBarcode) !== '') {
+            // CONTOH LOGIKA: Jika barcode diisi, kamu bisa mencari data transaksi lama dari database
+            // $oldTransaction = Transaction::where('invoice_number', $this->transactionBarcode)->first();
+            // if ($oldTransaction) {
+            //     // Muat item pesanan lama ke dalam cartItems kamu
+            //     // $this->cartItems = $oldTransaction->itemsToArray();
+            // }
+        }
+
+        // Jika nomor meja diinput secara manual, Anda bisa menyesuaikannya di sini
+        if (trim($this->tableNumberInput) !== '') {
+            // Sinkronisasi dengan sistem pemilihan meja bawaan jika diperlukan
+            // $this->selectedTableId = $this->tableNumberInput;
+        }
+
+        // 4. Berikan feedback sukses (menggunakan dispatch browser event bawaan Livewire v3)
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Data transaksi berhasil diterapkan!'
+        ]);
+
+        // 5. Tutup modal Scan / Input secara otomatis
+        $this->scanInputModalOpen = false;
     }
 
     public function render(): View
