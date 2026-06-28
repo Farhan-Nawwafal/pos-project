@@ -182,6 +182,15 @@ class PosPage extends Component
 
     public $showModal = false;
 
+    // --- STATE UNTUK SPLIT BILL ---
+    public bool $splitBillModalOpen = false; // Mengontrol buka/tutup modal split bill
+    public array $splitBills = [];           // Menampung data sub-bill yang dibuat
+    public int $activeSplitTab = 1;          // Menentukan sub-bill mana yang sedang aktif dipilih kasir
+
+    // --- STATE UNTUK CANCEL TABLE ---
+    public bool $cancelTableModalOpen = false; // Mengontrol buka/tutup modal cancel table
+    public string $cancelTableReason = '';      // Menampung input alasan pembatalan
+
     public function openQuickService()
     {
         $this->showModal = true;
@@ -1474,6 +1483,7 @@ class PosPage extends Component
                 'phone' => $this->customerPhone,
                 'order_type' => $this->orderType,
                 'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
+                'pax' => $this->numberOfPax,
                 'subtotal' => $this->subtotal,
                 'service_percentage' => $this->serviceRate,
                 'service_amount' => $this->serviceAmount,
@@ -2011,6 +2021,7 @@ class PosPage extends Component
                     'email' => null,
                     'order_type' => $this->orderType,
                     'dining_table_id' => $this->orderType === 'dine_in' ? $this->selectedTableId : null,
+                    'pax' => $this->numberOfPax,
                     'voucher_campaign_id' => $voucherCampaignId,
                     'voucher_code_id' => $voucherCodeId,
                     'voucher_code' => $voucherCode,
@@ -2503,16 +2514,66 @@ class PosPage extends Component
         $this->cashChange = max(0, $cashReceived - $this->total);
     }
 
+    /**
+     * Mengeksekusi pembatalan pesanan meja (Cancel Table)
+     */
     public function confirmCancel()
-{
-    // Logika hapus
-    $this->selectedTableId = null;
-    $this->showModal = false;
+    {
+        // Validasi input alasan wajib diisi minimal 5 karakter
+        $this->validate([
+            'cancelTableReason' => 'required|string|min:5',
+        ], [
+            'cancelTableReason.required' => 'Alasan pembatalan wajib diisi.',
+            'cancelTableReason.min' => 'Alasan minimal harus 5 karakter.',
+        ]);
 
-    // JANGAN gunakan redirect() jika tidak yakin URL-nya benar.
-    // Cukup kembalikan ke halaman saat ini dengan refresh data:
-    return redirect()->back();
-}
+        // JIKA PESANAN SUDAH PERNAH TERSIMPAN DI DATABASE (Meja Occupied)
+        if ($this->editingTransactionId !== null) {
+            DB::transaction(function () {
+                $trx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
+
+                if ($trx) {
+                    // 1. Kosongkan kembali status meja makan menjadi tersedia (Warna Biru)
+                    if ($trx->dining_table_id) {
+                        DB::table('dining_tables')->where('id', $trx->dining_table_id)->update([
+                            'status' => 'available',
+                            'occupied_at' => null
+                        ]);
+                    }
+
+                    // 2. Lakukan Soft Void (Isi kolom pembatalan audit tanpa menghapus data laporan)
+                    $trx->update([
+                        'payment_status' => 'void',
+                        'order_status' => 'void',
+                        'voided_at' => now(),
+                        'voided_by_user_id' => auth()->id(),
+                        'void_reason' => $this->cancelTableReason,
+                    ]);
+
+                    // Tambahkan log aktivitas jika tabel audit event tersedia
+                    if (class_exists(\App\Models\TransactionEvent::class)) {
+                        TransactionEvent::create([
+                            'transaction_id' => $trx->id,
+                            'actor_user_id' => auth()->id(),
+                            'action' => 'cancel_table',
+                            'meta' => ['reason' => $this->cancelTableReason]
+                        ]);
+                    }
+                }
+            });
+
+            $this->dispatch('toast', type: 'success', message: 'Pesanan meja berhasil dibatalkan & di-audit.');
+        } else {
+            // JIKA TRANSAKSI BARU (Belum masuk database sama sekali)
+            $this->dispatch('toast', type: 'success', message: 'Meja dilepas.');
+        }
+
+        // Tutup modal, bersihkan keranjang, balikkan halaman ke denah meja
+        $this->cancelTableModalOpen = false;
+        $this->cancelTableReason = '';
+        $this->resetOrderForNewTransaction();
+    }
+
     public function importTransactionCode(): void
     {
         $this->authorize('transactions.details');
@@ -2971,6 +3032,262 @@ class PosPage extends Component
         }
 
         $this->updatedCashReceived();
+    }
+
+    public function openSplitBill(): void
+    {
+        if (count($this->cartItems) === 0) {
+            $this->dispatch('toast', type: 'error', message: 'Keranjang belanja kosong.');
+            return;
+        }
+
+        // Inisialisasi awal: Kita buatkan 2 Bill kosong secara default seperti di gambar UI kamu
+        $this->splitBills = [
+            1 => [
+                'name' => 'Bill - 1',
+                'items' => []
+            ],
+            2 => [
+                'name' => 'Bill - 2',
+                'items' => []
+            ]
+        ];
+        $this->activeSplitTab = 1;
+        $this->splitBillModalOpen = true;
+    }
+
+    /**
+     * Menambah Bill Baru
+     */
+    public function addSplitBill(): void
+    {
+        $nextIndex = count($this->splitBills) > 0 ? max(array_keys($this->splitBills)) + 1 : 1;
+        $this->splitBills[$nextIndex] = [
+            'name' => 'Bill - ' . $nextIndex,
+            'items' => []
+        ];
+        $this->activeSplitTab = $nextIndex;
+    }
+
+    /**
+     * Menghapus Bill Tertentu
+     */
+    public function deleteSplitBill($billIndex): void
+    {
+        if (count($this->splitBills) <= 1) {
+            $this->dispatch('toast', type: 'error', message: 'Minimal harus menyisakan 1 Bill.');
+            return;
+        }
+
+        unset($this->splitBills[$billIndex]);
+        // Pindahkan tab aktif ke bill pertama yang tersedia
+        $this->activeSplitTab = array_key_first($this->splitBills);
+    }
+
+    /**
+     * Memindahkan Item dari Keranjang Utama ke Sub-Bill yang sedang aktif
+     */
+    public function moveItemToSplit($cartIndex): void
+    {
+        if (!isset($this->cartItems[$cartIndex])) return;
+
+        $item = $this->cartItems[$cartIndex];
+
+        // Pastikan quantity di keranjang utama masih mencukupi
+        if ($item['quantity'] <= 0) return;
+
+        $variantId = $item['variant_id'];
+
+        // Cek apakah item dengan variant ini sudah ada di Bill yang aktif saat ini
+        $existingIndex = null;
+        foreach ($this->splitBills[$this->activeSplitTab]['items'] as $i => $splitItem) {
+            if ($splitItem['variant_id'] === $variantId) {
+                $existingIndex = $i;
+                break;
+            }
+        }
+
+        if ($existingIndex !== null) {
+            // Jika sudah ada, tambahkan quantity-nya di sub-bill
+            $this->splitBills[$this->activeSplitTab]['items'][$existingIndex]['quantity'] += 1;
+        } else {
+            // Jika belum ada, buat baris baru di sub-bill
+            $this->splitBills[$this->activeSplitTab]['items'][] = [
+                'product_id'   => $item['product_id'],
+                'variant_id'   => $item['variant_id'],
+                'name'         => $item['name'],
+                'variant_name' => $item['variant_name'],
+                'price'        => $item['price'],
+                'quantity'     => 1,
+            ];
+        }
+
+        // Kurangi quantity di keranjang utama/induk
+        $this->cartItems[$cartIndex]['quantity'] -= 1;
+
+        // Jika quantity di keranjang utama habis (0), jangan dihapus array-nya agar baris menu di kiri UI tetap tampil untuk tracking sisa
+        $this->recalculateTotals();
+    }
+
+    /**
+     * Mengembalikan Item dari Sub-Bill ke Keranjang Utama
+     */
+    public function removeSplitItem($billIndex, $itemIndex): void
+    {
+        $splitItem = $this->splitBills[$billIndex]['items'][$itemIndex];
+        $variantId = $splitItem['variant_id'];
+
+        // Kembalikan quantity ke keranjang utama
+        foreach ($this->cartItems as $i => $cartItem) {
+            if ($cartItem['variant_id'] === $variantId) {
+                $this->cartItems[$i]['quantity'] += 1;
+                break;
+            }
+        }
+
+        // Kurangi quantity di sub-bill
+        $this->splitBills[$billIndex]['items'][$itemIndex]['quantity'] -= 1;
+
+        // Jika quantity di sub-bill habis, hapus dari list bill tersebut
+        if ($this->splitBills[$billIndex]['items'][$itemIndex]['quantity'] <= 0) {
+            array_splice($this->splitBills[$billIndex]['items'], $itemIndex, 1);
+        }
+
+        $this->recalculateTotals();
+    }
+
+    /**
+     * Memproses pembayaran khusus untuk sub-bill tertentu (Split Bill Eksekusi)
+     */
+    public function paySplitBill($billIndex): void
+    {
+        if (!isset($this->splitBills[$billIndex]) || empty($this->splitBills[$billIndex]['items'])) {
+            $this->dispatch('toast', type: 'error', message: 'Tidak ada item di bill ini.');
+            return;
+        }
+
+        // Pastikan kita sedang mengedit transaksi meja aktif yang ada di DB
+        if (!$this->editingTransactionId) {
+            $this->dispatch('toast', type: 'error', message: 'Split bill hanya bisa dilakukan pada pesanan meja yang sudah disimpan.');
+            return;
+        }
+
+        $splitItems = $this->splitBills[$billIndex]['items'];
+
+        DB::transaction(function () use ($splitItems, $billIndex) {
+            // 1. Kunci data transaksi induk dari DB untuk mencegah race condition
+            $parentTrx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
+            if (!$parentTrx) return;
+
+            $cabangId = auth()->user()->cabang_id ?? 1;
+
+            // 2. Hitung Matematika Keuangan untuk Sub-Bill Baru
+            $subBillSubtotal = collect($splitItems)->sum(fn($i) => $i['quantity'] * $i['price']);
+
+            // Perhitungan pajak dinamis mengikuti setting persentase dari transaksi induk
+            $taxRate = (float) ($parentTrx->tax_percentage ?? 0);
+            $serviceRate = (float) ($parentTrx->service_percentage ?? 0);
+
+            $subBillService = (int) round($subBillSubtotal * ($serviceRate / 100));
+            $subBillTax = (int) round(($subBillSubtotal + $subBillService) * ($taxRate / 100));
+            $subBillTotal = $subBillSubtotal + $subBillService + $subBillTax;
+
+            // 3. KLONING BARIS TRANSAKSI BARU (STATUS PAID)
+            $newTrx = Transaction::create([
+                'cabang_id' => $cabangId,
+                'code' => Transaction::generateUniqueCode(),
+                'member_id' => $parentTrx->member_id,
+                'channel' => 'pos',
+                'name' => $parentTrx->name . ' (' . $this->splitBills[$billIndex]['name'] . ')',
+                'phone' => $parentTrx->phone,
+                'order_type' => $parentTrx->order_type,
+                'dining_table_id' => null, // Dikosongkan agar meja aslinya tidak ikut terlepas/biru
+                'subtotal' => $subBillSubtotal,
+                'service_percentage' => $serviceRate,
+                'service_amount' => $subBillService,
+                'tax_percentage' => $taxRate,
+                'tax_amount' => $subBillTax,
+                'total' => $subBillTotal,
+                'payment_method' => 'cash', // Default diset cash, kasir bisa sesuaikan nanti jika perlu
+                'payment_status' => 'paid',  // LANGSUNG LUNAS!
+                'order_status' => 'completed',
+                'paid_at' => now(),
+                'external_id' => Transaction::generateUniqueCode(10),
+                'checkout_link' => '',
+            ]);
+
+            // 4. MASUKKAN LIST MENU KE TRANSACTION ITEMS BARU
+            foreach ($splitItems as $item) {
+                TransactionItem::create([
+                    'cabang_id' => $cabangId,
+                    'transaction_id' => $newTrx->id,
+                    'product_id' => $item['product_id'],
+                    'product_variant_id' => $item['variant_id'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['quantity'] * $item['price'],
+                ]);
+            }
+
+            // 5. UPDATE & BERSIHKAN TRANSAKSI INDUK DI DATABASE
+            // Hapus semua detail item lama, lalu simpan ulang sisa item yang ada di keranjang utama kasir saat ini
+            TransactionItem::where('transaction_id', $parentTrx->id)->delete();
+
+            $newParentSubtotal = 0;
+            foreach ($this->cartItems as $item) {
+                if ($item['quantity'] > 0) {
+                    TransactionItem::create([
+                        'cabang_id' => $cabangId,
+                        'transaction_id' => $parentTrx->id,
+                        'product_id' => $item['product_id'],
+                        'product_variant_id' => $item['variant_id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'subtotal' => $item['quantity'] * $item['price'],
+                    ]);
+                    $newParentSubtotal += $item['quantity'] * $item['price'];
+                }
+            }
+
+            // Hitung ulang totalan nominal diskon, service, pajak untuk transaksi induk yang tersisa
+            $parentService = (int) round($newParentSubtotal * ($serviceRate / 100));
+            $parentTax = (int) round(($newParentSubtotal + $parentService) * ($taxRate / 100));
+            $parentTotal = $newParentSubtotal + $parentService + $parentTax;
+
+            // Perbarui nilai transaksi induk di DB
+            $parentTrx->update([
+                'subtotal' => $newParentSubtotal,
+                'service_amount' => $parentService,
+                'tax_amount' => $parentTax,
+                'total' => $parentTotal,
+            ]);
+
+            // 6. PICU PRINTER KASIR UNTUK STRUK SUB-BILL YANG BARU LUNAS INI
+            $payload = $this->buildPrintPayload($newTrx->id);
+            if ($payload) {
+                $this->dispatch('pos-print-modal', payload: $payload, context: 'checkout');
+            }
+            network_activity_end:
+        });
+
+        // 7. BERSIHKAN MEMORI STATE LIVEWIRE
+        // Singkirkan tab sub-bill yang baru saja dibayar dari modal split
+        unset($this->splitBills[$billIndex]);
+
+        // Filter ulang array keranjang utama untuk membuang baris menu yang quantity-nya sudah benar-benar 0
+        $this->cartItems = collect($this->cartItems)->filter(fn($item) => $item['quantity'] > 0)->values()->all();
+
+        $this->dispatch('toast', type: 'success', message: 'Pembayaran sebagian berhasil diproses & dicetak!');
+
+        // Jika semua pesanan di meja sudah habis dipindahkan dan lunas terbayar
+        if (count($this->cartItems) === 0) {
+            $this->splitBillModalOpen = false;
+            $this->resetOrderForNewTransaction();
+        } else {
+            // Jika masih ada sisa, pindahkan tab fokus aktif modal split ke bill yang masih tersisa
+            $this->activeSplitTab = !empty($this->splitBills) ? array_key_first($this->splitBills) : 1;
+            $this->recalculateTotals();
+        }
     }
 
     public function render(): View

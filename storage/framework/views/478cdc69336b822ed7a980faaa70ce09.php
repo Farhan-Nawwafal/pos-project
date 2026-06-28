@@ -63,7 +63,7 @@
             });
 
             Alpine.store('sidebar', {
-                isEsbModalOpen: false, 
+                isEsbModalOpen: false,
                 toggleEsbModal() {
                     this.isEsbModalOpen = !this.isEsbModalOpen;
                 },
@@ -210,7 +210,8 @@ unset($__componentSlots);
 unset($__split);
 ?>
 
-        <div class="flex-1 transition-all duration-300 ease-in-out relative z-10 ml-0" :class="{
+        <div class="flex-1 transition-all duration-300 ease-in-out relative z-10 ml-0"
+            :class="{
                 'lg:ml-[60px]': true,
                 'lg:ml-[0px] :ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
                 'sm:translate-x-[0px]': $store.sidebar.isExpanded,
@@ -229,21 +230,115 @@ unset($__split);
         </div>
     </div>
 
-    <!-- Modal POS Print -->
-    <div x-data="posPrintModal" x-init="init()" x-show="open" class="fixed inset-0 z-[100000]" style="display: none;"
-        aria-modal="true" role="dialog">
+    <div x-data="posPrintModal" x-init="init()" x-show="open" class="fixed inset-0 z-[100000]"
+        style="display: none;" aria-modal="true" role="dialog">
         <template x-if="open">
             <div class="absolute inset-0">
                 <div class="absolute inset-0 bg-black/50" @click="close()"></div>
                 <div class="absolute inset-0 flex items-center justify-center p-4">
-                    <div class="relative flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-800 dark:bg-gray-900">
-                        <div class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
+                    <div
+                        class="relative flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-800 dark:bg-gray-900">
+                        <div
+                            class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
                             <div>
                                 <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Cetak Struk</h3>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400"
+                                    x-text="payload?.order?.code ? 'Kode: ' + payload.order.code : ''"></p>
                             </div>
-                            <button type="button" @click="close()" class="text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400">Tutup</button>
+                            <button type="button" @click="close()"
+                                class="text-sm font-medium text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">Tutup</button>
                         </div>
-                        <!-- Konten modal print lainnya ... -->
+
+                        <div class="min-h-0 flex-1 space-y-4 overflow-y-auto p-5">
+                            <div
+                                class="rounded-2xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-950">
+                                <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Pelanggan</p>
+                                        <p class="text-sm font-semibold text-gray-800 dark:text-white/90"
+                                            x-text="payload?.customer_name || '-'"></p>
+                                    </div>
+                                    <div class="sm:text-right">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Total</p>
+                                        <p class="text-sm font-semibold text-gray-800 dark:text-white/90"
+                                            x-text="payload?.order?.total ? ('Rp ' + Number(payload.order.total).toLocaleString('id-ID')) : '-'">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex flex-wrap items-center gap-2">
+                                    <span
+                                        class="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-500/15 dark:text-brand-300"
+                                        x-text="context === 'pending' ? 'Pending tersimpan' : (context === 'midtrans' ? 'Online dibayar' : 'Checkout berhasil')"></span>
+                                    <span
+                                        class="rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                                        x-text="payload?.order?.order_type === 'dine_in' ? ('Dine-in' + (payload?.table_number ? (' • Meja ' + payload.table_number) : '')) : 'Take Away'"></span>
+                                </div>
+                            </div>
+
+                            <div
+                                class="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-semibold text-gray-800 dark:text-white/90">Pilih Printer</p>
+                                    <a href="<?php echo e(route('settings.index', ['section' => 'printers'], false)); ?>"
+                                        wire:navigate @click="close()"
+                                        class="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300">Pengaturan</a>
+                                </div>
+
+                                <div class="mt-3 flex items-center justify-between gap-3">
+                                    <label
+                                        class="inline-flex items-center gap-2 text-xs font-semibold text-gray-600 dark:text-gray-400">
+                                        <input type="checkbox"
+                                            class="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900"
+                                            x-model="showAllPrinters" />
+                                        Tampilkan semua printer
+                                    </label>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400"
+                                        x-text="selectedSourceIds().length + ' dipilih'"></p>
+                                </div>
+
+                                <div class="mt-3 space-y-2">
+                                    <template x-for="source in visibleSources()" :key="source.id">
+                                        <div
+                                            class="flex items-start justify-between gap-3 rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-950">
+                                            <div class="flex min-w-0 items-start gap-3">
+                                                <input type="checkbox"
+                                                    class="mt-1 h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900"
+                                                    :checked="!!selected[roleFromSourceId(source?.id)]"
+                                                    @change="toggle(roleFromSourceId(source?.id))" />
+                                                <div class="min-w-0">
+                                                    <p class="truncate text-sm font-semibold text-gray-800 dark:text-white/90"
+                                                        x-text="source.name"></p>
+                                                    <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                                                        <span x-text="String(source?.type || '').toUpperCase()"></span>
+                                                        <span> • </span>
+                                                        <span x-text="itemsForSource(source).length + ' item'"></span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <span
+                                                    class="whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold"
+                                                    :class="statusClass(printerStatus(source)?.key)"
+                                                    x-text="printerStatus(source)?.label"></span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-200 p-5 dark:border-gray-800">
+                            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                <button type="button" :disabled="!canPrintSelected()" @click="printSelected()"
+                                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex h-11 items-center justify-center rounded-lg px-4 text-sm font-semibold text-white transition disabled:opacity-50">
+                                    Cetak Sesuai Pilihan
+                                </button>
+                                <button type="button" :disabled="!canPrintKasirOnly()" @click="printKasirOnly()"
+                                    class="shadow-theme-xs inline-flex h-11 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/[0.03] disabled:opacity-50">
+                                    Cetak Kasir Saja
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -251,10 +346,10 @@ unset($__split);
     </div>
 
     <!-- Modal Baru: ESB Order Report -->
-   <?php echo $__env->make('livewire.transactions.esb-order-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('livewire.transactions.esb-order-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <?php app("livewire")->forceAssetInjection(); ?><div x-persist="<?php echo e('toast-center'); ?>">
-    <?php if (isset($component)) { $__componentOriginal10afb6a75a927024643c78d9c8aff657 = $component; } ?>
+        <?php if (isset($component)) { $__componentOriginal10afb6a75a927024643c78d9c8aff657 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal10afb6a75a927024643c78d9c8aff657 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.common.toast-center','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('common.toast-center'); ?>
@@ -279,8 +374,13 @@ unset($__split);
     </div>
 
     <style>
-        .flatpickr-calendar { z-index: 1000000 !important; }
-        [x-cloak] { display: none !important; }
+        .flatpickr-calendar {
+            z-index: 1000000 !important;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
@@ -299,4 +399,6 @@ unset($__split);
         // ... (lanjutan script asli Anda)
     </script>
 </body>
-</html><?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+
+</html>
+<?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/layouts/app.blade.php ENDPATH**/ ?>
