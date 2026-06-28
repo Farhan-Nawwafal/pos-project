@@ -257,7 +257,6 @@
                         </div>
                     @endif
 
-
                     {{-- Grid Produk --}}
                     @php
                         $perPage = 16;
@@ -585,31 +584,46 @@
 
                     {{-- 3. Button Utama: Save Order (Menyimpan pesanan gantung & kembali ke list denah meja)
                                     --}}
-                    <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                        class="w-full h-10 font-bold text-gray-400 rounded-xs bg-brand-500  text-white rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 tracking-wider">
-                        Save Order
-                    </button>
+                    @if ($orderType === 'take_away')
+                        <button type="button" wire:click="printBill" @disabled($orderType === 'take_away' || $orderType === 'quick_service')
+                            @class([
+                                'w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95',
+                                'opacity-50 cursor-not-allowed pointer-events-none' =>
+                                    $orderType === 'take_away' || $orderType === 'quick_service',
+                            ])>
+                            Print Bill
+                        </button>
+                    @endif
+
+                    @if ($orderType === 'dine_in' && $selectedTableId)
+                        <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
+                            class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95">
+                            Save Order
+                        </button>
+                    @endif
                 </div>
                 @if ($orderType === 'take_away')
                     <div>
-                        <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                            class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs  tracking-wider active:scale-95">
-                            Save Order
+                        <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
+                            class="w-full h-10 font-bold text-white rounded-xs bg-[#1086e1] hover:bg-[#0f75c7] shadow-sm transition text-xs tracking-wider active:scale-95 uppercase">
+                            Payment
                         </button>
                     </div>
-                @else
                 @endif
                 {{-- BARIS BAWAH CADANGAN: HANYA MUNCUL JIKA STATUS TRANSAKSI SEDANG MENGEDIT (OCCUPIED) --}}
                 @if ($isEditing)
                     <div class="grid grid-cols-3 gap-2 w-full mt-2">
                         {{-- 1. Button Print Bill --}}
-                        <button type="button" wire:click="printBill"
-                            class="w-full h-11 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg text-xs hover:bg-gray-50 transition active:scale-95 shadow-sm uppercase tracking-wide">
+                        <button type="button" wire:click="printBill" @disabled($orderType === 'take_away' || $orderType === 'quick_service')
+                            @class([
+                                'w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95',
+                                'opacity-50 cursor-not-allowed pointer-events-none' =>
+                                    $orderType === 'take_away' || $orderType === 'quick_service',
+                            ])>
                             Print Bill
                         </button>
 
                         {{-- 2. Button Split Bill --}}
-                        {{-- Silakan hubungkan wire:click ke method split bill kamu jika sudah ada --}}
                         <button type="button" wire:click="openSplitBill"
                             class="w-full h-11 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg text-xs hover:bg-gray-50 transition active:scale-95 shadow-sm uppercase tracking-wide">
                             Split Bill
@@ -2121,6 +2135,208 @@
                     <button wire:click="confirmCancel" type="button"
                         class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold text-sm shadow-sm transition active:scale-95">
                         Apply Alasan <span>✓</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    @endteleport
+@endif
+@if ($quickServiceModalOpen)
+    @teleport('body')
+        <div class="fixed inset-0 flex items-center justify-center p-4 z-[100030]">
+            {{-- Backdrop Mask Gelap --}}
+            <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('quickServiceModalOpen', false)">
+            </div>
+
+            {{-- Box Kontainer Modal --}}
+            <div
+                class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans">
+
+                {{-- HEADER MODAL --}}
+                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                    <h3 class="text-base font-bold tracking-wide">Quick Service</h3>
+                </div>
+
+                {{-- KONTEN UTAMA MODAL --}}
+                <div class="p-6 space-y-6">
+
+                    {{-- SECT 1: NUMBER OF PAX --}}
+                    <div class="space-y-2">
+                        <label class="block text-sm font-bold text-gray-700">Number of Pax</label>
+
+                        {{-- Input Angka Tengah --}}
+                        <div class="flex justify-center">
+                            <input wire:model="numberOfPax" type="number" min="1"
+                                class="w-32 h-10 border border-gray-300 rounded text-center text-lg font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white dark:text-gray-900" />
+                        </div>
+
+                        {{-- Row Stepper Buttons --}}
+                        <div class="flex items-center justify-center gap-1">
+                            {{-- Button Minus (<) --}}
+                            <button type="button" wire:click="decrementPax"
+                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                &lt;
+                            </button>
+
+                            {{-- Deretan Angka Shortcut 1-5 --}}
+                            @foreach ([1, 2, 3, 4, 5] as $paxAmt)
+                                <button type="button" wire:click="$set('numberOfPax', {{ $paxAmt }})"
+                                    @class([
+                                        'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
+                                        'bg-[#337ab7] text-white' => $numberOfPax == $paxAmt,
+                                        'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
+                                            $numberOfPax != $paxAmt,
+                                    ])>
+                                    {{ $paxAmt }}
+                                </button>
+                            @endforeach
+
+                            {{-- Button Plus (>) --}}
+                            <button type="button" wire:click="incrementPax"
+                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                &gt;
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- SECT 2: SALES MODE --}}
+                    <div class="space-y-2">
+                        <label class="block text-sm font-bold text-gray-700">Sales Mode</label>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            {{-- Button DINE IN --}}
+                            <button type="button" wire:click="$set('quickServiceSalesMode', 'dine_in')"
+                                @class([
+                                    'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                    'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                        $quickServiceSalesMode === 'dine_in',
+                                    'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                        $quickServiceSalesMode !== 'dine_in',
+                                ])>
+                                Dine In
+                            </button>
+
+                            {{-- Button GOFOOD --}}
+                            <button type="button" wire:click="$set('quickServiceSalesMode', 'gofood')"
+                                @class([
+                                    'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                    'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                        $quickServiceSalesMode === 'gofood',
+                                    'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                        $quickServiceSalesMode !== 'gofood',
+                                ])>
+                                GoFood
+                            </button>
+
+                            {{-- Button TAKEAWAY --}}
+                            <button type="button" wire:click="$set('quickServiceSalesMode', 'take_away')"
+                                @class([
+                                    'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                    'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                        $quickServiceSalesMode === 'take_away',
+                                    'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                        $quickServiceSalesMode !== 'take_away',
+                                ])>
+                                Takeaway
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200">
+
+                    {{-- FOOTER BUTTONS ACTION MODAL --}}
+                    <div class="flex justify-end items-center gap-2 pt-2">
+                        <button type="button" wire:click="$set('scanInputModalOpen', true)"
+                            class="h-10 px-4 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
+                            📋 Scan / Input
+                        </button>
+
+                        {{-- Tombol Final Apply --}}
+                        <button type="button"
+                            wire:click="$set('orderType', '{{ $quickServiceSalesMode }}'); $set('quickServiceModalOpen', false);"
+                            class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
+                            ✓ Apply
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @endteleport
+@endif
+@if ($scanInputModalOpen)
+    @teleport('body')
+        <div class="fixed inset-0 flex items-center justify-center p-4 z-[100040]">
+            {{-- Backdrop Mask Gelap --}}
+            <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('scanInputModalOpen', false)"></div>
+
+            {{-- Box Kontainer Modal --}}
+            <div class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans text-gray-800">
+
+                {{-- HEADER MODAL --}}
+                <div class="bg-[#337ab7] px-5 py-3 text-white flex justify-between items-center">
+                    <h3 class="text-base font-bold tracking-wide">Scan / Input</h3>
+                    <button type="button" wire:click="$set('scanInputModalOpen', false)" class="text-white/80 hover:text-white text-lg font-bold">&times;</button>
+                </div>
+
+                {{-- KONTEN UTAMA MODAL --}}
+                <div class="p-6 space-y-4">
+
+                    {{-- Input Customer Transaction / Barcode --}}
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-bold text-gray-700">Customer Transaction / Barcode</label>
+                        <input type="text" wire:model.defer="transactionBarcode"
+                            class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                            placeholder="Scan barcode atau ketik nomor transaksi di sini..." />
+                    </div>
+
+                    {{-- Baris Dua Kolom: Customer Name & Phone --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block text-sm font-bold text-gray-700">Customer Name</label>
+                            <input type="text" wire:model.defer="customerName"
+                                class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="Walk-in Customer" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block text-sm font-bold text-gray-700">Customer Phone</label>
+                            <input type="text" wire:model.defer="customerPhone"
+                                class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="08xxxxxxxxxx" />
+                        </div>
+                    </div>
+
+                    {{-- Input Pax & Table Number --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block text-sm font-bold text-gray-700">Pax</label>
+                            <input type="number" min="1" wire:model.defer="numberOfPax"
+                                class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="1" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block text-sm font-bold text-gray-700">Table Number</label>
+                            <input type="text" wire:model.defer="tableNumberInput"
+                                class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="Nomor Meja (opsional)" />
+                        </div>
+                    </div>
+
+                </div>
+
+                {{-- FOOTER ACTIONS --}}
+                <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+                    {{-- Tombol Close di Kiri --}}
+                    <button type="button" wire:click="$set('scanInputModalOpen', false)"
+                        class="h-10 px-4 text-xs font-bold text-gray-500 hover:text-gray-700 transition">
+                        Close
+                    </button>
+
+                    {{-- Tombol OK / Submit di Kanan --}}
+                    <button type="button" wire:click="applyScanInput"
+                        class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 transition uppercase tracking-wider active:scale-95">
+                        ✓ OK
                     </button>
                 </div>
 
