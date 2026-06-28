@@ -1584,7 +1584,7 @@
             @teleport('body')
             <div class="fixed inset-0 z-[100001] flex items-center justify-center p-4">
                 {{-- Backdrop dengan Blur --}}
-                <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" wire:click="$set('voidItemModalOpen', false)">
+                <div class="absolute inset-0 bg-black/40 " wire:click="$set('voidItemModalOpen', false)">
                 </div>
 
                 <div
@@ -1692,6 +1692,7 @@
             @endteleport
         @endif
     @endif
+    
     @if ($selectTableModalOpen)
         @teleport('body')
         <div class="fixed inset-0 z-[100005] flex items-center justify-center p-4" aria-modal="true" role="dialog">
@@ -1808,7 +1809,7 @@
             aria-modal="true" role="dialog">
 
             {{-- Backdrop Gelap Transparan --}}
-            <div class="absolute inset-0 bg-black/40 backdrop-blur-xs" wire:click="$set('paymentModalOpen', false)">
+            <div class="absolute inset-0 bg-black/40 " wire:click="$set('paymentModalOpen', false)">
             </div>
 
             {{-- Box Card Modal --}}
