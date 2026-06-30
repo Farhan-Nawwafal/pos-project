@@ -251,15 +251,22 @@
                 statusTick: 0,
                 init() {
                     this.onModal = (data) => {
-                        const payload =
-                            data?.detail?.payload ??
-                            data?.payload ??
-                            (Array.isArray(data) ? data[0]?.payload : null);
-                        const context =
-                            data?.detail?.context ??
-                            data?.context ??
-                            (Array.isArray(data) ? data[0]?.context : null);
-                        if (!payload) return;
+                        // Ambil payload murni dari custom event detail, atau fallback ke data itu sendiri
+                        const rawData = data?.detail ?? data;
+
+                        // Ekstraksi payload dan context yang aman
+                        const payload = rawData?.payload ?? rawData;
+                        const context = rawData?.context ?? null;
+
+                        // Jika payload benar-benar kosong setelah di-fallback, baru kita return
+                        if (
+                            !payload ||
+                            (payload === rawData &&
+                                !payload.printer_sources &&
+                                !payload.items)
+                        ) {
+                            return;
+                        }
 
                         if (window.PRINTER_DEBUG) {
                             try {
@@ -286,6 +293,7 @@
                             } catch (e) {}
                         }
 
+                        // Mengisi state Alpine agar bodi modal bisa merender data
                         this.payload = payload;
                         this.context = context;
                         this.open = true;

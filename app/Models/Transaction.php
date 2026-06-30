@@ -24,6 +24,7 @@ class Transaction extends Model
         'email',
         'order_type',
         'dining_table_id',
+        'pax',
         'voucher_campaign_id',
         'voucher_code_id',
         'voucher_code',

@@ -156,7 +156,7 @@
                             <div class="col-span-10 flex items-center gap-1">
                                 <input wire:model.live.debounce.300ms="search" type="text"
                                     placeholder="Information will be printed on checker printout"
-                                    class="flex-1 h-8 border border-gray-300 rounded-sm bg-white px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700" />
+                                    class="w-full h-8 px-2 border border-gray-300 bg-white text-xs  rounded-sm transition shadow-sm outline-none" />
 
                                 <div class="flex items-center gap-1 shrink-0">
                                     <button type="button"
@@ -182,18 +182,20 @@
                             <div class="relative flex-1">
                                 <div
                                     class="absolute inset-y-0 left-0 flex items-center pl-3 px-4 pointer-events-none bg-gray-200">
-                                    <img src="/assets/icons/search.png" alt="Search" class="w-4 h-4 opacity-50 dark:invert">
+                                    <img src="/assets/icons/search.png" alt="Search"
+                                        class="w-4 h-4 opacity-50 dark:invert">
                                 </div>
 
-                                <input wire:model.live.debounce.300ms="searchMenu" type="text" placeholder="Search menu / code"
-                                    class="w-full h-8 border border-gray-300  bg-white pl-15 pr-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500" />
+                                <input wire:model.live.debounce.300ms="search" type="text"
+                                    placeholder="Information will be printed on checker printout"
+                                    class="w-full h-8 px-2 pl-15 border border-gray-300 bg-white text-xs  rounded-sm transition shadow-sm outline-none" />
 
                             </div>
                             <button type="button"
                                 class="w-12 h-8 flex items-center justify-center bg-brand-500 border transition shadow-sm"
                                 title="Refresh">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" class="w-4 h-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                                 </svg>
@@ -238,6 +240,7 @@
 
 
 
+
                     {{-- Tombol kembali ke pilih meja (khusus dine in) --}}
                     @if ($orderType === 'dine_in' && $selectedTableId)
                         <div class=" flex items-center gap-3">
@@ -247,12 +250,10 @@
                             </span>
                         </div>
                     @else
-
                         <div class="text-brand-500 font-semibold text-sm">
                             <h3>Menu</h3>
                         </div>
                     @endif
-
 
                     {{-- Grid Produk --}}
                     @php
@@ -311,11 +312,10 @@
                                 <div class="grid grid-cols-3 w-full">
 
                                     {{-- 1. Button Panah Atas --}}
-                                    <button type="button" wire:click="$set('selectedTableId', null)"
-                                        class="w-full h-10 text-xs font-bold bg-gray-200 border border-gray-300 rounded-xs text-white ">
+                                    <button type="button" wire:click="$set('cancelTableModalOpen', true)"
+                                        class="w-full h-10 text-xs font-bold bg-red-500 border border-gray-300 rounded-xs text-white ">
                                         Cancel Table
                                     </button>
-
                             @endif
                             @if ($orderType === 'dine_in' && $selectedTableId)
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
@@ -335,7 +335,7 @@
                                     class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200  shadow-sm transition text-xs  tracking-wider active:scale-95">
                                     Move Item
                                 </button>
-                                <div x-data="{ showModal: false }" class="">
+                                {{-- <div x-data="{ showModal: false }" class="">
                                     <button @click="showModal = true" type="button"
                                         class="bg-red-500 w-full h-10 text-xs font-bold text-white border border-red-600 rounded-xs">
                                         Cancel Table
@@ -382,12 +382,14 @@
 
                                         </div>
                                     </div>
-                                </div>
-                                {{-- 2. Button Panah Bawah --}}
-
+                                </div> --}}
 
                                 {{-- 3. Button Utama: Save Order (Menyimpan pesanan gantung & kembali ke list denah meja)
                                 --}}
+                                <button type="button" wire:click="$set('cancelTableModalOpen', true)"
+                                    class="w-full h-10 text-xs font-bold text-white rounded-xs bg-red-500  shadow-sm transition text-xs  tracking-wider active:scale-95">
+                                    Cancel Table
+                                </button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200  shadow-sm transition text-xs  tracking-wider active:scale-95">
                                     Link Table
@@ -402,10 +404,10 @@
                 </div>
 
                 {{-- SISI KANAN (KOLOM 5): TEMPAT TOMBOL BARU & AREA KERANJANG --}}
-                <div class="md:col-span-5 ">
+                <div class="md:col-span-5 pt-3">
 
                     {{-- AREA SINKRONISASI TINGGI (TEMPAT TOMBOL BARU KAMU) --}}
-                    <div class="min-h-[65px] flex items-center gap-1 pb-1">
+                    <div class=" flex items-center gap-1 ">
                         {{-- Tombol Kiri (30%) --}}
                         <div class="w-[10%]">
                             <button type="button"
@@ -432,13 +434,24 @@
                             </div>
                         @endif
                     </div>
-
+                    <div class="pt-1 pb-1 flex items-center gap-1 ">
+                        <div class="w-[70%]">
+                            <input type="text" placeholder="Promotion Description"
+                                class="w-full h-8 px-2 border border-gray-300 bg-white text-xs  rounded-sm transition shadow-sm outline-none " />
+                        </div>
+                        <div class="w-[30%]">
+                            <button type="button"
+                                class="w-full h-8 bg-brand-500 text-white text-xs  rounded-sm  transition shadow-sm">
+                                Add Promotion
+                            </button>
+                        </div>
+                    </div>
 
                     {{-- Area Box Keranjang --}}
-                    <div
+                    {{-- <div
                         class="md:sticky md:top-20 overflow-hidden border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
                         {{-- Header Keranjang --}}
-                        <div
+                        {{-- <div
                             class="flex items-center justify-between border-b border-gray-200 px-3 py-2 bg-gray-200 dark:border-gray-800">
                             <div class="flex items-center gap-3">
                                 <span
@@ -449,7 +462,7 @@
                                 <h3 class="text-xs font-black text-gray-800 dark:text-white/90 tracking-wider">
                                     Menu
                                 </h3>
-                            </div>
+                            </div> --}}
 
                             {{-- Tombol Pending Transaksi di Ujung Kanan --}}
                             {{-- <button wire:click="$set('pendingOrdersModalOpen', true)"
@@ -462,176 +475,146 @@
                                 @endif
                             </button> --}}
 
-                        </div>
+                            {{--
+                        </div> --}}
 
-                        <div class="p-4">
-                            {{-- DAFTAR ITEM --}}
-                            <div class="custom-scrollbar max-h-[420px] min-h-[420px] overflow-y-auto mb-4 pr-1">
-                                <div class="space-y-3">
+                        {{-- Container Utama: Gunakan flex-col agar footer bisa menempel di bawah --}}
+                        <div class="flex flex-col max-h-[540px] min-h-[540px] border border-gray-300 bg-white">
+
+                            {{-- 1. HEADER (Hanya muncul jika ada item) --}}
+                            @if(count($cartItems) > 0)
+                                <div class="flex items-center gap-3 bg-gray-200 py-2 px-3 border-b border-gray-300 shrink-0">
+                                    <span class="text-xs font-black text-gray-800 w-8 text-center tracking-wider">Qty</span>
+                                    <h3 class="text-xs font-black text-gray-800 tracking-wider">Menu</h3>
+                                </div>
+                            @endif
+
+                            {{-- 2. DAFTAR ITEM (Gunakan flex-1 dan overflow-y-auto agar bisa scroll) --}}
+                            <div class="flex-1 overflow-y-auto custom-scrollbar p-2">
+                                <div class="space-y-2">
                                     @forelse ($cartItems as $idx => $item)
-                                        @php
-                                            $price = (int) ($item['price'] ?? 0);
-                                            $qty = (int) ($item['quantity'] ?? 0);
-                                        @endphp
-                                        <div class=" last:border-0 flex flex-col gap-2">
-
-                                            {{-- LAYOUT BARU: BARIS ATAS (QTY & DETAIL PRODUK) --}}
-                                            <div class="flex items-start gap-3">
-                                                {{-- Kolom Qty (Kiri) --}}
-                                                <div class="w-8 shrink-0 text-center">
-                                                    <span class="text-[10px] font-black text-brand-500 tabular-nums px-2 py-0.5 ">
-                                                        {{ $qty }}
-                                                    </span>
+                                        {{-- ... isi item Anda tetap sama ... --}}
+                                        <div class="flex items-start gap-3">
+                                            <div class="w-8 shrink-0 text-center">
+                                                <span
+                                                    class="text-[10px] font-black text-brand-500 tabular-nums">{{ $item['quantity'] }}</span>
+                                            </div>
+                                            <div class="min-w-0 flex-1 flex justify-between items-start gap-2">
+                                                <div class="min-w-0 flex-1">
+                                                    <p class="text-[10px] text-brand-500 uppercase truncate">{{ $item['name'] }}</p>
+                                                    <p class="text-[10px] text-brand-500 font-bold">
+                                                        {{ number_format((int) $item['price'], 0, ',', '.') }} | Total:
+                                                        {{ number_format($item['quantity'] * (int) $item['price'], 0, ',', '.') }}
+                                                    </p>
                                                 </div>
-
-                                                {{-- Kolom Detail Pesanan & Harga (Kanan) --}}
-                                                <div class="min-w-0 flex-1 flex justify-between items-start gap-2">
-                                                    {{-- Sisi Kiri: Nama Menu, Varian, & Rincian Harga --}}
-                                                    <div class="min-w-0 flex-1">
-                                                        <p
-                                                            class="text-[10px]  text-brand-500 dark:text-white uppercase leading-tight truncate mb-1">
-                                                            {{ $item['name'] }}
-                                                        </p>
-                                                        @if (!empty($item['variant_name']))
-                                                            <p class="text-[5px] text-brand-500 italic mb-1">
-                                                                {{ $item['variant_name'] }}
-                                                            </p>
-                                                        @endif
-
-                                                        {{-- Rincian Harga sub-detail: @harga | total: hargaTotal --}}
-                                                        <p
-                                                            class="text-[10px]  text-brand-500 dark:text-gray-400 font-bold tracking-wide">
-                                                            @<span>{{ number_format($price, 0, ',', '.') }}</span>
-                                                            <span class="mx-1  text-brand-500 dark:text-gray-700 font-bold">|</span>
-                                                            <span class="font-bold text-gray-700 dark:text-gray-300">Total:
-
-                                                                {{ number_format($qty * $price, 0, ',', '.') }}</span>
-                                                        </p>
-                                                    </div>
-
-                                                    {{-- Sisi Kanan: Button Sampah (Sejajar Sempurna di Ujung Kanan Kolom Detail)
-                                                    --}}
-                                                    <div class="shrink-0">
-                                                        <button type="button" wire:click="removeItem({{ $idx }})"
-                                                            class="w-8 h-6 flex items-center justify-center text-white bg-red-700 transition"
-                                                            title="Hapus Menu">
-                                                            x
-                                                        </button>
-                                                    </div>
-                                                    <div class="shrink-0">
-                                                        <button type="button" wire:click="removeItem({{ $idx }})"
-                                                            class="w-3 h-3 flex items-center justify-center text-gray-400 hover:text-red-500 active:text-red-700 transition"
-                                                            title="Hapus Menu">
-                                                            <img src="/assets/icons/info.png" alt="">
-                                                        </button>
-                                                    </div>
+                                                <div class="flex flex-col gap-1 shrink-0">
+                                                    <button type="button" wire:click="removeItem({{ $idx }})"
+                                                        class="w-8 h-6 bg-red-700 text-white text-[10px]">X</button>
                                                 </div>
                                             </div>
                                         </div>
                                     @empty
-                                        <div class="py-8 text-center text-xs text-gray-400">Belum ada menu dipilih
-                                        </div>
+                                        <div class="py-8 text-center text-xs text-gray-400">No Item</div>
                                     @endforelse
                                 </div>
                             </div>
 
-                            {{-- SUMMARY BAR --}}
+                            {{-- 3. FOOTER SUMMARY (Akan selalu di bawah karena flex-col) --}}
                             @php $totalQty = collect($cartItems)->sum('quantity'); @endphp
-                            <div class="dark:bg-gray-900">
-                                <div class="gap-40 grid grid-cols-3 divide-x divide-white/10 text-center items-center border-t">
+                            <div class="bg-white border-t border-gray-200 shrink-0">
+                                <div class="grid grid-cols-3  text-center items-center py-2 gap-40">
                                     <div>
-                                        <p class="text-[10px] font-bold text-black">Qty</p>
-                                        <p class="text-[10px] font-bold text-black leading-none">{{ $totalQty }}</p>
+                                        <p class="text-[10px] font-bold text-gray-500 ">Qty</p>
+                                        <p class="text-[10px] font-bold text-black">{{ $totalQty }}</p>
                                     </div>
                                     <div>
-                                        <p class="text-[10px] font-bold text-black">Subtotal</p>
-                                        <p class="text-[10px] font-bold text-black leading-none mt-1">
-                                            {{ number_format($subtotal, 0, ',', '.') }}
+                                        <p class="text-[10px] font-bold text-gray-500 ">Subtotal</p>
+                                        <p class="text-[10px] font-bold text-black">{{ number_format($subtotal, 0, ',', '.') }}
                                         </p>
                                     </div>
                                     <div>
-                                        <p class="text-[10px] font-bold text-black">Billing</p>
-                                        <p class="text-[10px] font-bold text-black leading-none">
-                                            {{ number_format($total, 0, ',', '.') }}
+                                        <p class="text-[10px] font-bold text-gray-500 ">Billing</p>
+                                        <p class="text-[10px] font-bold text-black">{{ number_format($total, 0, ',', '.') }}
                                         </p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="space-y-1  border-gray-100 dark:border-gray-800">
+                            @php
+                                $isEditing = $editingTransactionId !== null;
+                                $isDineIn = $orderType === 'dine_in';
+                            @endphp
 
-                            {{-- INTERNAL ACTIONS BOX (DENGAN TIGA TOMBOL RATA SAAT EDITING MODE) --}}
-                            <div class="space-y-2 mt-3 pt-3  border-gray-100 dark:border-gray-800">
-                                @php
-                                    $isEditing = $editingTransactionId !== null;
-                                    $isDineIn = $orderType === 'dine_in';
-                                @endphp
+                            {{-- BARIS ATAS: Tiga Tombol Rata (Panah Atas, Panah Bawah, Save Order/Kirim Ke Dapur) --}}
+                            {{-- Ubah menjadi grid-cols-5 agar setiap kolom mewakili 20% --}}
+                            <div class="grid grid-cols-4  w-full">
 
-                                {{-- BARIS ATAS: Tiga Tombol Rata (Panah Atas, Panah Bawah, Save Order/Kirim Ke Dapur) --}}
-                                <div class="grid grid-cols-3 w-full">
-                                    {{-- 1. Button Panah Atas --}}
-                                    <button type="button"
-                                        class="h-10 w-full flex items-center justify-center bg-brand-500 text-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
-                                        <img src="/assets/icons/arrow-up.png" width="30" height="30" alt="">
-                                    </button>
+                                {{-- 1. Button Panah Atas (25%) --}}
+                                <button type="button"
+                                    class="col-span-1 flex items-center justify-center h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95">
+                                    <img src="/assets/icons/arrow-up.png" width="30" height="30" alt="Up">
+                                </button>
 
-                                    {{-- 2. Button Panah Bawah --}}
-                                    <button type="button"
-                                        class="h-10 w-full flex items-center justify-center bg-brand-500  text-white  rounded-xs border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-sm">
-                                        <img src="/assets/icons/arrow-down.png" width="30" height="30" alt="">
-                                    </button>
+                                {{-- 2. Button Panah Bawah (25%) --}}
+                                <button type="button"
+                                    class="col-span-1 flex items-center justify-center h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95">
+                                    <img src="/assets/icons/arrow-down.png" width="30" height="30" alt="Down">
+                                </button>
 
-                                    {{-- 3. Button Utama: Save Order (Menyimpan pesanan gantung & kembali ke list denah meja)
-                                    --}}
-
-
+                                {{-- 3. Button Utama (50%) --}}
+                                <div class="col-span-2">
                                     @if ($orderType === 'take_away')
-                                        <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                            class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200  shadow-sm transition text-xs  tracking-wider active:scale-95">
+                                        <button type="button" wire:click="printBill" @disabled($orderType === 'take_away' || $orderType === 'quick_service') @class([
+                                            'w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95',
+                                            'opacity-50 cursor-not-allowed pointer-events-none' => $orderType === 'take_away' || $orderType === 'quick_service',
+                                        ])>
                                             Print Bill
                                         </button>
-
                                     @endif
+
                                     @if ($orderType === 'dine_in' && $selectedTableId)
                                         <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                            class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200  shadow-sm transition text-xs  tracking-wider active:scale-95">
+                                            class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95">
                                             Save Order
                                         </button>
-
                                     @endif
                                 </div>
-                                @if ($orderType === 'take_away')
-                                    <div>
-                                        <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                            class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs  tracking-wider active:scale-95">
-                                            Save Order
-                                        </button>
-                                    </div>
-                                @else
-                                @endif
-                                {{-- BARIS BAWAH CADANGAN: HANYA MUNCUL JIKA STATUS TRANSAKSI SEDANG MENGEDIT (OCCUPIED) --}}
-                                @if ($isEditing)
-                                    <div class="grid grid-cols-3 gap-2 w-full mt-2">
-                                        {{-- 1. Button Print Bill --}}
-                                        <button type="button" wire:click="printBill"
-                                            class="w-full h-11 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg text-xs hover:bg-gray-50 transition active:scale-95 shadow-sm uppercase tracking-wide">
-                                            Print Bill
-                                        </button>
-
-                                        {{-- 2. Button Split Bill --}}
-                                        {{-- Silakan hubungkan wire:click ke method split bill kamu jika sudah ada --}}
-                                        <button type="button" wire:click="$set('splitBillModalOpen', true)"
-                                            class="w-full h-11 bg-white border border-gray-300 text-gray-700 font-bold rounded-lg text-xs hover:bg-gray-50 transition active:scale-95 shadow-sm uppercase tracking-wide">
-                                            Split Bill
-                                        </button>
-
-
-                                        {{-- 3. Button Payment --}}
-                                        <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
-                                            class="w-full h-11 flex items-center justify-center bg-[#1086e1] hover:bg-[#0f75c7] text-white font-bold rounded-lg text-xs transition active:scale-95 shadow-sm uppercase tracking-wide">
-                                            Payment
-                                        </button>
-                                    </div>
-                                @endif
                             </div>
+                            @if ($orderType === 'take_away')
+                                <div>
+                                    <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
+                                        class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95">
+                                        Payment
+                                    </button>
+                                </div>
+                            @endif
+                            {{-- BARIS BAWAH CADANGAN: HANYA MUNCUL JIKA STATUS TRANSAKSI SEDANG MENGEDIT (OCCUPIED) --}}
+                            @if ($isEditing)
+                                <div class="grid grid-cols-3  w-full">
+                                    {{-- 1. Button Print Bill --}}
+                                    <button type="button" wire:click="printBill" @disabled($orderType === 'take_away' || $orderType === 'quick_service') @class([
+                                        'w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95',
+                                        'opacity-50 cursor-not-allowed pointer-events-none' =>
+                                            $orderType === 'take_away' || $orderType === 'quick_service',
+                                    ])>
+                                        Print Bill
+                                    </button>
+
+                                    {{-- 2. Button Split Bill --}}
+                                    <button type="button" wire:click="openSplitBill"
+                                        class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95">
+                                        Split Bill
+                                    </button>
+
+
+                                    {{-- 3. Button Payment --}}
+                                    <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
+                                        class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 hover:bg-brand-600 shadow-sm transition text-xs tracking-wider active:scale-95">
+                                        Payment
+                                    </button>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -1412,12 +1395,12 @@
                                                                                             <button type="button"
                                                                                                 wire:click="$set('paymentMethod', '{{ $pm['id'] }}')"
                                                                                                 class="flex flex-col items-center justify-center rounded-xl border p-3 text-center transition-all duration-200 hover:shadow-md
-                                                                                                                                                                                                                                                                                                                                                                                {{ $paymentMethod === $pm['id']
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                {{ $paymentMethod === $pm['id']
                                                                     ? 'border-brand-500 bg-brand-50 text-brand-700 ring-2 ring-brand-500/20 dark:border-brand-400 dark:bg-brand-900/20 dark:text-brand-300'
                                                                     : 'border-gray-200 bg-white text-gray-600 hover:border-brand-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-800' }}">
                                                                                                 <div
                                                                                                     class="mb-2 flex h-8 w-8 items-center justify-center rounded-full
-                                                                                                                                                                                                                                                                                                                                                                                    {{ $paymentMethod === $pm['id'] ? 'bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' }}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $paymentMethod === $pm['id'] ? 'bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' }}">
                                                                                                     @if ($pm['id'] === 'cash')
                                                                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                                                                             viewBox="0 0 24 24">
@@ -1584,7 +1567,7 @@
             @teleport('body')
             <div class="fixed inset-0 z-[100001] flex items-center justify-center p-4">
                 {{-- Backdrop dengan Blur --}}
-                <div class="absolute inset-0 bg-black/40 " wire:click="$set('voidItemModalOpen', false)">
+                <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" wire:click="$set('voidItemModalOpen', false)">
                 </div>
 
                 <div
@@ -1692,7 +1675,6 @@
             @endteleport
         @endif
     @endif
-    
     @if ($selectTableModalOpen)
         @teleport('body')
         <div class="fixed inset-0 z-[100005] flex items-center justify-center p-4" aria-modal="true" role="dialog">
@@ -1809,7 +1791,7 @@
             aria-modal="true" role="dialog">
 
             {{-- Backdrop Gelap Transparan --}}
-            <div class="absolute inset-0 bg-black/40 " wire:click="$set('paymentModalOpen', false)">
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-xs" wire:click="$set('paymentModalOpen', false)">
             </div>
 
             {{-- Box Card Modal --}}
@@ -1926,6 +1908,393 @@
                     <button type="button" wire:click="$set('paymentModalOpen', false)"
                         class="h-10 px-6 bg-brand-500 hover:bg-brand-600 text-white text-xs font-black rounded-lg shadow-sm transition uppercase tracking-wider active:scale-95">
                         Apply
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        @endteleport
+    @endif
+    {{-- MODAL REKAYASA TAMPILAN SPLIT BILL --}}
+    @if ($splitBillModalOpen)
+        @teleport('body')
+        <div class="fixed inset-0 z-[100015] flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-xs" wire:click="$set('splitBillModalOpen', false)">
+            </div>
+
+            <div
+                class="relative w-full max-w-5xl h-[80vh] flex flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in duration-150">
+
+                {{-- HEADER MODAL --}}
+                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                    <h3 class="text-base font-bold tracking-wide">Split Bill</h3>
+                </div>
+
+                {{-- BODY CONTAINER --}}
+                <div class="flex-1 flex min-h-0 divide-x divide-gray-200 dark:divide-gray-800">
+
+                    {{-- SISI KIRI: SISA MENU TRANSAKSI UTAMA --}}
+                    <div class="w-1/2 flex flex-col p-4 bg-gray-50 dark:bg-gray-950/40">
+                        <div
+                            class="flex border-b border-gray-200 bg-gray-200 dark:bg-gray-800 px-3 py-2 font-bold text-xs text-gray-700 dark:text-gray-300">
+                            <span class="w-12 text-center">Qty</span>
+                            <span class="flex-1 pl-4">Menu</span>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto space-y-2 mt-2 custom-scrollbar">
+                            @foreach ($cartItems as $cIdx => $cItem)
+                                @if ($cItem['quantity'] > 0)
+                                    {{-- Hanya tampilkan jika Qty sisa > 0 --}}
+                                    <div
+                                        class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border rounded-lg shadow-xs">
+                                        <div class="flex items-center flex-1 min-w-0">
+                                            <span
+                                                class="w-12 text-center text-sm font-bold text-gray-800 dark:text-white">{{ $cItem['quantity'] }}</span>
+                                            <div class="pl-4 truncate">
+                                                <p class="text-xs font-bold text-gray-800 dark:text-white uppercase">
+                                                    {{ $cItem['name'] }}
+                                                </p>
+                                                <p class="text-[11px] text-gray-600 font-semibold mt-0.5">
+                                                    @ {{ number_format($cItem['price'], 0, ',', '.') }} | Total:
+                                                    {{ number_format($cItem['quantity'] * $cItem['price'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <button type="button" wire:click="moveItemToSplit({{ $cIdx }})"
+                                            class="w-10 h-8 flex items-center justify-center bg-[#337ab7] hover:bg-blue-700 text-white rounded font-bold shadow-xs text-sm">
+                                            +
+                                        </button>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                        <div class="pt-3">
+                            <button type="button"
+                                class="px-4 stream h-9 bg-[#337ab7] text-white text-xs font-bold rounded shadow-sm">📝
+                                Rename Bill</button>
+                        </div>
+                    </div>
+
+                    {{-- SISI KANAN: TABS BILL DAN DAFTAR ITEM YANG DIPINDAH --}}
+                    <div class="w-1/2 flex flex-col p-4 bg-white dark:bg-gray-900">
+
+                        {{-- ATAS: TAB NAVIGATION --}}
+                        <div
+                            class="flex flex-wrap border-b border-gray-200 dark:border-gray-800 gap-1 overflow-x-auto shrink-0 custom-scrollbar">
+                            @foreach ($splitBills as $bIdx => $bill)
+                                @php $itemCount = collect($bill['items'])->sum('quantity'); @endphp
+                                <button type="button" wire:click="$set('activeSplitTab', {{ $bIdx }})" @class([
+                                    'px-4 py-2 text-xs font-bold transition-all border-b-2 -mb-[1px]',
+                                    'border-[#337ab7] text-[#337ab7]' => $activeSplitTab == $bIdx,
+                                    'border-transparent text-gray-400 hover:text-gray-600' =>
+                                        $activeSplitTab != $bIdx,
+                                ])>
+                                    {{ $bill['name'] }} ({{ $itemCount }})
+                                </button>
+                            @endforeach
+                        </div>
+
+                        {{-- TENGAH: ISI ITEM DI DALAM TAB YANG SEDANG AKTIF --}}
+                        <div class="flex-1 overflow-y-auto space-y-2 mt-4 custom-scrollbar">
+                            @if (isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0)
+                                @foreach ($splitBills[$activeSplitTab]['items'] as $sIdx => $sItem)
+                                    <div
+                                        class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <div class="min-w-0 flex-1">
+                                            <p class="text-xs font-bold text-gray-800 dark:text-white uppercase">
+                                                {{ $sItem['name'] }}
+                                            </p>
+                                            <p class="text-[11px] text-gray-500 mt-0.5">{{ $sItem['quantity'] }}x | @
+                                                {{ number_format($sItem['price'], 0, ',', '.') }}
+                                            </p>
+                                        </div>
+                                        <button type="button" wire:click="removeSplitItem({{ $activeSplitTab }}, {{ $sIdx }})"
+                                            class="text-xs text-red-500 hover:text-red-700 font-bold px-2">
+                                            ❌ Batalkan
+                                        </button>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="h-full flex items-center justify-center text-xs text-gray-400 italic">
+                                    Belum ada menu di {{ $splitBills[$activeSplitTab]['name'] ?? 'Bill ini' }}. Klik
+                                    tombol (+) di kiri untuk memindahkan.
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- BAWAH SISI KANAN: TOMBOL DELETE BILL --}}
+                        <div class="pt-3 flex justify-end">
+                            <button type="button" wire:click="deleteSplitBill({{ $activeSplitTab }})"
+                                class="px-4 h-9 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded shadow-sm flex items-center gap-1">
+                                🗑️ Delete Bill
+                            </button>
+                            @if (isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0)
+                                <button type="button" wire:click="paySplitBill({{ $activeSplitTab }})"
+                                    class="px-4 h-9 bg-green-600 hover:bg-green-700 text-white text-xs font-black rounded shadow-sm flex items-center gap-1 uppercase tracking-wider">
+                                    💵 Pay This Bill (Rp
+                                    {{ number_format(collect($splitBills[$activeSplitTab]['items'])->sum(fn($i) => $i['quantity'] * $i['price']), 0, ',', '.') }})
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
+
+                {{-- FOOTER MODAL UTAMA --}}
+                <div
+                    class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950 px-5 py-3 flex items-center justify-between shrink-0">
+                    <button type="button" wire:click="addSplitBill"
+                        class="h-10 px-4 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm flex items-center gap-1">
+                        ➕ Add Bill
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" wire:click="$set('splitBillModalOpen', false)"
+                            class="h-10 px-5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm flex items-center gap-1">
+                            ✖ Close
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        @endteleport
+    @endif
+    @if ($cancelTableModalOpen)
+        @teleport('body')
+        <div class="fixed inset-0 flex items-center justify-center p-4 z-[100020]">
+            {{-- Backdrop Gelap --}}
+            <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('cancelTableModalOpen', false)">
+            </div>
+
+            {{-- Box Modal --}}
+            <div
+                class="relative bg-white rounded-lg shadow-xl w-full max-w-lg p-6 animate-in fade-in zoom-in-95 duration-150">
+
+                <h2 class="text-lg font-bold text-white">Cancel Table</h2>
+                <p class="text-sm text-gray-600 mt-2">Cancel Notes (Alasan Pembatalan)</p>
+
+                {{-- Kolom Input Saling Terikat ke BE --}}
+                <div class="mt-2 mb-3">
+                    <input type="text" wire:model.live="cancelTableReason"
+                        class="w-full border border-gray-300 rounded p-3 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                        placeholder="Masukkan alasan pembatalan meja...">
+
+                    @error('cancelTableReason')
+                        <span class="text-xs font-bold text-red-500 mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <hr class="my-4 border-gray-200">
+
+                {{-- FOOTER CONTROLS --}}
+                <div class="flex justify-between items-center">
+                    <button wire:click="$set('cancelTableModalOpen', false)" type="button"
+                        class="flex items-center gap-2 text-red-600 font-bold text-sm hover:text-red-800 transition">
+                        <span>✕</span> Batal
+                    </button>
+                    <button wire:click="confirmCancel" type="button"
+                        class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-bold text-sm shadow-sm transition active:scale-95">
+                        Apply Alasan <span>✓</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        @endteleport
+    @endif
+    @if ($quickServiceModalOpen)
+        @teleport('body')
+        <div class="fixed inset-0 flex items-center justify-center p-4 z-[100030]">
+            {{-- Backdrop Mask Gelap --}}
+            <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('quickServiceModalOpen', false)">
+            </div>
+
+            {{-- Box Kontainer Modal --}}
+            <div
+                class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans">
+
+                {{-- HEADER MODAL --}}
+                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                    <h3 class="text-base font-bold tracking-wide">Quick Service</h3>
+                </div>
+
+                {{-- KONTEN UTAMA MODAL --}}
+                <div class="p-6 space-y-6">
+
+                    {{-- SECT 1: NUMBER OF PAX --}}
+                    <div class="space-y-2">
+                        <label class="block text-sm font-bold text-gray-700">Number of Pax</label>
+
+                        {{-- Input Angka Tengah --}}
+                        <div class="flex justify-center">
+                            <input wire:model="numberOfPax" type="number" min="1"
+                                class="w-32 h-10 border border-gray-300 rounded text-center text-lg font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white dark:text-gray-900" />
+                        </div>
+
+                        {{-- Row Stepper Buttons --}}
+                        <div class="flex items-center justify-center gap-1">
+                            {{-- Button Minus (<) --}} <button type="button" wire:click="decrementPax"
+                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                &lt;
+                                </button>
+
+                                {{-- Deretan Angka Shortcut 1-5 --}}
+                                @foreach ([1, 2, 3, 4, 5] as $paxAmt)
+                                    <button type="button" wire:click="$set('numberOfPax', {{ $paxAmt }})" @class([
+                                        'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
+                                        'bg-[#337ab7] text-white' => $numberOfPax == $paxAmt,
+                                        'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
+                                            $numberOfPax != $paxAmt,
+                                    ])>
+                                        {{ $paxAmt }}
+                                    </button>
+                                @endforeach
+
+                                {{-- Button Plus (>) --}}
+                                <button type="button" wire:click="incrementPax"
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                    &gt;
+                                </button>
+                        </div>
+                    </div>
+
+                    {{-- SECT 2: SALES MODE --}}
+                    <div class="space-y-2">
+                        <label class="block text-sm font-bold text-gray-700">Sales Mode</label>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            {{-- Button DINE IN --}}
+                            <button type="button" wire:click="$set('quickServiceSalesMode', 'dine_in')" @class([
+                                'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                    $quickServiceSalesMode === 'dine_in',
+                                'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                    $quickServiceSalesMode !== 'dine_in',
+                            ])>
+                                Dine In
+                            </button>
+
+                            {{-- Button GOFOOD --}}
+                            <button type="button" wire:click="$set('quickServiceSalesMode', 'gofood')" @class([
+                                'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                    $quickServiceSalesMode === 'gofood',
+                                'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                    $quickServiceSalesMode !== 'gofood',
+                            ])>
+                                GoFood
+                            </button>
+
+                            {{-- Button TAKEAWAY --}}
+                            <button type="button" wire:click="$set('quickServiceSalesMode', 'take_away')" @class([
+                                'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                    $quickServiceSalesMode === 'take_away',
+                                'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                    $quickServiceSalesMode !== 'take_away',
+                            ])>
+                                Takeaway
+                            </button>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200">
+
+                    {{-- FOOTER BUTTONS ACTION MODAL --}}
+                    <div class="flex justify-end items-center gap-2 pt-2">
+                        <button type="button" wire:click="$set('scanInputModalOpen', true)"
+                            class="h-10 px-4 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
+                            📋 Scan / Input
+                        </button>
+
+                        {{-- Tombol Final Apply --}}
+                        <button type="button"
+                            wire:click="$set('orderType', '{{ $quickServiceSalesMode }}'); $set('quickServiceModalOpen', false);"
+                            class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
+                            ✓ Apply
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        @endteleport
+    @endif
+    @if ($scanInputModalOpen)
+        @teleport('body')
+        <div class="fixed inset-0 flex items-center justify-center p-4 z-[100040]">
+            {{-- Backdrop Mask Gelap --}}
+            <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('scanInputModalOpen', false)"></div>
+
+            {{-- Box Kontainer Modal --}}
+            <div
+                class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans text-gray-800">
+
+                {{-- HEADER MODAL --}}
+                <div class="bg-[#337ab7] px-5 py-3 text-white flex justify-between items-center">
+                    <h3 class="text-base font-bold tracking-wide">Scan / Input</h3>
+                    <button type="button" wire:click="$set('scanInputModalOpen', false)"
+                        class="text-white/80 hover:text-white text-lg font-bold">&times;</button>
+                </div>
+
+                {{-- KONTEN UTAMA MODAL --}}
+                <div class="p-6 space-y-4">
+
+                    {{-- Input Customer Transaction / Barcode --}}
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-bold text-gray-700">Customer Transaction / Barcode</label>
+                        <input type="text" wire:model.defer="transactionBarcode"
+                            class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                            placeholder="Scan barcode atau ketik nomor transaksi di sini..." />
+                    </div>
+
+                    {{-- Baris Dua Kolom: Customer Name & Phone --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block text-sm font-bold text-gray-700">Customer Name</label>
+                            <input type="text" wire:model.defer="customerName"
+                                class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="Walk-in Customer" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block text-sm font-bold text-gray-700">Customer Phone</label>
+                            <input type="text" wire:model.defer="customerPhone"
+                                class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="08xxxxxxxxxx" />
+                        </div>
+                    </div>
+
+                    {{-- Input Pax & Table Number --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block text-sm font-bold text-gray-700">Pax</label>
+                            <input type="number" min="1" wire:model.defer="numberOfPax"
+                                class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="1" />
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block text-sm font-bold text-gray-700">Table Number</label>
+                            <input type="text" wire:model.defer="tableNumberInput"
+                                class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="Nomor Meja (opsional)" />
+                        </div>
+                    </div>
+
+                </div>
+
+                {{-- FOOTER ACTIONS --}}
+                <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+                    {{-- Tombol Close di Kiri --}}
+                    <button type="button" wire:click="$set('scanInputModalOpen', false)"
+                        class="h-10 px-4 text-xs font-bold text-gray-500 hover:text-gray-700 transition">
+                        Close
+                    </button>
+
+                    {{-- Tombol OK / Submit di Kanan --}}
+                    <button type="button" wire:click="applyScanInput"
+                        class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 transition uppercase tracking-wider active:scale-95">
+                        ✓ OK
                     </button>
                 </div>
 
