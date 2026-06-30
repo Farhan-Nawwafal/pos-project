@@ -3336,7 +3336,7 @@ class PosPage extends Component
         $this->dispatch('notify', [
             'type' => 'success',
             'message' => 'Data transaksi berhasil diterapkan!'
-        ]);
+         ]);
 
         // 5. Tutup modal Scan / Input secara otomatis
         $this->scanInputModalOpen = false;
