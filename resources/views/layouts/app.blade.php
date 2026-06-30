@@ -277,7 +277,7 @@ window.addEventListener('resize', checkResponsive);" class="antialiased">
     </div>
 
     <!-- Modal Baru: ESB Order Report -->
-    @include('livewire.transactions.esb-order-modal')
+    <livewire:transactions.esb-order-modal />
 
     @persist('toast-center')
         <x-common.toast-center />

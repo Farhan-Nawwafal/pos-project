@@ -41,8 +41,8 @@
                         </div>
 
                     </div>
-                    <div class="flex items-center gap-1 ml-1">
-                        <i class="bi bi-exclamation-triangle-fill text-white text-sm"></i>
+                    <div class="flex items-center gap-1 ml-1 ">
+                        <i class="bi bi-exclamation-triangle-fill text-white text-sm "></i>
 
                         <button @click="$store.sidebar.toggleEsbModal()" class="btn text-white text-sm">
                             ESB Order Notification
@@ -51,7 +51,7 @@
 
                     {{-- notification --}}
                     <i
-                        class="bi bi-bell-fill text-white justify-end absolute inset-x-0  flex items-center justify-end mr-146"></i>
+                        class="bi bi-bell-fill text-white absolute right-146 top-2 pointer-events-none"></i>
 
                     <div class="absolute inset-x-0 gap-3 flex items-center justify-end mr-30 pointer-events-none">
                         <div x-data="{ now: new Date() }" x-init="setInterval(() => now = new Date(), 1000)"

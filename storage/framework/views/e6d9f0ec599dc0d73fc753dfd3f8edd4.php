@@ -101,7 +101,7 @@
                     @mouseleave="showTooltip = false"
                     class="relative flex items-center w-full px-3 py-3 transition-all duration-300 ease-in-out rounded-xl group focus:outline-none focus:ring-2 focus:ring-offset-2"
                     :class="[
-                    isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'hover:text-white',
+                    
                     (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'justify-center' : 'justify-start'
                 ]">
 
