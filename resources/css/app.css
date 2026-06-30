@@ -365,7 +365,7 @@
 }
 
 /* REINFORCE POS inactive BG hover - highest specificity */
-#sidebar a[href*="/pos"]:not(.bg-brand-500):hover,
+
 .sidebar a[href*="/pos"]:not(.bg-brand-500):hover {
   background-color: #e8f3fd !important;
 }
