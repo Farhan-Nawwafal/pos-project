@@ -181,7 +181,6 @@ class PosPage extends Component
     // Properti pengikat data (wire:model) di dalam modal Scan / Input
     public $transactionBarcode = '';
     public $tableNumberInput = '';
-    public $numberOfPax = 1; // Default pax diisi 1
 
     public string $viewMode = 'menu'; // Pilihan value: 'menu' atau 'payment'
     public $paymentPage = 1;          // Pagination metode bayar
@@ -624,16 +623,10 @@ class PosPage extends Component
         } else {
             // Alur Dine In bawaan lama kamu
             $this->orderType = 'dine_in';
-        $this->orderType = $type;
-        if ($type === 'dine_in') {
             $this->tableModalOpen = true;
-
-            return;
         }
 
         $this->recalculateTotals();
-        $this->selectedTableId = null;
-        $this->tableModalOpen = false;
     }
 
     public function openAddQuickService(): void
@@ -1380,8 +1373,6 @@ class PosPage extends Component
         // GANTI: simpan order type sebelumnya supaya tahu mau balik ke mana
         $previousOrderType = $this->orderType;
 
-        // Kembalikan mode ke Quick Service (Take Away)
-        $this->orderType = $this->orderType === 'dine_in' ? 'dine_in' : 'take_away';
         $this->selectedTableId = null;
         $this->memberId = null;
 
@@ -1583,6 +1574,7 @@ class PosPage extends Component
                 'phone' => $this->customerPhone,
                 'order_type' => $this->orderType,
                 'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
+                'pax' => $this->numberOfPax,
                 'subtotal' => $this->subtotal,
                 'service_percentage' => $this->serviceRate,
                 'service_amount' => $this->serviceAmount,
@@ -1646,6 +1638,9 @@ class PosPage extends Component
         // RESET ALUR: Kembalikan viewMode ke list menu produk utama dan reset status transaksi kasir
         $this->viewMode = 'menu';
         $this->resetOrderForNewTransaction();
+
+        $this->cashReceived = null;
+        $this->cashChange = 0;
     }
 
     public function nextStep(): void
@@ -1913,6 +1908,7 @@ class PosPage extends Component
                     'email' => null,
                     'order_type' => $this->orderType,
                     'dining_table_id' => $this->orderType === 'dine_in' ? $this->selectedTableId : null,
+                    'pax' => $this->numberOfPax,
                     'voucher_campaign_id' => $voucherCampaignId,
                     'voucher_code_id' => $voucherCodeId,
                     'voucher_code' => $voucherCode,
@@ -2408,16 +2404,66 @@ class PosPage extends Component
         $this->cashChange = max(0, $cashReceived - $this->total);
     }
 
+    /**
+     * Mengeksekusi pembatalan pesanan meja (Cancel Table)
+     */
     public function confirmCancel()
-{
-    // Logika hapus
-    $this->selectedTableId = null;
-    $this->showModal = false;
+    {
+        // Validasi input alasan wajib diisi minimal 5 karakter
+        $this->validate([
+            'cancelTableReason' => 'required|string|min:5',
+        ], [
+            'cancelTableReason.required' => 'Alasan pembatalan wajib diisi.',
+            'cancelTableReason.min' => 'Alasan minimal harus 5 karakter.',
+        ]);
 
-    // JANGAN gunakan redirect() jika tidak yakin URL-nya benar.
-    // Cukup kembalikan ke halaman saat ini dengan refresh data:
-    return redirect()->back();
-}
+        // JIKA PESANAN SUDAH PERNAH TERSIMPAN DI DATABASE (Meja Occupied)
+        if ($this->editingTransactionId !== null) {
+            DB::transaction(function () {
+                $trx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
+
+                if ($trx) {
+                    // 1. Kosongkan kembali status meja makan menjadi tersedia (Warna Biru)
+                    if ($trx->dining_table_id) {
+                        DB::table('dining_tables')->where('id', $trx->dining_table_id)->update([
+                            'status' => 'available',
+                            'occupied_at' => null
+                        ]);
+                    }
+
+                    // 2. Lakukan Soft Void (Isi kolom pembatalan audit tanpa menghapus data laporan)
+                    $trx->update([
+                        'payment_status' => 'void',
+                        'order_status' => 'void',
+                        'voided_at' => now(),
+                        'voided_by_user_id' => auth()->id(),
+                        'void_reason' => $this->cancelTableReason,
+                    ]);
+
+                    // Tambahkan log aktivitas jika tabel audit event tersedia
+                    if (class_exists(\App\Models\TransactionEvent::class)) {
+                        TransactionEvent::create([
+                            'transaction_id' => $trx->id,
+                            'actor_user_id' => auth()->id(),
+                            'action' => 'cancel_table',
+                            'meta' => ['reason' => $this->cancelTableReason]
+                        ]);
+                    }
+                }
+            });
+
+            $this->dispatch('toast', type: 'success', message: 'Pesanan meja berhasil dibatalkan & di-audit.');
+        } else {
+            // JIKA TRANSAKSI BARU (Belum masuk database sama sekali)
+            $this->dispatch('toast', type: 'success', message: 'Meja dilepas.');
+        }
+
+        // Tutup modal, bersihkan keranjang, balikkan halaman ke denah meja
+        $this->cancelTableModalOpen = false;
+        $this->cancelTableReason = '';
+        $this->resetOrderForNewTransaction();
+    }
+
     public function importTransactionCode(): void
     {
         $this->authorize('transactions.details');

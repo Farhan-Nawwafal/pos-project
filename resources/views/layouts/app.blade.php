@@ -305,7 +305,6 @@ window.addEventListener('resize', checkResponsive);" class="antialiased">
                 window.PrinterManager.configureSources(window.PRINTER_SOURCES);
             }
         });
-        // ... (lanjutan script asli Anda)
     </script>
 </body>
 
