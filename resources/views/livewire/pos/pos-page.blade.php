@@ -1581,113 +1581,97 @@
     @endif
     @if ($selectTableModalOpen)
         @teleport('body')
-            <div class="fixed inset-0 z-[100005] flex items-center justify-center p-4" aria-modal="true" role="dialog">
-
-                {{-- Backdrop Gelap Transparan --}}
-                <div class="absolute inset-0 bg-black/40 transition-opacity"
-                    wire:click="$set('selectTableModalOpen', false)">
+            <div class="fixed inset-0 flex items-center justify-center p-4 z-[100030]" aria-modal="true" role="dialog">
+                {{-- Backdrop Mask Gelap --}}
+                <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('selectTableModalOpen', false)">
                 </div>
 
-                {{-- Box Card Modal --}}
+                {{-- Box Kontainer Modal --}}
                 <div
-                    class="relative w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans">
 
-                    {{-- 1. HEADER MODAL --}}
-                    <div class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
-                        <h3 class="text-base font-bold text-gray-800 dark:text-white">
-                            Book Table ({{ 'Table ' . $tableToSelectLabel ?? 'Table 1' }})
-                        </h3>
-                        <button type="button" wire:click="$set('selectTableModalOpen', false)"
-                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                    {{-- HEADER MODAL --}}
+                    <div class="bg-[#337ab7] px-5 py-3 text-white">
+                        <h3 class="text-base font-bold tracking-wide">Book Table ({{ 'Table ' . $tableToSelectLabel ?? 'Table 1' }})</h3>
                     </div>
 
-                    {{-- 2. KONTEN UTAMA MODAL --}}
-                    <div class="p-5 space-y-5">
+                    {{-- KONTEN UTAMA MODAL --}}
+                    <div class="p-6 space-y-6">
 
-                        {{-- Elemen A: Number of Pax --}}
-                        <div>
-                            <label
-                                class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-                                Number of pax
-                            </label>
-                            <input wire:model.defer="numberOfPax" type="number" min="1"
-                                class="w-full h-11 border border-gray-300 rounded-lg bg-white px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700"
-                                placeholder="1" />
+                        {{-- SECT 1: NUMBER OF PAX --}}
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700">Number of Pax</label>
 
-                            {{-- Baris Elemen Tombol Cepat (Persis di Bawah Input Sesuai Gambar POS) --}}
-                            <div class="flex items-center gap-1.5 my-2 rounded-lg w-full overflow-x-auto custom-scrollbar">
-                                {{-- Tombol Kurang (<) --}} <button type="button" wire:click="decrementPax"
-                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                            {{-- Input Angka Tengah --}}
+                            <div class="flex justify-center">
+                                <input wire:model="numberOfPax" type="number" min="1"
+                                    class="w-32 h-10 border border-gray-300 rounded text-center text-lg font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white dark:text-gray-900" />
+                            </div>
+
+                            {{-- Row Stepper Buttons --}}
+                            <div class="flex items-center justify-center gap-1">
+                                {{-- Button Minus (<) --}} <button type="button" wire:click="decrementPax"
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                                     &lt;
                                 </button>
 
-                                {{-- Deretan Angka Pax Shortcut 1 sampai 5 --}}
+                                {{-- Deretan Angka Shortcut 1-5 --}}
                                 @foreach ([1, 2, 3, 4, 5] as $amt)
                                     <button type="button" wire:click="$set('numberOfPax', {{ $amt }})"
                                         @class([
-                                            'w-10 h-10 flex items-center justify-center text-sm font-bold rounded-md transition shrink-0 active:scale-95',
-                                            'bg-brand-500 text-white shadow-xs' => $numberOfPax == $amt,
-                                            'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 shadow-xs' =>
+                                            'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
+                                            'bg-[#337ab7] text-white' => $numberOfPax == $amt,
+                                            'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
                                                 $numberOfPax != $amt,
                                         ])>
                                         {{ $amt }}
                                     </button>
                                 @endforeach
 
-                                {{-- Tombol Tambah (>) --}}
+                                {{-- Button Plus (>) --}}
                                 <button type="button" wire:click="incrementPax"
-                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                                     &gt;
                                 </button>
                             </div>
                         </div>
 
-                        {{-- Elemen B: Sales Mode & Tipe Order --}}
-                        <div>
-                            <span
-                                class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                                Sales Mode: <span class="text-gray-800 dark:text-white font-bold">Dine In</span>
-                            </span>
+                        {{-- SECT 2: SALES MODE --}}
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700">Sales Mode</label>
 
-                            {{-- Button Status Aktif Dine In --}}
-                            <button type="button"
-                                class="h-11 px-6 font-bold text-xs rounded-lg border-2 border-[#1086e1] bg-blue-50 text-[#1086e1] dark:bg-blue-950/30 dark:text-blue-400 transition cursor-default">
-                                Dine In
-                            </button>
+                            <div class="grid grid-cols-3 gap-2">
+                                {{-- Button DINE IN --}}
+                                <button type="button" wire:click="$set('quickServiceSalesMode', 'dine_in')"
+                                    @class([
+                                        'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                        'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                            $quickServiceSalesMode === 'dine_in',
+                                        'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                            $quickServiceSalesMode !== 'dine_in',
+                                    ])>
+                                    Dine In
+                                </button>
                         </div>
 
-                    </div>
+                        <hr class="border-gray-200">
 
-                    {{-- 3. FOOTER ACTIONS (Dua Tombol Kanan Berjejer) --}}
-                    <div
-                        class="border-t border-gray-200 bg-gray-50 px-5 py-3 dark:border-gray-800 dark:bg-gray-950 flex items-center justify-between">
-
-                        {{-- Sisi Kiri: Tombol Close/Cancel --}}
-                        <button type="button" wire:click="$set('selectTableModalOpen', false)"
-                            class="h-10 px-4 text-xs font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition">
-                            Close
-                        </button>
-
-                        {{-- Sisi Kanan: Berjejer Horizontal --}}
-                        <div class="flex items-center gap-2">
+                        {{-- FOOTER BUTTONS ACTION MODAL --}}
+                        <div class="flex justify-end items-center gap-2 pt-2">
                             <button type="button" wire:click="confirmSelectTable('booking')"
-                                class="h-10 px-4 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 transition">
+                                class="h-10 px-4 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
                                 Book Table
                             </button>
 
-                            <button type="button" wire:click="confirmSelectTable('order')"
-                                class="h-10 px-4 bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
+                            {{-- Tombol Final Apply --}}
+                            <button type="button"
+                                wire:click="confirmSelectTable('order')"
+                                class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
                                 Book & Order
                             </button>
                         </div>
 
                     </div>
-
                 </div>
             </div>
         @endteleport
@@ -2204,7 +2188,7 @@
                         <label class="block text-sm font-bold text-gray-700">Phone Number</label>
                         <input type="text" wire:model.defer="customerPhone"
                             class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                            placeholder="8xx xxx xxx" />
+                            placeholder="08xx xxxx xxxx" />
                         @error('customerPhone')
                             <span class="text-xs font-bold text-red-500">{{ $message }}</span>
                         @enderror
@@ -2623,30 +2607,7 @@
                             </div>
                         </div>
 
-                        {{-- BARIS 2: Card Number & Verification Code --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1.5 min-w-0">
-                                <label class="block text-sm font-bold text-gray-700">Card Number</label>
-                                <input type="text" wire:model.live="cardNumber"
-                                    class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                                    placeholder="First 6 digit and last 4 digit of card number">
-                                @error('cardNumber')
-                                    <span class="text-xs font-bold text-red-500 block">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="space-y-1.5 min-w-0">
-                                <label class="block text-sm font-bold text-gray-700">Verification Code</label>
-                                <input type="text" wire:model.live="cardVerificationCode"
-                                    class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                                    placeholder="Verification code from EDC">
-                                @error('cardVerificationCode')
-                                    <span class="text-xs font-bold text-red-500 block">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        {{-- BARIS 3: Bank Name & Account Name --}}
+                        {{-- BARIS 2: Bank Name & Account Name --}}
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-1.5 min-w-0">
                                 <label class="block text-sm font-bold text-gray-700">Bank Name</label>
@@ -2669,15 +2630,6 @@
                             </div>
                         </div>
 
-                        {{-- BARIS 4: Self Order ID --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1.5 min-w-0">
-                                <label class="block text-sm font-bold text-gray-700">Self Order ID</label>
-                                <input type="text" wire:model.live="cardSelfOrderId"
-                                    class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                                    placeholder="Self Order ID">
-                            </div>
-                        </div>
                     </div>
 
                     {{-- FOOTER CONTROLS (fix, tidak ikut scroll) --}}
@@ -2756,7 +2708,6 @@
                             ✓ Apply
                         </button>
                     </div>
-
                 </div>
             </div>
         @endteleport

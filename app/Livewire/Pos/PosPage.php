@@ -379,15 +379,77 @@ class PosPage extends Component
     // 2. Method eksekusi akhir setelah kasir memilih tipe alurnya
     public function confirmSelectTable($actionType)
     {
+        // Validasi input pax minimal 1
+        $this->validate([
+            'numberOfPax' => 'required|integer|min:1',
+        ]);
+
+        $tableId = $this->tableToSelect;
+
+        if (!$tableId) {
+            $this->dispatch('toast', type: 'error', message: 'Meja belum dipilih.');
+            return;
+        }
+
         $this->selectTableModalOpen = false;
 
         if ($actionType === 'order') {
             // Alur A: Masuk ke halaman kasir pilih menu produk
             $this->selectedTableId = $this->tableToSelect;
         } else {
-            // Alur B: Hit API booking / simpan status meja ke backend, lalu refresh denah
-            // $this->bookTableWithoutMenu($this->tableToSelect);
+            // Alur B: Book Table (Hanya booking meja, status terisi/occupied, timer jalan berkelanjutan)
+            DB::transaction(function () use ($tableId) {
+                // 1. Ambil setting default atau buat data transaksi gantung dengan nominal 0 (karena belum mesen produk)
+                $cabangId = auth()->user()->cabang_id ?? 1;
+
+                $trx = Transaction::create([
+                    'code' => Transaction::generateUniqueCode(),
+                    'cabang_id' => $cabangId,
+                    'member_id' => null,
+                    'channel' => 'pos',
+                    'name' => 'Table ' . $this->tableToSelectLabel,
+                    'phone' => null,
+                    'order_type' => 'dine_in',
+                    'dining_table_id' => $tableId,
+                    'pax' => $this->numberOfPax,
+                    'subtotal' => 0,
+                    'service_percentage' => $this->serviceRate ?? 0,
+                    'service_amount' => 0,
+                    'tax_percentage' => $this->taxRate ?? 0,
+                    'tax_amount' => 0,
+                    'rounding_amount' => 0,
+                    'total' => 0,
+                    'payment_method' => 'pending',
+                    'payment_status' => 'pending',
+                    'order_status' => 'new',
+                    'external_id' => Transaction::generateUniqueCode(10),
+                    'checkout_link' => '',
+                ]);
+
+                // 2. Update status meja di database menjadi 'occupied' & set 'occupied_at' ke waktu sekarang
+                // Di program kamu, timer FE New Date() mengikat database field 'occupied_at' agar durasi jalan realtime
+                DB::table('dining_tables')->where('id', $tableId)->update([
+                    'status' => 'occupied',
+                    'occupied_at' => now(),
+                ]);
+
+                // 3. Catat log aktivitas jika tabel log audit event tersedia
+                if (class_exists(\App\Models\TransactionEvent::class)) {
+                    TransactionEvent::create([
+                        'transaction_id' => $trx->id,
+                        'actor_user_id' => auth()->id(),
+                        'action' => 'book_table',
+                        'meta' => ['message' => 'Meja berhasil dibooking tanpa pesanan makanan']
+                    ]);
+                }
+            });
+
+            // Bersihkan temporary state pemilih meja
             $this->tableToSelect = null;
+            $this->tableToSelectLabel = '';
+
+            // Kirim feedback sukses ke frontend dan memicu render ulang denah meja terbaru
+            $this->dispatch('toast', type: 'success', message: 'Meja berhasil di-booking!');
         }
     }
 
@@ -1381,6 +1443,12 @@ class PosPage extends Component
 
         $this->checkoutStep = 1;
 
+        $this->cardBankName = null;
+        $this->cardAccountName = null;
+        $this->cardAmount = null;
+        $this->cardNumber = null;
+        $this->cardVerificationCode = null;
+
         if ($previousOrderType === 'take_away') {
             // Balik ke waitlist Quick Service
             $this->orderType = 'take_away';
@@ -1588,6 +1656,8 @@ class PosPage extends Component
                 'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
                 'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
                 'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
+                'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
+                'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
                 'payment_status' => $isFinalPayment ? 'paid' : 'pending',
                 'paid_at' => $isFinalPayment ? now() : null,
                 'payment_processed_by' => $isFinalPayment ? auth()->id() : null,
@@ -2154,6 +2224,8 @@ class PosPage extends Component
                 'tax_amount' => $isFinalPayment ? $this->taxAmount : $this->taxAmount,
                 'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
                 'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
+                'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
+                'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
                 'payment_status' => $isFinalPayment ? 'paid' : 'pending',
                 'paid_at' => $isFinalPayment ? now() : null,
                 'payment_processed_by' => $isFinalPayment ? auth()->id() : null,
@@ -3389,16 +3461,9 @@ class PosPage extends Component
     public function applyCardPayment(): void
     {
         $this->validate([
-            'cardAmount' => 'required|numeric|min:1',
-            'cardNumber' => 'required|string|min:10',
-            'cardVerificationCode' => 'required|string|min:1',
             'cardBankName' => 'required|string|min:2',
             'cardAccountName' => 'required|string|min:2',
         ], [
-            'cardAmount.required' => 'Card amount wajib diisi.',
-            'cardNumber.required' => 'Card number wajib diisi.',
-            'cardNumber.min' => 'Card number minimal 10 digit (6 awal + 4 akhir).',
-            'cardVerificationCode.required' => 'Verification code wajib diisi.',
             'cardBankName.required' => 'Bank name wajib diisi.',
             'cardAccountName.required' => 'Account name wajib diisi.',
         ]);
@@ -3411,7 +3476,6 @@ class PosPage extends Component
         }
 
         // Set payment method jadi card + simpan nominal yang dibayar via cashReceived
-        // supaya alur outstanding/perhitungan kembalian tetap konsisten dengan metode lain
         $this->paymentMethod = 'card';
         $this->cashReceived = (string) $amount;
 
