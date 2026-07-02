@@ -1823,48 +1823,37 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selectTableModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
-            <div class="fixed inset-0 z-[100005] flex items-center justify-center p-4" aria-modal="true" role="dialog">
-
+            <div class="fixed inset-0 flex items-center justify-center p-4 z-[100030]" aria-modal="true" role="dialog">
                 
-                <div class="absolute inset-0 bg-black/40 transition-opacity"
-                    wire:click="$set('selectTableModalOpen', false)">
+                <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('selectTableModalOpen', false)">
                 </div>
 
                 
                 <div
-                    class="relative w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans">
 
                     
-                    <div class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
-                        <h3 class="text-base font-bold text-gray-800 dark:text-white">
-                            Book Table (<?php echo e('Table ' . $tableToSelectLabel ?? 'Table 1'); ?>)
-                        </h3>
-                        <button type="button" wire:click="$set('selectTableModalOpen', false)"
-                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                    <div class="bg-[#337ab7] px-5 py-3 text-white">
+                        <h3 class="text-base font-bold tracking-wide">Book Table (<?php echo e('Table ' . $tableToSelectLabel ?? 'Table 1'); ?>)</h3>
                     </div>
 
                     
-                    <div class="p-5 space-y-5">
+                    <div class="p-6 space-y-6">
 
                         
-                        <div>
-                            <label
-                                class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-                                Number of pax
-                            </label>
-                            <input wire:model.defer="numberOfPax" type="number" min="1"
-                                class="w-full h-11 border border-gray-300 rounded-lg bg-white px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700"
-                                placeholder="1" />
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700">Number of Pax</label>
 
                             
-                            <div class="flex items-center gap-1.5 my-2 rounded-lg w-full overflow-x-auto custom-scrollbar">
+                            <div class="flex justify-center">
+                                <input wire:model="numberOfPax" type="number" min="1"
+                                    class="w-32 h-10 border border-gray-300 rounded text-center text-lg font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white dark:text-gray-900" />
+                            </div>
+
+                            
+                            <div class="flex items-center justify-center gap-1">
                                  <button type="button" wire:click="decrementPax"
-                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                                     &lt;
                                 </button>
 
@@ -1872,9 +1861,9 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = [1, 2, 3, 4, 5]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                     <button type="button" wire:click="$set('numberOfPax', <?php echo e($amt); ?>)"
                                         class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                            'w-10 h-10 flex items-center justify-center text-sm font-bold rounded-md transition shrink-0 active:scale-95',
-                                            'bg-brand-500 text-white shadow-xs' => $numberOfPax == $amt,
-                                            'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 shadow-xs' =>
+                                            'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
+                                            'bg-[#337ab7] text-white' => $numberOfPax == $amt,
+                                            'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
                                                 $numberOfPax != $amt,
                                         ]); ?>">
                                         <?php echo e($amt); ?>
@@ -1884,53 +1873,48 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                                 
                                 <button type="button" wire:click="incrementPax"
-                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                                     &gt;
                                 </button>
                             </div>
                         </div>
 
                         
-                        <div>
-                            <span
-                                class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                                Sales Mode: <span class="text-gray-800 dark:text-white font-bold">Dine In</span>
-                            </span>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-gray-700">Sales Mode</label>
 
-                            
-                            <button type="button"
-                                class="h-11 px-6 font-bold text-xs rounded-lg border-2 border-[#1086e1] bg-blue-50 text-[#1086e1] dark:bg-blue-950/30 dark:text-blue-400 transition cursor-default">
-                                Dine In
-                            </button>
+                            <div class="grid grid-cols-3 gap-2">
+                                
+                                <button type="button" wire:click="$set('quickServiceSalesMode', 'dine_in')"
+                                    class="<?php echo \Illuminate\Support\Arr::toCssClasses([
+                                        'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                        'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                            $quickServiceSalesMode === 'dine_in',
+                                        'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                            $quickServiceSalesMode !== 'dine_in',
+                                    ]); ?>">
+                                    Dine In
+                                </button>
                         </div>
 
-                    </div>
-
-                    
-                    <div
-                        class="border-t border-gray-200 bg-gray-50 px-5 py-3 dark:border-gray-800 dark:bg-gray-950 flex items-center justify-between">
+                        <hr class="border-gray-200">
 
                         
-                        <button type="button" wire:click="$set('selectTableModalOpen', false)"
-                            class="h-10 px-4 text-xs font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition">
-                            Close
-                        </button>
-
-                        
-                        <div class="flex items-center gap-2">
+                        <div class="flex justify-end items-center gap-2 pt-2">
                             <button type="button" wire:click="confirmSelectTable('booking')"
-                                class="h-10 px-4 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 transition">
+                                class="h-10 px-4 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
                                 Book Table
                             </button>
 
-                            <button type="button" wire:click="confirmSelectTable('order')"
-                                class="h-10 px-4 bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
+                            
+                            <button type="button"
+                                wire:click="confirmSelectTable('order')"
+                                class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
                                 Book & Order
                             </button>
                         </div>
 
                     </div>
-
                 </div>
             </div>
         </template>
@@ -2468,7 +2452,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         <label class="block text-sm font-bold text-gray-700">Phone Number</label>
                         <input type="text" wire:model.defer="customerPhone"
                             class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                            placeholder="8xx xxx xxx" />
+                            placeholder="08xx xxxx xxxx" />
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['customerPhone'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -2929,43 +2913,6 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-1.5 min-w-0">
-                                <label class="block text-sm font-bold text-gray-700">Card Number</label>
-                                <input type="text" wire:model.live="cardNumber"
-                                    class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                                    placeholder="First 6 digit and last 4 digit of card number">
-                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['cardNumber'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                    <span class="text-xs font-bold text-red-500 block"><?php echo e($message); ?></span>
-                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                            </div>
-
-                            <div class="space-y-1.5 min-w-0">
-                                <label class="block text-sm font-bold text-gray-700">Verification Code</label>
-                                <input type="text" wire:model.live="cardVerificationCode"
-                                    class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                                    placeholder="Verification code from EDC">
-                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['cardVerificationCode'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                    <span class="text-xs font-bold text-red-500 block"><?php echo e($message); ?></span>
-                                <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                            </div>
-                        </div>
-
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1.5 min-w-0">
                                 <label class="block text-sm font-bold text-gray-700">Bank Name</label>
                                 <input type="text" wire:model.live="cardBankName"
                                     class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
@@ -3000,15 +2947,6 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             </div>
                         </div>
 
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1.5 min-w-0">
-                                <label class="block text-sm font-bold text-gray-700">Self Order ID</label>
-                                <input type="text" wire:model.live="cardSelfOrderId"
-                                    class="w-full h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                                    placeholder="Self Order ID">
-                            </div>
-                        </div>
                     </div>
 
                     
@@ -3094,7 +3032,6 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             ✓ Apply
                         </button>
                     </div>
-
                 </div>
             </div>
         </template>

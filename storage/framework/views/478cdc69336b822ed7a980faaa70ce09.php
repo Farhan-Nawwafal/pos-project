@@ -346,7 +346,32 @@ unset($__split);
     </div>
 
     <!-- Modal Baru: ESB Order Report -->
-    <?php echo $__env->make('livewire.transactions.esb-order-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('transactions.esb-order-modal', []);
+
+$__keyOuter = $__key ?? null;
+
+$__key = null;
+$__componentSlots = [];
+
+$__key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-1860390039-1', $__key);
+
+$__html = app('livewire')->mount($__name, $__params, $__key, $__componentSlots);
+
+echo $__html;
+
+unset($__html);
+unset($__key);
+$__key = $__keyOuter;
+unset($__keyOuter);
+unset($__name);
+unset($__params);
+unset($__componentSlots);
+unset($__split);
+?>
 
     <?php app("livewire")->forceAssetInjection(); ?><div x-persist="<?php echo e('toast-center'); ?>">
         <?php if (isset($component)) { $__componentOriginal10afb6a75a927024643c78d9c8aff657 = $component; } ?>
@@ -396,7 +421,6 @@ unset($__split);
                 window.PrinterManager.configureSources(window.PRINTER_SOURCES);
             }
         });
-        // ... (lanjutan script asli Anda)
     </script>
 </body>
 

@@ -47,6 +47,8 @@ class Transaction extends Model
         'self_order_token',
         'payment_session_hash',
         'payment_method',
+        'bank_name',
+        'account_name',
         'payment_status',
         'order_status',
         'paid_at',
