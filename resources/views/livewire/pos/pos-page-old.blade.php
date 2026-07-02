@@ -157,7 +157,7 @@
                                     @class([
                                         'flex flex-col items-center justify-center h-16 rounded-xl border transition-all shadow-sm group',
                                         'bg-red-600 border-red-700 hover:bg-red-700 text-white' => $isOccupied,
-                                        'bg-[#1086e1] border-[#0f75c7] hover:bg-[#0f75c7] text-white' => !$isOccupied,
+                                        'bg-[#3C8CBC] border-[#0f75c7] hover:bg-[#0f75c7] text-white' => !$isOccupied,
                                     ])>
                                     <span
                                         class="text-sm font-bold group-hover:scale-110 transition-transform">{{ $t['label'] }}</span>
@@ -365,7 +365,7 @@
                             <button wire:click="openCheckout" @disabled(count($cartItems) === 0)
                                 @class([
                                     'w-full h-14 rounded-xl font-black text-white shadow-lg transition tracking-widest text-base active:scale-[0.98]',
-                                    'bg-[#1086e1] hover:bg-[#0f75c7]' => $isDineIn && $isEditing,
+                                    'bg-[#3C8CBC] hover:bg-[#3C8CBC]' => $isDineIn && $isEditing,
                                     'bg-brand-500 hover:bg-brand-600' => !($isDineIn && $isEditing),
                                 ])>
                                 {{ $isDineIn ? ($isEditing ? 'Bayar Sekarang' : 'Kirim Ke Dapur') : 'Proses Bayar' }}
@@ -677,7 +677,7 @@
                                 <button wire:click="openCheckout" @disabled(count($cartItems) === 0)
                                     @class([
                                         'w-full h-14 rounded-xl font-black text-white shadow-lg transition tracking-widest text-base active:scale-[0.98]',
-                                        'bg-[#1086e1] hover:bg-[#0f75c7]' => $isDineIn && $isEditing,
+                                        'bg-[#3C8CBC] hover:bg-[#3C8CBC]' => $isDineIn && $isEditing,
                                         'bg-brand-500 hover:bg-brand-600' => !($isDineIn && $isEditing),
                                     ])>
                                     {{ $isDineIn ? ($isEditing ? 'Bayar Sekarang' : 'Kirim Ke Dapur') : 'Proses Bayar' }}
@@ -1022,7 +1022,7 @@
                                                         <span @class([
                                                             'px-2 py-1 rounded text-[10px] font-bold uppercase',
                                                             'bg-orange-100 text-orange-700' => !$isFinalPayment,
-                                                            'bg-[#1086e1]/10 text-[#1086e1] border border-[#1086e1]/20' => $isFinalPayment,
+                                                            'bg-[#3C8CBC]/10 text-[#3C8CBC] border border-[#3C8CBC]/20' => $isFinalPayment,
                                                         ])>
                                                             {{ $isFinalPayment ? 'Pelunasan / Bayar' : 'Dine In' }}
                                                         </span>
@@ -1273,7 +1273,7 @@
                                             <button type="button" wire:click="checkout" wire:loading.attr="disabled"
                                                 @class([
                                                     'flex-[2] px-6 py-3 rounded-xl font-black transition text-lg text-white shadow-lg',
-                                                    'bg-[#1086e1] hover:bg-[#0f75c7]' => $isFinalPayment, // Jika Bayar - Header Blue
+                                                    'bg-[#3C8CBC] hover:bg-[#3C8CBC]' => $isFinalPayment, // Jika Bayar - Header Blue
                                                     'bg-blue-600 hover:bg-blue-700' => !$isFinalPayment, // Jika Booking
                                                 ])>
                                                 {{ $isFinalPayment ? 'Lunasi Sekarang' : 'Kirim Ke Dapur' }}

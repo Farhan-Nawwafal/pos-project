@@ -1,5 +1,5 @@
 <header
-    class="sticky flex w-full bg-[#1086e1] border-[#0f75c7] z-[99999] dark:border-[#0c5fa3] dark:bg-[#0f75c7] xl:border-b"
+    class="sticky flex w-full bg-[#3C8CBC] border-[#3C8CBC] z-[99999] dark:border-[#3C8CBC] dark:bg-[#3C8CBC] xl:border-b"
     style="height: 45px;" x-data="{
 
         isApplicationMenuOpen: false,

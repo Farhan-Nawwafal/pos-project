@@ -396,7 +396,6 @@ unset($__split);
                 window.PrinterManager.configureSources(window.PRINTER_SOURCES);
             }
         });
-        // ... (lanjutan script asli Anda)
     </script>
 </body>
 
