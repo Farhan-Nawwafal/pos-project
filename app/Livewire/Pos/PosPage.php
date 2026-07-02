@@ -190,6 +190,23 @@ class PosPage extends Component
 
     public $showModal = false;
 
+    // --- STATE UNTUK PHONE NUMBER ---
+    public bool $phoneNumberModalOpen = false;
+
+    // --- STATE UNTUK MEMBER ---
+    public bool $editMemberModalOpen = false;
+    public string $memberSearch = '';
+    public int $memberListPage = 1;
+
+    // --- STATE UNTUK EDIT TABLE ---
+    public bool $editTableModalOpen = false;
+
+    // --- STATE UNTUK DELIVERY COST ---
+    public bool $deliveryCostModalOpen = false;
+    public ?string $deliveryCost = null;
+    public ?string $orderFee = null;
+    public int $platformFee = 0;
+
     // --- STATE UNTUK SPLIT BILL ---
     public bool $splitBillModalOpen = false; // Mengontrol buka/tutup modal split bill
     public array $splitBills = [];           // Menampung data sub-bill yang dibuat
@@ -199,8 +216,28 @@ class PosPage extends Component
     public bool $cancelTableModalOpen = false; // Mengontrol buka/tutup modal cancel table
     public string $cancelTableReason = '';      // Menampung input alasan pembatalan
 
+    public bool $showQuickServiceWaitlist = true;
     public bool $quickServiceModalOpen = false; // Mengontrol munculnya modal Quick Service otomatis
     public string $quickServiceSalesMode = 'take_away'; // Menampung pilihan sales mode di modal ('dine_in', 'gofood', 'take_away')
+
+    // --- STATE UNTUK CARD PAYMENT METHOD ---
+    public bool $cardDetailModalOpen = false;
+    public ?string $cardAmount = null;
+    public ?string $cardNumber = null;
+    public ?string $cardVerificationCode = null;
+    public ?string $cardBankName = null;
+    public ?string $cardAccountName = null;
+    public ?string $cardSelfOrderId = null;
+
+    // --- STATE UNTUK COMPLIMENT PAYMENT METHOD ---
+    public bool $complimentModalOpen = false;
+    public ?string $complimentPercentage = null;
+    public ?string $complimentAmount = null;
+    public string $complimentNotes = '';
+
+    // --- STATE UNTUK OTHER COST PAYMENT METHOD ---
+    public bool $otherCostModalOpen = false;
+    public string $otherCostNotes = '';
 
     public function openQuickService()
     {
@@ -581,19 +618,15 @@ class PosPage extends Component
             $this->numberOfPax = 1; // Reset default pax ke 1
             $this->quickServiceSalesMode = 'take_away'; // Default select button TAKEAWAY
 
-            $this->quickServiceModalOpen = true; // Picu modal otomatis muncul di atas halaman menu
+            $this->showQuickServiceWaitlist = true; // Picu modal otomatis muncul di atas halaman menu
             $this->viewMode = 'menu';
         } else {
             // Alur Dine In bawaan lama kamu
             $this->orderType = 'dine_in';
             $this->tableModalOpen = true;
-
-            return;
         }
 
         $this->recalculateTotals();
-        $this->selectedTableId = null;
-        $this->tableModalOpen = false;
     }
 
     public function openAddQuickService(): void
@@ -1337,8 +1370,9 @@ class PosPage extends Component
         $this->clearCart();
         $this->editingTransactionId = null;
 
-        // Kembalikan mode ke Quick Service (Take Away)
-        $this->orderType = 'dine_in';
+        // GANTI: simpan order type sebelumnya supaya tahu mau balik ke mana
+        $previousOrderType = $this->orderType;
+
         $this->selectedTableId = null;
         $this->memberId = null;
 
@@ -1540,6 +1574,7 @@ class PosPage extends Component
                 'phone' => $this->customerPhone,
                 'order_type' => $this->orderType,
                 'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
+                'pax' => $this->numberOfPax,
                 'subtotal' => $this->subtotal,
                 'service_percentage' => $this->serviceRate,
                 'service_amount' => $this->serviceAmount,
@@ -1603,6 +1638,9 @@ class PosPage extends Component
         // RESET ALUR: Kembalikan viewMode ke list menu produk utama dan reset status transaksi kasir
         $this->viewMode = 'menu';
         $this->resetOrderForNewTransaction();
+
+        $this->cashReceived = null;
+        $this->cashChange = 0;
     }
 
     public function nextStep(): void
@@ -1870,6 +1908,7 @@ class PosPage extends Component
                     'email' => null,
                     'order_type' => $this->orderType,
                     'dining_table_id' => $this->orderType === 'dine_in' ? $this->selectedTableId : null,
+                    'pax' => $this->numberOfPax,
                     'voucher_campaign_id' => $voucherCampaignId,
                     'voucher_code_id' => $voucherCodeId,
                     'voucher_code' => $voucherCode,
@@ -2365,16 +2404,66 @@ class PosPage extends Component
         $this->cashChange = max(0, $cashReceived - $this->total);
     }
 
+    /**
+     * Mengeksekusi pembatalan pesanan meja (Cancel Table)
+     */
     public function confirmCancel()
-{
-    // Logika hapus
-    $this->selectedTableId = null;
-    $this->showModal = false; 
+    {
+        // Validasi input alasan wajib diisi minimal 5 karakter
+        $this->validate([
+            'cancelTableReason' => 'required|string|min:5',
+        ], [
+            'cancelTableReason.required' => 'Alasan pembatalan wajib diisi.',
+            'cancelTableReason.min' => 'Alasan minimal harus 5 karakter.',
+        ]);
 
-    // JANGAN gunakan redirect() jika tidak yakin URL-nya benar.
-    // Cukup kembalikan ke halaman saat ini dengan refresh data:
-    return redirect()->back(); 
-}
+        // JIKA PESANAN SUDAH PERNAH TERSIMPAN DI DATABASE (Meja Occupied)
+        if ($this->editingTransactionId !== null) {
+            DB::transaction(function () {
+                $trx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
+
+                if ($trx) {
+                    // 1. Kosongkan kembali status meja makan menjadi tersedia (Warna Biru)
+                    if ($trx->dining_table_id) {
+                        DB::table('dining_tables')->where('id', $trx->dining_table_id)->update([
+                            'status' => 'available',
+                            'occupied_at' => null
+                        ]);
+                    }
+
+                    // 2. Lakukan Soft Void (Isi kolom pembatalan audit tanpa menghapus data laporan)
+                    $trx->update([
+                        'payment_status' => 'void',
+                        'order_status' => 'void',
+                        'voided_at' => now(),
+                        'voided_by_user_id' => auth()->id(),
+                        'void_reason' => $this->cancelTableReason,
+                    ]);
+
+                    // Tambahkan log aktivitas jika tabel audit event tersedia
+                    if (class_exists(\App\Models\TransactionEvent::class)) {
+                        TransactionEvent::create([
+                            'transaction_id' => $trx->id,
+                            'actor_user_id' => auth()->id(),
+                            'action' => 'cancel_table',
+                            'meta' => ['reason' => $this->cancelTableReason]
+                        ]);
+                    }
+                }
+            });
+
+            $this->dispatch('toast', type: 'success', message: 'Pesanan meja berhasil dibatalkan & di-audit.');
+        } else {
+            // JIKA TRANSAKSI BARU (Belum masuk database sama sekali)
+            $this->dispatch('toast', type: 'success', message: 'Meja dilepas.');
+        }
+
+        // Tutup modal, bersihkan keranjang, balikkan halaman ke denah meja
+        $this->cancelTableModalOpen = false;
+        $this->cancelTableReason = '';
+        $this->resetOrderForNewTransaction();
+    }
+
     public function importTransactionCode(): void
     {
         $this->authorize('transactions.details');
@@ -3123,6 +3212,242 @@ class PosPage extends Component
 
         // 5. Tutup modal Scan / Input secara otomatis
         $this->scanInputModalOpen = false;
+    }
+
+    public function getFilteredMembersProperty()
+    {
+        if (! auth()->user()?->can('members.view')) {
+            return collect();
+        }
+
+        $term = trim($this->memberSearch);
+
+        return Member::query()
+            ->when($term !== '', function ($q) use ($term) {
+                $q->where(function ($qq) use ($term) {
+                    $qq->where('name', 'like', "%{$term}%")
+                        ->orWhere('phone', 'like', "%{$term}%");
+                });
+            })
+            ->orderBy('name')
+            ->get(['id', 'name', 'phone']);
+    }
+
+    public function clearRegularMember(): void
+    {
+        $this->memberId = null;
+        $this->memberSearch = '';
+        $this->memberListPage = 1;
+        $this->updatedMemberId();
+    }
+
+    public function updatedDeliveryCost(): void
+    {
+        $this->calculatePlatformFee();
+    }
+
+    public function updatedOrderFee(): void
+    {
+        $this->calculatePlatformFee();
+    }
+
+    private function calculatePlatformFee(): void
+    {
+        $delivery = (int) preg_replace('/\D+/', '', (string) ($this->deliveryCost ?? '0'));
+        $order = (int) preg_replace('/\D+/', '', (string) ($this->orderFee ?? '0'));
+
+        // Sesuaikan rumus platform fee dengan kebijakan bisnis kamu
+        $this->platformFee = $delivery + $order;
+    }
+
+    public function openEditTableModal(): void
+    {
+        $this->editTableModalOpen = true;
+    }
+
+    public function applyEditTablePax(): void
+    {
+        $this->validate([
+            'numberOfPax' => 'required|integer|min:1',
+        ]);
+
+        // Jika pesanan sudah tersimpan di DB (meja sudah occupied), update langsung pax di transaksinya
+        if ($this->editingTransactionId !== null) {
+            DB::table('transactions')
+                ->where('id', $this->editingTransactionId)
+                ->update(['pax' => $this->numberOfPax]);
+
+            $this->dispatch('toast', type: 'success', message: 'Jumlah pax berhasil diperbarui.');
+        }
+
+        $this->editTableModalOpen = false;
+    }
+
+    public function applyEsbOrderScan(): void
+    {
+        $orderId = trim($this->esbOrderIdInput);
+
+        if ($orderId === '') {
+            $this->addError('esbOrderIdInput', 'Order ID wajib diisi.');
+            return;
+        }
+
+        // Cari transaksi ESB Order yang sudah PAID berdasarkan kode/external_id
+        $trx = Transaction::query()
+            ->where(function ($q) use ($orderId) {
+                $q->where('code', $orderId)
+                    ->orWhere('external_id', $orderId);
+            })
+            ->where('payment_status', 'paid')
+            ->first();
+
+        if (! $trx) {
+            $this->addError('esbOrderIdInput', 'Order ID tidak ditemukan atau belum dibayar.');
+            return;
+        }
+
+        // Muat transaksi ke kasir (sesuaikan dengan logic loadPending kalau diperlukan)
+        $this->editingTransactionId = (int) $trx->id;
+        $this->orderType = (string) $trx->order_type;
+        $this->customerName = (string) $trx->name;
+        $this->customerPhone = $trx->phone;
+
+        $this->dispatch('toast', type: 'success', message: 'Order ESB berhasil dimuat.');
+
+        $this->esbOrderIdInput = '';
+        $this->scanInputModalOpen = false;
+    }
+
+    public function updatedComplimentPercentage(): void
+    {
+        $pct = (float) ($this->complimentPercentage ?? 0);
+        if ($pct > 0) {
+            $this->complimentAmount = (string) (int) round($this->total * ($pct / 100));
+        }
+    }
+
+    public function updatedComplimentAmount(): void
+    {
+        $amount = (int) preg_replace('/\D+/', '', (string) ($this->complimentAmount ?? '0'));
+        if ($this->total > 0 && $amount > 0) {
+            $this->complimentPercentage = (string) round(($amount / $this->total) * 100, 2);
+        }
+    }
+
+    public function getOutstandingAfterComplimentProperty(): int
+    {
+        $amount = (int) preg_replace('/\D+/', '', (string) ($this->complimentAmount ?? '0'));
+        return max(0, $this->total - $amount);
+    }
+
+    public function applyCompliment(): void
+    {
+        $this->validate([
+            'complimentNotes' => 'required|string|min:3',
+        ], [
+            'complimentNotes.required' => 'Compliment Notes wajib diisi.',
+            'complimentNotes.min' => 'Notes minimal 3 karakter.',
+        ]);
+
+        $amount = (int) preg_replace('/\D+/', '', (string) ($this->complimentAmount ?? '0'));
+
+        if ($amount <= 0) {
+            $this->addError('complimentAmount', 'Nominal compliment harus diisi.');
+            return;
+        }
+
+        // Set paymentMethod jadi compliment, simpan info compliment ke property
+        $this->paymentMethod = 'compliment';
+        $this->manualDiscountType = 'fixed_amount';
+        $this->manualDiscountValue = $amount;
+        $this->manualDiscountNote = 'Compliment: ' . $this->complimentNotes;
+
+        $this->recalculateTotals();
+
+        $this->complimentModalOpen = false;
+
+        $this->dispatch('toast', type: 'success', message: 'Compliment berhasil diterapkan.');
+    }
+
+    public function openCardPaymentModal(): void
+    {
+        $this->resetValidation();
+        $this->cardAmount = (string) $this->total;
+        $this->cardNumber = null;
+        $this->cardVerificationCode = null;
+        $this->cardBankName = null;
+        $this->cardAccountName = null;
+        $this->cardSelfOrderId = null;
+        $this->cardDetailModalOpen = true;
+    }
+
+    public function setCardOutstandingAmount(): void
+    {
+        $this->cardAmount = (string) $this->total;
+    }
+
+    public function applyCardPayment(): void
+    {
+        $this->validate([
+            'cardAmount' => 'required|numeric|min:1',
+            'cardNumber' => 'required|string|min:10',
+            'cardVerificationCode' => 'required|string|min:1',
+            'cardBankName' => 'required|string|min:2',
+            'cardAccountName' => 'required|string|min:2',
+        ], [
+            'cardAmount.required' => 'Card amount wajib diisi.',
+            'cardNumber.required' => 'Card number wajib diisi.',
+            'cardNumber.min' => 'Card number minimal 10 digit (6 awal + 4 akhir).',
+            'cardVerificationCode.required' => 'Verification code wajib diisi.',
+            'cardBankName.required' => 'Bank name wajib diisi.',
+            'cardAccountName.required' => 'Account name wajib diisi.',
+        ]);
+
+        $amount = (int) preg_replace('/\D+/', '', (string) ($this->cardAmount ?? '0'));
+
+        if ($amount <= 0) {
+            $this->addError('cardAmount', 'Nominal kartu harus lebih dari 0.');
+            return;
+        }
+
+        // Set payment method jadi card + simpan nominal yang dibayar via cashReceived
+        // supaya alur outstanding/perhitungan kembalian tetap konsisten dengan metode lain
+        $this->paymentMethod = 'card';
+        $this->cashReceived = (string) $amount;
+
+        $this->recalculateTotals();
+
+        $this->cardDetailModalOpen = false;
+
+        $this->dispatch('toast', type: 'success', message: 'Pembayaran Card berhasil diterapkan.');
+    }
+
+    public function openOtherCostModal(): void
+    {
+        $this->resetValidation();
+        $this->otherCostNotes = '';
+        $this->otherCostModalOpen = true;
+    }
+
+    public function applyOtherCost(): void
+    {
+        $this->validate([
+            'otherCostNotes' => 'required|string|min:3|max:100',
+        ], [
+            'otherCostNotes.required' => 'Notes wajib diisi.',
+            'otherCostNotes.min' => 'Notes minimal 3 karakter.',
+            'otherCostNotes.max' => 'Notes maksimal 100 karakter.',
+        ]);
+
+        $this->paymentMethod = 'other_cost';
+        $this->cashReceived = (string) $this->total;
+        $this->manualDiscountNote = 'Other Cost: ' . $this->otherCostNotes;
+
+        $this->recalculateTotals();
+
+        $this->otherCostModalOpen = false;
+
+        $this->dispatch('toast', type: 'success', message: 'Other Cost berhasil diterapkan.');
     }
 
     public function render(): View

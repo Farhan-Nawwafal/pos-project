@@ -351,9 +351,9 @@
                                     class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Move
                                     Item</button>
                             </div>
-                            <div class="grid grid-cols-3 w-full">
+                            <div class="grid grid-cols-3 w-full pointer-events-none">
                                 <button type="button" wire:click="$set('cancelTableModalOpen', true)"
-                                    class="w-full h-10 text-xs font-bold bg-red-500 rounded-xs text-white shadow-sm">Cancel
+                                    class="w-full h-10 text-xs font-bold bg-gray-200 rounded-xs text-gray-400 shadow-sm">Cancel
                                     Table</button>
                             </div>
                         @endif
