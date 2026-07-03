@@ -3471,6 +3471,7 @@ class PosPage extends Component
         $amount = (int) preg_replace('/\D+/', '', (string) ($this->cardAmount ?? '0'));
 
         if ($amount <= 0) {
+
             $this->addError('cardAmount', 'Nominal kartu harus lebih dari 0.');
             return;
         }
