@@ -1,19 +1,10 @@
-<?php
-
-use Livewire\Component;
-
-new class extends Component {
-    //
-};
-?>
-
 <div class="w-full bg-white">
 
     
     <div class="flex items-center justify-between px-4 py-3 bg-gray-100 border border-gray-300">
         <span class="text-sm font-semibold text-gray-800">Current Shift</span>
         <div class="flex items-center gap-2">
-            <button type="button"
+            <button type="button" wire:click="endShift"
                 class="flex items-center gap-1.5 px-4 py-2 bg-[#428bca] hover:bg-[#3071a9] text-white text-xs font-semibold rounded transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2">
@@ -46,38 +37,66 @@ new class extends Component {
     
     <div class="px-4 pt-4 pb-2">
 
-        
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(session()->has('success')): ?>
+            <div class="p-3 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
+                <?php echo e(session('success')); ?>
+
+            </div>
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
         <div class="grid grid-cols-3 gap-4 mb-3">
+
             <div>
-                <label class="block text-xs font-semibold text-gray-700 mb-1">Outlet</label>
-                <input type="text" value="ALAS BU YANTI - CIAWI BOGOR" readonly
-                    class="w-full px-2 py-1.5 text-xs bg-gray-100 border border-gray-300 rounded text-gray-700 cursor-default focus:outline-none">
+                <label class="block text-xs font-semibold text-gray-700 mb-1">
+                    Outlet
+                </label>
+
+                <input type="text" readonly value="<?php echo e(optional($currentUser->cabang)->name ?? '-'); ?>"
+                    class="w-full text-sm border-gray-300 bg-gray-50 rounded px-2 py-1">
             </div>
+
             <div>
-                <label class="block text-xs font-semibold text-gray-700 mb-1">Started By</label>
-                <input type="text" value="KASIR" readonly
-                    class="w-full px-2 py-1.5 text-xs bg-gray-100 border border-gray-300 rounded text-gray-700 cursor-default focus:outline-none">
+                <label class="block text-xs font-semibold text-gray-700 mb-1">
+                    Started By
+                </label>
+
+                <input type="text" readonly value="<?php echo e($currentUser->name); ?>"
+                    class="w-full text-sm border-gray-300 bg-gray-50 rounded px-2 py-1">
             </div>
+
             <div>
-                <label class="block text-xs font-semibold text-gray-700 mb-1">Starting Shift</label>
-                <input type="text" value="13-05-2026 08:07:24" readonly
-                    class="w-full px-2 py-1.5 text-xs bg-gray-100 border border-gray-300 rounded text-gray-700 text-right cursor-default focus:outline-none">
+                <label class="block text-xs font-semibold text-gray-700 mb-1">
+                    Starting Shift
+                </label>
+
+                <input type="text" readonly value="<?php echo e($currentShift
+    ? $currentShift->started_at->format('d-m-Y H:i:s')
+    : ($currentUser->last_login_at?->format('d-m-Y H:i:s') ?? '-')); ?>"
+                    class="w-full text-sm border-gray-300 bg-gray-50 rounded px-2 py-1">
             </div>
+
         </div>
 
-        
         <div class="mb-4">
-            <label class="block text-xs font-semibold text-gray-700 mb-1">Starting Cash</label>
+
+            <label class="block text-xs font-semibold text-gray-700 mb-1">
+                Starting Cash
+            </label>
+
             <div class="w-1/3">
-                <input type="text" value="0" readonly
-                    class="w-full px-2 py-1.5 text-xs bg-gray-100 border border-gray-300 rounded text-gray-700 text-right cursor-default focus:outline-none">
+
+                <input type="text" readonly value="<?php echo e(number_format($currentShift->starting_cash ?? 0, 0, ',', '.')); ?>"
+                    class="w-full text-sm border-gray-300 bg-gray-50 rounded px-2 py-1">
+
             </div>
+
         </div>
 
     </div>
 
     
-    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden">
+    
+    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Shift Detail</span>
         </div>
@@ -90,160 +109,161 @@ new class extends Component {
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="2" class="px-4 py-6"></td>
+                    <td class="px-4 py-4 text-gray-800 font-medium">
+                        <?php echo e($currentShift && $currentShift->ended_at ? \Carbon\Carbon::parse($currentShift->ended_at)->format('d-m-Y H:i:s') : '-'); ?>
+
+                    </td>
+                    <td class="px-4 py-4 text-gray-800 font-medium">
+                        <?php echo e($currentShift && $currentShift->endedBy ? $currentShift->endedBy->name : '-'); ?>
+
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     
-    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden">
-
-        
+    <div class="mb-6 mx-4">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Sales Recapitulation</span>
         </div>
-
-        
-        <table class="w-full text-xs">
-            <thead>
-                <tr class="bg-gray-100 border-b border-gray-300">
-                    <th class="px-4 py-2 text-left font-semibold text-gray-700">Description</th>
-                    <th class="px-4 py-2 text-right font-semibold text-gray-700 w-40">Total</th>
-                </tr>
-            </thead>
+        <table class="w-full border-collapse border border-gray-300 text-sm bg-white rounded-b">
             <tbody>
-                
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-800 font-medium">Pending Sales</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">Sales Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">10.077.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">Discount Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">Voucher Discount Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
+                <tr>
+                    <td class="px-4 py-2 text-gray-700">Sales Total</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($salesTotal, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
 
-                
                 <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-800 font-medium">Net Sales</td>
-                    <td class="px-4 py-2 text-right text-gray-700">10.077.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">Delivery Cost Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">Order Fee Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">Service Charge</td>
-                    <td class="px-4 py-2 text-right text-gray-700">454.700</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">PB1</td>
-                    <td class="px-4 py-2 text-right text-gray-700">1.007.700</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">Platform Fee</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-10 text-gray-600 italic">Voucher Sales Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
+                    <td class="px-4 py-2 text-gray-700">Discount</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($discount, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
 
-                
                 <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-800 font-medium">Gross Sales</td>
-                    <td class="px-4 py-2 text-right font-semibold text-gray-800">11.540.200</td>
+                    <td class="px-4 py-2 text-gray-700">ManualDiscount</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($manualDiscount, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
 
-                
-                <tr>
-                    <td class="px-4 py-2 text-gray-800 font-medium">Pax Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">41</td>
+                <tr class="border-b border-gray-200">
+                    <td class="px-4 py-2 text-gray-700">Voucher Discount</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($voucherDiscount, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
-                <tr>
-                    <td class="px-4 py-2 text-gray-800 font-medium">Average Net Sales per Pax</td>
-                    <td class="px-4 py-2 text-right text-gray-700">245.780</td>
+
+                <tr class="border-b border-gray-200">
+                    <td class="px-4 py-2 text-gray-700">Point Discount</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($pointDiscount, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
-                <tr>
-                    <td class="px-4 py-2 text-gray-800 font-medium">Average Gross Sales per Pax</td>
-                    <td class="px-4 py-2 text-right text-gray-700">245.780</td>
+
+                <tr class="border-b border-gray-200">
+                    <td class="px-4 py-2 text-gray-700">Service Charge</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($serviceCharge, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
-                <tr>
-                    <td class="px-4 py-2 text-gray-800 font-medium">Number of Bills</td>
-                    <td class="px-4 py-2 text-right text-gray-700">41</td>
+
+                <tr class="border-b border-gray-200">
+                    <td class="px-4 py-2 text-gray-700">Tax</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($tax, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
-                <tr>
-                    <td class="px-4 py-2 text-gray-800 font-medium">Average Net Sales per Bill</td>
-                    <td class="px-4 py-2 text-right text-gray-700">245.780</td>
+
+                <tr class="border-b border-gray-200">
+                    <td class="px-4 py-2 text-gray-700">Payment Fee</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($paymentFee, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
-                <tr>
-                    <td class="px-4 py-2 text-gray-800 font-medium">Average Gross Sales per Bill</td>
-                    <td class="px-4 py-2 text-right text-gray-700">245.780</td>
+
+                <tr class="border-b border-gray-200">
+                    <td class="px-4 py-2 text-gray-700">Rounding</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($rounding, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
-                <tr>
-                    <td class="px-4 py-2 text-gray-800 font-medium">Cancel Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">10.000</td>
+
+                <tr class="border-b border-gray-200">
+                    <td class="px-4 py-2 text-gray-700">Refunded</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($refundedAmount, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
-                <tr>
-                    <td class="px-4 py-2 text-gray-800 font-medium">Void Total</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
+
+                <tr class="font-bold">
+                    <td class="px-4 py-2 text-gray-700">Net Sales</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        Rp <?php echo e(number_format($netSales, 0, ',', '.')); ?>
+
+                    </td>
+                </tr>
+
+                <tr class="border-b border-gray-200">
+                    <td class="px-4 py-2 text-gray-700">Number Of Bills</td>
+                    <td class="px-4 py-2 text-right text-gray-700">
+                        <?php echo e($numberOfBills); ?>
+
+                    </td>
                 </tr>
             </tbody>
         </table>
-
     </div>
 
     
-    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden">
+    <div class="mb-6 mx-4">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Sales Payment Recapitulation</span>
         </div>
-        <table class="w-full text-xs">
-            <thead>
-                <tr class="bg-gray-100 border-b border-gray-300">
-                    <th class="px-4 py-2 text-left font-semibold text-gray-800">Payment Method</th>
-                    <th class="px-4 py-2 text-right font-semibold text-gray-800">Payment Amount</th>
-                </tr>
-            </thead>
+        <table class="w-full border-collapse border border-gray-300 text-sm bg-white rounded-b">
             <tbody>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700 font-medium">CASH</td>
-                    <td class="px-4 py-2 text-right text-gray-700">807.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700 font-medium">EDC BRI</td>
-                    <td class="px-4 py-2 text-right text-gray-700">2.254.200</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700 font-medium">QRIS BRI</td>
-                    <td class="px-4 py-2 text-right text-gray-700">8.479.000</td>
-                </tr>
-                <tr class="border-b border-gray-200 bg-gray-50">
-                    <td class="px-4 py-3 font-bold text-gray-800">TOTAL</td>
-                    <td class="px-4 py-3 text-right font-bold text-gray-800">11.540.200</td>
-                </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $paymentRecaps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $payment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                    <tr class="border-b border-gray-200">
+                        <td class="px-4 py-2 text-gray-700 uppercase"><?php echo e($payment->payment_method ?? 'TIDAK DIKETAHUI'); ?>
+
+                        </td>
+                        <td class="px-4 py-2 text-right text-gray-700">
+                            <?php echo e(number_format($payment->total_amount, 0, ',', '.')); ?>
+
+                        </td>
+                    </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                    <tr class="border-b border-gray-200">
+                        <td colspan="2" class="px-4 py-2 text-center text-gray-500 italic">Belum ada transaksi pembayaran.
+                        </td>
+                    </tr>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 <tr class="bg-gray-50">
-                    <td class="px-4 py-3 font-bold text-gray-800">OVER VOUCHER VALUE</td>
-                    <td class="px-4 py-3 text-right font-bold text-gray-800">0</td>
+                    <td class="px-4 py-2 font-bold text-gray-900 uppercase">Total</td>
+                    <td class="px-4 py-2 text-right font-bold text-gray-900">
+                        <?php echo e(number_format($totalPayment, 0, ',', '.')); ?>
+
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     
-    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden">
+    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Sales Menu</span>
         </div>
@@ -253,236 +273,47 @@ new class extends Component {
                     <th class="px-4 py-3 text-left font-semibold text-gray-800">Menu</th>
                     <th class="px-4 py-3 text-center font-semibold text-gray-800">Qty</th>
                     <th class="px-4 py-3 text-right font-semibold text-gray-800">Subtotal</th>
+                    <th class="px-4 py-3 text-right font-semibold text-gray-800">Manual Discount</th>
+                    <th class="px-4 py-3 text-right font-semibold text-gray-800">Voucher Discount</th>
                     <th class="px-4 py-3 text-right font-semibold text-gray-800">Menu Discount</th>
-                    <th class="px-4 py-3 text-right font-semibold text-gray-800">Service Charge</th>
-                    <th class="px-4 py-3 text-right font-semibold text-gray-800">PB1</th>
-                    <th class="px-4 py-3 text-right font-semibold text-gray-800">Grand Total</th>
+                    <!-- <th class="px-4 py-3 text-right font-semibold text-gray-800">Grand Total</th> -->
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">AYAM BKR KPG</td>
-                    <td class="px-4 py-2 text-center text-gray-700">7</td>
-                    <td class="px-4 py-2 text-right text-gray-700">231.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">11.550</td>
-                    <td class="px-4 py-2 text-right text-gray-700">23.100</td>
-                    <td class="px-4 py-2 text-right text-gray-700">265.650</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Air Putih</td>
-                    <td class="px-4 py-2 text-center text-gray-700">4</td>
-                    <td class="px-4 py-2 text-right text-gray-700">8.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">300</td>
-                    <td class="px-4 py-2 text-right text-gray-700">800</td>
-                    <td class="px-4 py-2 text-right text-gray-700">9.100</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Air Putih Es</td>
-                    <td class="px-4 py-2 text-center text-gray-700">2</td>
-                    <td class="px-4 py-2 text-right text-gray-700">6.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">300</td>
-                    <td class="px-4 py-2 text-right text-gray-700">600</td>
-                    <td class="px-4 py-2 text-right text-gray-700">6.900</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Ayam Bakar Madu</td>
-                    <td class="px-4 py-2 text-center text-gray-700">7</td>
-                    <td class="px-4 py-2 text-right text-gray-700">203.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">8.700</td>
-                    <td class="px-4 py-2 text-right text-gray-700">20.300</td>
-                    <td class="px-4 py-2 text-right text-gray-700">232.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Ayam Gr Kampung</td>
-                    <td class="px-4 py-2 text-center text-gray-700">12</td>
-                    <td class="px-4 py-2 text-right text-gray-700">348.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">14.500</td>
-                    <td class="px-4 py-2 text-right text-gray-700">34.800</td>
-                    <td class="px-4 py-2 text-right text-gray-700">397.300</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Ayam Kremes</td>
-                    <td class="px-4 py-2 text-center text-gray-700">12</td>
-                    <td class="px-4 py-2 text-right text-gray-700">300.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">13.750</td>
-                    <td class="px-4 py-2 text-right text-gray-700">30.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">343.750</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Bakwan Jagung</td>
-                    <td class="px-4 py-2 text-center text-gray-700">27</td>
-                    <td class="px-4 py-2 text-right text-gray-700">135.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">6.250</td>
-                    <td class="px-4 py-2 text-right text-gray-700">13.500</td>
-                    <td class="px-4 py-2 text-right text-gray-700">154.750</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Bebek Bakar</td>
-                    <td class="px-4 py-2 text-center text-gray-700">2</td>
-                    <td class="px-4 py-2 text-right text-gray-700">84.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">4.200</td>
-                    <td class="px-4 py-2 text-right text-gray-700">8.400</td>
-                    <td class="px-4 py-2 text-right text-gray-700">96.600</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Bebek Kremes</td>
-                    <td class="px-4 py-2 text-center text-gray-700">4</td>
-                    <td class="px-4 py-2 text-right text-gray-700">160.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">6.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">16.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">182.000</td>
-                </tr>
-                <tr>
-                    <td class="px-4 py-2 text-gray-700">Empal Serundeng</td>
-                    <td class="px-4 py-2 text-center text-gray-700">16</td>
-                    <td class="px-4 py-2 text-right text-gray-700">560.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">0</td>
-                    <td class="px-4 py-2 text-right text-gray-700">24.500</td>
-                    <td class="px-4 py-2 text-right text-gray-700">56.000</td>
-                    <td class="px-4 py-2 text-right text-gray-700">640.500</td>
-                </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $salesByMenus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                    <trclass="border-b border-gray-200">
+                        
+                        <td class="px-4 py-2 text-gray-700"><?php echo e($item->product->name ?? 'Produk Dihapus'); ?></td>
+                        <td class="px-4 py-2 text-center text-gray-700"><?php echo e($item->total_qty); ?></td>
+                        <td class="px-4 py-2 text-right text-gray-700">Rp
+                            <?php echo e(number_format($item->subtotal, 0, ',', '.')); ?>
+
+                        </td>
+                        <td class="px-4 py-2 text-right text-gray-700">Rp
+                            <?php echo e(number_format($item->manual_discount, 0, ',', '.')); ?>
+
+                        </td>
+                        <td class="px-4 py-2 text-right text-gray-700">Rp
+                            <?php echo e(number_format($item->voucher_discount, 0, ',', '.')); ?>
+
+                        </td>
+                        <td class="px-4 py-2 text-right text-gray-700">Rp
+                            <?php echo e(number_format($item->menu_discount + $item->voucher_discount, 0, ',', '.')); ?>
+
+                        </td>
+                        </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                    <tr>
+                        <td colspan="3" class="text-center italic text-gray-500 py-4">Tidak ada data penjualan menu.
+                        </td>
+                    </tr>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </tbody>
         </table>
     </div>
 
     
-    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden">
-        <div class="px-4 py-2 bg-[#428bca]">
-            <span class="text-sm font-semibold text-white">Sales By Menu</span>
-        </div>
-        <table class="w-full text-xs">
-            <thead>
-                <tr class="bg-gray-100 border-b border-gray-300">
-                    <th class="px-4 py-3 text-left font-semibold text-gray-800">Description</th>
-                    <th class="px-4 py-3 text-center font-semibold text-gray-800 w-24">Qty</th>
-                    <th class="px-4 py-3 text-right font-semibold text-gray-800 w-32">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                <tr class="border-b border-gray-200">
-                    <td colspan="3" class="px-4 py-2 text-gray-700 font-medium">MAKANAN</td>
-                </tr>
-
-                
-                <tr class="border-b border-gray-200">
-                    <td colspan="3" class="px-4 py-2 pl-8 text-gray-700">ANEKA DAGING</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Empal Serundeng</td>
-                    <td class="px-4 py-2 text-center text-gray-700">16</td>
-                    <td class="px-4 py-2 text-right text-gray-700">560.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-8 text-gray-700">Total - ANEKA DAGING</td>
-                    <td class="px-4 py-2 text-center text-gray-700">16</td>
-                    <td class="px-4 py-2 text-right text-gray-700">560.000</td>
-                </tr>
-
-                
-                <tr class="border-b border-gray-200">
-                    <td colspan="3" class="px-4 py-2 pl-8 text-gray-700">ANEKA GORENGAN</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Bakwan Jagung</td>
-                    <td class="px-4 py-2 text-center text-gray-700">27</td>
-                    <td class="px-4 py-2 text-right text-gray-700">135.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Mendoan</td>
-                    <td class="px-4 py-2 text-center text-gray-700">17</td>
-                    <td class="px-4 py-2 text-right text-gray-700">85.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Perkedel</td>
-                    <td class="px-4 py-2 text-center text-gray-700">16</td>
-                    <td class="px-4 py-2 text-right text-gray-700">96.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Peye Udang Gr</td>
-                    <td class="px-4 py-2 text-center text-gray-700">2</td>
-                    <td class="px-4 py-2 text-right text-gray-700">50.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Tahu Bacem</td>
-                    <td class="px-4 py-2 text-center text-gray-700">6</td>
-                    <td class="px-4 py-2 text-right text-gray-700">30.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Tahu Goreng</td>
-                    <td class="px-4 py-2 text-center text-gray-700">17</td>
-                    <td class="px-4 py-2 text-right text-gray-700">68.000</td>
-                </tr>
-                <tr class="border-b border-gray-200 bg-gray-50 hover:bg-gray-100">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Tempe Bacem</td>
-                    <td class="px-4 py-2 text-center text-gray-700">13</td>
-                    <td class="px-4 py-2 text-right text-gray-700">65.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Tempe Goreng</td>
-                    <td class="px-4 py-2 text-center text-gray-700">17</td>
-                    <td class="px-4 py-2 text-right text-gray-700">68.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-8 text-gray-700">Total - ANEKA GORENGAN</td>
-                    <td class="px-4 py-2 text-center text-gray-700">115</td>
-                    <td class="px-4 py-2 text-right text-gray-700">597.000</td>
-                </tr>
-
-                
-                <tr class="border-b border-gray-200">
-                    <td colspan="3" class="px-4 py-2 pl-8 text-gray-700">ANEKA IKAN</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Gurame Bakar</td>
-                    <td class="px-4 py-2 text-center text-gray-700">3</td>
-                    <td class="px-4 py-2 text-right text-gray-700">315.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Gurame Goreng</td>
-                    <td class="px-4 py-2 text-center text-gray-700">1</td>
-                    <td class="px-4 py-2 text-right text-gray-700">100.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Gurame Pecak</td>
-                    <td class="px-4 py-2 text-center text-gray-700">1</td>
-                    <td class="px-4 py-2 text-right text-gray-700">100.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Ikan Asin Gabus</td>
-                    <td class="px-4 py-2 text-center text-gray-700">1</td>
-                    <td class="px-4 py-2 text-right text-gray-700">14.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 pl-12 text-gray-700">Ikan Baby</td>
-                    <td class="px-4 py-2 text-center text-gray-700">2</td>
-                    <td class="px-4 py-2 text-right text-gray-700">54.000</td>
-                </tr>
-                <tr>
-                    <td class="px-4 py-2 pl-12 text-gray-700">Ikan Barakuda</td>
-                    <td class="px-4 py-2 text-center text-gray-700">1</td>
-                    <td class="px-4 py-2 text-right text-gray-700">40.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700 font-medium">Total - MAKANAN</td>
-                    <td class="px-4 py-2 text-center text-gray-700">541</td>
-                    <td class="px-4 py-2 text-right text-gray-700">9.000.000</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    
-    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden">
+    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Non Sales By Menu</span>
         </div>
@@ -496,68 +327,76 @@ new class extends Component {
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="3" class="px-4 py-4"></td>
+                    <td colspan="3" class="px-4 py-4 text-center text-gray-500 italic">Kosong</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     
-    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden">
+    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Custom Menu Sales</span>
         </div>
-        <table class="w-full text-xs">
+        <table class="w-full border-collapse border border-gray-300 text-sm">
             <thead>
-                <tr class="bg-gray-100 border-b border-gray-300">
-                    <th class="px-4 py-3 text-left font-semibold text-gray-800 w-1/4">Sales Number</th>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-800">Custom Menu Name</th>
-                    <th class="px-4 py-3 text-center font-semibold text-gray-800 w-24">Qty</th>
-                    <th class="px-4 py-3 text-right font-semibold text-gray-800 w-32">Value</th>
+                <tr class="bg-gray-50 border-b border-gray-300">
+                    <th class="px-4 py-2 text-left font-semibold text-gray-800">Custom Item Name</th>
+                    <th class="px-4 py-2 text-center font-semibold text-gray-800">Qty</th>
+                    <th class="px-4 py-2 text-right font-semibold text-gray-800">Amount</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td colspan="4" class="px-4 py-4"></td>
-                </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $customMenus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $custom): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                    <tr class="border-b border-gray-200">
+                        <td class="px-4 py-2 text-gray-700"><?php echo e($custom->item_name ?? 'Item Kustom'); ?></td>
+                        <td class="px-4 py-2 text-center text-gray-700"><?php echo e($custom->total_qty); ?></td>
+                        <td class="px-4 py-2 text-right text-gray-700">Rp
+                            <?php echo e(number_format($custom->total_amount, 0, ',', '.')); ?>
+
+                        </td>
+                    </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                    <tr class="border-b border-gray-200">
+                        <td colspan="3" class="px-4 py-2 text-center text-gray-500 italic">Tidak ada custom menu.</td>
+                    </tr>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </tbody>
         </table>
     </div>
 
     
-    <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden">
+    <div class="mx-4 mb-10 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Sales By Table Section</span>
         </div>
-        <table class="w-full text-xs">
+        <table class="w-full border-collapse border border-gray-300 text-sm">
             <thead>
-                <tr class="bg-gray-100 border-b border-gray-300">
-                    <th class="px-4 py-3 text-left font-semibold text-gray-800">Table Section</th>
-                    <th class="px-4 py-3 text-center font-semibold text-gray-800 w-32">Bill</th>
-                    <th class="px-4 py-3 text-right font-semibold text-gray-800 w-32">Value</th>
+                <tr class="bg-gray-50 border-b border-gray-300">
+                    <th class="px-4 py-2 text-left font-semibold text-gray-800">Table Section</th>
+                    <th class="px-4 py-2 text-right font-semibold text-gray-800">Bills</th>
+                    <th class="px-4 py-2 text-right font-semibold text-gray-800">Value</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">1-50</td>
-                    <td class="px-4 py-2 text-center text-gray-700">26</td>
-                    <td class="px-4 py-2 text-right text-gray-700">6.354.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">51-100</td>
-                    <td class="px-4 py-2 text-center text-gray-700">1</td>
-                    <td class="px-4 py-2 text-right text-gray-700">713.000</td>
-                </tr>
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2 text-gray-700">Quick Service</td>
-                    <td class="px-4 py-2 text-center text-gray-700">14</td>
-                    <td class="px-4 py-2 text-right text-gray-700">3.010.000</td>
-                </tr>
-                <tr class="bg-gray-50 border-t border-gray-300">
-                    <td class="px-4 py-3 font-bold text-gray-800">TOTAL</td>
-                    <td class="px-4 py-3 text-center font-bold text-gray-800">41</td>
-                    <td class="px-4 py-3 text-right font-bold text-gray-800">10.077.000</td>
-                </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $tableSections; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $section): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                    <tr class="border-b border-gray-200">
+                        
+                        <td class="px-4 py-2 text-gray-700">Meja <?php echo e($section->table_number); ?></td>
+                        <td class="px-4 py-2 text-right text-gray-700 font-medium">
+                            <?php echo e(number_format($section->bill, 0, ',', '.')); ?>
+
+                        </td>
+                        <td class="px-4 py-2 text-right text-gray-700 font-medium">Rp
+                            <?php echo e(number_format($section->value, 0, ',', '.')); ?>
+
+                        </td>
+                    </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                    <tr>
+                        <td colspan="2" class="text-center italic">Tidak ada transaksi meja</td>
+                    </tr>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </tbody>
         </table>
     </div>
