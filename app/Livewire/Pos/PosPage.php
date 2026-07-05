@@ -2176,9 +2176,20 @@ class PosPage extends Component
 
             // KUNCI UTAMA: Update Status Meja Makan Menjadi TERISI & ISI TIMER
             if ($this->orderType === 'dine_in' && $this->selectedTableId) {
+                // 1. Ambil data meja saat ini untuk mengecek apakah sudah ada data waktu 'occupied_at' sebelumnya
+                $currentTable = DB::table('dining_tables')
+                    ->where('id', $this->selectedTableId)
+                    ->first();
+
+                // 2. Gunakan logika pengaman: jika sudah ada, pakai yang lama; jika kosong, pakai waktu sekarang
+                $occupiedAtValue = ($currentTable && $currentTable->occupied_at)
+                    ? $currentTable->occupied_at
+                    : now();
+
+                // 3. Eksekusi update ke database tanpa merusak data timer lama
                 DB::table('dining_tables')->where('id', $this->selectedTableId)->update([
                     'status' => 'occupied',
-                    'occupied_at' => now(), // Mengisi parameter awal mula waktu timer diaktifkan
+                    'occupied_at' => $occupiedAtValue,
                 ]);
             }
 
