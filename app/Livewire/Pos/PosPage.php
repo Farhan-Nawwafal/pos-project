@@ -211,6 +211,10 @@ class PosPage extends Component
     public bool $splitBillModalOpen = false; // Mengontrol buka/tutup modal split bill
     public array $splitBills = [];           // Menampung data sub-bill yang dibuat
     public int $activeSplitTab = 1;          // Menentukan sub-bill mana yang sedang aktif dipilih kasir
+    public int $splitBillTotal = 0;
+    public array $currentSplitItems = [];
+    public bool $isSplitPaymentMode = false;
+    public ?int $currentSplitBillIndex = null;
 
     // --- STATE UNTUK CANCEL TABLE ---
     public bool $cancelTableModalOpen = false; // Mengontrol buka/tutup modal cancel table
@@ -1593,15 +1597,15 @@ class PosPage extends Component
 
     public function savePayment(): void
     {
-        if (count($this->cartItems) === 0) return;
+        // Jika split bill, yang divalidasi adalah item split-nya
+        $itemsToProcess = $this->isSplitPaymentMode ? $this->currentSplitItems : $this->cartItems;
+        if (count($itemsToProcess) === 0) return;
 
         $isDineIn = $this->orderType === 'dine_in';
         $isEditing = $this->editingTransactionId !== null;
         $isFinalPayment = ($this->orderType === 'take_away' || ($isDineIn && $isEditing));
 
-        $this->recalculateTotals();
-
-        // Validasi rules dasar dari transaksi lama kamu
+        // Validasi aturan dasar
         $rules = [
             'customerName' => ['required', 'string', 'max:255'],
             'customerPhone' => ['nullable', 'string', 'max:50'],
@@ -1611,7 +1615,6 @@ class PosPage extends Component
         if ($isFinalPayment) {
             $rules['paymentMethod'] = ['required', 'string', 'max:50'];
             if ($this->paymentMethod === 'cash') {
-                // Gunakan cash received mentah tanpa format rupiah untuk validasi nominal minimal
                 $rawCash = (int) preg_replace('/\D+/', '', (string)($this->cashReceived ?? '0'));
                 if ($rawCash < $this->total) {
                     $this->addError('cashReceived', 'Uang diterima kurang dari total tagihan.');
@@ -1624,80 +1627,177 @@ class PosPage extends Component
         $trxId = null;
 
         DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId) {
-            $trx = $this->editingTransactionId
-                ? Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first()
-                : new Transaction();
-
+            $cabangId = auth()->user()->cabang_id ?? 1;
             $cashReceivedValue = $isFinalPayment && $this->paymentMethod === 'cash'
                 ? (int) preg_replace('/\D+/', '', (string)$this->cashReceived)
                 : null;
 
-            $cabangId = auth()->user()->cabang_id ?? 1;
+            if ($this->isSplitPaymentMode) {
+                // JALUR KELUARAN: SPLIT BILL PAYMENT
 
-            $trx->fill([
-                'code' => $trx->code ?? Transaction::generateUniqueCode(),
-                'cabang_id' => $cabangId,
-                'member_id' => $this->memberId,
-                'name' => $this->customerName,
-                'phone' => $this->customerPhone,
-                'order_type' => $this->orderType,
-                'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
-                'pax' => $this->numberOfPax,
-                'subtotal' => $this->subtotal,
-                'service_percentage' => $this->serviceRate,
-                'service_amount' => $this->serviceAmount,
-                'voucher_discount_amount' => $this->voucherDiscountAmount,
-                'manual_discount_amount' => $this->manualDiscountAmount,
-                'discount_total_amount' => $isFinalPayment ? $this->discountTotalAmount : 0,
-                'tax_percentage' => $this->taxRate,
-                'tax_amount' => $this->taxAmount,
-                'rounding_amount' => $this->roundingAmount,
-                'cash_received' => $cashReceivedValue,
-                'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
-                'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
-                'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
-                'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
-                'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
-                'payment_status' => $isFinalPayment ? 'paid' : 'pending',
-                'paid_at' => $isFinalPayment ? now() : null,
-                'payment_processed_by' => $isFinalPayment ? auth()->id() : null,
-                'checkout_link' => '',
-                'external_id' => $trx->external_id ?? Transaction::generateUniqueCode(10),
-            ]);
+                $parentTrx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
+                $splitBillData = $this->splitBills[$this->currentSplitBillIndex];
 
-            $trx->save();
-
-            // Sinkronisasi ulang data item pesanan makanan
-            TransactionItem::where('transaction_id', $trx->id)->delete();
-            foreach ($this->cartItems as $item) {
-                TransactionItem::create([
+                // 1. Buat invoice baru khusus untuk sub-bill yang lunas ini
+                $newTrx = Transaction::create([
                     'cabang_id' => $cabangId,
-                    'transaction_id' => $trx->id,
-                    'product_id' => $item['product_id'],
-                    'product_variant_id' => $item['variant_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'subtotal' => $item['quantity'] * $item['price'],
-                    'note' => $item['note'] ?? null,
+                    'code' => Transaction::generateUniqueCode(),
+                    'member_id' => $parentTrx->member_id,
+                    'channel' => 'pos',
+                    'name' => $parentTrx->name . ' (' . $splitBillData['name'] . ')',
+                    'phone' => $parentTrx->phone,
+                    'order_type' => $parentTrx->order_type,
+                    'dining_table_id' => null, // Dikosongkan agar meja aslinya tidak lepas status terisi
+                    'subtotal' => $this->subtotal,
+                    'service_percentage' => $this->serviceRate,
+                    'service_amount' => $this->serviceAmount,
+                    'tax_percentage' => $this->taxRate,
+                    'tax_amount' => $this->taxAmount,
+                    'cash_received' => $cashReceivedValue,
+                    'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
+                    'total' => $this->total,
+                    'payment_method' => $this->paymentMethod,
+                    'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
+                    'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
+                    'payment_status' => 'paid',
+                    'order_status' => 'completed',
+                    'paid_at' => now(),
+                    'payment_processed_by' => auth()->id(),
+                    'external_id' => Transaction::generateUniqueCode(10),
+                    'checkout_link' => '',
                 ]);
-            }
 
-            // Kembalikan status meja makan Dine In menjadi kosong/tersedia kembali (Warna Biru)
-            if ($isDineIn) {
-                $targetTableId = $this->selectedTableId ?? $trx->dining_table_id;
-                if ($isFinalPayment) {
-                    DiningTable::where('id', $targetTableId)->update(['status' => 'available', 'occupied_at' => null]);
-                } else {
-                    DiningTable::where('id', $targetTableId)->update(['status' => 'occupied', 'occupied_at' => now()]);
+                // Tulis item pesanan untuk invoice baru ini
+                foreach ($this->currentSplitItems as $item) {
+                    TransactionItem::create([
+                        'cabang_id' => $cabangId,
+                        'transaction_id' => $newTrx->id,
+                        'product_id' => $item['product_id'],
+                        'product_variant_id' => $item['variant_id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'subtotal' => $item['quantity'] * $item['price'],
+                        'note' => $item['note'] ?? null,
+                    ]);
                 }
-            }
 
-            $trxId = (int) $trx->id;
+                // 2. Update transaksi induk (mengurangi menu yang sudah dicabut)
+                TransactionItem::where('transaction_id', $parentTrx->id)->delete();
+                $newParentSubtotal = 0;
+                foreach ($this->cartItems as $item) {
+                    if ($item['quantity'] > 0) {
+                        TransactionItem::create([
+                            'cabang_id' => $cabangId,
+                            'transaction_id' => $parentTrx->id,
+                            'product_id' => $item['product_id'],
+                            'product_variant_id' => $item['variant_id'],
+                            'quantity' => $item['quantity'],
+                            'price' => $item['price'],
+                            'subtotal' => $item['quantity'] * $item['price'],
+                            'note' => $item['note'] ?? null,
+                        ]);
+                        $newParentSubtotal += $item['quantity'] * $item['price'];
+                    }
+                }
+
+                // Hitung ulang totalan sisa tagihan di induk
+                $parentService = (int) round($newParentSubtotal * ($this->serviceRate / 100));
+                $parentTax = (int) round(($newParentSubtotal + $parentService) * ($this->taxRate / 100));
+                $parentTotal = $newParentSubtotal + $parentService + $parentTax;
+
+                $parentTrx->update([
+                    'subtotal' => $newParentSubtotal,
+                    'service_amount' => $parentService,
+                    'tax_amount' => $parentTax,
+                    'total' => $parentTotal,
+                ]);
+
+                // Kunci timer meja lama agar tidak hilang
+                if ($isDineIn) {
+                    $currentTable = DiningTable::find($this->selectedTableId);
+                    DiningTable::where('id', $this->selectedTableId)->update([
+                        'status' => 'occupied',
+                        'occupied_at' => $currentTable ? $currentTable->occupied_at : now()
+                    ]);
+                }
+
+                $trxId = (int) $newTrx->id;
+
+                // Bersihkan tab split bill yang selesai dibayar ini dari memori kasir
+                unset($this->splitBills[$this->currentSplitBillIndex]);
+            } else {
+                // JALUR KELUARAN: TRANSAKSI NORMAL (ASLI)
+                $trx = $this->editingTransactionId
+                    ? Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first()
+                    : new Transaction();
+
+                $trx->fill([
+                    'code' => $trx->code ?? Transaction::generateUniqueCode(),
+                    'cabang_id' => $cabangId,
+                    'member_id' => $this->memberId,
+                    'name' => $this->customerName,
+                    'phone' => $this->customerPhone,
+                    'order_type' => $this->orderType,
+                    'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
+                    'pax' => $this->numberOfPax,
+                    'subtotal' => $this->subtotal,
+                    'service_percentage' => $this->serviceRate,
+                    'service_amount' => $this->serviceAmount,
+                    'voucher_discount_amount' => $this->voucherDiscountAmount,
+                    'manual_discount_amount' => $this->manualDiscountAmount,
+                    'discount_total_amount' => $isFinalPayment ? $this->discountTotalAmount : 0,
+                    'tax_percentage' => $this->taxRate,
+                    'tax_amount' => $this->taxAmount,
+                    'rounding_amount' => $this->roundingAmount,
+                    'cash_received' => $cashReceivedValue,
+                    'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
+                    'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
+                    'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
+                    'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
+                    'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
+                    'payment_status' => $isFinalPayment ? 'paid' : 'pending',
+                    'paid_at' => $isFinalPayment ? now() : null,
+                    'payment_processed_by' => $isFinalPayment ? auth()->id() : null,
+                    'checkout_link' => '',
+                    'external_id' => $trx->external_id ?? Transaction::generateUniqueCode(10),
+                ]);
+
+                $trx->save();
+
+                TransactionItem::where('transaction_id', $trx->id)->delete();
+                foreach ($this->cartItems as $item) {
+                    TransactionItem::create([
+                        'cabang_id' => $cabangId,
+                        'transaction_id' => $trx->id,
+                        'product_id' => $item['product_id'],
+                        'product_variant_id' => $item['variant_id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'subtotal' => $item['quantity'] * $item['price'],
+                        'note' => $item['note'] ?? null,
+                    ]);
+                }
+
+                if ($isDineIn) {
+                    $targetTableId = $this->selectedTableId ?? $trx->dining_table_id;
+                    if ($isFinalPayment) {
+                        DiningTable::where('id', $targetTableId)->update(['status' => 'available', 'occupied_at' => null]);
+                    } else {
+                        $currentTable = DiningTable::find($targetTableId);
+                        DiningTable::where('id', $targetTableId)->update([
+                            'status' => 'occupied',
+                            'occupied_at' => $currentTable ? $currentTable->occupied_at : now()
+                        ]);
+                    }
+                }
+
+                $trxId = (int) $trx->id;
+            }
         });
 
         $this->dispatch('toast', type: 'success', message: $isFinalPayment ? 'Transaksi Berhasil Dilunasi!' : 'Pesanan Disimpan');
 
-        // Picu perintah cetak nota bill lunas final ke printer kasir bluetooth
+        // Cetak struk belanja khusus tagihan yang baru dibayar
         if ($isFinalPayment) {
             $payload = $this->buildPrintPayload($trxId);
             if ($payload) {
@@ -1705,10 +1805,19 @@ class PosPage extends Component
             }
         }
 
-        // RESET ALUR: Kembalikan viewMode ke list menu produk utama dan reset status transaksi kasir
+        // Pembersihan akhir (Reset State)
+        $this->checkoutModalOpen = false;
         $this->viewMode = 'menu';
-        $this->resetOrderForNewTransaction();
 
+        // Kembalikan filter cartItems agar membuang menu yang bernilai 0 karena dipotong split bill
+        $this->cartItems = collect($this->cartItems)->filter(fn($item) => $item['quantity'] > 0)->values()->all();
+
+        // Reset penampung split bill
+        $this->isSplitPaymentMode = false;
+        $this->currentSplitItems = [];
+        $this->currentSplitBillIndex = null;
+
+        $this->resetOrderForNewTransaction();
         $this->cashReceived = null;
         $this->cashChange = 0;
     }
@@ -2067,9 +2176,20 @@ class PosPage extends Component
 
             // KUNCI UTAMA: Update Status Meja Makan Menjadi TERISI & ISI TIMER
             if ($this->orderType === 'dine_in' && $this->selectedTableId) {
+                // 1. Ambil data meja saat ini untuk mengecek apakah sudah ada data waktu 'occupied_at' sebelumnya
+                $currentTable = DB::table('dining_tables')
+                    ->where('id', $this->selectedTableId)
+                    ->first();
+
+                // 2. Gunakan logika pengaman: jika sudah ada, pakai yang lama; jika kosong, pakai waktu sekarang
+                $occupiedAtValue = ($currentTable && $currentTable->occupied_at)
+                    ? $currentTable->occupied_at
+                    : now();
+
+                // 3. Eksekusi update ke database tanpa merusak data timer lama
                 DB::table('dining_tables')->where('id', $this->selectedTableId)->update([
                     'status' => 'occupied',
-                    'occupied_at' => now(), // Mengisi parameter awal mula waktu timer diaktifkan
+                    'occupied_at' => $occupiedAtValue,
                 ]);
             }
 
@@ -2254,10 +2374,12 @@ class PosPage extends Component
 
             if ($isDineIn) {
                 $targetTableId = $this->selectedTableId ?? $trx->dining_table_id;
-                if ($isFinalPayment) {
-                    \App\Models\DiningTable::where('id', $targetTableId)->update(['status' => 'available', 'occupied_at' => null]);
+                if ($isFinalPayment && !$this->isSplitPaymentMode) {
+                    DiningTable::where('id', $targetTableId)->update(['status' => 'available', 'occupied_at' => null]);
                 } else {
-                    \App\Models\DiningTable::where('id', $targetTableId)->update(['status' => 'occupied', 'occupied_at' => now()]);
+                    $currentTable = DiningTable::find($targetTableId);
+                    $oldOccupiedAt = $currentTable ? $currentTable->occupiedAt : now();
+                    DiningTable::where('id', $targetTableId)->update(['status' => 'occupied', 'occupied_at' => now()]);
                 }
             }
 
@@ -3123,133 +3245,40 @@ class PosPage extends Component
      */
     public function paySplitBill($billIndex): void
     {
+        // 1. Validasi awal penampung data split bill [cite: 47]
         if (!isset($this->splitBills[$billIndex]) || empty($this->splitBills[$billIndex]['items'])) {
             $this->dispatch('toast', type: 'error', message: 'Tidak ada item di bill ini.');
             return;
         }
 
-        // Pastikan kita sedang mengedit transaksi meja aktif yang ada di DB
+        // 2. Pastikan sedang mengedit transaksi meja aktif [cite: 48]
         if (!$this->editingTransactionId) {
             $this->dispatch('toast', type: 'error', message: 'Split bill hanya bisa dilakukan pada pesanan meja yang sudah disimpan.');
             return;
         }
 
-        $splitItems = $this->splitBills[$billIndex]['items'];
+        // 3. Ambil item dari sub-bill yang dipilih & tandai mode split aktif
+        $this->currentSplitItems = $this->splitBills[$billIndex]['items'];
+        $this->currentSplitBillIndex = $billIndex;
+        $this->isSplitPaymentMode = true;
 
-        DB::transaction(function () use ($splitItems, $billIndex) {
-            // 1. Kunci data transaksi induk dari DB untuk mencegah race condition
-            $parentTrx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
-            if (!$parentTrx) return;
+        // 4. Hitung matematika keuangan khusus untuk sub-bill ini [cite: 50]
+        // Supaya angka yang muncul di halaman pilih metode pembayaran akurat sesuai item pecahan
+        $subBillSubtotal = collect($this->currentSplitItems)->sum(fn($i) => $i['quantity'] * $i['price']);
 
-            $cabangId = auth()->user()->cabang_id ?? 1;
+        $this->subtotal = $subBillSubtotal;
+        $this->serviceAmount = (int) round($this->subtotal * ($this->serviceRate / 100));
+        $this->taxAmount = (int) round(($this->subtotal + $this->serviceAmount) * ($this->taxRate / 100));
+        $rawGrandTotal = $this->subtotal + ($this->orderType === 'dine_in' ? $this->serviceAmount : 0) + $this->taxAmount;
+        $this->total = $this->roundingBase > 0
+            ? (int) (round($rawGrandTotal / $this->roundingBase) * $this->roundingBase)
+            : $rawGrandTotal;
 
-            // 2. Hitung Matematika Keuangan untuk Sub-Bill Baru
-            $subBillSubtotal = collect($splitItems)->sum(fn($i) => $i['quantity'] * $i['price']);
+        // 4. Tutup modal split bill dan arahkan kasir ke halaman Select Payment Method utama
+        $this->splitBillModalOpen = false;
+        $this->viewMode = 'payment'; // Berpindah halaman inline sesuai layout blade kamu
 
-            // Perhitungan pajak dinamis mengikuti setting persentase dari transaksi induk
-            $taxRate = (float) ($parentTrx->tax_percentage ?? 0);
-            $serviceRate = (float) ($parentTrx->service_percentage ?? 0);
-
-            $subBillService = (int) round($subBillSubtotal * ($serviceRate / 100));
-            $subBillTax = (int) round(($subBillSubtotal + $subBillService) * ($taxRate / 100));
-            $subBillTotal = $subBillSubtotal + $subBillService + $subBillTax;
-
-            // 3. KLONING BARIS TRANSAKSI BARU (STATUS PAID)
-            $newTrx = Transaction::create([
-                'cabang_id' => $cabangId,
-                'code' => Transaction::generateUniqueCode(),
-                'member_id' => $parentTrx->member_id,
-                'channel' => 'pos',
-                'name' => $parentTrx->name . ' (' . $this->splitBills[$billIndex]['name'] . ')',
-                'phone' => $parentTrx->phone,
-                'order_type' => $parentTrx->order_type,
-                'dining_table_id' => null, // Dikosongkan agar meja aslinya tidak ikut terlepas/biru
-                'subtotal' => $subBillSubtotal,
-                'service_percentage' => $serviceRate,
-                'service_amount' => $subBillService,
-                'tax_percentage' => $taxRate,
-                'tax_amount' => $subBillTax,
-                'total' => $subBillTotal,
-                'payment_method' => 'cash', // Default diset cash, kasir bisa sesuaikan nanti jika perlu
-                'payment_status' => 'paid',  // LANGSUNG LUNAS!
-                'order_status' => 'completed',
-                'paid_at' => now(),
-                'external_id' => Transaction::generateUniqueCode(10),
-                'checkout_link' => '',
-            ]);
-
-            // 4. MASUKKAN LIST MENU KE TRANSACTION ITEMS BARU
-            foreach ($splitItems as $item) {
-                TransactionItem::create([
-                    'cabang_id' => $cabangId,
-                    'transaction_id' => $newTrx->id,
-                    'product_id' => $item['product_id'],
-                    'product_variant_id' => $item['variant_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'subtotal' => $item['quantity'] * $item['price'],
-                ]);
-            }
-
-            // 5. UPDATE & BERSIHKAN TRANSAKSI INDUK DI DATABASE
-            // Hapus semua detail item lama, lalu simpan ulang sisa item yang ada di keranjang utama kasir saat ini
-            TransactionItem::where('transaction_id', $parentTrx->id)->delete();
-
-            $newParentSubtotal = 0;
-            foreach ($this->cartItems as $item) {
-                if ($item['quantity'] > 0) {
-                    TransactionItem::create([
-                        'cabang_id' => $cabangId,
-                        'transaction_id' => $parentTrx->id,
-                        'product_id' => $item['product_id'],
-                        'product_variant_id' => $item['variant_id'],
-                        'quantity' => $item['quantity'],
-                        'price' => $item['price'],
-                        'subtotal' => $item['quantity'] * $item['price'],
-                    ]);
-                    $newParentSubtotal += $item['quantity'] * $item['price'];
-                }
-            }
-
-            // Hitung ulang totalan nominal diskon, service, pajak untuk transaksi induk yang tersisa
-            $parentService = (int) round($newParentSubtotal * ($serviceRate / 100));
-            $parentTax = (int) round(($newParentSubtotal + $parentService) * ($taxRate / 100));
-            $parentTotal = $newParentSubtotal + $parentService + $parentTax;
-
-            // Perbarui nilai transaksi induk di DB
-            $parentTrx->update([
-                'subtotal' => $newParentSubtotal,
-                'service_amount' => $parentService,
-                'tax_amount' => $parentTax,
-                'total' => $parentTotal,
-            ]);
-
-            // 6. PICU PRINTER KASIR UNTUK STRUK SUB-BILL YANG BARU LUNAS INI
-            $payload = $this->buildPrintPayload($newTrx->id);
-            if ($payload) {
-                $this->dispatch('pos-print-modal', payload: $payload, context: 'checkout');
-            }
-            network_activity_end:
-        });
-
-        // 7. BERSIHKAN MEMORI STATE LIVEWIRE
-        // Singkirkan tab sub-bill yang baru saja dibayar dari modal split
-        unset($this->splitBills[$billIndex]);
-
-        // Filter ulang array keranjang utama untuk membuang baris menu yang quantity-nya sudah benar-benar 0
-        $this->cartItems = collect($this->cartItems)->filter(fn($item) => $item['quantity'] > 0)->values()->all();
-
-        $this->dispatch('toast', type: 'success', message: 'Pembayaran sebagian berhasil diproses & dicetak!');
-
-        // Jika semua pesanan di meja sudah habis dipindahkan dan lunas terbayar
-        if (count($this->cartItems) === 0) {
-            $this->splitBillModalOpen = false;
-            $this->resetOrderForNewTransaction();
-        } else {
-            // Jika masih ada sisa, pindahkan tab fokus aktif modal split ke bill yang masih tersisa
-            $this->activeSplitTab = !empty($this->splitBills) ? array_key_first($this->splitBills) : 1;
-            $this->recalculateTotals();
-        }
+        $this->dispatch('toast', type: 'success', message: 'Silakan pilih metode pembayaran untuk sub-bill ini.');
     }
 
     public function applyScanInput()
@@ -3471,6 +3500,7 @@ class PosPage extends Component
         $amount = (int) preg_replace('/\D+/', '', (string) ($this->cardAmount ?? '0'));
 
         if ($amount <= 0) {
+
             $this->addError('cardAmount', 'Nominal kartu harus lebih dari 0.');
             return;
         }

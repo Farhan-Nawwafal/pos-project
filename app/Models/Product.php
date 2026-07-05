@@ -150,11 +150,11 @@ class Product extends Model
                 'products.updated_at',
             );
 
-        if (! empty($categoryId)) {
+        if (!empty($categoryId)) {
             $query->where('products.category_id', (int) $categoryId);
         }
 
-        if (! empty($term)) {
+        if (!empty($term)) {
             $like = '%' . trim($term) . '%';
             $query->where(function ($q) use ($like) {
                 $q->where('products.name', 'like', $like)

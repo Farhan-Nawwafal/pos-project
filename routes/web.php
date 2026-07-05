@@ -57,12 +57,15 @@ use App\Livewire\Vouchers\VoucherCodesPage;
 use App\Livewire\Vouchers\VoucherPerformancePage;
 use App\Livewire\Vouchers\VoucherRedemptionsPage;
 use App\Livewire\Cabang\CabangPage;
+
+// Progres IDIN day start/end: 2024-06-20
+use App\Livewire\DayStartEnd\DayStartEndPage;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Progres IDIN day start/end: 2024-06-20
-use App\Livewire\DayStartEnd\DayStartEndPage;
+
 
 $landingDomain = parse_url(config('app.url'), PHP_URL_HOST);
 
