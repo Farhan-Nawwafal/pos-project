@@ -211,6 +211,8 @@ class PosPage extends Component
     public bool $splitBillModalOpen = false; // Mengontrol buka/tutup modal split bill
     public array $splitBills = [];           // Menampung data sub-bill yang dibuat
     public int $activeSplitTab = 1;          // Menentukan sub-bill mana yang sedang aktif dipilih kasir
+    public int $splitBillTotal = 0;
+    public $processingSplitBillIndex = null;
 
     // --- STATE UNTUK CANCEL TABLE ---
     public bool $cancelTableModalOpen = false; // Mengontrol buka/tutup modal cancel table
@@ -3250,6 +3252,32 @@ class PosPage extends Component
             $this->activeSplitTab = !empty($this->splitBills) ? array_key_first($this->splitBills) : 1;
             $this->recalculateTotals();
         }
+    }
+
+    public function paySplitBillAndRedirect($billIndex)
+    {
+        if (!isset($this->splitBills[$billIndex]) || empty($this->splitBills[$billIndex]['items'])) {
+            $this->dispatch('toast', type: 'error', message: 'Tidak ada item di bill ini.');
+            return;
+        }
+
+        // Simpan index bill yang dipilih
+        $this->processingSplitBillIndex = $billIndex;
+
+        // Simpan items bill tersebut ke keranjang sementara untuk diproses di halaman pembayaran
+        $this->cartItems = $this->splitBills[$billIndex]['items'];
+
+        // Hitung ulang total untuk keranjang sementara
+        $this->recalculateTotals();
+
+        // Tutup modal split bill
+        $this->splitBillModalOpen = false;
+
+        // Ubah view ke mode payment
+        $this->viewMode = 'payment';
+
+        // Pastikan checkout step diarahkan ke pembayaran
+        $this->checkoutStep = 3;
     }
 
     public function applyScanInput()

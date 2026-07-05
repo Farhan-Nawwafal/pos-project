@@ -7,4 +7,4 @@
     class="h-16 w-16 animate-spin rounded-full border-8 border-solid border-brand-500 border-y-transparent"
   ></div>
 </div>
-<?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/components/common/preloader.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\farhan\projects\project-freelance\pos-restoran-v2\resources\views/components/common/preloader.blade.php ENDPATH**/ ?>

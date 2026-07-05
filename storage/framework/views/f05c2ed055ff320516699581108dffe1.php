@@ -560,14 +560,14 @@
             </div>
         <?php else: ?>
             
-            <div class="grid grid-cols-1 gap-6 p-2 md:grid-cols-12 animate-in fade-in duration-150"
+            <div class="grid grid-cols-1 gap-2 p-2 md:grid-cols-12 animate-in fade-in duration-150"
                 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'view-mode-payment'; ?>wire:key="view-mode-payment">
                 
                 <div class="md:col-span-9 space-y-4">
                     
                     <div>
-                        <h3 class="text-xs font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300 mb-2">
-                            Table & Member Info</h3>
+                        <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300 ">
+                            Table </h3>
                         <div class="flex items-center gap-2">
                             <div class="relative flex-1 flex gap-2">
                                 <div class="w-1/4">
@@ -594,15 +594,15 @@
                     </div>
 
                     
-                    <div class="flex items-center justify-between pt-1">
-                        <h3 class="text-xs font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">Select
+                    <div class="flex items-center justify-between ">
+                        <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300">Select
                             Payment Method</h3>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center ">
                             <div
-                                class="flex items-center justify-between h-9  px-2  gap-1">
-                                <div class="flex items-center justify-between h-11 px-2 gap-3">
+                                class="flex items-center justify-between h-9  gap-1">
+                                <div class="flex items-center justify-between h-11 gap-3">
                                     <button type="button" wire:click="previousPage"
-                                        class="p-3 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg transition">
+                                        class="p-3 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
                                         <img src="/assets/icons/arrow.png" class="rotate-90" width="10" height="10" alt="Up">
                                     </button>
                                 </div>    
@@ -618,11 +618,9 @@
                         </div>
                     </div>
 
-                    <hr class="border-gray-200 dark:border-gray-800 my-2" />
-
                     
                     <div
-                        class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-lg p-2">
+                        class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-sm p-2 pb-40 ">
                         <?php
                             $methods = [
                                 ['id' => 'promo', 'name' => 'ADD PROMO', 'color' => '#F29C12', 'text' => '#FFFFFF'],
@@ -643,7 +641,7 @@
                                 wire:click="openOtherCostModal" <?php else: ?>
                                     wire:click="$set('paymentMethod', '<?php echo e($method['id']); ?>'); $set('selectedPaymentLabel', '<?php echo e($method['name']); ?> Payment'); $set('paymentModalOpen', true);"
                                 <?php endif; ?>
-                                class="group flex min-h-[120px] w-full flex-col items-center justify-center overflow-hidden rounded-xs border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
+                                class="group flex min-h-[150px] w-full flex-col items-center justify-center overflow-hidden rounded-xs border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
                                 style="background-color: <?php echo e($method['color']); ?>;">
                                 <div class="text-center p-3 w-full h-full flex items-center justify-center">
                                     <p class="text-xs font-black uppercase leading-snug tracking-wider"
@@ -657,58 +655,53 @@
                     </div>
 
                     
-                    <div class="grid grid-cols-2  gap-4 mt-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <div class="space-y-3 ">
+                    <div class="grid grid-cols-2  gap-1  bg-gray-50 p-2 rounded-sm border border-gray-200 ">
+                        <div class="space-y-1 ">
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Voucher
+                                <label class="block text-[11px] font-bold text-black tracking-wider">Voucher
                                     Purchase</label>
-                                <div class="grid grid-cols-2 gap-2">
+                                <div class="grid grid-cols-6 gap-2">
                                     <input type="text" wire:model.live="voucherPaidCount" placeholder="Qty / Kode"
-                                        class="w-full h-10 border border-gray-300 rounded-lg bg-white px-3 text-xs" />
+                                        class="col-span-1 w-full h-10 border border-gray-300 rounded-sm bg-gray-200 px-3 text-xs" />
                                     <input type="number" wire:model.live="voucherPaidAmount" placeholder="Nominal Rp"
-                                        class="w-full h-10 border border-gray-300 rounded-lg bg-white px-3 text-xs" />
+                                        class="col-span-5 w-full h-10 border border-gray-300 rounded-sm bg-gray-200 px-3 text-xs" />
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Total
+                                <label class="block text-[11px] font-bold text-black  tracking-wider">Total
                                     Payment</label>
                                 <input type="text" disabled
                                     value="<?php echo e($cashReceived ? 'Rp ' . number_format((int) preg_replace('/\D+/', '', $cashReceived), 0, ',', '.') : ''); ?>"
                                     placeholder="Belum ada pembayaran"
-                                    class="w-full h-10 border border-gray-300 font-bold text-gray-700 rounded-lg bg-gray-100 px-3 text-sm cursor-not-allowed" />
+                                    class="w-full h-10 border border-gray-300 font-bold text-gray-700 rounded-sm bg-gray-200 px-3 text-sm cursor-not-allowed" />
                             </div>
                         </div>
-                        <div class="space-y-3">
+                        <div class="space-y-1">
                             <div>
                                 <label
-                                    class="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Outstanding</label>
+                                    class="block text-[11px] font-bold text-black  tracking-wider">Outstanding</label>
                                 <input type="text" readonly placeholder="Rp 0"
                                     value="<?php echo e(number_format(max(0, $total - (int) preg_replace('/\D+/', '', $cashReceived ?? '0')), 0, ',', '.')); ?>"
-                                    class="w-full h-10 border border-gray-300 rounded-lg bg-gray-100 px-3 text-xs font-semibold text-red-600 cursor-not-allowed" />
+                                    class="w-full h-10 border border-gray-300 rounded-sm bg-gray-100 px-3 text-xs font-semibold text-black cursor-not-allowed" />
                             </div>
                             <div>
                                 <label
-                                    class="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Change</label>
+                                    class="block text-[11px] font-bold text-black  tracking-wider">Change</label>
                                 <input type="text" readonly placeholder="Rp 0"
                                     value="<?php echo e(number_format((int) $cashChange, 0, ',', '.')); ?>"
-                                    class="w-full h-10 border border-gray-300 rounded-lg bg-gray-100 px-3 text-xs font-bold text-green-600 cursor-not-allowed" />
+                                    class="w-full h-10 border border-gray-300 rounded-sm bg-gray-100 px-3 text-xs font-bold text-black cursor-not-allowed" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 
-                <div class="md:col-span-3 space-y-1">
-                    <div class=" flex flex-col justify-end ">
-                        <button type="button" wire:click="$set('viewMode', 'menu')"
-                            class="w-full h-11 bg-gray-500 hover:bg-gray-600 text-white text-xs font-bold rounded-lg transition shadow-sm uppercase tracking-wider">
-                            ← Kembali ke Edit Menu Pesanan
-                        </button>
-                    </div>
+                <div class="md:col-span-3 space-y-1 ">
+                    
 
-                    <div class="overflow-hidden border border-gray-200 bg-white shadow-sm rounded-xl flex flex-col">
+                    <div class="overflow-hidden border border-gray-200 bg-white p-8 pb-20 pt-4 shadow-sm rounded-xs flex flex-col">
                         <div
-                            class="p-4 flex-1 min-h-[440px] max-h-[440px] overflow-y-auto bg-gray-50 font-mono text-[11px] leading-relaxed custom-scrollbar">
+                            class="p-4 flex-1 min-h-[500px] max-h-[440px] overflow-y-auto bg-gray-50 font-mono text-[11px] leading-relaxed custom-scrollbar border border-black">
 
                             <?php
                                 $isDineIn = $orderType === 'dine_in';
@@ -721,7 +714,7 @@
                             ?>
 
                             
-                            <div class="text-center space-y-0.5">
+                            <div class="text-center space-y-0.5 ">
                                 <p class="font-bold text-xs uppercase text-gray-900">
                                     <?php echo e(cache('setting')?->company_name ?? 'ALAS BU YANTI'); ?>
 
@@ -834,35 +827,27 @@
 
                             </div>
                         </div>
-
-                        
-                        <div class="p-4 bg-white border-t border-gray-100 space-y-2">
-                            <div class="grid grid-cols-3 gap-2 w-full">
+                    </div>
+                    <div class=" bg-white space-y-1">
+                            <div class="grid grid-cols-4 w-full">
                                 <button type="button"
-                                    class="h-12 w-full flex items-center justify-center bg-gray-100 rounded-lg border border-gray-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                                        stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-                                    </svg>
+                                    class="col-span-1 h-10 w-full flex items-center justify-center bg-brand-500 rounded-sm border border-gray-300">
+                                    <img src="/assets/icons/arrow.png" class="rotate-180" width="10" height="10" alt="Up">
                                 </button>
                                 <button type="button"
-                                    class="h-12 w-full flex items-center justify-center bg-gray-100 rounded-lg border border-gray-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                                        stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                    </svg>
+                                    class="col-span-1 h-10 w-full flex items-center justify-center bg-brand-500 rounded-sm border border-gray-300">
+                                    <img src="/assets/icons/arrow.png"  width="10" height="10" alt="Up">
                                 </button>
                                 <button type="button"
-                                    class="w-full h-12 bg-white border border-gray-300 text-gray-700 text-[10px] font-bold rounded-lg uppercase shadow-sm">
+                                    class="col-span-2 w-full h-10 bg-brand-500 border border-gray-300 text-white text-[10px]  rounded-sm  shadow-sm">
                                     Purchase Voucher
                                 </button>
                             </div>
                             <button type="button" wire:click="savePayment"
-                                class="w-full h-14 bg-brand-500 text-white font-black rounded-lg shadow-md transition text-sm tracking-widest uppercase">
+                                class="w-full h-10 bg-brand-500 text-white font-black rounded-sm shadow-md transition text-sm tracking-widest">
                                 Save Payment
                             </button>
                         </div>
-                    </div>
                 </div>
             </div>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>

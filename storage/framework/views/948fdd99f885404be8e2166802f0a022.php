@@ -131,4 +131,4 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
             </div>
         </div>
     </div>
-</div><?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/livewire/auth/sign-in-page.blade.php ENDPATH**/ ?>
+</div><?php /**PATH D:\farhan\projects\project-freelance\pos-restoran-v2\resources\views/livewire/auth/sign-in-page.blade.php ENDPATH**/ ?>

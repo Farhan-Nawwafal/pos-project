@@ -245,7 +245,11 @@
                             
                             <div
                                 class="<?php echo e(($orderType == 'dine_in' && $selectedTableId) ? 'col-span-10' : 'col-span-12'); ?> flex items-center gap-1">
+<<<<<<< HEAD
                                 <input wire:model.live.debounce.300ms="search" type="text"
+=======
+                                <input wire:model.live.debounce.300ms="test" type="text"
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                     placeholder="Information will be printed on checker printout"
                                     class="w-full h-8 px-2 border border-gray-300 bg-white text-xs rounded-sm transition shadow-sm outline-none" />
 
@@ -276,7 +280,11 @@
                                     <img src="/assets/icons/search.png" alt="Search" class="w-3 h-3 opacity-50 dark:invert">
                                 </div>
                                 <input wire:model.live.debounce.300ms="search" type="text"
+<<<<<<< HEAD
                                     placeholder="Information will be printed on checker printout"
+=======
+                                    placeholder="Search menu / code"
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                     class="w-full h-8 px-2 pl-15 border border-gray-300 bg-white text-xs rounded-sm transition shadow-sm outline-none" />
                             </div>
                             <button type="button"
@@ -290,7 +298,11 @@
                                         class="p-3 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg transition">
                                         <img src="/assets/icons/arrow.png" class="rotate-90" width="10" height="10" alt="Up">
                                     </button>
+<<<<<<< HEAD
                                     <span class="text-sm font-semibold text-gray-800 dark:text-white whitespace-nowrap">
+=======
+                                    <span class="text-sm text-gray-800 dark:text-white whitespace-nowrap">
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                         <?php echo e($productPage); ?> of <?php echo e(ceil(count($this->productCards) / 16)); ?>
 
                                     </span>
@@ -511,7 +523,11 @@
 
                                 
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType === 'dine_in'): ?>
+<<<<<<< HEAD
                                     
+=======
+
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                     <div class="col-span-2">
                                         <button type="button" wire:click="saveAsPending" <?php if(count($cartItems) === 0): echo 'disabled'; endif; ?>
                                             class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 shadow-sm transition text-xs tracking-wider">
@@ -560,14 +576,23 @@
             </div>
         <?php else: ?>
             
+<<<<<<< HEAD
             <div class="grid grid-cols-1 gap-6 p-2 md:grid-cols-12 animate-in fade-in duration-150"
+=======
+            <div class="grid grid-cols-1 gap-2 p-2 md:grid-cols-12 animate-in fade-in duration-150"
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'view-mode-payment'; ?>wire:key="view-mode-payment">
                 
                 <div class="md:col-span-9 space-y-4">
                     
                     <div>
+<<<<<<< HEAD
                         <h3 class="text-xs font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300 mb-2">
                             Table & Member Info</h3>
+=======
+                        <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300 ">
+                            Table </h3>
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                         <div class="flex items-center gap-2">
                             <div class="relative flex-1 flex gap-2">
                                 <div class="w-1/4">
@@ -594,6 +619,7 @@
                     </div>
 
                     
+<<<<<<< HEAD
                     <div class="flex items-center justify-between pt-1">
                         <h3 class="text-xs font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">Select
                             Payment Method</h3>
@@ -606,6 +632,20 @@
                                         <img src="/assets/icons/arrow.png" class="rotate-90" width="10" height="10" alt="Up">
                                     </button>
                                 </div>    
+=======
+                    <div class="flex items-center justify-between ">
+                        <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300">Select
+                            Payment Method</h3>
+                        <div class="flex items-center ">
+                            <div
+                                class="flex items-center justify-between h-9  gap-1">
+                                <div class="flex items-center justify-between h-11 gap-3">
+                                    <button type="button" wire:click="previousPage"
+                                        class="p-3 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
+                                        <img src="/assets/icons/arrow.png" class="rotate-90" width="10" height="10" alt="Up">
+                                    </button>
+                                </div>
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                 <span class="text-xs font-bold text-gray-800 whitespace-nowrap"><?php echo e($paymentPage); ?> of
                                     1</span>
                                 <div class="flex items-center justify-between h-11 px-2 gap-3">
@@ -613,16 +653,26 @@
                                         class="p-3 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg transition">
                                         <img src="/assets/icons/arrow.png" class="rotate-270" width="10" height="10" alt="Up">
                                     </button>
+<<<<<<< HEAD
                                 </div>    
+=======
+                                </div>
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                             </div>
                         </div>
                     </div>
 
+<<<<<<< HEAD
                     <hr class="border-gray-200 dark:border-gray-800 my-2" />
 
                     
                     <div
                         class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-lg p-2">
+=======
+                    
+                    <div
+                        class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-sm p-2 pb-40 ">
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                         <?php
                             $methods = [
                                 ['id' => 'promo', 'name' => 'ADD PROMO', 'color' => '#F29C12', 'text' => '#FFFFFF'],
@@ -643,7 +693,11 @@
                                 wire:click="openOtherCostModal" <?php else: ?>
                                     wire:click="$set('paymentMethod', '<?php echo e($method['id']); ?>'); $set('selectedPaymentLabel', '<?php echo e($method['name']); ?> Payment'); $set('paymentModalOpen', true);"
                                 <?php endif; ?>
+<<<<<<< HEAD
                                 class="group flex min-h-[120px] w-full flex-col items-center justify-center overflow-hidden rounded-xs border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
+=======
+                                class="group flex min-h-[150px] w-full flex-col items-center justify-center overflow-hidden rounded-xs border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                 style="background-color: <?php echo e($method['color']); ?>;">
                                 <div class="text-center p-3 w-full h-full flex items-center justify-center">
                                     <p class="text-xs font-black uppercase leading-snug tracking-wider"
@@ -657,6 +711,7 @@
                     </div>
 
                     
+<<<<<<< HEAD
                     <div class="grid grid-cols-2  gap-4 mt-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <div class="space-y-3 ">
                             <div>
@@ -671,10 +726,27 @@
                             </div>
                             <div>
                                 <label class="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Total
+=======
+                    <div class="grid grid-cols-2  gap-1  bg-gray-50 p-2 rounded-sm border border-gray-200 ">
+                        <div class="space-y-1 ">
+                            <div>
+                                <label class="block text-[11px] font-bold text-black tracking-wider">Voucher
+                                    Purchase</label>
+                                <div class="grid grid-cols-6 gap-2">
+                                    <input type="text" wire:model.live="voucherPaidCount" placeholder="Qty / Kode"
+                                        class="col-span-1 w-full h-10 border border-gray-300 rounded-sm bg-gray-200 px-3 text-xs" />
+                                    <input type="number" wire:model.live="voucherPaidAmount" placeholder="Nominal Rp"
+                                        class="col-span-5 w-full h-10 border border-gray-300 rounded-sm bg-gray-200 px-3 text-xs" />
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-black  tracking-wider">Total
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                     Payment</label>
                                 <input type="text" disabled
                                     value="<?php echo e($cashReceived ? 'Rp ' . number_format((int) preg_replace('/\D+/', '', $cashReceived), 0, ',', '.') : ''); ?>"
                                     placeholder="Belum ada pembayaran"
+<<<<<<< HEAD
                                     class="w-full h-10 border border-gray-300 font-bold text-gray-700 rounded-lg bg-gray-100 px-3 text-sm cursor-not-allowed" />
                             </div>
                         </div>
@@ -692,12 +764,32 @@
                                 <input type="text" readonly placeholder="Rp 0"
                                     value="<?php echo e(number_format((int) $cashChange, 0, ',', '.')); ?>"
                                     class="w-full h-10 border border-gray-300 rounded-lg bg-gray-100 px-3 text-xs font-bold text-green-600 cursor-not-allowed" />
+=======
+                                    class="w-full h-10 border border-gray-300 font-bold text-gray-700 rounded-sm bg-gray-200 px-3 text-sm cursor-not-allowed" />
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-black  tracking-wider">Outstanding</label>
+                                <input type="text" readonly placeholder="Rp 0"
+                                    value="<?php echo e(number_format(max(0, $total - (int) preg_replace('/\D+/', '', $cashReceived ?? '0')), 0, ',', '.')); ?>"
+                                    class="w-full h-10 border border-gray-300 rounded-sm bg-gray-100 px-3 text-xs font-semibold text-black cursor-not-allowed" />
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-black  tracking-wider">Change</label>
+                                <input type="text" readonly placeholder="Rp 0"
+                                    value="<?php echo e(number_format((int) $cashChange, 0, ',', '.')); ?>"
+                                    class="w-full h-10 border border-gray-300 rounded-sm bg-gray-100 px-3 text-xs font-bold text-black cursor-not-allowed" />
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                             </div>
                         </div>
                     </div>
                 </div>
 
                 
+<<<<<<< HEAD
                 <div class="md:col-span-3 space-y-1">
                     <div class=" flex flex-col justify-end ">
                         <button type="button" wire:click="$set('viewMode', 'menu')"
@@ -709,6 +801,14 @@
                     <div class="overflow-hidden border border-gray-200 bg-white shadow-sm rounded-xl flex flex-col">
                         <div
                             class="p-4 flex-1 min-h-[440px] max-h-[440px] overflow-y-auto bg-gray-50 font-mono text-[11px] leading-relaxed custom-scrollbar">
+=======
+                <div class="md:col-span-3 space-y-1 ">
+                    
+
+                    <div class="overflow-hidden border border-gray-200 bg-white p-8 pb-20 pt-4 shadow-sm rounded-xs flex flex-col">
+                        <div
+                            class="p-4 flex-1 min-h-[500px] max-h-[440px] overflow-y-auto bg-gray-50 font-mono text-[11px] leading-relaxed custom-scrollbar border border-black">
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
 
                             <?php
                                 $isDineIn = $orderType === 'dine_in';
@@ -721,7 +821,11 @@
                             ?>
 
                             
+<<<<<<< HEAD
                             <div class="text-center space-y-0.5">
+=======
+                            <div class="text-center space-y-0.5 ">
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                 <p class="font-bold text-xs uppercase text-gray-900">
                                     <?php echo e(cache('setting')?->company_name ?? 'ALAS BU YANTI'); ?>
 
@@ -834,6 +938,7 @@
 
                             </div>
                         </div>
+<<<<<<< HEAD
 
                         
                         <div class="p-4 bg-white border-t border-gray-100 space-y-2">
@@ -854,15 +959,37 @@
                                 </button>
                                 <button type="button"
                                     class="w-full h-12 bg-white border border-gray-300 text-gray-700 text-[10px] font-bold rounded-lg uppercase shadow-sm">
+=======
+                    </div>
+                    <div class=" bg-white space-y-1">
+                            <div class="grid grid-cols-4 w-full">
+                                <button type="button"
+                                    class="col-span-1 h-10 w-full flex items-center justify-center bg-brand-500 rounded-sm border border-gray-300">
+                                    <img src="/assets/icons/arrow.png" class="rotate-180" width="10" height="10" alt="Up">
+                                </button>
+                                <button type="button"
+                                    class="col-span-1 h-10 w-full flex items-center justify-center bg-brand-500 rounded-sm border border-gray-300">
+                                    <img src="/assets/icons/arrow.png"  width="10" height="10" alt="Up">
+                                </button>
+                                <button type="button"
+                                    class="col-span-2 w-full h-10 bg-brand-500 border border-gray-300 text-white text-[10px]  rounded-sm  shadow-sm">
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                                     Purchase Voucher
                                 </button>
                             </div>
                             <button type="button" wire:click="savePayment"
+<<<<<<< HEAD
                                 class="w-full h-14 bg-brand-500 text-white font-black rounded-lg shadow-md transition text-sm tracking-widest uppercase">
                                 Save Payment
                             </button>
                         </div>
                     </div>
+=======
+                                class="w-full h-10 bg-brand-500 text-white font-black rounded-sm shadow-md transition text-sm tracking-widest">
+                                Save Payment
+                            </button>
+                        </div>
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa
                 </div>
             </div>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -3058,4 +3185,9 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
         </div>
         </template>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+<<<<<<< HEAD
 </div><?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/livewire/pos/pos-page.blade.php ENDPATH**/ ?>
+=======
+</div>
+<?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/livewire/pos/pos-page.blade.php ENDPATH**/ ?>
+>>>>>>> de79a29d45ad17abf39ef6aa654271e7287087fa

@@ -175,4 +175,4 @@ window.addEventListener('resize', checkMobile);">
 </body>
 
 </html>
-<?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/layouts/fullscreen-layout.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\farhan\projects\project-freelance\pos-restoran-v2\resources\views/layouts/fullscreen-layout.blade.php ENDPATH**/ ?>
