@@ -1,6 +1,6 @@
 <div>
     <aside id="sidebar"
-        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-gray-900 dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
+        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-[#212C32] text-[#212C32] h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
         x-data="{
             openSubmenus: {},
             init() {
