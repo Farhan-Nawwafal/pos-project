@@ -117,7 +117,7 @@ class Transaction extends Model
 
     public function diningTable(): BelongsTo
     {
-        return $this->belongsTo(DiningTable::class);
+        return $this->belongsTo(DiningTable::class, 'dining_table_id', 'id');
     }
 
     public function member(): BelongsTo
@@ -175,12 +175,12 @@ class Transaction extends Model
             }
 
             // If we don't have both letters and numbers, regenerate
-            if (! $hasLetter || ! $hasNumber) {
+            if (!$hasLetter || !$hasNumber) {
                 continue;
             }
 
             $exists = self::where('code', $code)->exists();
-            if (! $exists) {
+            if (!$exists) {
                 return $code;
             }
 
