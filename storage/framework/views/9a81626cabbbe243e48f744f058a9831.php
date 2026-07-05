@@ -3044,4 +3044,4 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
         </template>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 </div>
-<?php /**PATH D:\farhan\project-freelance\pos-restoran-v2\resources\views/livewire/pos/pos-page.blade.php ENDPATH**/ ?>
+<?php /**PATH D:\farhan\projects\project-freelance\pos-restoran-v2\resources\views/livewire/pos/pos-page.blade.php ENDPATH**/ ?>

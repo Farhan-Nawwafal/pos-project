@@ -241,7 +241,7 @@
                             {{-- KONDISI DINAMIS: col-span-10 jika dine_in+meja, col-span-12 jika take_away atau lainnya --}}
                             <div
                                 class="{{ ($orderType == 'dine_in' && $selectedTableId) ? 'col-span-10' : 'col-span-12' }} flex items-center gap-1">
-                                <input wire:model.live.debounce.300ms="search" type="text"
+                                <input wire:model.live.debounce.300ms="test" type="text"
                                     placeholder="Information will be printed on checker printout"
                                     class="w-full h-8 px-2 border border-gray-300 bg-white text-xs rounded-sm transition shadow-sm outline-none" />
 
@@ -272,7 +272,7 @@
                                     <img src="/assets/icons/search.png" alt="Search" class="w-3 h-3 opacity-50 dark:invert">
                                 </div>
                                 <input wire:model.live.debounce.300ms="search" type="text"
-                                    placeholder="Information will be printed on checker printout"
+                                    placeholder="Search menu / code"
                                     class="w-full h-8 px-2 pl-15 border border-gray-300 bg-white text-xs rounded-sm transition shadow-sm outline-none" />
                             </div>
                             <button type="button"
@@ -286,7 +286,7 @@
                                         class="p-3 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg transition">
                                         <img src="/assets/icons/arrow.png" class="rotate-90" width="10" height="10" alt="Up">
                                     </button>
-                                    <span class="text-sm font-semibold text-gray-800 dark:text-white whitespace-nowrap">
+                                    <span class="text-sm text-gray-800 dark:text-white whitespace-nowrap">
                                         {{ $productPage }} of {{ ceil(count($this->productCards) / 16) }}
                                     </span>
                                     <button type="button" wire:click="nextPage"
@@ -499,7 +499,7 @@
 
                                 {{-- 1. KONDISI JIKA DINE IN (Mengambil sisa 2 kolom di baris pertama) --}}
                                 @if ($orderType === 'dine_in')
-                                    
+
                                     <div class="col-span-2">
                                         <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                             class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 shadow-sm transition text-xs tracking-wider">
@@ -592,7 +592,7 @@
                                         class="p-3 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
                                         <img src="/assets/icons/arrow.png" class="rotate-90" width="10" height="10" alt="Up">
                                     </button>
-                                </div>    
+                                </div>
                                 <span class="text-xs font-bold text-gray-800 whitespace-nowrap">{{ $paymentPage }} of
                                     1</span>
                                 <div class="flex items-center justify-between h-11 px-2 gap-3">
@@ -600,7 +600,7 @@
                                         class="p-3 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg transition">
                                         <img src="/assets/icons/arrow.png" class="rotate-270" width="10" height="10" alt="Up">
                                     </button>
-                                </div>    
+                                </div>
                             </div>
                         </div>
                     </div>
