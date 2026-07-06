@@ -74,8 +74,4 @@ $classes = implode(' ', [$baseClasses, $typeClasses, $variantClasses]);
     <?php echo e($slot); ?>
 
 </div>
-<<<<<<<< HEAD:storage/framework/views/b0f2e440c81bf569a42c15d590229147.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/components/badge.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\components\badge.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/c69856b0e41578064bea9b1d94727f19.php

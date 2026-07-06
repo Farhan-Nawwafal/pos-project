@@ -8,8 +8,4 @@
         </clipPath>
     </defs>
 </svg>
-<<<<<<<< HEAD:storage/framework/views/6cc4752b3b29005c2be5d8d8fccba397.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/components/icons/alert.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\components\icons\alert.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/51e31d691ec890d0b84931447b1ed335.php

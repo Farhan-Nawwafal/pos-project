@@ -57,8 +57,4 @@ unset($__defined_vars, $__key, $__value); ?>
 
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     </div>
-<<<<<<<< HEAD:storage/framework/views/1889c04d86ecab1ed129abc76852b2d7.php
 </div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/common/dropdown-menu.blade.php ENDPATH**/ ?>
-========
-</div><?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\components\common\dropdown-menu.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/4471201e4c1db9418bbc58f2e5693f04.php

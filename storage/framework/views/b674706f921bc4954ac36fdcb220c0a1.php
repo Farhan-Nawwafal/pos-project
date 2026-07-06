@@ -64,8 +64,4 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php $component = $__componentOriginal12cb286571f553eebcbe98210b217f94; ?>
 <?php unset($__componentOriginal12cb286571f553eebcbe98210b217f94); ?>
 <?php endif; ?>
-<<<<<<<< HEAD:storage/framework/views/b674706f921bc4954ac36fdcb220c0a1.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/components/formatted-source.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\components\formatted-source.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/86789a04cf587218f15074b3310f8b30.php

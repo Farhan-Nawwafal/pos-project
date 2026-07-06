@@ -67,7 +67,7 @@
                 .isMobileOpen
         }" 
         <!-- Logo Section -->
-        <div class="pt-1.5 pb-2 flex items-center gap-3" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
+        <div class="pt-1 pb-1 bg-white/10 flex items-center gap-3" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
             'justify-center' :
             'justify-start'">
 
@@ -83,9 +83,9 @@
                     alt="Logo" width="140" />
 
                 <!-- Logo ICON (WAJIB beda file) -->
+                
                 <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
                     x-transition src="<?php echo e(asset('assets/images/logoesb.png')); ?>" alt="Logo Icon" width="40" />
-
             </a>
 
             <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"

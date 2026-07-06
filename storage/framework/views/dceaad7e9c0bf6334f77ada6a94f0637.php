@@ -167,9 +167,4 @@
 <?php endif; ?>
         </div>
     </div>
-<<<<<<<< HEAD:storage/framework/views/dceaad7e9c0bf6334f77ada6a94f0637.php
 </div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/livewire/dashboard-page.blade.php ENDPATH**/ ?>
-========
-</div>
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\livewire\dashboard-page.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/e2c0bbd1b97530a2f6a2ccccc7ee6466.php

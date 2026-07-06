@@ -80,8 +80,4 @@
         </div>
     </div>
 </div>
-<<<<<<<< HEAD:storage/framework/views/ada2db9759a180059841ccaf463d6566.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/ecommerce/monthly-target.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\components\ecommerce\monthly-target.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/b0c2d13c61696dfa092a562859d3a4b7.php

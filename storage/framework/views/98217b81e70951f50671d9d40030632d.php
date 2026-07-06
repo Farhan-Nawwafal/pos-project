@@ -84,9 +84,4 @@ unset($__defined_vars, $__key, $__value); ?>
             </div>
         </div>
     </div>
-<<<<<<<< HEAD:storage/framework/views/98217b81e70951f50671d9d40030632d.php
 </div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/ecommerce/ecommerce-metrics.blade.php ENDPATH**/ ?>
-========
-</div>
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\components\ecommerce\ecommerce-metrics.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/82bfd4818da86d07a6e040ce6b76b1dc.php
