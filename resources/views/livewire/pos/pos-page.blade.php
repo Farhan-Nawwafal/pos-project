@@ -238,10 +238,10 @@
                                 </div>
                             @endif
 
-                            {{-- KONDISI DINAMIS: col-span-10 jika dine_in+meja, col-span-12 jika take_away atau lainnya --}}
+                            {{-- KONDISI DINAMIS: col-span-10 jika dine_in + meja, col-span-12 jika take_away atau lainnya --}}
                             <div
                                 class="{{ ($orderType == 'dine_in' && $selectedTableId) ? 'col-span-10' : 'col-span-12' }} flex items-center gap-1">
-                                <input wire:model.live.debounce.300ms="test" type="text"
+                                <input wire:model.live.debounce.300ms="orderNotes" type="text"
                                     placeholder="Information will be printed on checker printout"
                                     class="w-full h-8 px-2 border border-gray-300 bg-white text-xs rounded-sm transition shadow-sm outline-none" />
 

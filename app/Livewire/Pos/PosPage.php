@@ -3,6 +3,7 @@
 namespace App\Livewire\Pos;
 
 use App\Events\SelfOrderPaymentUpdated;
+use App\Models\CardPayment;
 use App\Models\Category;
 use App\Models\DiningTable;
 use App\Models\Member;
@@ -145,6 +146,8 @@ class PosPage extends Component
 
     public string $customerName = '';
 
+    public string $orderNotes = '';
+
     public ?string $customerPhone = null;
 
     public string $paymentMethod = 'cash';
@@ -189,6 +192,8 @@ class PosPage extends Component
     public string $selectedPaymentLabel = 'Cash Payment';
 
     public $showModal = false;
+
+    public $finalCustomerName = '';
 
     // --- STATE UNTUK PHONE NUMBER ---
     public bool $phoneNumberModalOpen = false;
@@ -708,6 +713,10 @@ class PosPage extends Component
 
     public function selectQuickServicePending(int $transactionId): void
     {
+        $trx = Transaction::query()->find($transactionId);
+        if ($trx && $trx->order_type === 'take_away') {
+            $this->orderNotes = $trx->name !== 'Quick Service' ? $trx->name : '';
+        }
         $this->loadPending($transactionId);
         $this->showQuickServiceWaitlist = false;
     }
@@ -1447,11 +1456,14 @@ class PosPage extends Component
 
         $this->checkoutStep = 1;
 
-        $this->cardBankName = null;
-        $this->cardAccountName = null;
-        $this->cardAmount = null;
-        $this->cardNumber = null;
-        $this->cardVerificationCode = null;
+        $this->cardAmount = '';
+        $this->cardNumber = '';
+        $this->cardVerificationCode = '';
+        $this->cardBankName = '';
+        $this->cardAccountName = '';
+        $this->cardSelfOrderId = '';
+
+        $this->orderNotes = '';
 
         if ($previousOrderType === 'take_away') {
             // Balik ke waitlist Quick Service
@@ -1681,6 +1693,20 @@ class PosPage extends Component
                     ]);
                 }
 
+                if ($this->paymentMethod === 'card') {
+                    $cardAmountValue = (int) preg_replace('/\D+/', '', (string)$this->cardAmount);
+                    CardPayment::create([
+                        'transaction_id' => $newTrx->id, // Menggunakan ID invoice split baru
+                        'cabang_id' => $cabangId,
+                        'amount' => $cardAmountValue > 0 ? $cardAmountValue : $newTrx->total,
+                        'card_number' => $this->cardNumber,
+                        'verification_code' => $this->cardVerificationCode,
+                        'bank_name' => $this->cardBankName,
+                        'account_name' => $this->cardAccountName,
+                        'self_order_id' => $this->cardSelfOrderId ?: null,
+                    ]);
+                }
+
                 // 2. Update transaksi induk (mengurangi menu yang sudah dicabut)
                 TransactionItem::where('transaction_id', $parentTrx->id)->delete();
                 $newParentSubtotal = 0;
@@ -1776,6 +1802,22 @@ class PosPage extends Component
                         'subtotal' => $item['quantity'] * $item['price'],
                         'note' => $item['note'] ?? null,
                     ]);
+                }
+
+                if ($isFinalPayment && $this->paymentMethod === 'card') {
+                    $cardAmountValue = (int) preg_replace('/\D+/', '', (string)$this->cardAmount);
+                    CardPayment::updateOrCreate(
+                        ['transaction_id' => $trx->id],
+                        [
+                            'cabang_id' => $cabangId,
+                            'amount' => $cardAmountValue > 0 ? $cardAmountValue : $this->total,
+                            'card_number' => $this->cardNumber,
+                            'verification_code' => $this->cardVerificationCode,
+                            'bank_name' => $this->cardBankName,
+                            'account_name' => $this->cardAccountName,
+                            'self_order_id' => $this->cardSelfOrderId ?: null,
+                        ]
+                    );
                 }
 
                 if ($isDineIn) {
@@ -2046,10 +2088,21 @@ class PosPage extends Component
         }
 
         $trxId = null;
-        $validated = $this->validate([
-            'customerName' => ['required', 'string', 'max:255'],
+        // Jika take_away, customerName tidak wajib required dari input customer modal karena diganti Order Notes
+        $validationRules = [
+            'customerName' => $this->orderType === 'take_away' ? ['nullable', 'string', 'max:255'] : ['required', 'string', 'max:255'],
             'customerPhone' => ['nullable', 'string', 'max:50'],
-        ]);
+        ];
+        $validated = $this->validate($validationRules);
+
+        if ($this->orderType === 'take_away') {
+            // Jika input Order Notes diisi, pakai itu. Jika tidak, pakai customerName modal, jika kosong baru 'Quick Service'
+            $finalCustomerName = !empty(trim((string)$this->orderNotes))
+                ? trim((string)$this->orderNotes)
+                : (!empty($validated['customerName']) ? $validated['customerName'] : 'Quick Service');
+        } else {
+            $finalCustomerName = $validated['customerName'];
+        }
 
         $manualTypeForPermission = $this->manualDiscountType !== null ? trim((string) $this->manualDiscountType) : '';
         $manualValueForPermission = $this->manualDiscountValue === null ? 0 : (int) $this->manualDiscountValue;
@@ -2064,7 +2117,7 @@ class PosPage extends Component
             return;
         }
 
-        DB::transaction(function () use ($validated, $voucherCampaignId, $voucherCodeId, $voucherCode, &$trxId) {
+        DB::transaction(function () use ($finalCustomerName, $validated, $voucherCampaignId, $voucherCodeId, $voucherCode, &$trxId) {
             $trx = $this->editingTransactionId
                 ? Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first()
                 : null;
@@ -2082,7 +2135,7 @@ class PosPage extends Component
                     'cabang_id' => $cabangId, // Field wajib dari skema tabel kamu
                     'member_id' => $this->memberId,
                     'channel' => 'pos',
-                    'name' => $validated['customerName'],
+                    'name' => $finalCustomerName,
                     'phone' => $validated['customerPhone'] !== '' ? $validated['customerPhone'] : null,
                     'email' => null,
                     'order_type' => $this->orderType,
@@ -2119,7 +2172,7 @@ class PosPage extends Component
             } else {
                 $trx->update([
                     'member_id' => $this->memberId,
-                    'name' => $validated['customerName'],
+                    'name' => $finalCustomerName,
                     'phone' => $validated['customerPhone'] !== '' ? $validated['customerPhone'] : null,
                     'order_type' => $this->orderType,
                     'dining_table_id' => $this->orderType === 'dine_in' ? $this->selectedTableId : null,
@@ -2324,6 +2377,7 @@ class PosPage extends Component
                 : new Transaction();
 
             $previousPaymentStatus = (string) $trx->payment_status;
+            $cabangId = auth()->user()->cabang_id ?? 1;
 
             // Ambil nominal cash (bersihkan karakter non-digit jika ada)
             $cashReceivedValue = $isFinalPayment && $this->paymentMethod === 'cash'
@@ -2370,6 +2424,24 @@ class PosPage extends Component
                     'price' => $item['price'],
                     'subtotal' => $item['quantity'] * $item['price'],
                 ]);
+            }
+
+            if ($isFinalPayment && $this->paymentMethod === 'card') {
+                // Bersihkan nilai nominal cardAmount dari karakter non-digit jika ada formatting rupiah
+                $cardAmountValue = (int) preg_replace('/\D+/', '', (string)$this->cardAmount);
+
+                CardPayment::updateOrCreate(
+                    ['transaction_id' => $trx->id], // mencegah double records jika kasir melakukan re-checkout / edit payment
+                    [
+                        'cabang_id' => $cabangId,
+                        'amount' => $cardAmountValue > 0 ? $cardAmountValue : $this->total,
+                        'card_number' => $this->cardNumber,
+                        'verification_code' => $this->cardVerificationCode,
+                        'bank_name' => $this->cardBankName,
+                        'account_name' => $this->cardAccountName,
+                        'self_order_id' => $this->cardSelfOrderId ?: null,
+                    ]
+                );
             }
 
             if ($isDineIn) {

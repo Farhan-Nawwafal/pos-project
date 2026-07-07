@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Transaction extends Model
@@ -198,5 +199,10 @@ class Transaction extends Model
     public function cashier()
     {
         return $this->belongsTo(User::class, 'payment_processed_by');
+    }
+
+    public function cardPayment(): HasOne
+    {
+        return $this->hasOne(CardPayment::class);
     }
 }

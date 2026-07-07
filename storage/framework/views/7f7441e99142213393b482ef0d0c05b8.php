@@ -3,14 +3,14 @@
     <div>
         <?php if (isset($component)) { $__componentOriginal7a8ebae80cb620ff53481da70e35e7fd = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7a8ebae80cb620ff53481da70e35e7fd = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ecommerce.filter','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ecommerce.filter','data' => ['timeFilter' => $timeFilter,'orderTimeRange' => $orderTimeRange]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ecommerce.filter'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes([]); ?>
+<?php $component->withAttributes(['timeFilter' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($timeFilter),'orderTimeRange' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($orderTimeRange)]); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
@@ -27,7 +27,7 @@
 
     
     <div class="grid grid-cols-12 gap-4 overflow-x-hidden md:gap-6">
-        
+
         <div class="col-span-12 min-w-0 space-y-6 xl:col-span-7">
             <?php if (isset($component)) { $__componentOriginalc07b2e1699f32a6c6657e13682549915 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc07b2e1699f32a6c6657e13682549915 = $attributes; } ?>
@@ -167,4 +167,5 @@
 <?php endif; ?>
         </div>
     </div>
-</div><?php /**PATH D:\farhan\projects\freelance\pos-restoran-v2\resources\views/livewire/dashboard-page.blade.php ENDPATH**/ ?>
+</div>
+<?php /**PATH D:\farhan\projects\freelance\pos-restoran-v2\resources\views/livewire/dashboard-page.blade.php ENDPATH**/ ?>

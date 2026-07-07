@@ -56,64 +56,141 @@ class DashboardPage extends Component
 
     public array $voidItems = [];
 
+    public string $orderTimeRange = '';
+
+    public string $timeFilter = 'today';
+
     public function mount(): void
     {
         $this->authorize('dashboard.access');
 
+        // Set default filter awal grafik ke 7 hari terakhir
         $now = now();
-        $start = $now->copy()->startOfDay();
-        $end = $now->copy()->endOfDay();
-        $currentCabangId = auth()->user()->cabang_id;
+        $this->statisticsFrom = $now->subDays(6)->toDateString();
+        $this->statisticsTo = $now->toDateString();
 
+        // Ambil data dashboard pertama kali (default data hari ini)
+        $this->loadDashboardData();
+    }
+
+    public function updatedTimeFilter(): void
+    {
+        if ($this->timeFilter === 'custom') {
+            $this->orderTimeRange = ''; // Reset custom range string
+            $this->dispatch('init-flatpickr'); // Trigger skrip JS Flatpickr di blade
+        } else {
+            $this->loadDashboardData();
+        }
+    }
+
+    public function updatedOrderTimeRange(): void
+    {
+        $this->loadDashboardData();
+    }
+
+    public function loadDashboardData(): void
+    {
+        $currentCabangId = auth()->user()->cabang_id;
+        $now = now();
+
+        // Evaluasi dan config logic filter waktu (Shortcut & Custom)
+        if ($this->timeFilter === 'custom' && !empty($this->orderTimeRange)) {
+            $dates = explode(' to ', $this->orderTimeRange);
+            if (count($dates) === 2) {
+                $start = Carbon::parse($dates[0])->startOfDay();
+                $end = Carbon::parse($dates[1])->endOfDay();
+            } else {
+                $start = Carbon::parse($dates[0])->startOfDay();
+                $end = Carbon::parse($dates[0])->endOfDay();
+            }
+        } else {
+            // Skenario Pilihan Cepat (Shortcut Macrogroups) permintaan client
+            switch ($this->timeFilter) {
+                case '7_days':
+                    $start = $now->copy()->subDays(6)->startOfDay();
+                    $end = $now->copy()->endOfDay();
+                    break;
+                case '30_days':
+                    $start = $now->copy()->subDays(29)->startOfDay();
+                    $end = $now->copy()->endOfDay();
+                    break;
+                case 'this_month':
+                    $start = $now->copy()->startOfMonth();
+                    $end = $now->copy()->endOfMonth();
+                    break;
+                case '3_months':
+                    $start = $now->copy()->subMonths(3)->startOfDay();
+                    $end = $now->copy()->endOfDay();
+                    break;
+                case '6_months':
+                    $start = $now->copy()->subMonths(6)->startOfDay();
+                    $end = $now->copy()->endOfDay();
+                    break;
+                case '1_year':
+                    $start = $now->copy()->subYear()->startOfDay();
+                    $end = $now->copy()->endOfDay();
+                    break;
+                case 'today':
+                default:
+                    $start = $now->copy()->startOfDay();
+                    $end = $now->copy()->endOfDay();
+                    break;
+            }
+        }
+
+        // Sinkronisasi data visual jangkauan grafik mengikuti filter yang berjalan aktif
+        $this->statisticsFrom = $start->toDateString();
+        $this->statisticsTo = $end->toDateString();
+
+        // 2. QUERY METRIKS DATABASE (Tetap mengalir aman menggunakan variabel $start dan $end yang baru)
         $this->todayRevenueAmount = $this->getRevenueBetween($start, $end);
 
         $this->todayGrossAmount = (int) Transaction::query()
             ->where('cabang_id', $currentCabangId)
             ->whereBetween('created_at', [$start, $end])
             ->whereIn('payment_status', ['paid', 'settlement', 'success', 'partial_refund'])
-            ->whereNull('voided_at') // Jangan hitung yang di-void
-            ->sum('total'); // Kolom total sudah termasuk pajak dan service charge
+            ->whereNull('voided_at')
+            ->sum('total');
 
-        $this->transactionsCount = $this->getTransactionsCount($now);
+        $this->transactionsCount = Transaction::query()
+            ->whereBetween('created_at', [$start, $end])
+            ->count();
 
-        [$this->transactionsDeltaPercent, $this->transactionsDeltaUp] = $this->getTransactionsDelta($now);
+        // Perhitungan delta pembanding (periode sebelumnya yang sama panjangnya)
+        $daysDiff = $start->diffInDays($end) + 1;
+        $previousStart = $start->copy()->subDays($daysDiff);
+        $previousEnd = $end->copy()->subDays($daysDiff);
 
-        $this->todayRevenueAmount = $this->getRevenueBetween($now->copy()->startOfDay(), $now->copy()->endOfDay());
+        $previousCount = Transaction::query()
+            ->whereBetween('created_at', [$previousStart, $previousEnd])
+            ->count();
 
+        $deltaTransactions = $this->transactionsCount - $previousCount;
+        $this->transactionsDeltaPercent = $this->calculateDeltaPercent($this->transactionsCount, $previousCount);
+        $this->transactionsDeltaUp = $deltaTransactions >= 0;
+
+        // Memuat komponen chart, widget, dan summary log fraud lainnya
         $this->loadMonthlyTargetWidget();
-
-        $this->statisticsFrom = $now->copy()->subDays(6)->toDateString();
-        $this->statisticsTo = $now->toDateString();
         $this->loadStatisticsForRange();
+        $this->bestSellingProducts = $this->getBestSellingProductsForRange($start, $end);
+        $this->latestTransactions = $this->getLatestTransactionsForRange($start, $end);
 
-        $this->bestSellingProducts = $this->getBestSellingProducts($now);
-        $this->latestTransactions = $this->getLatestTransactions();
-
-        // Ambil semua log deleted_item hari ini untuk cabang ini
         $itemLogs = Activity::where('log_name', 'deleted_item')
             ->where('properties->cabang_id', $currentCabangId)
-            ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
+            ->whereBetween('created_at', [$start, $end])
             ->get();
 
-        // 1. Hitung DELETED ITEM (Hanya yang tipenya 'reduced' / Pengurangan Qty)
         $this->totalDeletedAmount = $itemLogs->where('properties.type', 'reduced')->sum(function ($log) {
-            $oldQty = $log->getExtraProperty('old_qty');
-            $newQty = $log->getExtraProperty('new_qty');
-            $price = $log->getExtraProperty('price');
-            return ($oldQty - $newQty) * $price;
+            return ($log->getExtraProperty('old_qty') - $log->getExtraProperty('new_qty')) * $log->getExtraProperty('price');
         });
 
-        // 2. Hitung VOID ITEM (Hanya yang tipenya 'removed' / Hapus 1 Baris Menu)
         $this->totalVoidItemAmount = $itemLogs->where('properties.type', 'removed')->sum(function ($log) {
-            $oldQty = $log->getExtraProperty('old_qty');
-            $price = $log->getExtraProperty('price');
-            return $oldQty * $price;
+            return $log->getExtraProperty('old_qty') * $log->getExtraProperty('price');
         });
 
-        // 3. Hitung VOID TRANSACTION (Pembatalan 1 Nota/Nota di-Void total)
         $this->totalVoidAmount = (int) Transaction::whereNotNull('voided_at')
             ->where('cabang_id', $currentCabangId)
-            ->whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])
+            ->whereBetween('created_at', [$start, $end])
             ->sum('subtotal');
     }
 
@@ -130,38 +207,6 @@ class DashboardPage extends Component
         $this->loadStatisticsForRange();
     }
 
-    protected function getTransactionsCount(Carbon $now): int
-    {
-        $todayStart = $now->copy()->startOfDay();
-        $todayEnd = $now->copy()->endOfDay();
-
-        return Transaction::query()
-            ->whereBetween('created_at', [$todayStart, $todayEnd])
-            ->count();
-    }
-
-    protected function getTransactionsDelta(Carbon $now): array
-    {
-        $todayStart = $now->copy()->startOfDay();
-        $todayEnd = $now->copy()->endOfDay();
-
-        $yesterdayStart = $todayStart->copy()->subDay();
-        $yesterdayEnd = $todayEnd->copy()->subDay();
-
-        $todayCount = Transaction::query()
-            ->whereBetween('created_at', [$todayStart, $todayEnd])
-            ->count();
-
-        $yesterdayCount = Transaction::query()
-            ->whereBetween('created_at', [$yesterdayStart, $yesterdayEnd])
-            ->count();
-
-        $delta = $todayCount - $yesterdayCount;
-        $percent = $this->calculateDeltaPercent($todayCount, $yesterdayCount);
-
-        return [$percent, $delta >= 0];
-    }
-
     protected function getRevenueBetween(Carbon $from, Carbon $to): int
     {
         return (int) round(NetSales::netSalesBetween($from, $to));
@@ -172,7 +217,6 @@ class DashboardPage extends Component
         if ($target <= 0) {
             return 0.0;
         }
-
         return min(100.0, round(($value / $target) * 100, 2));
     }
 
@@ -181,7 +225,6 @@ class DashboardPage extends Component
         if ($previous <= 0) {
             return $current > 0 ? 100.0 : 0.0;
         }
-
         return round((($current - $previous) / $previous) * 100, 2);
     }
 
@@ -190,17 +233,12 @@ class DashboardPage extends Component
         if (is_string($amount) && is_numeric($amount)) {
             $amount = str_contains($amount, '.') ? (float) $amount : (int) $amount;
         }
-
         $decimals = is_float($amount) ? 2 : 0;
-
         return 'Rp' . number_format((float) $amount, $decimals, ',', '.');
     }
 
-    protected function getBestSellingProducts(Carbon $now): array
+    protected function getBestSellingProductsForRange(Carbon $from, Carbon $to): array
     {
-        $from = $now->copy()->startOfMonth();
-        $to = $now->copy()->endOfMonth();
-
         $rows = TransactionItem::query()
             ->selectRaw('product_id, SUM(quantity) as sold')
             ->whereHas('transaction', function ($query) use ($from, $to) {
@@ -215,7 +253,6 @@ class DashboardPage extends Component
 
         return $rows->map(function (TransactionItem $item): array {
             $product = $item->product;
-
             return [
                 'name' => $product?->name ?? '-',
                 'image' => $product?->image ?? '/images/product/product-01.jpg',
@@ -224,9 +261,10 @@ class DashboardPage extends Component
         })->all();
     }
 
-    protected function getLatestTransactions(): array
+    protected function getLatestTransactionsForRange(Carbon $from, Carbon $to): array
     {
         $items = Transaction::query()
+            ->whereBetween('created_at', [$from, $to])
             ->with(['member'])
             ->orderByDesc('created_at')
             ->limit(5)
@@ -251,7 +289,6 @@ class DashboardPage extends Component
     protected function loadMonthlyTargetWidget(): void
     {
         $now = now();
-
         $monthStart = $now->copy()->startOfMonth();
         $monthEnd = $monthStart->copy()->endOfMonth();
 
@@ -291,7 +328,6 @@ class DashboardPage extends Component
 
         if ($days <= 90) {
             $rows = NetSales::netSalesByDay($from, $to);
-
             $categories = [];
             $revenue = [];
 
@@ -308,17 +344,10 @@ class DashboardPage extends Component
                 ['name' => 'Revenue', 'data' => $revenue],
             ];
             $this->dispatch('statistics-updated', series: $this->statisticsSeries, categories: $this->statisticsCategories);
-
             return;
         }
 
-        $driver = Transaction::query()->getConnection()->getDriverName();
-        $bucketExpr = $driver === 'sqlite'
-            ? "strftime('%Y-%m-01', t.created_at)"
-            : 'DATE_FORMAT(t.created_at, "%Y-%m-01")';
-
         $rows = NetSales::netSalesByMonth($from, $to);
-
         $categories = [];
         $revenue = [];
 
