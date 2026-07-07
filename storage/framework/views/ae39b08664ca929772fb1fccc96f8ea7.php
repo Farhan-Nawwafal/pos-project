@@ -80,8 +80,4 @@ unset($__defined_vars, $__key, $__value); ?>
     </div>
 </div>
 
-<<<<<<<< HEAD:storage/framework/views/ae39b08664ca929772fb1fccc96f8ea7.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/ecommerce/best-selling-products.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\components\ecommerce\best-selling-products.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/fcd28840f68ac57aa812facef7831ad6.php

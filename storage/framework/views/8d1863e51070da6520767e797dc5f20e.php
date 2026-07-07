@@ -62,8 +62,4 @@
 <?php unset($__componentOriginal2a45ee13943eadc15ee63d255f492356); ?>
 <?php endif; ?>
 </div>
-<<<<<<<< HEAD:storage/framework/views/8d1863e51070da6520767e797dc5f20e.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/components/laravel-ascii-spotlight.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\components\laravel-ascii-spotlight.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/dde778f8b9fca4b82a4ecfcea552364c.php

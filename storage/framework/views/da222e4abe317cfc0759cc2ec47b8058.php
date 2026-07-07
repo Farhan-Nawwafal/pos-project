@@ -131,8 +131,4 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
             </div>
         </div>
     </div>
-<<<<<<<< HEAD:storage/framework/views/da222e4abe317cfc0759cc2ec47b8058.php
 </div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/livewire/auth/sign-in-page.blade.php ENDPATH**/ ?>
-========
-</div><?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\livewire\auth\sign-in-page.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/e7d0c8dab9abbfe030fbb273d5f6b18d.php

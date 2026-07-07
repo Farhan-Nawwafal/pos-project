@@ -70,8 +70,4 @@
         <div wire:ignore id="chartThree" data-series='<?php echo json_encode($series, 15, 512) ?>' data-categories='<?php echo json_encode($categories, 15, 512) ?>' class="w-full min-w-0"></div>
     </div>
 </div>
-<<<<<<<< HEAD:storage/framework/views/723c852d65336414e878181840e14ec6.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/ecommerce/statistics-chart.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\components\ecommerce\statistics-chart.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/25d8a9d78ed1db58db41204f7281d930.php

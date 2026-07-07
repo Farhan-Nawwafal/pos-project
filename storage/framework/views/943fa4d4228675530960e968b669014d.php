@@ -80,8 +80,4 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php endif; ?>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 </div>
-<<<<<<<< HEAD:storage/framework/views/943fa4d4228675530960e968b669014d.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/components/routing-parameter.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\components\routing-parameter.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/b3b650c792e8b8139d7998ffdaf4d61f.php

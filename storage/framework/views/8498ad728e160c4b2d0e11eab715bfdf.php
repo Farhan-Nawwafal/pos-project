@@ -116,8 +116,4 @@ unset($__defined_vars, $__key, $__value); ?>
         <span x-text="copied ? 'Copied to clipboard' : 'Copy as Markdown'"></span>
     </button>
 </div>
-<<<<<<<< HEAD:storage/framework/views/8498ad728e160c4b2d0e11eab715bfdf.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/components/topbar.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\components\topbar.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/9d309177c21031bfe99b31ec749a6d7d.php

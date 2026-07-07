@@ -110,8 +110,4 @@ unset($__defined_vars, $__key, $__value); ?>
         </div>
     </div>
 </div>
-<<<<<<<< HEAD:storage/framework/views/37449b903a720742bffd09ea2a0f64ad.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/ecommerce/metric-summary.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\components\ecommerce\metric-summary.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/5a2bbdc73792a13a38ccd63904a13388.php

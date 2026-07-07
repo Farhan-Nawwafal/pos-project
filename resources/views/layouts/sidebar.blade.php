@@ -1,6 +1,6 @@
 <div>
     <aside id="sidebar"
-        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-gray-900 dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
+        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-[#212C32] text-[#212C32] h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
         x-data="{
             openSubmenus: {},
             init() {
@@ -70,7 +70,7 @@
         @mouseleave="$store.sidebar.setHovered(false)"
         @click.outside="$store.sidebar.isMobileOpen ? $store.sidebar.toggleMobileOpen() : null"> --}}
         <!-- Logo Section -->
-        <div class="pt-1.5 pb-2 flex items-center gap-3" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
+        <div class="pt-1 pb-1 bg-white/10 flex items-center gap-3" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
             'justify-center' :
             'justify-start'">
 
@@ -86,9 +86,9 @@
                     alt="Logo" width="140" />
 
                 <!-- Logo ICON (WAJIB beda file) -->
+                
                 <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
                     x-transition src="{{ asset('assets/images/logoesb.png') }}" alt="Logo Icon" width="40" />
-
             </a>
 
             <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"

@@ -430,8 +430,4 @@
 <?php $component = $__componentOriginalbbd4eeea836234825f7514ed20d2d52d; ?>
 <?php unset($__componentOriginalbbd4eeea836234825f7514ed20d2d52d); ?>
 <?php endif; ?>
-<<<<<<<< HEAD:storage/framework/views/cb1547cd6fe1439ab2c46049f9f7938a.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/show.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\show.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/5b0b4740758932e5c089b6a24a5f22dc.php

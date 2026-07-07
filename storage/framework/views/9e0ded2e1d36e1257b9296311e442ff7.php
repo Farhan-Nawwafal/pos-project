@@ -95,8 +95,4 @@ unset($__defined_vars, $__key, $__value); ?>
     ></div>
     <div x-show="!highlightedCode"><?php echo $fallback; ?></div>
 </div>
-<<<<<<<< HEAD:storage/framework/views/9e0ded2e1d36e1257b9296311e442ff7.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/components/syntax-highlight.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\components\syntax-highlight.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/a0696f959f33e551c52434b531877a1c.php

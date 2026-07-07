@@ -9,8 +9,4 @@
     </clipPath>
   </defs>
 </svg>
-<<<<<<<< HEAD:storage/framework/views/fdba17d941f5e5b0d5160ad90ef368ed.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\Providers/../resources/exceptions/renderer/components/icons/chevrons-up-down.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\vendor\laravel\framework\src\Illuminate\Foundation\resources\exceptions\renderer\components\icons\chevrons-up-down.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/2e61b0b39053c6601d01acf3dcb0e99c.php

@@ -154,8 +154,4 @@
         window.dispatchEvent(new CustomEvent('toast', { detail: payload }));
     };
 </script>
-<<<<<<<< HEAD:storage/framework/views/ca44c4de0c100f7da13bc165b25e383b.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/common/toast-center.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\components\common\toast-center.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/2631549a35b6677e0c0cd38bfbd0c7b5.php

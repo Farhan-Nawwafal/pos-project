@@ -175,8 +175,4 @@ window.addEventListener('resize', checkMobile);">
 </body>
 
 </html>
-<<<<<<<< HEAD:storage/framework/views/3d37c93fd770cb9bb3b0fbe8742ee746.php
 <?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/layouts/fullscreen-layout.blade.php ENDPATH**/ ?>
-========
-<?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views\layouts\fullscreen-layout.blade.php ENDPATH**/ ?>
->>>>>>>> 77fab1855109285eb057b892225d4a691dd8446b:storage/framework/views/ec8e66a390887cb9add3537d901c759c.php
