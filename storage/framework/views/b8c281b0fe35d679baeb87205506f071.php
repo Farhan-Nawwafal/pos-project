@@ -1,10 +1,10 @@
 <div class="flex flex-col h-full">
-
+    
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType === 'dine_in' && !$selectedTableId): ?>
         <div
             class="flex flex-col flex-1 min-h-0 bg-white dark:bg-gray-900 p-2 border border-gray-200 dark:border-gray-800 shadow-sm">
 
-
+            
             <div class="flex flex-wrap items-center gap-2 mb-2 flex-shrink-0">
                 <button type="button" wire:click="chooseOrderType('take_away')"
                     class="px-15 py-4 text-xs font-bold bg-brand-500 border border-gray-300 rounded-xs text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300">
@@ -24,7 +24,7 @@
                     100</button>
             </div>
 
-
+            
             <div class="flex-1 min-h-0 overflow-y-auto  border border-gray-200 pb-8 pr-14 pl-3 ">
                 <div class="grid grid-cols-10 gap-3 md:gap-3 lg:gap-9 xl:gap-20">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $this->tables; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
@@ -78,15 +78,15 @@
                 </div>
             </div>
 
-
+            
             <div class="flex-shrink-0 pt-8  ">
                 <div class="flex items-center gap-2">
                     <span class="px-2.5 py-1 text-xs font-bold bg-yellow-400 text-white "> > 0 minute</span>
                     <span class="px-2.5 py-1 text-xs font-bold bg-[#DD4B39] text-white "> > 0 minute</span>
                     <div class="flex flex-wrap items-center gap-x-45 gap-y-3">
+                        
 
-
-
+                        
                         <div class="flex items-center gap-4 pl-20">
                             <div class="w-4 h-4 bg-[#3C8CBC]  border-[#3C8CBC]"></div>
                             <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Available</span>
@@ -107,11 +107,11 @@
                 </div>
             </div>
         </div>
-
+        
     <?php elseif($orderType === 'take_away' && $showQuickServiceWaitlist): ?>
         <div class="flex flex-col flex-1 min-h-0 bg-white border border-gray-200 shadow-sm">
 
-
+            
             <div class="flex items-center justify-between px-2 py-2 border-b border-gray-200">
                 <div class="flex flex-wrap items-center gap-2">
                     <button type="button" wire:click="chooseOrderType('take_away')"
@@ -126,7 +126,7 @@
                         class="px-6 py-3 text-xs font-bold rounded-xs bg-[#3C8CBC] text-white">
                         51 - 100
                     </button>
-
+                    
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -144,7 +144,7 @@
                 </div>
             </div>
 
-
+            
             <div class="flex items-center justify-between px-4 py-3 bg-gray-100 border-b border-gray-200">
                 <h3 class="text-sm font-semibold text-gray-700">Quick Service List</h3>
                 <button type="button" wire:click="openAddQuickService"
@@ -153,7 +153,7 @@
                 </button>
             </div>
 
-
+            
             <div class="flex-1 overflow-y-auto">
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($this->quickServicePendingList->isEmpty()): ?>
                     <div class="h-full flex items-center justify-center text-sm text-gray-500"
@@ -183,36 +183,36 @@
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </div>
 
-
+            
             <div class="px-4 py-2 border-t border-gray-200 text-right text-xs text-gray-400">
                 0 of <?php echo e($this->quickServicePendingList->count()); ?>
 
             </div>
         </div>
-
+        
     <?php elseif($orderType === 'take_away' || ($orderType === 'dine_in' && $selectedTableId)): ?>
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($viewMode === 'menu'): ?>
             <div class="grid grid-cols-1 gap-2 p-2 md:grid-cols-12" <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'view-mode-menu'; ?>wire:key="view-mode-menu">
 
-
+                
                 <div class="md:col-span-7 space-y-3">
 
-
+                    
                     <div>
-
+                        
                         <div class="grid grid-cols-12 gap-2 mb-1 space-y-1">
-
+                            
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType === 'dine_in' && $selectedTableId): ?>
                                 <h3 class="col-span-1 text-xs font-bold tracking-wide text-black ">
                                     Table:
                                 </h3>
-                                <div class="col-span-10">
+                                <div class="col-span-10"> 
                                     <h3 class="text-xs font-bold tracking-wide text-black ">
                                         Order Notes
                                     </h3>
                                 </div>
 
-
+                                
                             <?php elseif($orderType === 'take_away'): ?>
                                 <div class="col-span-10">
                                     <h3 class="text-xs font-bold tracking-wide text-gray-500 dark:text-gray-400">
@@ -220,7 +220,7 @@
                                     </h3>
                                 </div>
 
-
+                                
                             <?php else: ?>
                                 <div class="col-span-12">
                                     <h3 class="text-xs font-bold tracking-wide text-gray-500 dark:text-gray-400">
@@ -230,7 +230,7 @@
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
 
-
+                        
                         <div class="grid grid-cols-12 gap-2 items-center">
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType == 'dine_in' && $selectedTableId): ?>
                                 <div class="col-span-2">
@@ -242,7 +242,7 @@
                                 </div>
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-
+                            
                             <div
                                 class="<?php echo e(($orderType == 'dine_in' && $selectedTableId) ? 'col-span-10' : 'col-span-12'); ?> flex items-center gap-1">
                                 <input wire:model.live.debounce.300ms="test" type="text"
@@ -267,7 +267,7 @@
                         </div>
                     </div>
 
-
+                    
                     <div>
                         <div class="flex items-center">
                             <div class="relative flex-1">
@@ -303,12 +303,12 @@
                         </div>
                     </div>
 
-
+                    
                     <div class="text-brand-500 font-semibold text-sm">
                         <h3>Menu</h3>
                     </div>
 
-
+                    
                     <?php
                         $perPage = 16;
                         $displayProducts = array_slice($this->productCards, ($productPage - 1) * $perPage, $perPage);
@@ -343,7 +343,7 @@
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </div>
 
-
+                    
                     <div class="space-y-2">
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType === 'take_away'): ?>
                             <div class="grid grid-cols-3 w-full gap-1">
@@ -388,11 +388,11 @@
                             </div>
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </div>
-                </div>
+                </div> 
 
-
+                
                 <div class="md:col-span-5 pt-3 space-y-1">
-
+                    
                     <div class="flex items-center gap-1">
                         <div class="w-[10%]">
                             <button type="button" wire:click="$set('deliveryCostModalOpen', true)"
@@ -419,7 +419,7 @@
                         </div>
                     </div>
 
-
+                    
                     <div
                         class="flex flex-col max-h-[620px] min-h-[620px] border border-gray-300 bg-white rounded-sm overflow-hidden shadow-sm">
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(count($cartItems) > 0): ?>
@@ -463,7 +463,7 @@
                             </div>
                         </div>
 
-
+                        
                         <?php $totalQty = collect($cartItems)->sum('quantity'); ?>
                         <div class=" border-t border-gray-200 shrink-0 p-2 ">
                             <div class="grid grid-cols-3 items-center justify-end text-right py-1 gap-40">
@@ -493,7 +493,7 @@
                                 $isDineIn = $orderType === 'dine_in';
                             ?>
 
-
+                            
                             <div class="grid grid-cols-4 space-y-1 w-full divide-x divide-black/20">
                                 <div class="col-span-1">
                                     <button type="button"
@@ -509,7 +509,7 @@
                                     </button>
                                 </div>
 
-
+                                
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType === 'dine_in'): ?>
 
                                     <div class="col-span-2">
@@ -519,7 +519,7 @@
                                         </button>
                                     </div>
 
-
+                                
                                 <?php elseif($orderType === 'take_away'): ?>
                                     <div class="col-span-2">
                                         <button type="button" wire:click="printBill"
@@ -537,7 +537,7 @@
                                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </div>
 
-
+                            
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($isEditing): ?>
                                 <div class="grid grid-cols-3 w-full divide-x divide-black/20 ">
                                     <button type="button" wire:click="printBill"
@@ -559,12 +559,12 @@
                 </div>
             </div>
         <?php else: ?>
-
+            
             <div class="grid grid-cols-1 gap-2 p-2 md:grid-cols-12 animate-in fade-in duration-150"
                 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'view-mode-payment'; ?>wire:key="view-mode-payment">
-
+                
                 <div class="md:col-span-9 space-y-4">
-
+                    
                     <div>
                         <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300 ">
                             Table </h3>
@@ -593,7 +593,7 @@
                         </div>
                     </div>
 
-
+                    
                     <div class="flex items-center justify-between ">
                         <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300">Select
                             Payment Method</h3>
@@ -618,7 +618,7 @@
                         </div>
                     </div>
 
-
+                    
                     <div
                         class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-sm p-2 pb-40 ">
                         <?php
@@ -654,7 +654,7 @@
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     </div>
 
-
+                    
                     <div class="grid grid-cols-2  gap-1  bg-gray-50 p-2 rounded-sm border border-gray-200 ">
                         <div class="space-y-1 ">
                             <div>
@@ -695,9 +695,9 @@
                     </div>
                 </div>
 
-
+                
                 <div class="md:col-span-3 space-y-1 ">
-
+                    
 
                     <div class="overflow-hidden border border-gray-200 bg-white p-8 pb-20 pt-4 shadow-sm rounded-xs flex flex-col">
                         <div
@@ -713,7 +713,7 @@
                                 $purposeText = $isDineIn ? 'DINE IN' : 'TAKE AWAY';
                             ?>
 
-
+                            
                             <div class="text-center space-y-0.5 ">
                                 <p class="font-bold text-xs uppercase text-gray-900">
                                     <?php echo e(cache('setting')?->company_name ?? 'ALAS BU YANTI'); ?>
@@ -728,7 +728,7 @@
 
                             <div class="border-b border-dashed border-gray-300 my-2"></div>
 
-
+                            
                             <div class="space-y-0.5 text-[10px] text-gray-700">
                                 <div class="flex"><span class="w-20 shrink-0">Date</span><span>:
                                         <?php echo e(now()->format('d-m-Y')); ?></span></div>
@@ -742,7 +742,7 @@
 
                             <div class="border-b border-dashed border-gray-300 my-2"></div>
 
-
+                            
                             <div class="space-y-1.5">
                                 <?php
                                     $itemsToDisplay = $isSplitPaymentMode ? $currentSplitItems: $cartItems;
@@ -770,7 +770,7 @@
 
                             <div class="border-b border-dashed border-gray-300 my-2"></div>
 
-
+                            
                             <?php $totalQtyStruk = collect($itemsToDisplay)->sum('quantity'); ?>
                             <div class="space-y-1 text-gray-700">
                                 <p class="text-[10px] text-gray-600"><?php echo e($totalQtyStruk); ?> items</p>
@@ -781,7 +781,7 @@
                                         class="tabular-nums font-medium text-gray-900"><?php echo e(number_format($subtotal, 0, ',', '.')); ?></span>
                                 </div>
 
-
+                                
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!$isQuickService && $serviceAmount > 0): ?>
                                     <div class="flex justify-between">
                                         <span>Service Charge</span>
@@ -800,7 +800,7 @@
 
                             <div class="border-b border-dashed border-gray-300 my-2"></div>
 
-
+                            
                             <?php
                                 $rawGrandTotal = $subtotal + (!$isQuickService ? $serviceAmount : 0) + $taxAmount;
                                 $grandTotal =
@@ -855,7 +855,7 @@
             </div>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-
+        
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($checkoutModalOpen): ?>
             <?php
                 $paymentMethods = [
@@ -1313,7 +1313,7 @@
 
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($checkoutStep === 3): ?>
                                         <div class="space-y-4">
-
+                                            
                                             <div
                                                 class="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800">
                                                 <div class="flex justify-between items-start ">
@@ -1346,7 +1346,7 @@
                                                     <span class="font-bold text-blue-900 dark:text-white text-lg">Total
                                                         Bill</span>
                                                     <span class="text-3xl font-black text-brand-600">
-
+                                                        
                                                         Rp
                                                         <?php echo e(number_format($isFinalPayment ? $total : $subtotal, 0, ',', '.')); ?>
 
@@ -1355,7 +1355,7 @@
                                             </div>
 
                                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($isFinalPayment): ?>
-
+                                                
                                                 <div
                                                     class="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
                                                     <div class="flex items-center justify-between">
@@ -1399,7 +1399,7 @@
 <?php endif; ?>
                                                             </div>
                                                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-
+                                                        
                                                         <div class="w-32">
                                                             <label
                                                                 class="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">Pajak
@@ -1597,7 +1597,7 @@
                                                     </div>
                                                 </div>
                                             <?php else: ?>
-
+                                                
                                                 <div
                                                     class="p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl text-center border-2 border-dashed border-gray-300 dark:border-gray-700">
                                                     <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor"
@@ -1658,18 +1658,18 @@
             </template>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-
+        
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($voidItemModalOpen): ?>
             <template x-teleport="<?php echo e('body'); ?>">
             <div class="fixed inset-0 z-[100001] flex items-center justify-center p-4">
-
+                
                 <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" wire:click="$set('voidItemModalOpen', false)">
                 </div>
 
                 <div
                     class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900 border border-gray-100 dark:border-gray-800 animate-in fade-in zoom-in duration-200">
 
-
+                    
                     <div class="bg-red-50 dark:bg-red-900/20 px-6 py-5 border-b border-red-100 dark:border-red-900/30">
                         <div class="flex items-center gap-3 text-red-600 dark:text-red-400">
                             <div class="p-2 bg-red-100 dark:bg-red-800/40 rounded-full">
@@ -1683,7 +1683,7 @@
                     </div>
 
                     <div class="p-6">
-
+                        
                         <?php
                             $itemToVoid = $cartItems[$voidItemIndex] ?? null;
                         ?>
@@ -1715,7 +1715,7 @@
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                         <div class="space-y-5">
-
+                            
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Alasan
                                     Penghapusan</label>
@@ -1742,7 +1742,7 @@ endif;
 unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </div>
 
-
+                            
                             <div>
                                 <label
                                     class="block text-[10px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider text-center">PIN
@@ -1774,7 +1774,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div class="p-4 bg-gray-50 dark:bg-gray-800/80 flex gap-3">
                         <button type="button" wire:click="$set('voidItemModalOpen', false)"
                             class="flex-1 h-12 font-bold text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-2xl transition">
@@ -1794,15 +1794,15 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 z-[100005] flex items-center justify-center p-4" aria-modal="true" role="dialog">
 
-
+            
             <div class="absolute inset-0 bg-black/40 transition-opacity" wire:click="$set('selectTableModalOpen', false)">
             </div>
 
-
+            
             <div
                 class="relative w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
 
-
+                
                 <div class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
                     <h3 class="text-base font-bold text-gray-800 dark:text-white">
                         Book Table (<?php echo e('Table ' . $tableToSelectLabel ?? 'Table 1'); ?>)
@@ -1816,10 +1816,10 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </button>
                 </div>
 
-
+                
                 <div class="p-5 space-y-5">
 
-
+                    
                     <div>
                         <label
                             class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
@@ -1829,14 +1829,14 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             class="w-full h-11 border border-gray-300 rounded-lg bg-white px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700"
                             placeholder="1" />
 
-
+                        
                         <div class="flex items-center gap-1.5 my-2 rounded-lg w-full overflow-x-auto custom-scrollbar">
                              <button type="button" wire:click="decrementPax"
                                 class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
                                 &lt;
                                 </button>
 
-
+                                
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = [1, 2, 3, 4, 5]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $amt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                     <button type="button" wire:click="$set('numberOfPax', <?php echo e($amt); ?>)" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
                                         'w-10 h-10 flex items-center justify-center text-sm font-bold rounded-md transition shrink-0 active:scale-95',
@@ -1849,7 +1849,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                     </button>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
 
-
+                                
                                 <button type="button" wire:click="incrementPax"
                                     class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
                                     &gt;
@@ -1857,13 +1857,13 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div>
                         <span class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
                             Sales Mode: <span class="text-gray-800 dark:text-white font-bold">Dine In</span>
                         </span>
 
-
+                        
                         <button type="button"
                             class="h-11 px-6 font-bold text-xs rounded-lg border-2 border-[#3C8CBC] bg-blue-50 text-[#3C8CBC] dark:bg-blue-950/30 dark:text-blue-400 transition cursor-default">
                             Dine In
@@ -1872,17 +1872,17 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                 </div>
 
-
+                
                 <div
                     class="border-t border-gray-200 bg-gray-50 px-5 py-3 dark:border-gray-800 dark:bg-gray-950 flex items-center justify-between">
 
-
+                    
                     <button type="button" wire:click="$set('selectTableModalOpen', false)"
                         class="h-10 px-4 text-xs font-bold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition">
                         Close
                     </button>
 
-
+                    
                     <div class="flex items-center gap-2">
                         <button type="button" wire:click="confirmSelectTable('booking')"
                             class="h-10 px-4 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 transition">
@@ -1906,15 +1906,15 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
         <div class="fixed inset-0 z-[100010] flex items-center justify-center p-4 animate-in fade-in duration-100"
             aria-modal="true" role="dialog">
 
-
+            
             <div class="absolute inset-0 bg-black/40 backdrop-blur-xs" wire:click="$set('paymentModalOpen', false)">
             </div>
 
-
+            
             <div
                 class="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transform scale-100 transition-all">
 
-
+                
                 <div
                     class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
                     <h3
@@ -1931,12 +1931,12 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </button>
                 </div>
 
-
+                
                 <div class="p-5 space-y-4 bg-white dark:bg-gray-900">
 
-
+                    
                     <div class="flex items-end gap-2 w-full">
-
+                        
                         <div class="w-1/3 space-y-1">
                             <label
                                 class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Outstanding</label>
@@ -1944,7 +1944,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                 class="w-full h-10 border border-gray-200 bg-gray-100 text-red-600 font-bold px-3 text-xs rounded-lg dark:bg-gray-800 dark:border-gray-700 cursor-not-allowed tabular-nums" />
                         </div>
 
-
+                        
                         <div class="flex-1 space-y-1">
                             <label
                                 class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Cash
@@ -1953,7 +1953,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                 class="w-full h-10 border border-brand-500 font-black text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-950 px-3 rounded-lg focus:ring-1 focus:ring-brand-500 focus:border-brand-500" />
                         </div>
 
-
+                        
                         <div class="shrink-0">
                             <button type="button" wire:click="$set('cashReceived', '<?php echo e($total); ?>')" title="Reset Uang Pas"
                                 class="h-10 w-11 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 rounded-lg border border-gray-300 dark:border-gray-600 transition active:scale-95 shadow-xs">
@@ -1966,7 +1966,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div class="space-y-1">
                         <label
                             class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Rekomendasi
@@ -1982,7 +1982,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div class="space-y-1">
                         <label
                             class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
@@ -2005,7 +2005,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             ?>
 
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $moneyDenominations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $coin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-
+                                
                                 <button type="button" wire:click="$set('cashReceived', <?php echo e($coin['value']); ?>)"
                                     class="h-11 flex flex-col items-center justify-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 font-extrabold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-brand-500 dark:hover:border-brand-500 transition active:scale-95 shadow-xs">
                                     <span class="text-xs tracking-tight"><?php echo e($coin['label']); ?></span>
@@ -2016,7 +2016,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                 </div>
 
-
+                
                 <div
                     class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950 px-5 py-3 flex items-center justify-end gap-2">
                     <button type="button" wire:click="$set('paymentModalOpen', false)"
@@ -2033,7 +2033,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
         </div>
         </template>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-
+    
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($splitBillModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 z-[100015] flex items-center justify-center p-4">
@@ -2043,15 +2043,15 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
             <div
                 class="relative w-full max-w-5xl h-[80vh] flex flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in duration-150">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Split Bill</h3>
                 </div>
 
-
+                
                 <div class="flex-1 flex min-h-0 divide-x divide-gray-200 dark:divide-gray-800">
 
-
+                    
                     <div class="w-1/2 flex flex-col p-4 bg-gray-50 dark:bg-gray-950/40">
                         <div
                             class="flex border-b border-gray-200 bg-gray-200 dark:bg-gray-800 px-3 py-2 font-bold text-xs text-gray-700 dark:text-gray-300">
@@ -2062,7 +2062,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         <div class="flex-1 overflow-y-auto space-y-2 mt-2 custom-scrollbar">
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cIdx => $cItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($cItem['quantity'] > 0): ?>
-
+                                    
                                     <div
                                         class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border rounded-lg shadow-xs">
                                         <div class="flex items-center flex-1 min-w-0">
@@ -2095,10 +2095,10 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div class="w-1/2 flex flex-col p-4 bg-white dark:bg-gray-900">
 
-
+                        
                         <div
                             class="flex flex-wrap border-b border-gray-200 dark:border-gray-800 gap-1 overflow-x-auto shrink-0 custom-scrollbar">
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $splitBills; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $bIdx => $bill): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
@@ -2114,7 +2114,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                         </div>
 
-
+                        
                         <div class="flex-1 overflow-y-auto space-y-2 mt-4 custom-scrollbar">
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0): ?>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $splitBills[$activeSplitTab]['items']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sIdx => $sItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
@@ -2144,7 +2144,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
 
-
+                        
                         <div class="pt-3 flex justify-end">
                             <button type="button" wire:click="deleteSplitBill(<?php echo e($activeSplitTab); ?>)"
                                 class="px-4 h-9 bg-[#DD4B39] text-white text-xs font-bold rounded shadow-sm flex items-center gap-1">
@@ -2162,7 +2162,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                 </div>
 
-
+                
                 <div
                     class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950 px-5 py-3 flex items-center justify-between shrink-0">
                     <button type="button" wire:click="addSplitBill"
@@ -2185,18 +2185,18 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($cancelTableModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100020]">
-
+            
             <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('cancelTableModalOpen', false)">
             </div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-xl w-full max-w-lg p-6 animate-in fade-in zoom-in-95 duration-150">
 
                 <h2 class="text-lg font-bold text-white">Cancel Table</h2>
                 <p class="text-sm text-gray-600 mt-2">Cancel Notes (Alasan Pembatalan)</p>
 
-
+                
                 <div class="mt-2 mb-3">
                     <input type="text" wire:model.live="cancelTableReason"
                         class="w-full border border-gray-300 rounded p-3 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
@@ -2216,7 +2216,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                 <hr class="my-4 border-gray-200">
 
-
+                
                 <div class="flex justify-between items-center">
                     <button wire:click="$set('cancelTableModalOpen', false)" type="button"
                         class="flex items-center gap-2 text-red-600 font-bold text-sm hover:text-red-800 transition">
@@ -2235,40 +2235,40 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($quickServiceModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100030]">
-
+            
             <div class="absolute inset-0 bg-black/40 bg-opacity-50" wire:click="$set('quickServiceModalOpen', false)">
             </div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Quick Service</h3>
                 </div>
 
-
+                
                 <div class="p-6 space-y-6">
 
-
+                    
                     <div class="space-y-2">
                         <label class="block text-sm font-bold text-gray-700">Number of Pax</label>
 
-
+                        
                         <div class="flex justify-center">
                             <input wire:model="numberOfPax" type="number" min="1"
                                 class="w-32 h-10 border border-gray-300 rounded text-center text-lg font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white dark:text-gray-900" />
                         </div>
 
-
+                        
                         <div class="flex items-center justify-center gap-1">
                              <button type="button" wire:click="decrementPax"
                                 class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                                 &lt;
                                 </button>
 
-
+                                
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = [1, 2, 3, 4, 5]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $paxAmt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                     <button type="button" wire:click="$set('numberOfPax', <?php echo e($paxAmt); ?>)" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
                                         'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
@@ -2281,7 +2281,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                     </button>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
 
-
+                                
                                 <button type="button" wire:click="incrementPax"
                                     class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                                     &gt;
@@ -2289,12 +2289,12 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div class="space-y-2">
                         <label class="block text-sm font-bold text-gray-700">Sales Mode</label>
 
                         <div class="grid grid-cols-3 gap-2">
-
+                            
                             <button type="button" wire:click="$set('quickServiceSalesMode', 'dine_in')" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
                                 'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
                                 'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
@@ -2305,7 +2305,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                 Dine In
                             </button>
 
-
+                            
                             <button type="button" wire:click="$set('quickServiceSalesMode', 'gofood')" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
                                 'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
                                 'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
@@ -2316,7 +2316,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                 GoFood
                             </button>
 
-
+                            
                             <button type="button" wire:click="$set('quickServiceSalesMode', 'take_away')" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
                                 'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
                                 'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
@@ -2331,14 +2331,14 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                     <hr class="border-gray-200">
 
-
+                    
                     <div class="flex justify-end items-center gap-2 pt-2">
                         <button type="button" wire:click="$set('scanInputModalOpen', true)"
                             class="h-10 px-4 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
                             📋 Scan / Input
                         </button>
 
-
+                        
                         <button type="button"
                             wire:click="$set('orderType', '<?php echo e($quickServiceSalesMode); ?>'); $set('quickServiceModalOpen', false); $set('showQuickServiceWaitlist', false);"
                             class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
@@ -2354,14 +2354,14 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($scanInputModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100040]">
-
+            
             <div class="absolute inset-0 bg-black/40" wire:click="$set('scanInputModalOpen', false)"></div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans text-gray-800">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white flex items-center gap-3">
                     <button type="button" wire:click="$set('scanInputModalOpen', false)"
                         class="text-white hover:text-white/80 transition">
@@ -2373,7 +2373,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     <h3 class="text-base font-bold tracking-wide">Scan/Input</h3>
                 </div>
 
-
+                
                 <div class="p-6 space-y-2">
                     <label class="block text-sm font-bold text-gray-700">Input Order ID</label>
                     <p class="text-sm font-semibold italic text-[#337ab7]">
@@ -2408,19 +2408,19 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($phoneNumberModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100025]">
-
+            
             <div class="absolute inset-0 bg-black/40" wire:click="$set('phoneNumberModalOpen', false)"></div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Customer Phone Number</h3>
                 </div>
 
-
+                
                 <div class="p-6 space-y-2">
                     <label class="block text-sm font-bold text-gray-700">Phone Number</label>
                     <input type="text" wire:model.defer="customerPhone"
@@ -2440,7 +2440,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                 <hr class="border-gray-200">
 
-
+                
                 <div class="px-5 py-3 flex justify-end items-center gap-2">
                     <button type="button" wire:click="$set('phoneNumberModalOpen', false)"
                         class="h-10 px-5 border border-[#DD4B39] text-red-500 text-xs font-bold rounded hover:bg-red-50 transition active:scale-95">
@@ -2458,14 +2458,14 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($editMemberModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100026]">
-
+            
             <div class="absolute inset-0 bg-black/40" wire:click="$set('editMemberModalOpen', false)"></div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[85vh]">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white shrink-0">
                     <h3 class="text-base font-bold tracking-wide">
                         Edit Member
@@ -2477,11 +2477,11 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </h3>
                 </div>
 
-
+                
                 <div class="p-5 space-y-3 flex-1 overflow-y-auto">
                     <h4 class="text-sm text-gray-700">Regular Member</h4>
 
-
+                    
                     <div class="text-center py-2">
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($memberId): ?>
                             <?php $selectedMember = $this->filteredMembers->firstWhere('id', $memberId); ?>
@@ -2495,7 +2495,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </div>
 
-
+                    
                     <div class="flex items-stretch gap-0 border border-gray-300 rounded overflow-hidden">
                         <div class="px-3 flex items-center bg-gray-50 border-r border-gray-300">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2515,7 +2515,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </button>
                     </div>
 
-
+                    
                     <div class="min-h-[180px]">
                         <?php
                             $perPageMember = 5;
@@ -2549,7 +2549,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </div>
 
-
+                    
                     <div class="flex items-center justify-end gap-3 text-xs text-gray-500">
                         <span><?php echo e($totalMembers > 0 ? ($memberListPage - 1) * $perPageMember + 1 : 0); ?> of
                             <?php echo e($totalMembers); ?></span>
@@ -2579,7 +2579,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </div>
                 </div>
 
-
+                
                 <div class="px-5 py-3 border-t border-gray-100 flex justify-between items-center shrink-0">
                     <button type="button" wire:click="clearRegularMember"
                         class="h-10 px-4 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
@@ -2597,22 +2597,22 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($deliveryCostModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100027]">
-
+            
             <div class="absolute inset-0 bg-black/40" wire:click="$set('deliveryCostModalOpen', false)"></div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Delivery Cost</h3>
                 </div>
 
-
+                
                 <div class="p-6 space-y-4">
 
-
+                    
                     <div class="space-y-1.5">
                         <label class="block text-sm font-bold text-gray-700">Input Delivery Cost</label>
                         <input type="text" wire:model.live="deliveryCost" inputmode="numeric"
@@ -2620,7 +2620,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             placeholder="0" />
                     </div>
 
-
+                    
                     <div class="space-y-1.5">
                         <label class="block text-sm font-bold text-gray-700">Input Order Fee</label>
                         <input type="text" wire:model.live="orderFee" inputmode="numeric"
@@ -2628,7 +2628,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             placeholder="0" />
                     </div>
 
-
+                    
                     <div class="space-y-1.5">
                         <label class="block text-sm font-bold text-gray-700">Platform Fee</label>
                         <input type="text" readonly value="<?php echo e(number_format($platformFee, 0, ',', '.')); ?>"
@@ -2636,7 +2636,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </div>
                 </div>
 
-
+                
                 <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center">
                     <button type="button" wire:click="$set('deliveryCostModalOpen', false)"
                         class="h-10 px-6 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
@@ -2650,14 +2650,14 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($editTableModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100028]">
-
+            
             <div class="absolute inset-0 bg-black/40" wire:click="$set('editTableModalOpen', false)"></div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">
                         Edit Table
@@ -2667,17 +2667,17 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </h3>
                 </div>
 
-
+                
                 <div class="p-6 space-y-3">
                     <label class="block text-sm font-bold text-gray-700">Number of Pax</label>
 
-
+                    
                     <div class="flex justify-center">
                         <input wire:model.live="numberOfPax" type="number" min="1"
                             class="w-32 h-10 border border-gray-300 rounded text-center text-lg font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white text-gray-900" />
                     </div>
 
-
+                    
                     <div class="flex items-center justify-center gap-1">
                         <button type="button" wire:click="decrementPax"
                             class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
@@ -2713,7 +2713,7 @@ endif;
 unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </div>
 
-
+                
                 <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center">
                     <button type="button" wire:click="applyEditTablePax"
                         class="h-10 px-6 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
@@ -2727,22 +2727,22 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($complimentModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100029]">
-
+            
             <div class="absolute inset-0 bg-black/40" wire:click="$set('complimentModalOpen', false)"></div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Complimentary</h3>
                 </div>
 
-
+                
                 <div class="p-6 space-y-5">
 
-
+                    
                     <div class="grid grid-cols-3 gap-3 items-end">
                         <div class="space-y-1.5">
                             <label class="block text-xs font-bold text-gray-700">Outstanding</label>
@@ -2782,7 +2782,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-
+                    
                     <div class="space-y-1.5">
                         <label class="block text-xs font-bold text-gray-700 flex items-center gap-1">
                             Compliment Notes
@@ -2811,7 +2811,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </div>
                 </div>
 
-
+                
                 <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center gap-2">
                     <button type="button" wire:click="$set('complimentModalOpen', false)"
                         class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
@@ -2829,22 +2829,22 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($cardDetailModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100025]">
-
+            
             <div class="absolute inset-0 bg-black/40" wire:click="$set('cardDetailModalOpen', false)"></div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white shrink-0">
                     <h3 class="text-base font-bold tracking-wide">Card Payment</h3>
                 </div>
 
-
+                
                 <div class="p-6 space-y-4 text-gray-800 overflow-y-auto flex-1">
 
-
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="space-y-1.5 min-w-0">
                             <label class="block text-sm font-bold text-gray-700">Outstanding</label>
@@ -2875,7 +2875,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="space-y-1.5 min-w-0">
                             <label class="block text-sm font-bold text-gray-700">Card Number</label>
@@ -2912,7 +2912,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="space-y-1.5 min-w-0">
                             <label class="block text-sm font-bold text-gray-700">Bank Name</label>
@@ -2949,7 +2949,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
                     </div>
 
-
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="space-y-1.5 min-w-0">
                             <label class="block text-sm font-bold text-gray-700">Self Order ID</label>
@@ -2960,7 +2960,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </div>
                 </div>
 
-
+                
                 <div class="px-5 py-3 flex justify-end items-center gap-2 bg-gray-50 border-t border-gray-200 shrink-0">
                     <button type="button" wire:click="$set('cardDetailModalOpen', false)"
                         class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
@@ -2979,29 +2979,29 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($otherCostModalOpen): ?>
         <template x-teleport="<?php echo e('body'); ?>">
         <div class="fixed inset-0 flex items-center justify-center p-4 z-[100029]">
-
+            
             <div class="absolute inset-0 bg-black/40" wire:click="$set('otherCostModalOpen', false)"></div>
 
-
+            
             <div
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden overflow-x-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
 
-
+                
                 <div class="bg-[#337ab7] px-5 py-3 text-white shrink-0">
                     <h3 class="text-base font-bold tracking-wide">Other Cost - Non Sales</h3>
                 </div>
 
-
+                
                 <div class="p-6 space-y-4 text-gray-800 overflow-y-auto flex-1">
 
-
+                    
                     <div class="space-y-1.5">
                         <label class="block text-sm font-bold text-gray-700">Subtotal Transaction</label>
                         <input type="text" readonly value="<?php echo e(number_format($total, 0, ',', '.')); ?>"
                             class="w-full h-11 border border-gray-300 rounded px-4 text-sm text-right bg-gray-100 text-gray-600 cursor-not-allowed" />
                     </div>
 
-
+                    
                     <div class="space-y-1.5">
                         <label class="flex items-center gap-1 text-sm font-bold text-gray-700">
                             Notes
@@ -3030,7 +3030,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     </div>
                 </div>
 
-
+                
                 <div class="px-5 py-3 flex justify-end items-center gap-2 bg-gray-50 border-t border-gray-200 shrink-0">
                     <button type="button" wire:click="$set('otherCostModalOpen', false)"
                         class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
