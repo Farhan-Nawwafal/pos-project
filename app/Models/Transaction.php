@@ -43,6 +43,8 @@ class Transaction extends Model
         'cash_received',
         'cash_change',
         'refunded_amount',
+        'compliment_amount',
+        'compliment_notes',
         'total',
         'checkout_link',
         'self_order_token',

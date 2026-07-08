@@ -224,6 +224,7 @@ class PosPage extends Component
     // --- STATE UNTUK CANCEL TABLE ---
     public bool $cancelTableModalOpen = false; // Mengontrol buka/tutup modal cancel table
     public string $cancelTableReason = '';      // Menampung input alasan pembatalan
+    public string $cancelTablePin = '';
 
     public bool $showQuickServiceWaitlist = true;
     public bool $quickServiceModalOpen = false; // Mengontrol munculnya modal Quick Service otomatis
@@ -243,6 +244,8 @@ class PosPage extends Component
     public ?string $complimentPercentage = null;
     public ?string $complimentAmount = null;
     public string $complimentNotes = '';
+    public int $appliedComplimentAmount = 0;
+    public ?string $appliedComplimentNotes = null;
 
     // --- STATE UNTUK OTHER COST PAYMENT METHOD ---
     public bool $otherCostModalOpen = false;
@@ -1465,6 +1468,12 @@ class PosPage extends Component
 
         $this->orderNotes = '';
 
+        $this->complimentAmount = '';
+        $this->complimentPercentage = '';
+        $this->complimentNotes = '';
+        $this->appliedComplimentAmount = 0;
+        $this->appliedComplimentNotes = null;
+
         if ($previousOrderType === 'take_away') {
             // Balik ke waitlist Quick Service
             $this->orderType = 'take_away';
@@ -1628,8 +1637,12 @@ class PosPage extends Component
             $rules['paymentMethod'] = ['required', 'string', 'max:50'];
             if ($this->paymentMethod === 'cash') {
                 $rawCash = (int) preg_replace('/\D+/', '', (string)($this->cashReceived ?? '0'));
-                if ($rawCash < $this->total) {
-                    $this->addError('cashReceived', 'Uang diterima kurang dari total tagihan.');
+
+                // SANGAT PENTING: Hitung sisa bersih wajib bayar kasir setelah dikurangi subsidi compliment
+                $netTotalWajibBayar = $this->total - (int)$this->appliedComplimentAmount;
+
+                if ($rawCash < $netTotalWajibBayar) {
+                    $this->addError('cashReceived', 'Uang diterima kurang dari sisa tagihan.');
                     return;
                 }
             }
@@ -1644,9 +1657,12 @@ class PosPage extends Component
                 ? (int) preg_replace('/\D+/', '', (string)$this->cashReceived)
                 : null;
 
+            // AMBIL LANGSUNG DARI PROPERTI PENAMPUNG INDEPENDEN
+            $complimentAmountValue = (int) $this->appliedComplimentAmount;
+            $complimentNotesValue = $this->appliedComplimentNotes;
+
             if ($this->isSplitPaymentMode) {
                 // JALUR KELUARAN: SPLIT BILL PAYMENT
-
                 $parentTrx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
                 $splitBillData = $this->splitBills[$this->currentSplitBillIndex];
 
@@ -1667,7 +1683,7 @@ class PosPage extends Component
                     'tax_amount' => $this->taxAmount,
                     'cash_received' => $cashReceivedValue,
                     'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
-                    'total' => $this->total,
+                    'total' => $this->total + $complimentAmountValue, // Mengembalikan ke angka utuh asli (200k)
                     'payment_method' => $this->paymentMethod,
                     'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
                     'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
@@ -1751,6 +1767,20 @@ class PosPage extends Component
 
                 // Bersihkan tab split bill yang selesai dibayar ini dari memori kasir
                 unset($this->splitBills[$this->currentSplitBillIndex]);
+
+                // REKAM SPATIE LOG JIKA INI PEMBAYARAN COMPLIMENT
+                if ($complimentAmountValue > 0) {
+                    activity()
+                        ->performedOn($newTrx)
+                        ->causedBy(auth()->user())
+                        ->event('payment_compliment')
+                        ->withProperties([
+                            'cabang_id' => $cabangId,
+                            'compliment_amount' => $complimentAmountValue,
+                            'notes' => $this->complimentNotes
+                        ])
+                        ->log("Pembayaran Compliment diterapkan pada transaksi split #{$newTrx->id} sebesar Rp " . number_format($complimentAmountValue, 0, ',', '.') . " dengan alasan: {$this->complimentNotes}");
+                }
             } else {
                 // JALUR KELUARAN: TRANSAKSI NORMAL (ASLI)
                 $trx = $this->editingTransactionId
@@ -1772,12 +1802,16 @@ class PosPage extends Component
                     'voucher_discount_amount' => $this->voucherDiscountAmount,
                     'manual_discount_amount' => $this->manualDiscountAmount,
                     'discount_total_amount' => $isFinalPayment ? $this->discountTotalAmount : 0,
+                    'compliment_amount' => $complimentAmountValue,
+                    'compliment_notes' => $complimentAmountValue > 0 ? $complimentNotesValue : null,
                     'tax_percentage' => $this->taxRate,
                     'tax_amount' => $this->taxAmount,
                     'rounding_amount' => $this->roundingAmount,
                     'cash_received' => $cashReceivedValue,
                     'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
-                    'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
+                    'total' => $isFinalPayment
+                        ? ($this->subtotal + $this->serviceAmount + $this->taxAmount)
+                        : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
                     'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
                     'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
                     'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
@@ -1834,6 +1868,18 @@ class PosPage extends Component
                 }
 
                 $trxId = (int) $trx->id;
+                if ($complimentAmountValue > 0) {
+                    activity()
+                        ->performedOn($trx)
+                        ->causedBy(auth()->user())
+                        ->event('payment_compliment')
+                        ->withProperties([
+                            'cabang_id' => $cabangId,
+                            'compliment_amount' => $complimentAmountValue,
+                            'notes' => $this->complimentNotes
+                        ])
+                        ->log("Pembayaran Compliment diterapkan pada transaksi normal #{$trx->id} sebesar Rp " . number_format($complimentAmountValue, 0, ',', '.') . " dengan alasan: {$this->complimentNotes}");
+                }
             }
         });
 
@@ -2362,7 +2408,8 @@ class PosPage extends Component
         if ($isFinalPayment) {
             $rules['paymentMethod'] = ['required', 'string', 'max:50'];
             if ($this->paymentMethod === 'cash') {
-                $rules['cashReceived'] = ['required', 'numeric', 'min:' . $this->total];
+                $netTotalWajibBayar = $this->total - (int)$this->appliedComplimentAmount;
+                $rules['cashReceived'] = ['required', 'numeric', 'min:' . $netTotalWajibBayar];
             }
         }
 
@@ -2379,10 +2426,17 @@ class PosPage extends Component
             $previousPaymentStatus = (string) $trx->payment_status;
             $cabangId = auth()->user()->cabang_id ?? 1;
 
+            $complimentAmountValue = (int) $this->appliedComplimentAmount;
+            $complimentNotesValue = $this->appliedComplimentNotes;
+
             // Ambil nominal cash (bersihkan karakter non-digit jika ada)
             $cashReceivedValue = $isFinalPayment && $this->paymentMethod === 'cash'
                 ? (int) preg_replace('/\D+/', '', (string)$this->cashReceived)
                 : null;
+
+            $complimentAmountValue = $this->paymentMethod === 'compliment'
+                ? (int) preg_replace('/\D+/', '', (string)($this->complimentAmount ?? '0'))
+                : 0;
 
             $trx->fill([
                 'code' => $trx->code ?? Transaction::generateUniqueCode(),
@@ -2393,10 +2447,8 @@ class PosPage extends Component
                 'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
                 'subtotal' => $this->subtotal,
                 'service_percentage' => $this->serviceRate,
-                'service_amount' => $isFinalPayment ? $this->serviceAmount : $this->serviceAmount,
-                'tax_percentage' => $this->taxRate,
-                'tax_amount' => $isFinalPayment ? $this->taxAmount : $this->taxAmount,
-                'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
+                'service_amount' => $this->serviceAmount,
+                'total' => $isFinalPayment ? ($this->subtotal + $this->serviceAmount + $this->taxAmount) : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
                 'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
                 'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
                 'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
@@ -2406,10 +2458,14 @@ class PosPage extends Component
                 'checkout_link' => '',
                 'external_id' => $trx->external_id ?? Transaction::generateUniqueCode(10),
                 'tax_percentage' => $this->taxRate,
-                'tax_amount' => $isFinalPayment ? $this->taxAmount : $this->taxAmount,
+                'tax_amount' => $this->taxAmount,
                 'discount_total_amount' => $isFinalPayment ? $this->discountTotalAmount : 0,
+
+                // TAMBAHAN KOLOM COMPLIMENT DI CHECKOUT DIRECT
+                'compliment_amount' => $complimentAmountValue,
+                'compliment_notes' => $complimentAmountValue > 0 ? $complimentNotesValue : null,
                 'cash_received' => $cashReceivedValue,
-                'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
+                'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - ($this->total - $complimentAmountValue)) : null,
             ]);
 
             $trx->save();
@@ -2456,6 +2512,18 @@ class PosPage extends Component
             }
 
             $trxId = (int) $trx->id;
+            if ($complimentAmountValue > 0) {
+                activity()
+                    ->performedOn($trx)
+                    ->causedBy(auth()->user())
+                    ->event('payment_compliment')
+                    ->withProperties([
+                        'cabang_id' => $cabangId,
+                        'compliment_amount' => $complimentAmountValue,
+                        'notes' => $complimentNotesValue
+                    ])
+                    ->log("Pembayaran Compliment diterapkan pada transaksi checkout direct #{$trx->id} sebesar Rp " . number_format($complimentAmountValue, 0, ',', '.') . " dengan alasan: {$complimentNotesValue}");
+            }
         });
 
         $this->dispatch('toast', type: 'success', message: $isFinalPayment ? 'Transaksi Lunas' : 'Pesanan Disimpan');
@@ -2675,29 +2743,61 @@ class PosPage extends Component
      */
     public function confirmCancel()
     {
-        // Validasi input alasan wajib diisi minimal 5 karakter
+        // 1. Validasi input alasan dan PIN wajib diisi
         $this->validate([
             'cancelTableReason' => 'required|string|min:5',
+            'cancelTablePin' => 'required|numeric',
         ], [
             'cancelTableReason.required' => 'Alasan pembatalan wajib diisi.',
             'cancelTableReason.min' => 'Alasan minimal harus 5 karakter.',
+            'cancelTablePin.required' => 'PIN otorisasi manager wajib diisi.',
+            'cancelTablePin.numeric' => 'PIN harus berupa angka.',
         ]);
 
         // JIKA PESANAN SUDAH PERNAH TERSIMPAN DI DATABASE (Meja Occupied)
         if ($this->editingTransactionId !== null) {
-            DB::transaction(function () {
+
+            // 2. Cari kandidat user manager/admin yang aktif untuk cek PIN
+            $candidates = \App\Models\User::query()
+                ->where('is_active', true)
+                ->whereNotNull('manager_pin')
+                ->get();
+
+            $validApprover = null;
+
+            // 3. Verifikasi PIN menggunakan Hash::check
+            foreach ($candidates as $candidate) {
+                if (\Illuminate\Support\Facades\Hash::check($this->cancelTablePin, $candidate->manager_pin)) {
+                    if ($candidate->can('transactions.void.approve') || $candidate->hasRole(['admin', 'owner'])) {
+                        $validApprover = $candidate;
+                        break;
+                    }
+                }
+            }
+
+            // 4. Jika PIN tidak cocok
+            if (!$validApprover) {
+                $this->addError('cancelTablePin', 'PIN salah atau user tidak memiliki otoritas approval.');
+                return;
+            }
+
+            // 5. Eksekusi Void Transaksi di Database
+            DB::transaction(function () use ($validApprover) {
                 $trx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
 
                 if ($trx) {
-                    // 1. Kosongkan kembali status meja makan menjadi tersedia (Warna Biru)
-                    if ($trx->dining_table_id) {
-                        DB::table('dining_tables')->where('id', $trx->dining_table_id)->update([
+                    $cabangId = $trx->cabang_id;
+                    $tableId = $trx->dining_table_id;
+
+                    // TABEL 1: dining_tables -> Kembalikan status meja makan menjadi tersedia
+                    if ($tableId) {
+                        DB::table('dining_tables')->where('id', $tableId)->update([
                             'status' => 'available',
                             'occupied_at' => null
                         ]);
                     }
 
-                    // 2. Lakukan Soft Void (Isi kolom pembatalan audit tanpa menghapus data laporan)
+                    // TABEL 2: transactions -> Lakukan Soft Void sesuai kolom migrasimu
                     $trx->update([
                         'payment_status' => 'void',
                         'order_status' => 'void',
@@ -2706,19 +2806,39 @@ class PosPage extends Component
                         'void_reason' => $this->cancelTableReason,
                     ]);
 
-                    // Tambahkan log aktivitas jika tabel audit event tersedia
+                    // TABEL 3: transaction_events -> Rekam event pembatalan meja (Wajib bawa cabang_id)
                     if (class_exists(\App\Models\TransactionEvent::class)) {
                         TransactionEvent::create([
+                            'cabang_id' => $cabangId, // Sesuai kolom di migrasi transaction_events kamu
                             'transaction_id' => $trx->id,
                             'actor_user_id' => auth()->id(),
                             'action' => 'cancel_table',
-                            'meta' => ['reason' => $this->cancelTableReason]
+                            'meta' => [
+                                'reason' => $this->cancelTableReason,
+                                'approved_by_user_id' => $validApprover->id,
+                                'approved_by_name' => $validApprover->name,
+                                'grand_total_voided' => $trx->total ?? 0
+                            ]
                         ]);
                     }
+
+                    // TABEL 4: activity_log -> Spatie Activity Log (Membawa event custom)
+                    activity()
+                        ->performedOn($trx)
+                        ->causedBy(auth()->user())
+                        ->event('cancel_table') // Mengisi kolom 'event' di migrasi tambahan Spatie kamu
+                        ->withProperties([
+                            'cabang_id' => $cabangId,
+                            'approved_by_user_id' => $validApprover->id,
+                            'approved_by_name' => $validApprover->name,
+                            'reason' => $this->cancelTableReason,
+                            'total_voided' => $trx->total ?? 0
+                        ])
+                        ->log("User " . auth()->user()->name . " melakukan void penuh untuk transaksi #{$trx->id} pada Meja ID: {$tableId}. Diacc oleh Manager: {$validApprover->name} dengan alasan: {$this->cancelTableReason}");
                 }
             });
 
-            $this->dispatch('toast', type: 'success', message: 'Pesanan meja berhasil dibatalkan & di-audit.');
+            $this->dispatch('toast', type: 'success', message: 'Pesanan meja berhasil dibatalkan & di-audit oleh ' . $validApprover->name);
         } else {
             // JIKA TRANSAKSI BARU (Belum masuk database sama sekali)
             $this->dispatch('toast', type: 'success', message: 'Meja dilepas.');
@@ -2727,6 +2847,7 @@ class PosPage extends Component
         // Tutup modal, bersihkan keranjang, balikkan halaman ke denah meja
         $this->cancelTableModalOpen = false;
         $this->cancelTableReason = '';
+        $this->cancelTablePin = ''; // Reset input PIN setelah selesai
         $this->resetOrderForNewTransaction();
     }
 
@@ -3529,16 +3650,21 @@ class PosPage extends Component
             return;
         }
 
-        // Set paymentMethod jadi compliment, simpan info compliment ke property
+        // 1. Kunci nilai murni compliment ke properti independen
+        $this->appliedComplimentAmount = $amount;
+        $this->appliedComplimentNotes = $this->complimentNotes;
+
+        // 2. BERIKAN LABEL AGAR LOLOS VALIDASI REQUIRED PADA SAVEPAYMENT
         $this->paymentMethod = 'compliment';
-        $this->manualDiscountType = 'fixed_amount';
-        $this->manualDiscountValue = $amount;
-        $this->manualDiscountNote = 'Compliment: ' . $this->complimentNotes;
+
+        // 3. Reset diskon manual sistem lama agar pajak PB1 aman & tetap utuh
+        $this->manualDiscountType = null;
+        $this->manualDiscountValue = 0;
+        $this->manualDiscountNote = null;
 
         $this->recalculateTotals();
 
         $this->complimentModalOpen = false;
-
         $this->dispatch('toast', type: 'success', message: 'Compliment berhasil diterapkan.');
     }
 
