@@ -185,4 +185,4 @@
             </div>
         </div>
     </div>
-</div>
+</div><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/components/pos-modal.blade.php ENDPATH**/ ?>

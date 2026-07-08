@@ -49,7 +49,7 @@
                     {{-- notification --}}
                     <i class="bi bi-bell-fill text-white absolute right-160  pointer-events-none"></i>
 
-                    <div class="absolute inset-x-0 gap-3 flex items-center justify-end mr-42 pointer-events-none">
+                    <div class="absolute inset-x-0 gap-3 flex items-center justify-end mr-40 pointer-events-none">
                         <div x-data="{ now: new Date() }" x-init="setInterval(() => now = new Date(), 1000)"
                             class="text-sm text-white flex items-center justify-end gap-2">
 
@@ -104,14 +104,9 @@
                     <div class="relative">
 
                         <button @click="isProfileOpen = !isProfileOpen" @click.away="isProfileOpen = false"
-                            class="flex items-center gap-1.5 text-white/90 hover:text-white text-sm font-medium py-1 px-2 rounded-lg hover:bg-white/10 transition-all">
+                            class="flex items-center gap-1.5 text-white/90  text-sm font-medium py-1 px-2 rounded-lg transition-all">
 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round" class="w-4 h-4">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
+                            <img src="/assets/icons/men.png" alt="Search" class="w-4 h-4  ">
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"

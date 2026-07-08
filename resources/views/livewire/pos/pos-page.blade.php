@@ -347,8 +347,12 @@
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200 hover:text-gray-600">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                    <img src="/assets/icons/dashboards.png" width="10" height="10" alt="Up">
+                                    Merge Table
+                                </button>
+                                <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                         class="w-3.5 h-3.5">
                                         <polyline points="5 9 2 12 5 15"></polyline>
@@ -359,15 +363,20 @@
                                         <line x1="12" y1="2" x2="12" y2="22"></line>
                                     </svg>
 
-                                    Merge Table
-                                </button>
-                                <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">
                                     {{-- <img src="/assets/icons/.png" width="15" height="15" alt="Up"> --}}
                                     Move Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Move
-                                    Item</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="w-3.5 h-3.5">
+                                        <polyline points="19 5 22 8 19 11"></polyline>
+                                        <line x1="2" y1="8" x2="22" y2="8"></line>
+
+                                        <polyline points="5 13 2 16 5 19"></polyline>
+                                        <line x1="2" y1="16" x2="22" y2="16"></line>
+                                    </svg>
+                                    Move Item</button>
                             </div>
                             <div class="grid grid-cols-3 w-full pointer-events-none">
                                 <button type="button" wire:click="$set('cancelTableModalOpen', true)"
@@ -393,14 +402,35 @@
                         @if ($orderType === 'dine_in' && $selectedTableId)
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Merge
-                                    Table</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
+                                    <img src="/assets/icons/dashboards.png" width="10" height="10" alt="Up">
+                                    Merge Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Move
-                                    Table</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="w-3.5 h-3.5">
+                                        <polyline points="5 9 2 12 5 15"></polyline>
+                                        <polyline points="9 5 12 2 15 5"></polyline>
+                                        <polyline points="15 19 12 22 9 19"></polyline>
+                                        <polyline points="19 9 22 12 19 15"></polyline>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <line x1="12" y1="2" x2="12" y2="22"></line>
+                                    </svg>
+                                    Move Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Move
-                                    Item</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="w-3.5 h-3.5">
+                                        <polyline points="19 5 22 8 19 11"></polyline>
+                                        <line x1="2" y1="8" x2="22" y2="8"></line>
+
+                                        <polyline points="5 13 2 16 5 19"></polyline>
+                                        <line x1="2" y1="16" x2="22" y2="16"></line>
+                                    </svg>
+                                    Move Item</button>
                             </div>
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="$set('cancelTableModalOpen', true)"
@@ -418,10 +448,13 @@
                                     </svg>
                                     Cancel Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Link
-                                    Table</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                    <img src="/assets/icons/link.png" width="10" height="10" alt="Up">
+                                    Link Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider">Checker</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
+                                    <img src="/assets/icons/printer.png" width="10" height="10" alt="Up">
+                                    Checker</button>
                             </div>
                         @endif
                     </div>
@@ -487,9 +520,16 @@
                                                     {{ number_format($item['quantity'] * (int) $item['price'], 0, ',', '.') }}
                                                 </p>
                                             </div>
-                                            <div class="flex flex-col gap-1 shrink-0">
+                                            <div class="flex items-center gap-2 shrink-0">
                                                 <button type="button" wire:click="removeItem({{ $idx }})"
-                                                    class="w-8 h-6 bg-[#DD4B39] text-white text-[10px] rounded-xs font-bold hover:bg-red-800">X</button>
+                                                    class="w-6 h-5 bg-[#DD4B39] text-white text-[10px] rounded-xs font-bold  flex items-center justify-center">
+                                                    X
+                                                </button>
+
+                                                <button type="button" title="Last created:"
+                                                    class="group relative w-3 h-3 bg-gray-400 text-white text-[11px] rounded-full font-bold flex items-center justify-center transition-colors">
+                                                    <span class="leading-none">i</span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -893,7 +933,8 @@
                                 </svg>
                             </button>
                             <button type="button"
-                                class="col-span-2 w-full h-10 bg-brand-500 border border-gray-300 text-white text-[10px]  rounded-sm  shadow-sm">
+                                class="col-span-2 w-full h-10 flex items-center justify-center gap-2 font-bold text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
+                                <img src="/assets/icons/gift.png" width="15" height="15" alt="Up">
                                 Purchase Voucher
                             </button>
                         </div>
@@ -1334,12 +1375,12 @@
                                                                                             <button type="button"
                                                                                                 wire:click="$set('paymentMethod', '{{ $pm['id'] }}')"
                                                                                                 class="flex flex-col items-center justify-center rounded-xl border p-3 text-center transition-all duration-200 hover:shadow-md
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {{ $paymentMethod === $pm['id']
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {{ $paymentMethod === $pm['id']
                                                                     ? 'border-brand-500 bg-brand-50 text-brand-700 ring-2 ring-brand-500/20 dark:border-brand-400 dark:bg-brand-900/20 dark:text-brand-300'
                                                                     : 'border-gray-200 bg-white text-gray-600 hover:border-brand-300 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-800' }}">
                                                                                                 <div
                                                                                                     class="mb-2 flex h-8 w-8 items-center justify-center rounded-full
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $paymentMethod === $pm['id'] ? 'bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' }}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $paymentMethod === $pm['id'] ? 'bg-brand-100 text-brand-600 dark:bg-brand-900/40 dark:text-brand-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400' }}">
                                                                                                     @if ($pm['id'] === 'cash')
                                                                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                                                                             viewBox="0 0 24 24">

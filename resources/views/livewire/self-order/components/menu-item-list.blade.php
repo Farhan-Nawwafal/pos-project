@@ -40,7 +40,7 @@
                             <button
                                 type="button"
                                 aria-label="Hapus item"
-                                class="grid h-9 w-9 shrink-0 place-content-center rounded-xl bg-red-50 text-red-600 transition-colors hover:bg-red-100"
+                                class="grid h-9 w-9 shrink-0 place-content-center rounded-xl bg-red-50 text-[#DD4B39] transition-colors hover:bg-red-100"
                                 wire:click="$parent.removeItem({{ $index }})"
                             >
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
