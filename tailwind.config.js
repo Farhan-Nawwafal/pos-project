@@ -15,7 +15,10 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                // Menggunakan Roboto sebagai font utama (sans)
+                sans: ["Roboto", "Helvetica Neue", ...defaultTheme.fontFamily.sans],
+                
+                // Mempertahankan Poppins sebagai alternatif jika ingin dipanggil manual
                 poppins: ["Poppins", ...defaultTheme.fontFamily.sans],
             },
             colors: {

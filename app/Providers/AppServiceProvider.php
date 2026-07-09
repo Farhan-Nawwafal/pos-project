@@ -4,13 +4,13 @@ namespace App\Providers;
 
 use App\Helpers\MenuHelper;
 use App\Models\DiningTable;
-use App\Models\PrinterSource;
 use App\Models\Transaction;
 use App\Observers\DiningTableObserver;
 use App\Observers\TransactionObserver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,10 +29,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // 1. Register Observers
         Transaction::observe(TransactionObserver::class);
         DiningTable::observe(DiningTableObserver::class);
 
-        // Gunakan View Composer agar auth()->user() sudah tersedia
+        // 2. Global View Composer (Tersedia di semua view)
         View::composer('*', function ($view) {
             $printerSourcesForJs = [];
 
@@ -40,7 +41,6 @@ class AppServiceProvider extends ServiceProvider
                 $user = auth()->user();
                 $cabangId = $user?->cabang_id;
 
-                // Sekarang $cabangId pasti ada isinya jika user login
                 $printerSourcesForJs = \App\Models\PrinterSource::query()
                     ->when($cabangId, fn($q) => $q->where('cabang_id', $cabangId))
                     ->orderBy('name')
@@ -49,13 +49,13 @@ class AppServiceProvider extends ServiceProvider
                         'id' => (int) $s->id,
                         'name' => (string) $s->name,
                         'type' => (string) $s->type,
-                        'role' => "source-{$s->id}" // Tambahkan role biar PrinterManager gak bingung
+                        'role' => "source-{$s->id}"
                     ])
                     ->values()
                     ->toArray();
             }
 
-            $settings = \Illuminate\Support\Facades\DB::table('settings')->first();
+            $settings = DB::table('settings')->first();
 
             $view->with('appSettings', [
                 'rounding_base' => (int) ($settings->rounding_base ?? 0),
@@ -64,10 +64,11 @@ class AppServiceProvider extends ServiceProvider
             $view->with('printerSourcesForJs', $printerSourcesForJs);
         });
 
-        View::composer('layouts.sidebar', function (\Illuminate\View\View $view): void {
+        // 3. Sidebar View Composer
+        View::composer('layouts.sidebar', function ($view): void {
             $user = auth()->user();
             $view->with([
-                'menuGroups' => \App\Helpers\MenuHelper::getMenuGroups(),
+                'menuGroups' => MenuHelper::getMenuGroups(),
                 'currentPath' => request()->path(),
                 'canAccessPos' => $user?->can('pos.access') ?? false,
             ]);

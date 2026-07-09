@@ -107,7 +107,7 @@
 
                     <span class="flex items-center justify-center"
                         :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 '">
-                        <img src="/assets/icons/dashboards.png" alt="Search" class="w-4 h-4  ">
+                        <img src="/assets/icons/map.png" alt="Search" class="w-4 h-4  ">
                     </span>
 
                     <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
