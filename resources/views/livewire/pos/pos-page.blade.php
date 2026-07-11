@@ -192,19 +192,19 @@
             <div class="grid grid-cols-1 gap-2 p-2 md:grid-cols-12" wire:key="view-mode-menu">
 
                 {{-- SISI KIRI (KOLOM 7): AREA INPUT ATAS & GRID PRODUK --}}
-                <div class="md:col-span-7 space-y-3">
+                <div class="md:col-span-7 space-y-1">
 
                     {{-- BARIS 1: ORDER NOTES (Hanya di atas list produk) --}}
                     <div>
                         {{-- Bagian Header Label --}}
-                        <div class="grid grid-cols-14 gap-2 mb-1 space-y-1">
+                        <div class="grid grid-cols-14 gap-2 mt-1 space-y-1">
                             {{-- JIKA DINE IN & ADA MEJA --}}
                             @if ($orderType === 'dine_in' && $selectedTableId)
-                                <h3 class="col-span-2 text-xs font-bold tracking-wide text-black ">
+                                <h3 class="col-span-2 text-xs font-black tracking-wide text-black ">
                                     Table:
                                 </h3>
                                 <div class="col-span-4"> {{-- Diubah ke 11 agar pas dengan col-span-1 --}}
-                                    <h3 class="text-xs font-bold tracking-wide text-black ">
+                                    <h3 class="text-xs font-black tracking-wide text-black ">
                                         Additional info / Cust. name
                                     </h3>
                                 </div>
@@ -264,11 +264,12 @@
                     </div>
 
                     {{-- BARIS 2: SEARCH MENU & STEPPER --}}
+                    <div class="border border-gray-200 shadow-sm rounded-sm  bg-gray-100 ">
                         <div>
-                            <div class="flex items-center">
+                            <div class="flex items-center pl-2 pr-2 pt-0.5">
                                 <div class="relative flex-1">
                                     <div
-                                        class="absolute inset-y-0 left-0 flex items-center pl-3 px-4 pointer-events-none bg-gray-200">
+                                        class="absolute inset-y-0 left-0 flex items-center pl-2 px-2 pointer-events-none bg-gray-200 border border-gray-300">
                                         <img src="/assets/icons/search.png" alt="Search" class="w-3 h-3 opacity-50 dark:invert">
                                     </div>
                                     <input wire:model.live.debounce.300ms="search" type="text"
@@ -283,7 +284,7 @@
                                 <div class="flex items-center gap-2 shrink-0">
                                     <div class="flex items-center justify-between h-11 px-2 gap-3">
                                         <button type="button" wire:click="previousPage"
-                                            class="p-2.5 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg transition">
+                                            class="p-2.5 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                                 class="w-3 h-3 ">
                                                 <path d="M9 4L2 12L9 20V15H22V9H9V4Z" />
@@ -293,7 +294,7 @@
                                             {{ $productPage }} of {{ ceil(count($this->productCards) / 16) }}
                                         </span>
                                         <button type="button" wire:click="nextPage"
-                                            class="p-2.5 rounded-md text-white bg-brand-500 border border-gray-300 rounded-lg transition">
+                                            class="p-2.5 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                                 class="w-3 h-3 rotate-180">
                                                 <path d="M9 4L2 12L9 20V15H22V9H9V4Z" />
@@ -305,7 +306,7 @@
                         </div>
 
                         {{-- Label Menu --}}
-                        <div class="text-brand-500 font-semibold text-sm">
+                        <div class="text-brand-500 font-bold text-xs p-2">
                             <h3>Menu</h3>
                         </div>
 
@@ -315,7 +316,7 @@
                             $displayProducts = array_slice($this->productCards, ($productPage - 1) * $perPage, $perPage);
                         @endphp
                         <div wire:init="loadVariantStockStatuses"
-                            class="grid grid-cols-4 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
+                            class="grid grid-cols-4 gap-1.5 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white p-2 ">
                             @forelse ($displayProducts as $product)
                                 @php
                                     $firstVariant = $product['variants'][0] ?? null;
@@ -340,14 +341,14 @@
                                 </div>
                             @endforelse
                         </div>
-
+                    </div>
                     {{-- Button Bawah Sisi Kiri --}}
                     <div class="space-y-2">
                         @if ($orderType === 'take_away')
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200 hover:text-gray-600">
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="3" y="3" width="8" height="8" rx="2" />
                                         <rect x="13" y="3" width="8" height="8" rx="2" />
                                         <rect x="3" y="13" width="8" height="8" rx="2" />
@@ -408,7 +409,7 @@
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
-                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="3" y="3" width="8" height="8" rx="2" />
                                         <rect x="13" y="3" width="8" height="8" rx="2" />
                                         <rect x="3" y="13" width="8" height="8" rx="2" />
@@ -688,38 +689,57 @@
             <div class="grid grid-cols-1 gap-2 p-2 md:grid-cols-12 animate-in fade-in duration-150"
                 wire:key="view-mode-payment">
                 {{-- SISI KIRI (KOLOM 7): AREA INPUT STRUKTUR BAYAR & GRID PAYMENT --}}
-                <div class="md:col-span-9 space-y-4">
+                <div class="md:col-span-9 space-y-1">
                     {{-- LAPIS ATAS: BARIS 1 (INFO TABLE, MEMBER & BUTTON PROFILE) --}}
                     <div>
-                        <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300 ">
-                            Table </h3>
-                        <div class="flex items-center gap-2">
-                            <div class="relative flex-1 flex gap-2">
-                                <div class="w-1/4">
-                                    <span
-                                        class="h-8 w-full flex items-center bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white px-3 text-sm font-bold rounded-sm border border-gray-300 dark:border-gray-700">
+    {{-- Baris Label (Table & Member) --}}
+    <div class="grid grid-cols-14 gap-1.5 mb-1">
+        <div class="col-span-2">
+            <h3 class="text-xs font-black tracking-wide text-gray-700 dark:text-gray-300">
+                Table
+            </h3>
+        </div>
+        <div class="col-span-12">
+            <h3 class="text-xs font-black tracking-wide text-black dark:text-white">
+                Member
+            </h3>
+        </div>
+    </div>
 
-                                        {{ collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? 'Walk-In' }}
-                                    </span>
-                                </div>
-                                <div class="flex-1">
-                                    <input type="text" readonly wire:model="customerName"
-                                        class="w-full h-8 border border-gray-300 rounded-sm bg-gray-50 px-4 text-sm dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700 cursor-not-allowed" />
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2 shrink-0">
-                                <button type="button"
-                                    class="h-8 px-3 flex items-center justify-center bg-brand-500 text-white text-xs font-semibold rounded-sm border border-gray-300 transition shadow-sm">Profile</button>
-                                <button type="button"
-                                    class="h-8 px-3 flex items-center justify-center bg-brand-500 text-white text-xs font-semibold rounded-sm transition shadow-sm">Check
-                                    Online Payment</button>
-                            </div>
-                        </div>
-                    </div>
+    {{-- Baris Input & Tombol --}}
+    <div class="flex items-center gap-1">
+        <div class="relative flex-1 flex gap-1.5 grid grid-cols-12">
+            {{-- Bagian Table --}}
+            <div class="col-span-2">
+                <span class="h-8 w-full flex items-center bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white px-2 text-sm font-bold rounded-sm border border-gray-300 dark:border-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {{ collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? 'Walk-In' }}
+                </span>
+            </div>
+            {{-- Bagian Member Input --}}
+            <div class="col-span-10">
+                <input type="text" readonly wire:model="customerName"
+                    class="w-full h-8 border border-gray-300 rounded-sm bg-gray-50 px-4 text-sm dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700 cursor-not-allowed" />
+            </div>
+        </div>
+
+        {{-- Bagian Tombol Aksi --}}
+        <div class="flex items-center gap-1 shrink-0">
+            <button type="button" wire:click="$set('editMemberModalOpen', true)"
+                class="h-8 px-5 bg-brand-500 text-white text-xs font-semibold rounded-sm border transition flex items-center justify-center">
+                <img src="/assets/icons/contact.png" alt="Search" class="w-5 h-5">
+            </button>
+            <button type="button"
+                class="h-8 px-3 flex items-center justify-center bg-brand-500 text-white text-xs font-semibold rounded-sm transition shadow-sm whitespace-nowrap">
+                Check Online Payment
+            </button>
+        </div>
+    </div>
+</div>
 
                     {{-- LAPIS TENGAH: BARIS 2 (JUDUL SELECT PAYMENT METHOD) --}}
-                    <div class="flex items-center justify-between ">
-                        <h3 class="text-xs font-bold tracking-wide text-gray-700 dark:text-gray-300">Select
+                <div class=" border bg-gray-100 rounded-sm">    
+                    <div class="flex items-center justify-between p-2 ">
+                        <h3 class="text-md font-semibold tracking-wide text-gray-700 dark:text-gray-300">Select
                             Payment Method</h3>
                         <div class="flex items-center ">
                             <div class="flex items-center justify-between h-9  gap-1">
@@ -732,8 +752,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <span class="text-xs font-bold text-gray-800 whitespace-nowrap">{{ $paymentPage }} of
-                                    1</span>
+                                <span class="text-xs font-bold text-gray-800 whitespace-nowrap">{{ $paymentPage }} of 1</span>
                                 <div class="flex items-center justify-between h-11 px-2 gap-3">
                                     <button type="button" wire:click="previousPage"
                                         class="p-3 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
@@ -747,10 +766,10 @@
                             </div>
                         </div>
                     </div>
-
+                       
                     {{-- GRID KARTU PEMBAYARAN --}}
                     <div
-                        class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-sm p-2 pb-40 ">
+                        class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-b-sm p-2 pb-40 ">
                         @php
                             $methods = [
                                 ['id' => 'promo', 'name' => 'ADD PROMO', 'color' => '#F29C12', 'text' => '#FFFFFF'],
@@ -782,7 +801,7 @@
                             </button>
                         @endforeach
                     </div>
-
+                </div> 
                     {{-- RINGKASAN DATA VOUCHER / OUTSTANDING --}}
                     <div class="grid grid-cols-2  gap-1  bg-gray-50 p-2 rounded-sm border border-gray-200 ">
                         <div class="space-y-1 ">
@@ -832,7 +851,7 @@
                     </div> --}}
 
                     <div
-                        class="overflow-hidden border border-gray-200 bg-white p-8 pb-20 pt-4 shadow-sm rounded-xs flex flex-col">
+                        class="overflow-hidden border border-gray-200 bg-white p-8 pb-30 pt-4 shadow-sm rounded-xs flex flex-col">
                         <div
                             class="p-4 flex-1 min-h-[500px] max-h-[440px] overflow-y-auto bg-gray-50 font-mono text-[11px] leading-relaxed custom-scrollbar border border-black">
 
@@ -1592,7 +1611,7 @@
             @teleport('body')
             <div class="fixed inset-0 z-[100001] flex items-center justify-center p-4">
                 {{-- Backdrop dengan Blur --}}
-                <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" wire:click="$set('voidItemModalOpen', false)">
+                <div class="absolute inset-0 bg-gray-900/60 " wire:click="$set('voidItemModalOpen', false)">
                 </div>
 
                 <div
@@ -1633,7 +1652,7 @@
                                     </div>
                                     <div class="text-right">
                                         <span
-                                            class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-md">{{ $itemToVoid['quantity'] }}
+                                            class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-sm">{{ $itemToVoid['quantity'] }}
                                             item</span>
                                     </div>
                                 </div>
@@ -1742,14 +1761,14 @@
                         {{-- Baris Elemen Tombol Cepat (Persis di Bawah Input Sesuai Gambar POS) --}}
                         <div class="flex items-center gap-1.5 my-2 rounded-lg w-full overflow-x-auto custom-scrollbar">
                             {{-- Tombol Kurang (<) --}} <button type="button" wire:click="decrementPax"
-                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-sm text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
                                 &lt;
                                 </button>
 
                                 {{-- Deretan Angka Pax Shortcut 1 sampai 5 --}}
                                 @foreach ([1, 2, 3, 4, 5] as $amt)
                                     <button type="button" wire:click="$set('numberOfPax', {{ $amt }})" @class([
-                                        'w-10 h-10 flex items-center justify-center text-sm font-bold rounded-md transition shrink-0 active:scale-95',
+                                        'w-10 h-10 flex items-center justify-center text-sm font-bold rounded-sm transition shrink-0 active:scale-95',
                                         'bg-brand-500 text-white shadow-xs' => $numberOfPax == $amt,
                                         'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 shadow-xs' =>
                                             $numberOfPax != $amt,
@@ -1760,7 +1779,7 @@
 
                                 {{-- Tombol Tambah (>) --}}
                                 <button type="button" wire:click="incrementPax"
-                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-sm text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
                                     &gt;
                                 </button>
                         </div>
@@ -1816,7 +1835,7 @@
             aria-modal="true" role="dialog">
 
             {{-- Backdrop Gelap Transparan --}}
-            <div class="absolute inset-0 bg-black/40 backdrop-blur-xs" wire:click="$set('paymentModalOpen', false)">
+            <div class="absolute inset-0 bg-black/40 " wire:click="$set('paymentModalOpen', false)">
             </div>
 
             {{-- Box Card Modal --}}

@@ -211,9 +211,9 @@ unset($__componentSlots);
 unset($__split);
 ?>
 
-        <div class="flex-1 transition-all duration-300 ease-in-out relative z-10 ml-0"
+        <div class="flex-1 transition-all  relative "
             :class="{
-                'lg:ml-[60px]': true,
+                'lg:ml-[50px]': true,
                 'lg:ml-[0px] :ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
                 'sm:translate-x-[0px]': $store.sidebar.isExpanded,
                 'translate-x-0': !$store.sidebar.isExpanded
@@ -347,8 +347,7 @@ unset($__split);
     </div>
 
     <!-- Modal Baru: ESB Order Report -->
-    <?php echo $__env->make('livewire.transactions.esb-order-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-
+    
     <?php app("livewire")->forceAssetInjection(); ?><div x-persist="<?php echo e('toast-center'); ?>">
         <?php if (isset($component)) { $__componentOriginal10afb6a75a927024643c78d9c8aff657 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal10afb6a75a927024643c78d9c8aff657 = $attributes; } ?>
