@@ -57,10 +57,10 @@
   --color-brand-100: #ffdde0;
   --color-brand-200: #ffc2c7;
   --color-brand-300: #ff9ca5;
-  --color-brand-400: #3C8CBC;
-  --color-brand-500: #3C8CBC;
-  --color-brand-600: #3C8CBC;
-  --color-brand-700: #3C8CBC;
+  --color-brand-400: #3C8DBC;
+  --color-brand-500: #3C8DBC;
+  --color-brand-600: #3C8DBC;
+  --color-brand-700: #3C8DBC;
   --color-brand-800: #8e2424;
   --color-brand-900: #6a1b1b;
   --color-brand-950: #3f0e0e;
@@ -346,22 +346,22 @@
 /* POS "Masuk Kasir" Button - Match menu styling */
 .sidebar a[href="{{ route('pos.index', [], false) }}"]:not(.bg-brand-500):hover {
   
-  color: #3C8CBC !important;
+  color: #3C8DBC !important;
   
 }
 
 .sidebar a[href="{{ route('pos.index', [], false) }}"] .text-gray-400:hover {
-  color: #3C8CBC !important;
+  color: #3C8DBC !important;
 }
 
 .dark .sidebar a[href="{{ route('pos.index', [], false) }}"]:not(.bg-brand-500):hover {
   background-color: #e8f3fd !important;
-  color: #3C8CBC !important;
+  color: #3C8DBC !important;
   border-color: #e8f3fd !important;
 }
 
 .dark .sidebar a[href="{{ route('pos.index', [], false) }}"] .text-gray-400:hover {
-  color: #3C8CBC !important;
+  color: #3C8DBC !important;
 }
 
 /* REINFORCE POS inactive BG hover - highest specificity */
@@ -398,7 +398,7 @@
   }
 }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #3C8CBC;
+  background-color: #3C8DBC;
 }
 @layer utilities {
   /* For Remove Date Icon */
@@ -909,7 +909,7 @@ span.flatpickr-weekday,
 code[class*='language-'],
 pre[class*='language-'] {
   text-shadow: none;
-  color: #3C8CBC;
+  color: #3C8DBC;
   overflow: hidden !important;
   font-size: 14px;
   margin: 0;
