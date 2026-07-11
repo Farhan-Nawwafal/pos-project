@@ -1,4 +1,4 @@
-<3C8DBC
+<header
     class="sticky flex w-full bg-[#3C8DBC] border-[#3C8DBC] z-[99999] dark:border-[#3C8DBC] dark:bg-[#3C8DBC] xl:border-b"
     style="height: 50px;" x-data="{
         isApplicationMenuOpen: false,
@@ -143,4 +143,4 @@
             </div>
         </div>
     </div>
-</3C8DBC><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/layouts/app-header.blade.php ENDPATH**/ ?>
+</header><?php /**PATH D:\POS PROJECT FINAL\pos-project\resources\views/layouts/app-header.blade.php ENDPATH**/ ?>
