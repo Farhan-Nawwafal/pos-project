@@ -177,7 +177,7 @@
 
                     <button
                         @click="showModal = false"
-                        class="px-5 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded transition-colors"
+                        class="px-5 py-2 bg-[#DD4B39]  text-white text-sm font-medium rounded transition-colors"
                     >
                         ✕ Close
                     </button>

@@ -156,8 +156,8 @@
                                     }" @endif
                                     @class([
                                         'flex flex-col items-center justify-center h-16 rounded-xl border transition-all shadow-sm group',
-                                        'bg-red-600 border-red-700 hover:bg-red-700 text-white' => $isOccupied,
-                                        'bg-[#3C8CBC] border-[#0f75c7] hover:bg-[#0f75c7] text-white' => !$isOccupied,
+                                        'bg-[#DD4B39] border-[#DD4B39] text-white' => $isOccupied,
+                                        'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' => !$isOccupied,
                                     ])>
                                     <span
                                         class="text-sm font-bold group-hover:scale-110 transition-transform">{{ $t['label'] }}</span>
@@ -235,7 +235,7 @@
                             </svg>
                             @if ($this->pendingTransactions->count() > 0)
                                 <span
-                                    class="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">{{ $this->pendingTransactions->count() }}</span>
+                                    class="absolute top-1 right-1 w-4 h-4 bg-[#DD4B39] text-white text-[10px] font-bold flex items-center justify-center rounded-full">{{ $this->pendingTransactions->count() }}</span>
                             @endif
                         </button>
                     </div>
@@ -484,7 +484,7 @@
                             @endphp
                             <button type="button" wire:click="addToCart({{ (int) ($product['id'] ?? 0) }})"
                                 class="group flex min-h-[60px] flex-col items-center justify-center overflow-hidden rounded-2xl border px-2 py-1.5 shadow-sm hover:shadow-md transition dark:bg-gray-900 dark:border-gray-800"
-                                style="background-color: #F07600; ">
+                                style="background-color: #F29C12; ">
                                 <div class="relative">
                                     @if ($variantCount > 1)
                                         <div
@@ -546,7 +546,7 @@
                                 </svg>
                                 @if ($this->pendingTransactions->count() > 0)
                                     <span
-                                        class="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full">{{ $this->pendingTransactions->count() }}</span>
+                                        class="absolute top-1 right-1 w-4 h-4 bg-[#DD4B39] text-white text-[10px] font-bold flex items-center justify-center rounded-full">{{ $this->pendingTransactions->count() }}</span>
                                 @endif
                             </button>
                         </div>
@@ -1217,7 +1217,7 @@
                                                                         class="mt-2 flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
                                                                         <span
                                                                             class="text-base font-medium text-gray-800 dark:text-white/90">Kembalian</span>
-                                                                        <span class="text-xl font-bold text-[#1086e1]">
+                                                                        <span class="text-xl font-bold text-[#3C8CBC]">
                                                                             Rp
                                                                             {{ number_format((int) $cashChange, 0, ',', '.') }}
                                                                         </span>
@@ -1300,9 +1300,9 @@
                     class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900 border border-gray-100 dark:border-gray-800 animate-in fade-in zoom-in duration-200">
 
                     {{-- Header dengan Warna Merah Lembut --}}
-                    <div class="bg-red-50 dark:bg-red-900/20 px-6 py-5 border-b border-red-100 dark:border-red-900/30">
+                    <div class="bg-red-50 bg-[#DD4B39] px-6 py-5 border-b border-red-100 dark:border-red-900/30">
                         <div class="flex items-center gap-3 text-red-600 dark:text-red-400">
-                            <div class="p-2 bg-red-100 dark:bg-red-800/40 rounded-full">
+                            <div class="p-2 bg-red-100 bg-[#DD4B39] rounded-full">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -1332,7 +1332,7 @@
                                     </div>
                                     <div class="text-right">
                                         <span
-                                            class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-md">{{ $itemToVoid['quantity'] }}
+                                            class="text-xs font-bold text-red-500 bg-[#DD4B39]  px-2 py-1 rounded-md">{{ $itemToVoid['quantity'] }}
                                             item</span>
                                     </div>
                                 </div>
@@ -1393,7 +1393,7 @@
                             Batal
                         </button>
                         <button type="button" wire:click="confirmVoidItem"
-                            class="flex-[2] h-12 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black shadow-lg shadow-red-500/30 uppercase tracking-wider transition active:scale-95">
+                            class="flex-[2] h-12 bg-[#DD4B39]  text-white rounded-2xl font-black shadow-lg shadow-red-500/30 uppercase tracking-wider transition active:scale-95">
                             Hapus Menu Sekarang
                         </button>
                     </div>

@@ -15,6 +15,9 @@
     <link rel="icon" href="{{ asset('assets/images/logoesb.png') }}" type="image/png">
     <link rel="manifest" href="{{ route('admin.manifest') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Robotodisplay=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles

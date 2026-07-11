@@ -91,7 +91,7 @@
 
                         {{-- Keterangan Status --}}
                         <div class="flex items-center gap-4 pl-40">
-                            <div class="w-4 h-4 bg-[#3C8CBC]  border-[#3C8CBC]"></div>
+                            <div class="w-4 h-4 bg-[#3C8DBC]  border-[#3C8DBC]"></div>
                             <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Available</span>
                         </div>
                         <div class="flex items-center gap-4">
@@ -122,11 +122,11 @@
                         Quick Service
                     </button>
                     <button type="button" wire:click="chooseOrderType('dine_in')"
-                        class="px-15 py-4 text-xs font-bold rounded-xs bg-[#3C8CBC] text-white">
+                        class="px-15 py-4 text-xs font-bold rounded-xs bg-[#3C8DBC] text-white">
                         1 - 50
                     </button>
                     <button type="button" wire:click="chooseOrderType('dine_in')"
-                        class="px-15 py-4 text-xs font-bold rounded-xs bg-[#3C8CBC] text-white">
+                        class="px-15 py-4 text-xs font-bold rounded-xs bg-[#3C8DBC] text-white">
                         51 - 100
                     </button>
                     {{-- Tombol preset tambahan bisa ditambahkan manual sesuai kebutuhan cabang --}}
@@ -353,10 +353,19 @@
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200 hover:text-gray-600">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="3" y="3" width="8" height="8" rx="2" />
+                                        <rect x="13" y="3" width="8" height="8" rx="2" />
+                                        <rect x="3" y="13" width="8" height="8" rx="2" />
+                                        <rect x="13" y="13" width="8" height="8" rx="2" />
+                                    </svg>
+                                    Merge Table
+                                </button>
+                                <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="w-3.5 h-3.5">
                                         <polyline points="5 9 2 12 5 15"></polyline>
                                         <polyline points="9 5 12 2 15 5"></polyline>
                                         <polyline points="15 19 12 22 9 19"></polyline>
@@ -365,15 +374,20 @@
                                         <line x1="12" y1="2" x2="12" y2="22"></line>
                                     </svg>
 
-                                    Merge Table
-                                </button>
-                                <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">
                                     {{-- <img src="/assets/icons/.png" width="15" height="15" alt="Up"> --}}
                                     Move Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Move
-                                    Item</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="w-3.5 h-3.5">
+                                        <polyline points="19 5 22 8 19 11"></polyline>
+                                        <line x1="2" y1="8" x2="22" y2="8"></line>
+
+                                        <polyline points="5 13 2 16 5 19"></polyline>
+                                        <line x1="2" y1="16" x2="22" y2="16"></line>
+                                    </svg>
+                                    Move Item</button>
                             </div>
                             <div class="grid grid-cols-3 w-full pointer-events-none">
                                 <button type="button" wire:click="$set('cancelTableModalOpen', true)"
@@ -400,14 +414,40 @@
                         @if ($orderType === 'dine_in' && $selectedTableId)
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Merge
-                                    Table</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="3" y="3" width="8" height="8" rx="2" />
+                                        <rect x="13" y="3" width="8" height="8" rx="2" />
+                                        <rect x="3" y="13" width="8" height="8" rx="2" />
+                                        <rect x="13" y="13" width="8" height="8" rx="2" />
+                                    </svg>
+                                    Merge Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Move
-                                    Table</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="w-3.5 h-3.5">
+                                        <polyline points="5 9 2 12 5 15"></polyline>
+                                        <polyline points="9 5 12 2 15 5"></polyline>
+                                        <polyline points="15 19 12 22 9 19"></polyline>
+                                        <polyline points="19 9 22 12 19 15"></polyline>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <line x1="12" y1="2" x2="12" y2="22"></line>
+                                    </svg>
+                                    Move Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Move
-                                    Item</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="w-3.5 h-3.5">
+                                        <polyline points="19 5 22 8 19 11"></polyline>
+                                        <line x1="2" y1="8" x2="22" y2="8"></line>
+
+                                        <polyline points="5 13 2 16 5 19"></polyline>
+                                        <line x1="2" y1="16" x2="22" y2="16"></line>
+                                    </svg>
+                                    Move Item</button>
                             </div>
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="$set('cancelTableModalOpen', true)"
@@ -426,10 +466,16 @@
                                     </svg>
                                     Cancel Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">Link
-                                    Table</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                                    </svg>
+                                    Link Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                                    class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider">Checker</button>
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
+                                    <img src="/assets/icons/printer.png" width="14" height="14" alt="Up">
+                                    Checker</button>
                             </div>
                         @endif
                     </div>
@@ -497,9 +543,16 @@
                                                     {{ number_format($item['quantity'] * (int) $item['price'], 0, ',', '.') }}
                                                 </p>
                                             </div>
-                                            <div class="flex flex-col gap-1 shrink-0">
+                                            <div class="flex items-center gap-2 shrink-0">
                                                 <button type="button" wire:click="removeItem({{ $idx }})"
-                                                    class="w-8 h-6 bg-[#DD4B39] text-white text-[10px] rounded-xs font-bold hover:bg-red-800">X</button>
+                                                    class="w-6 h-5 bg-[#DD4B39] text-white text-[10px] rounded-xs font-bold  flex items-center justify-center">
+                                                    X
+                                                </button>
+
+                                                <button type="button" title="Last created:"
+                                                    class="group relative w-3 h-3 bg-gray-400 text-white text-[11px] rounded-full font-bold flex items-center justify-center transition-colors">
+                                                    <span class="leading-none">i</span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -567,8 +620,12 @@
                                         <button type="button" wire:click="saveAsPending"
                                             @disabled(count($cartItems) === 0)
                                             class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs  bg-brand-500 shadow-sm">
-                                            <img src="/assets/icons/save.png" width="12" height="12"
-                                                alt="Down">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <rect x="3" y="16" width="18" height="6" rx="2" />
+                                                <circle cx="17" cy="19" r="1" fill="white" />
+                                                <circle cx="20" cy="19" r="1" fill="white" />
+                                            </svg>
                                             <span>Save Order</span>
                                         </button>
                                     </div>
@@ -578,8 +635,7 @@
                                     <div class="col-span-2">
                                         <button type="button" wire:click="printBill"
                                             class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs  bg-brand-500 shadow-sm">
-                                            <img src="/assets/icons/printer.png" width="15" height="15"
-                                                alt="Up">
+                                            <img src="/assets/icons/printer.png" width="14" height="14" alt="Up">
                                             <span>Print Bill</span>
                                         </button>
                                     </div>
@@ -588,8 +644,12 @@
                                         <button type="button" wire:click="saveAsPending"
                                             @disabled(count($cartItems) === 0)
                                             class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs  bg-brand-500 shadow-sm">
-                                            <img src="/assets/icons/save.png" width="12" height="12"
-                                                alt="Down">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <rect x="3" y="16" width="18" height="6" rx="2" />
+                                                <circle cx="17" cy="19" r="1" fill="white" />
+                                                <circle cx="20" cy="19" r="1" fill="white" />
+                                            </svg>
                                             <span>Save Order</span>
                                         </button>
                                     </div>
@@ -606,11 +666,26 @@
                                         <span>Print Bill</span>
                                     </button>
                                     <button type="button" wire:click="openSplitBill"
-                                        class="w-full h-10 font-bold text-white rounded-xs bg-brand-500 shadow-sm transition text-xs tracking-wider">
+                                        class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs bg-brand-500 shadow-sm">
+                                        <svg width="14" height="14" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="12" y="8" width="40" height="48" rx="4" ry="4" />
+
+                                        <polyline points="20 18 25 23 32 16" />
+                                        <polyline points="20 28 25 33 32 26" />
+                                        <polyline points="20 38 25 43 32 36" />
+
+                                        <line x1="38" y1="18" x2="46" y2="18" />
+                                        <line x1="38" y1="28" x2="46" y2="28" />
+                                        <line x1="38" y1="38" x2="46" y2="38" />
+                                        <line x1="20" y1="48" x2="46" y2="48" />
+                                        </svg>
                                         Split Bill
                                     </button>
                                     <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
-                                        class="w-full h-10 font-bold text-white rounded-xs bg-brand-500  shadow-sm transition text-xs tracking-wider">
+                                        class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs bg-brand-500 shadow-sm">
+
+                                        <img src="/assets/icons/dollar-symbol.png" width="12" height="12" alt="Payment" class="filter invert">
+
                                         Payment
                                     </button>
                                 </div>
@@ -690,15 +765,15 @@
                         @php
                             $methods = [
                                 ['id' => 'promo', 'name' => 'ADD PROMO', 'color' => '#F29C12', 'text' => '#FFFFFF'],
-                                ['id' => 'cash', 'name' => 'CASH', 'color' => '#3C8CBC', 'text' => '#FFFFFF'],
-                                ['id' => 'card', 'name' => 'CARD', 'color' => '#3C8CBC', 'text' => '#FFFFFF'],
+                                ['id' => 'cash', 'name' => 'CASH', 'color' => '#3C8DBC', 'text' => '#FFFFFF'],
+                                ['id' => 'card', 'name' => 'CARD', 'color' => '#3C8DBC', 'text' => '#FFFFFF'],
                                 [
                                     'id' => 'compliment',
                                     'name' => 'COMPLIMENT',
-                                    'color' => '#3C8CBC',
+                                    'color' => '#3C8DBC',
                                     'text' => '#FFFFFF',
                                 ],
-                                ['id' => 'other', 'name' => 'OTHER COST', 'color' => '#3C8CBC', 'text' => '#FFFFFF'],
+                                ['id' => 'other', 'name' => 'OTHER COST', 'color' => '#3C8DBC', 'text' => '#FFFFFF'],
                             ];
                         @endphp
                         @foreach ($methods as $method)
@@ -922,12 +997,19 @@
                                 </svg>
                             </button>
                             <button type="button"
-                                class="col-span-2 w-full h-10 bg-brand-500 border border-gray-300 text-white text-[10px]  rounded-sm  shadow-sm">
+                                class="col-span-2 w-full h-10 flex items-center justify-center gap-2 font-bold text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
+                                <img src="/assets/icons/gift.png" width="15" height="15" alt="Up">
                                 Purchase Voucher
                             </button>
                         </div>
                         <button type="button" wire:click="savePayment"
-                            class="w-full h-10 bg-brand-500 text-white font-black rounded-sm shadow-md transition text-sm tracking-widest">
+                            class="w-full flex items-center justify-center h-10 font-bold text-white rounded-xs bg-brand-500 shadow-sm transition active:scale-95">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <rect x="3" y="16" width="18" height="6" rx="2" />
+                                                <circle cx="17" cy="19" r="1" fill="white" />
+                                                <circle cx="20" cy="19" r="1" fill="white" />
+                                            </svg>
                             Save Payment
                         </button>
                     </div>
@@ -1265,33 +1347,33 @@
                                             </div>
                                         @endif
 
-                                        @if ($checkoutStep === 3)
-                                            <div class="space-y-4">
-                                                {{-- Card Info Ringkasan --}}
-                                                <div
-                                                    class="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800">
-                                                    <div class="flex justify-between items-start ">
-                                                        <div>
-                                                            <p
-                                                                class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">
-                                                                Menu</p>
-                                                            <p class="text-xl font-black text-blue-900 dark:text-white">
-                                                                {{ $customerName }}
-                                                            </p>
-                                                        </div>
-                                                        <div class="text-right">
-                                                            <p
-                                                                class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">
-                                                                Status</p>
-                                                            <span @class([
-                                                                'px-2 py-1 rounded text-[10px] font-bold uppercase',
-                                                                'bg-orange-100 text-orange-700' => !$isFinalPayment,
-                                                                'bg-[#3C8CBC]/10 text-[#3C8CBC] border border-[#3C8CBC]/20' => $isFinalPayment,
-                                                            ])>
-                                                                {{ $isFinalPayment ? 'Pelunasan / Bayar' : 'Dine In' }}
-                                                            </span>
-                                                        </div>
+                                    @if ($checkoutStep === 3)
+                                        <div class="space-y-4">
+                                            {{-- Card Info Ringkasan --}}
+                                            <div
+                                                class="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800">
+                                                <div class="flex justify-between items-start ">
+                                                    <div>
+                                                        <p
+                                                            class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">
+                                                            Menu</p>
+                                                        <p class="text-xl font-black text-blue-900 dark:text-white">
+                                                            {{ $customerName }}
+                                                        </p>
                                                     </div>
+                                                    <div class="text-right">
+                                                        <p
+                                                            class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">
+                                                            Status</p>
+                                                        <span @class([
+                                                            'px-2 py-1 rounded text-[10px] font-bold uppercase',
+                                                            'bg-orange-100 text-orange-700' => !$isFinalPayment,
+                                                            'bg-[#3C8DBC]/10 text-[#3C8DBC] border border-[#3C8DBC]/20' => $isFinalPayment,
+                                                        ])>
+                                                            {{ $isFinalPayment ? 'Pelunasan / Bayar' : 'Dine In' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
 
                                                     <div
                                                         class="pt-4 border-t border-blue-200 dark:border-blue-700 flex justify-between items-center">
@@ -1535,28 +1617,27 @@
                                                 </button>
                                             @endif
 
-                                            @if ($checkoutStep < 3)
-                                                <button type="button" wire:click="nextStep"
-                                                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex h-11 items-center justify-center rounded-lg px-4 text-sm font-semibold text-white transition">
-                                                    Lanjut
-                                                </button>
-                                            @else
-                                                <button type="button" wire:click="checkout" wire:loading.attr="disabled"
-                                                    @class([
-                                                        'flex-[2] px-6 py-3 rounded-xl font-black transition text-lg text-white shadow-lg',
-                                                        'bg-[#3C8CBC] hover:bg-[#0f75c7]' => $isFinalPayment, // Jika Bayar - Header Blue
-                                                        'bg-blue-600 hover:bg-blue-700' => !$isFinalPayment, // Jika Booking
-                                                    ])>
-                                                    {{ $isFinalPayment ? 'Lunasi Sekarang' : 'Kirim Ke Dapur' }}
-                                                </button>
-                                            @endif
-                                        </div>
+                                        @if ($checkoutStep < 3)
+                                            <button type="button" wire:click="nextStep"
+                                                class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex h-11 items-center justify-center rounded-lg px-4 text-sm font-semibold text-white transition">
+                                                Lanjut
+                                            </button>
+                                        @else
+                                            <button type="button" wire:click="checkout" wire:loading.attr="disabled" @class([
+                                                'flex-[2] px-6 py-3 rounded-xl font-black transition text-lg text-white shadow-lg',
+                                                'bg-[#3C8DBC] ' => $isFinalPayment, // Jika Bayar - Header Blue
+                                                'bg-blue-600' => !$isFinalPayment, // Jika Booking
+                                            ])>
+                                                {{ $isFinalPayment ? 'Lunasi Sekarang' : 'Kirim Ke Dapur' }}
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             @endteleport
         @endif
 
@@ -1752,12 +1833,12 @@
                                 Sales Mode: <span class="text-gray-800 dark:text-white font-bold">Dine In</span>
                             </span>
 
-                            {{-- Button Status Aktif Dine In --}}
-                            <button type="button"
-                                class="h-11 px-6 font-bold text-xs rounded-lg border-2 border-[#3C8CBC] bg-blue-50 text-[#3C8CBC] dark:bg-blue-950/30 dark:text-blue-400 transition cursor-default">
-                                Dine In
-                            </button>
-                        </div>
+                        {{-- Button Status Aktif Dine In --}}
+                        <button type="button"
+                            class="h-11 px-6 font-bold text-xs rounded-lg border-2 border-[#3C8DBC] bg-blue-50 text-[#3C8DBC] dark:bg-blue-950/30 dark:text-blue-400 transition cursor-default">
+                            Dine In
+                        </button>
+                    </div>
 
                     </div>
 

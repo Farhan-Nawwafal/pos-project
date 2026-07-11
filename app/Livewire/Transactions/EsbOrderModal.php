@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Transactions;
+namespace App\Livewire\Transaction;
 
 use Livewire\Component;
 

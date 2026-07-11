@@ -98,7 +98,7 @@
                             <div class="flex items-center gap-2">
                                 <span class="font-bold">{{ $v['name'] }}</span>
                                 @if($isPromo && $pct > 0)
-                                    <span class="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">-{{ $pct }}%</span>
+                                    <span class="text-[10px] font-bold text-red-500 bg-red-100 px-2 py-0.5 rounded-full">-{{ $pct }}%</span>
                                 @endif
                             </div>
                             <div class="flex items-baseline gap-2 mt-1">

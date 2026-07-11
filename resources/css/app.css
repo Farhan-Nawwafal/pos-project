@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap') layer(base);
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap') layer(base);
 @import 'prismjs/themes/prism.min.css';
 @config "../../tailwind.config.js";
 @import 'tailwindcss';
@@ -18,7 +18,7 @@
 
 @theme {
   --font-*: initial;
-  --font-outfit: Outfit, sans-serif;
+  --font-outfit: Roboto, sans-serif;
 
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
