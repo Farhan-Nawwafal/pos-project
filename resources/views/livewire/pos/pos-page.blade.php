@@ -138,9 +138,9 @@
                         </svg>
                     </button>
                     <button type="button"
-                        class="w-9 h-9 flex items-center justify-center bg-[#337ab7] text-white rounded">‹</button>
+                        class="w-9 h-9 flex items-center justify-center bg-[#3C8DBC] text-white rounded">‹</button>
                     <button type="button"
-                        class="w-9 h-9 flex items-center justify-center bg-[#337ab7] text-white rounded">›</button>
+                        class="w-9 h-9 flex items-center justify-center bg-[#3C8DBC] text-white rounded">›</button>
                 </div>
             </div>
 
@@ -148,7 +148,7 @@
             <div class="flex items-center justify-between px-4 py-3 bg-gray-100 border-b border-gray-200">
                 <h3 class="text-sm font-semibold text-gray-700">Quick Service List</h3>
                 <button type="button" wire:click="openAddQuickService"
-                    class="px-4 py-2 bg-[#337ab7] text-white text-xs font-bold rounded flex items-center gap-1.5 transition active:scale-95">
+                    class="px-4 py-2 bg-[#3C8DBC] text-white text-xs font-bold rounded flex items-center gap-1.5 transition active:scale-95">
                     + Add Quick Service
                 </button>
             </div>
@@ -1951,7 +1951,7 @@
                 class="relative w-full max-w-2xl h-[50vh] flex flex-col overflow-hidden rounded-sm bg-white shadow-2xl   animate-in ">
 
                 {{-- HEADER MODAL --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Split Bill</h3>
                 </div>
 
@@ -1986,7 +1986,7 @@
                                             </div>
                                         </div>
                                         <button type="button" wire:click="moveItemToSplit({{ $cIdx }})"
-                                            class="w-12 h-8 flex items-center justify-center bg-[#337ab7] text-white rounded font-bold shadow-xs text-sm">
+                                            class="w-12 h-8 flex items-center justify-center bg-[#3C8DBC] text-white rounded font-bold shadow-xs text-sm">
                                             +
                                         </button>
                                     </div>
@@ -1995,7 +1995,7 @@
                         </div>
                         <div class="pt-3">
                             <button type="button"
-        class="px-4 stream h-9 bg-[#337ab7] text-white text-xs rounded shadow-sm flex items-center gap-2">
+        class="px-4 stream h-9 bg-[#3C8DBC] text-white text-xs rounded shadow-sm flex items-center gap-2">
     <svg xmlns="http://www.w3.org/2000/svg" 
          viewBox="0 0 24 24" 
          fill="none" 
@@ -2023,7 +2023,7 @@
                                 @php $itemCount = collect($bill['items'])->sum('quantity'); @endphp
                                 <button type="button" wire:click="$set('activeSplitTab', {{ $bIdx }})" @class([
                                     'px-4 py-2 text-xs font-bold transition-all border-b-2 -mb-[1px]',
-                                    'border-[#337ab7] text-[#337ab7]' => $activeSplitTab == $bIdx,
+                                    'border-[#3C8DBC] text-[#3C8DBC]' => $activeSplitTab == $bIdx,
                                     'border-transparent text-gray-400 hover:text-gray-600' =>
                                         $activeSplitTab != $bIdx,
                                 ])>
@@ -2093,7 +2093,7 @@
                 <div
                     class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950 px-5 py-3 flex items-center justify-between shrink-0">
                     <button type="button" wire:click="addSplitBill"
-                        class="h-10 px-4 bg-[#337ab7]  text-white text-xs  rounded-lg shadow-sm flex items-center gap-1">
+                        class="h-10 px-4 bg-[#3C8DBC]  text-white text-xs  rounded-lg shadow-sm flex items-center gap-1">
                         + Add Bill
                     </button>
 
@@ -2164,7 +2164,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans">
 
                 {{-- HEADER MODAL --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Quick Service</h3>
                 </div>
 
@@ -2184,7 +2184,7 @@
                         {{-- Row Stepper Buttons --}}
                         <div class="flex items-center justify-center gap-1">
                             {{-- Button Minus (<) --}} <button type="button" wire:click="decrementPax"
-                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                                 &lt;
                                 </button>
 
@@ -2192,7 +2192,7 @@
                                 @foreach ([1, 2, 3, 4, 5] as $paxAmt)
                                     <button type="button" wire:click="$set('numberOfPax', {{ $paxAmt }})" @class([
                                         'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
-                                        'bg-[#337ab7] text-white' => $numberOfPax == $paxAmt,
+                                        'bg-[#3C8DBC] text-white' => $numberOfPax == $paxAmt,
                                         'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
                                             $numberOfPax != $paxAmt,
                                     ])>
@@ -2202,7 +2202,7 @@
 
                                 {{-- Button Plus (>) --}}
                                 <button type="button" wire:click="incrementPax"
-                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                                     &gt;
                                 </button>
                         </div>
@@ -2216,7 +2216,7 @@
                             {{-- Button DINE IN --}}
                             <button type="button" wire:click="$set('quickServiceSalesMode', 'dine_in')" @class([
                                 'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
-                                'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
                                     $quickServiceSalesMode === 'dine_in',
                                 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
                                     $quickServiceSalesMode !== 'dine_in',
@@ -2227,7 +2227,7 @@
                             {{-- Button GOFOOD --}}
                             <button type="button" wire:click="$set('quickServiceSalesMode', 'gofood')" @class([
                                 'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
-                                'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
                                     $quickServiceSalesMode === 'gofood',
                                 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
                                     $quickServiceSalesMode !== 'gofood',
@@ -2238,7 +2238,7 @@
                             {{-- Button TAKEAWAY --}}
                             <button type="button" wire:click="$set('quickServiceSalesMode', 'take_away')" @class([
                                 'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
-                                'border-[#337ab7] bg-blue-50 text-[#337ab7]' =>
+                                'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
                                     $quickServiceSalesMode === 'take_away',
                                 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
                                     $quickServiceSalesMode !== 'take_away',
@@ -2253,14 +2253,14 @@
                     {{-- FOOTER BUTTONS ACTION MODAL --}}
                     <div class="flex justify-end items-center gap-2 pt-2">
                         <button type="button" wire:click="$set('scanInputModalOpen', true)"
-                            class="h-10 px-4 bg-[#337ab7]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
+                            class="h-10 px-4 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
                             📋 Scan / Input
                         </button>
 
                         {{-- Tombol Final Apply --}}
                         <button type="button"
                             wire:click="$set('orderType', '{{ $quickServiceSalesMode }}'); $set('quickServiceModalOpen', false); $set('showQuickServiceWaitlist', false);"
-                            class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
+                            class="h-10 px-6 bg-gray-300 hover:bg-[#3C8DBC] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
                             ✓ Apply
                         </button>
                     </div>
@@ -2281,7 +2281,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans text-gray-800">
 
                 {{-- HEADER dengan Panah Kembali --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white flex items-center gap-3">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white flex items-center gap-3">
                     <button type="button" wire:click="$set('scanInputModalOpen', false)"
                         class="text-white hover:text-white/80 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
@@ -2295,7 +2295,7 @@
                 {{-- KONTEN --}}
                 <div class="p-6 space-y-2">
                     <label class="block text-sm font-bold text-gray-700">Input Order ID</label>
-                    <p class="text-sm font-semibold italic text-[#337ab7]">
+                    <p class="text-sm font-semibold italic text-[#3C8DBC]">
                         Only paid transaction of ESB Order QS that can be input
                     </p>
 
@@ -2304,7 +2304,7 @@
                             class="flex-1 h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
                             placeholder="Please input Order ID ESB Order" />
                         <button type="button" wire:click="applyEsbOrderScan"
-                            class="h-11 px-6 bg-[#337ab7]  text-white text-sm font-bold rounded shadow-sm transition active:scale-95 shrink-0">
+                            class="h-11 px-6 bg-[#3C8DBC]  text-white text-sm font-bold rounded shadow-sm transition active:scale-95 shrink-0">
                             Apply
                         </button>
                     </div>
@@ -2328,7 +2328,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-150">
 
                 {{-- HEADER --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Customer Phone Number</h3>
                 </div>
 
@@ -2352,7 +2352,7 @@
                         Cancel
                     </button>
                     <button type="button" wire:click="$set('phoneNumberModalOpen', false)"
-                        class="h-10 px-6 bg-[#337ab7]  text-white text-xs font-bold rounded shadow-sm transition active:scale-95">
+                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm transition active:scale-95">
                         Apply
                     </button>
                 </div>
@@ -2371,7 +2371,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden  animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[85vh]">
 
                 {{-- HEADER --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white shrink-0">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
                     <h3 class="text-base font-bold tracking-wide">
                         Edit Member
                         @if ($selectedTableId)
@@ -2409,7 +2409,7 @@
                         <input type="text" wire:model.live.debounce.300ms="memberSearch"
                             class="flex-1 h-11 px-3 text-sm outline-none border-0" placeholder="Search Regular Member" />
                         <button type="button" wire:click="$set('memberSearch', '')"
-                            class="w-12 bg-[#337ab7]  text-white flex items-center justify-center transition">
+                            class="w-12 bg-[#3C8DBC]  text-white flex items-center justify-center transition">
                             {{-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
                                 stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -2439,7 +2439,7 @@
                                 @foreach ($pagedMembers as $m)
                                     <button type="button" wire:click="$set('memberId', {{ (int) $m->id }})" @class([
                                         'w-full text-left px-4 py-2.5 text-sm transition',
-                                        'bg-blue-50 text-[#337ab7] font-bold' => $memberId == $m->id,
+                                        'bg-blue-50 text-[#3C8DBC] font-bold' => $memberId == $m->id,
                                         'hover:bg-gray-50 text-gray-700' => $memberId != $m->id,
                                     ])>
                                         {{ $m->name }}
@@ -2489,7 +2489,7 @@
                         ✖ Clear Regular Member
                     </button>
                     <button type="button" wire:click="$set('editMemberModalOpen', false)"
-                        class="h-10 px-6 bg-[#337ab7]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
                         ✓ Apply
                     </button>
                 </div>
@@ -2508,7 +2508,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
 
                 {{-- HEADER --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Delivery Cost</h3>
                 </div>
 
@@ -2542,7 +2542,7 @@
                 {{-- FOOTER --}}
                 <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center">
                     <button type="button" wire:click="$set('deliveryCostModalOpen', false)"
-                        class="h-10 px-6 bg-[#337ab7]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
                         ✓ Apply
                     </button>
                 </div>
@@ -2561,7 +2561,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
 
                 {{-- HEADER --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">
                         Edit Table
                         @if ($selectedTableId)
@@ -2583,14 +2583,14 @@
                     {{-- Row Stepper Buttons --}}
                     <div class="flex items-center justify-center gap-1">
                         <button type="button" wire:click="decrementPax"
-                            class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                            class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                             &lt;
                         </button>
 
                         @foreach ([1, 2, 3, 4, 5] as $paxAmt)
                             <button type="button" wire:click="$set('numberOfPax', {{ $paxAmt }})" @class([
                                 'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
-                                'bg-[#337ab7] text-white' => $numberOfPax == $paxAmt,
+                                'bg-[#3C8DBC] text-white' => $numberOfPax == $paxAmt,
                                 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
                                     $numberOfPax != $paxAmt,
                             ])>
@@ -2599,7 +2599,7 @@
                         @endforeach
 
                         <button type="button" wire:click="incrementPax"
-                            class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#337ab7] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                            class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
                             &gt;
                         </button>
                     </div>
@@ -2611,7 +2611,7 @@
                 {{-- FOOTER --}}
                 <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center">
                     <button type="button" wire:click="applyEditTablePax"
-                        class="h-10 px-6 bg-[#337ab7]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
                         ✓ Apply
                     </button>
                 </div>
@@ -2630,7 +2630,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
 
                 {{-- HEADER --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
                     <h3 class="text-base font-bold tracking-wide">Complimentary</h3>
                 </div>
 
@@ -2660,7 +2660,7 @@
                                     class="flex-1 h-11 border border-gray-300 rounded px-4 text-sm text-right focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
                                     placeholder="0" />
                                 <button type="button" wire:click="$set('complimentAmount', '{{ $total }}')"
-                                    class="h-11 px-3 bg-[#337ab7]  text-white text-xs font-bold rounded shrink-0 transition active:scale-95">
+                                    class="h-11 px-3 bg-[#3C8DBC]  text-white text-xs font-bold rounded shrink-0 transition active:scale-95">
                                     Get Outstanding
                                 </button>
                             </div>
@@ -2699,7 +2699,7 @@
                         ✖ Cancel
                     </button>
                     <button type="button" wire:click="applyCompliment"
-                        class="h-10 px-6 bg-gray-300 hover:bg-[#337ab7] hover:text-white text-gray-500 hover:text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                        class="h-10 px-6 bg-gray-300 hover:bg-[#3C8DBC] hover:text-white text-gray-500 hover:text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
                         ✓ Apply
                     </button>
                 </div>
@@ -2718,7 +2718,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
 
                 {{-- HEADER MODAL (fix, tidak ikut scroll) --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white shrink-0">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
                     <h3 class="text-base font-bold tracking-wide">Card Payment</h3>
                 </div>
 
@@ -2739,7 +2739,7 @@
                                 <input type="text" wire:model.live="cardAmount" inputmode="numeric"
                                     class="flex-1 min-w-0 h-11 border border-brand-500 rounded px-4 text-sm text-right focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white" />
                                 <button type="button" wire:click="setCardOutstandingAmount"
-                                    class="h-11 px-3 bg-[#337ab7]  text-white text-xs font-bold rounded shrink-0 transition active:scale-95">
+                                    class="h-11 px-3 bg-[#3C8DBC]  text-white text-xs font-bold rounded shrink-0 transition active:scale-95">
                                     Get Outstanding
                                 </button>
                             </div>
@@ -2813,7 +2813,7 @@
                         ✖ Cancel
                     </button>
                     <button type="button" wire:click="applyCardPayment"
-                        class="h-10 px-6 bg-[#337ab7]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
                         ✓ Apply
                     </button>
                 </div>
@@ -2833,7 +2833,7 @@
                 class="relative bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden overflow-x-hidden animate-in fade-in zoom-in-95 duration-150">
 
                 {{-- HEADER MODAL --}}
-                <div class="bg-[#337ab7] px-5 py-3 text-white shrink-0">
+                <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
                     <h3 class="text-base font-bold tracking-wide">Other Cost - Non Sales</h3>
                 </div>
 
@@ -2876,7 +2876,7 @@
                         ✖ Cancel
                     </button>
                     <button type="button" wire:click="applyOtherCost"
-                        class="h-10 px-6 bg-[#337ab7]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
                         ✓ Apply
                     </button>
                 </div>
