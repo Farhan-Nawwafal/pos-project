@@ -77,6 +77,8 @@ class Transaction extends Model
         'kitchen_processed_at',
         'kitchen_processed_by_user_id',
         'payment_processed_by',
+        'promotion_id',
+        'promotion_discount_amount',
     ];
 
     protected function casts(): array

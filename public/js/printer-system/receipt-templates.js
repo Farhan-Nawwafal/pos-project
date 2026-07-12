@@ -66,20 +66,13 @@ if (!window.ReceiptTemplates) {
             const chunks = [];
             chunks.push(this.encoder.encode(COMMANDS.RESET));
 
-            // ================= LOGO =================
+            // LOGO
             if (data?.store?.logo_url) {
-                console.log("Mencoba print logo:", data.store.logo_url);
                 try {
                     const logoBytes = await this._buildLogoRasterBytes(
                         data.store.logo_url,
                     );
-                    if (logoBytes) {
-                        chunks.push(logoBytes);
-                        console.log(
-                            "✅ Logo berhasil ditambahkan:",
-                            data.store.logo_url,
-                        );
-                    }
+                    if (logoBytes) chunks.push(logoBytes);
                 } catch (e) {
                     console.warn("⚠️ Logo gagal dibuat:", e);
                 }
@@ -98,23 +91,26 @@ if (!window.ReceiptTemplates) {
             receipt += "--------------------------------\n";
 
             // INFO
-            let infoText = "-";
             receipt += COMMANDS.ALIGN_LEFT;
             receipt += "Date      : " + this.formatDate(data.date) + "\n";
-            if (data.order?.order_type === "dine_in")
-                infoText = data.table_number || "-";
-            else infoText = data.order?.code || "-";
+
+            const orderType = (data.order?.order_type || "").toLowerCase();
+            const isQuickService = orderType !== "dine_in";
+            const infoText =
+                orderType === "dine_in"
+                    ? data.table_number || "-"
+                    : data.order?.code || "-";
+
             receipt += "Info      : " + infoText + "\n";
-            let purpose =
-                data.order?.order_type === "dine_in" ? "DINE IN" : "TAKE AWAY";
-            receipt += "Purpose   : " + purpose + "\n";
+            receipt +=
+                "Purpose   : " +
+                (orderType === "dine_in" ? "DINE IN" : "TAKE AWAY") +
+                "\n";
             receipt += "Cashier   : " + (data.name_kasir || "Kasir") + "\n";
             receipt += "--------------------------------\n";
 
             // ITEMS
-            let total = 0;
             let totalItems = 0;
-
             if (data.items && Array.isArray(data.items)) {
                 data.items.forEach((item) => {
                     const name = item.product?.name || item.name || "Item";
@@ -122,43 +118,29 @@ if (!window.ReceiptTemplates) {
                     const price = item.price || 0;
                     const subtotal = qty * price;
                     totalItems += qty;
-                    total += subtotal;
                     receipt +=
                         this.formatItemLine(name, qty, price, subtotal) + "\n";
                 });
             }
-
             receipt += "--------------------------------\n";
 
             // TOTALS
-            let subtotal = parseInt(data.order?.subtotal || total);
-
-            // Ambil tipe order (dine_in atau take_away/quick_service)
-            const orderType = (
-                data.order?.order_type ||
-                data.order_type ||
-                ""
-            ).toLowerCase();
-            const isQuickService = orderType !== "dine_in";
-
-            // Ambil persentase langsung dari data order
+            const subtotal = parseInt(data.order?.subtotal || 0);
+            const promotionDiscount = parseInt(
+                data.order?.promotion_discount_amount || 0,
+            );
             let servicePercent = parseFloat(
                 data.order?.service_percentage || 0,
             );
-            let taxPercent = parseFloat(data.order?.tax_percentage || 0);
-
-            // LOGIKA BARU: Jika Quick Service, paksa service charge jadi 0
-            let service = isQuickService
+            const service = isQuickService
                 ? 0
                 : parseInt(
                       data.order?.service_amount ||
                           Math.round(subtotal * (servicePercent / 100)),
                   );
-
-            let tax = parseInt(
-                data.order?.tax_amount ||
-                    Math.round(subtotal * (taxPercent / 100)),
-            );
+            const tax = parseInt(data.order?.tax_amount || 0);
+            const grandTotal = parseInt(data.order?.total || 0);
+            const roundingAmount = parseInt(data.order?.rounding_amount || 0);
 
             receipt += `${totalItems} items\n`;
             receipt +=
@@ -167,7 +149,13 @@ if (!window.ReceiptTemplates) {
                     this.formatRibuan(subtotal),
                 ) + "\n";
 
-            // Baris ini otomatis tidak akan muncul jika service = 0 (karena isQuickService)
+            // if (promotionDiscount > 0)
+            //     receipt +=
+            //         this.centerLabelRightValue(
+            //             "Promotion",
+            //             "-" + this.formatRibuan(promotionDiscount),
+            //         ) + "\n";
+
             if (service > 0)
                 receipt +=
                     this.centerLabelRightValue(
@@ -179,45 +167,19 @@ if (!window.ReceiptTemplates) {
                 receipt +=
                     this.centerLabelRightValue("PB1", this.formatRibuan(tax)) +
                     "\n";
+
             receipt += "--------------------------------\n";
 
-            // GRAND TOTAL (Otomatis service akan 0 jika Quick Service)
-            let rawGrandTotal = subtotal + service + tax;
-            let roundingBase = parseInt(
-                data.rounding_base || window.APP_SETTINGS?.rounding_base || 0,
-            );
-            let grandTotal = rawGrandTotal;
-
-            // Logika Pembulatan (Round to nearest base)
-            if (roundingBase > 0) {
-                grandTotal =
-                    Math.round(rawGrandTotal / roundingBase) * roundingBase;
-            }
-
-            // Hitung selisih pembulatan jika ingin ditampilkan (opsional)
-            // let roundingDiff = grandTotal - rawGrandTotal;
+            // STATUS
             const status = (
-                data.order?.payment_status ||
-                data.payment_status ||
-                "pending"
+                data.order?.payment_status || "pending"
             ).toLowerCase();
             let statusText = "--- Not Paid ---";
-
             if (status === "paid") statusText = "--- Thank You ---";
             else if (status === "voided") statusText = "--- Void ---";
 
+            // GRAND TOTAL
             receipt += COMMANDS.ALIGN_CENTER;
-
-            // Jika ada selisih pembulatan, tampilkan baris pembulatan (Opsional tapi disarankan)
-            // if (roundingDiff !== 0) {
-            //     receipt +=
-            //         this.centerLabelRightValue(
-            //             "Rounding",
-            //             (roundingDiff > 0 ? "+" : "") +
-            //                 this.formatRibuan(roundingDiff),
-            //         ) + "\n";
-            // }
-
             receipt += COMMANDS.TEXT_DOUBLE_HEIGHT;
             receipt += COMMANDS.BOLD_ON;
             receipt +=
@@ -228,8 +190,6 @@ if (!window.ReceiptTemplates) {
             receipt += COMMANDS.TEXT_NORMAL;
             receipt += COMMANDS.BOLD_OFF;
             receipt += "--------------------------------\n";
-
-            receipt += COMMANDS.ALIGN_CENTER;
             receipt += `${statusText}\n\n\n`;
             receipt += COMMANDS.CUT_PAPER;
 
