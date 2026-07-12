@@ -9,6 +9,7 @@ use App\Models\TransactionItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DayStartEndPage extends Component
 {
@@ -98,7 +99,9 @@ class DayStartEndPage extends Component
             'endedBy'
         ])
             ->where('cabang_id', $this->currentUser->cabang_id)
-            ->where('status', 'open')
+            // Ganti where('status', 'open') dengan mengambil shift terbaru hari ini
+            ->whereDate('started_at', Carbon::today())
+            ->latest('id')
             ->first();
 
         // sementara tanpa cek shift
@@ -132,9 +135,10 @@ class DayStartEndPage extends Component
     // SALES RECAPITULATION
     public function calculateRecapitulation()
     {
-
+        // 1. Tambahkan filter whereDate hari ini di Base Query
         $baseQuery = Transaction::query()
             ->where('cabang_id', $this->currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
             ->where('payment_status', 'paid')
             ->whereNull('voided_at');
 
@@ -144,9 +148,8 @@ class DayStartEndPage extends Component
         // Simpan jika nanti diperlukan
         $this->transactions = $transactions;
 
-        // Jika belum ada transaksi
+        // Jika belum ada transaksi hari ini
         if ($transactions->isEmpty()) {
-
             $this->salesTotal = 0;
             $this->discount = 0;
             $this->menuDiscount = 0;
@@ -193,13 +196,15 @@ class DayStartEndPage extends Component
         $this->linkedTotal = 0;
 
         /*
-         * Void & Pending
+         * Void & Pending (Tambahkan filter hari ini juga)
          */
         $this->voidSales = Transaction::where('cabang_id', $this->currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
             ->whereNotNull('voided_at')
             ->sum('total');
 
         $this->pendingSales = Transaction::where('cabang_id', $this->currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
             ->where('payment_status', 'pending')
             ->sum('total');
 
@@ -209,6 +214,7 @@ class DayStartEndPage extends Component
 
         $this->paymentRecaps = Transaction::query()
             ->where('cabang_id', $this->currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
             ->where('payment_status', 'paid')
             ->whereNull('voided_at')
             ->select(
@@ -225,6 +231,8 @@ class DayStartEndPage extends Component
         // ===============================
         // Sales By Menu
         // ===============================
+        // Tidak perlu ditambah whereDate karena id transaksinya ($transactionIds) 
+        // sudah difilter dari $baseQuery yang hanya mengambil hari ini.
 
         $transactionIds = $transactions->pluck('id');
 
@@ -244,29 +252,6 @@ class DayStartEndPage extends Component
             ->orderByDesc('total_qty')
             ->get();
 
-        // dd($this->salesByMenus);
-
-        // ===============================
-        // Sales By Table
-        // ===============================
-
-        // $this->tableSections = Transaction::query()
-        //     ->join(
-        //         'dining_tables',
-        //         'transactions.dining_table_id',
-        //         '=',
-        //         'dining_tables.id'
-        //     )
-        //     ->whereIn('transactions.id', $transactionIds)
-        //     ->select(
-        //         'dining_tables.table_number as section_name',
-        //         DB::raw('SUM(transactions.total) as total_amount')
-        //     )
-        //     ->groupBy('dining_tables.table_number')
-        //     ->orderBy('dining_tables.table_number')
-        //     ->get();
-
-
         // ===============================
         // Custom Menu
         // ===============================
@@ -279,6 +264,7 @@ class DayStartEndPage extends Component
 
         $this->tableSections = Transaction::query()
             ->where('cabang_id', $this->currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
             ->where('payment_status', 'paid')
             ->whereNull('voided_at')
             ->whereNotNull('dining_table_id')
@@ -299,8 +285,72 @@ class DayStartEndPage extends Component
             ->values();
     }
 
+    public function print(Request $request)
+    {
+        $currentUser = Auth::user();
+
+        // 1. Ambil Shift Saat Ini (Atau Shift Terakhir Hari Ini)
+        $currentShift = Shift::with(['cabang', 'startedBy', 'endedBy'])
+            ->where('cabang_id', $currentUser->cabang_id)
+            ->whereDate('started_at', Carbon::today())
+            ->latest('id')
+            ->first();
+
+        if (!$currentShift) {
+            return back()->with('error', 'Tidak ada data shift hari ini untuk dicetak.');
+        }
+
+        // 2. Base Query Transaksi Hari Ini
+        $baseQuery = Transaction::query()
+            ->where('cabang_id', $currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today())
+            ->where('payment_status', 'paid')
+            ->whereNull('voided_at');
+
+        $transactions = $baseQuery->get();
+
+        // 3. Kalkulasi Sales Recapitulation
+        $salesTotal = $transactions->sum('subtotal');
+        $discount = $transactions->sum('discount_total_amount');
+        $tax = $transactions->sum('tax_amount');
+        $serviceCharge = $transactions->sum('service_amount');
+        $netSales = $transactions->sum('total');
+        $numberOfBills = $transactions->count();
+
+        // 4. Kalkulasi Payment Recapitulation
+        $paymentRecaps = Transaction::query()
+            ->where('cabang_id', $currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today())
+            ->where('payment_status', 'paid')
+            ->whereNull('voided_at')
+            ->select(
+                'payment_method',
+                DB::raw('SUM(total) as total_amount')
+            )
+            ->groupBy('payment_method')
+            ->orderBy('payment_method')
+            ->get();
+
+        $totalPayment = $paymentRecaps->sum('total_amount');
+
+        // Kembalikan ke view cetak
+        return view('components.day-start-end.shift-out', compact(
+            'currentShift',
+            'currentUser',
+            'salesTotal',
+            'discount',
+            'tax',
+            'serviceCharge',
+            'netSales',
+            'numberOfBills',
+            'paymentRecaps',
+            'totalPayment'
+        ));
+    }
+
     public function render()
     {
         return view('components.day-start-end.day-start-end-page');
     }
+
 }
