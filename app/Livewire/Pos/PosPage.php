@@ -2601,6 +2601,18 @@ class PosPage extends Component
         }
     }
 
+    public function getReceiptCodeProperty(): string
+    {
+        if ($this->editingTransactionId) {
+            $trx = Transaction::query()->select('code')->find($this->editingTransactionId);
+            if ($trx) {
+                return (string) $trx->code;
+            }
+        }
+
+        return '-';
+    }
+
     private function userHasManualDiscountPermission(): bool
     {
         $user = auth()->user();

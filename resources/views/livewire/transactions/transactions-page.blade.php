@@ -267,6 +267,7 @@
             </div>
         </div>
         <x-ecommerce.void-items-history :items="$voidItems" />
+        <x-ecommerce.cancel-table-history :cancelledTables="$cancelledTables" />
 
         <div class="mt-8">
             <div

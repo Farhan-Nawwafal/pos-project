@@ -157,12 +157,12 @@ class TransactionsPage extends Component
 
             // Search Code
             ->when($this->searchNumber !== '', function (Builder $query) {
-                $query->where('code', 'like', '%'.$this->searchNumber.'%');
+                $query->where('code', 'like', '%' . $this->searchNumber . '%');
             })
 
             // Seacrh Nama Pelanggan
             ->when($this->searchCustomer !== '', function (Builder $query) use ($canViewPii) {
-                $term = '%'.$this->searchCustomer.'%';
+                $term = '%' . $this->searchCustomer . '%';
                 $query->where(function (Builder $q) use ($term, $canViewPii) {
                     $q->where('name', 'like', $term);
 
@@ -176,13 +176,13 @@ class TransactionsPage extends Component
             // Search No Meja
             ->when($this->searchTable !== '', function (Builder $query) {
                 $query->whereHas('dining_table_id', function (Builder $q) {
-                    $q->where('name', 'like', '%'.$this->searchTable.'%');
+                    $q->where('name', 'like', '%' . $this->searchTable . '%');
                 });
             })
 
-            ->when($this->paymentStatus !== '', fn (Builder $query) => $query->where('payment_status', $this->paymentStatus))
-            ->when($this->paymentMethod !== '', fn (Builder $query) => $query->where('payment_method', $this->paymentMethod))
-            ->when($this->orderType !== '', fn (Builder $query) => $query->where('order_type', $this->orderType));
+            ->when($this->paymentStatus !== '', fn(Builder $query) => $query->where('payment_status', $this->paymentStatus))
+            ->when($this->paymentMethod !== '', fn(Builder $query) => $query->where('payment_method', $this->paymentMethod))
+            ->when($this->orderType !== '', fn(Builder $query) => $query->where('order_type', $this->orderType));
 
         if ($this->fromDate) {
             $query->whereDate('created_at', '>=', $this->fromDate);
@@ -202,8 +202,8 @@ class TransactionsPage extends Component
             ->distinct()
             ->orderBy('payment_status')
             ->pluck('payment_status')
-            ->map(fn ($value) => (string) $value)
-            ->filter(fn ($value) => $value !== '')
+            ->map(fn($value) => (string) $value)
+            ->filter(fn($value) => $value !== '')
             ->values()
             ->all();
     }
@@ -215,8 +215,8 @@ class TransactionsPage extends Component
             ->distinct()
             ->orderBy('payment_method')
             ->pluck('payment_method')
-            ->map(fn ($value) => (string) $value)
-            ->filter(fn ($value) => $value !== '')
+            ->map(fn($value) => (string) $value)
+            ->filter(fn($value) => $value !== '')
             ->values()
             ->all();
     }
@@ -252,12 +252,12 @@ class TransactionsPage extends Component
             ->whereIn('t.id', $transactionIds)
             ->selectRaw('t.id as tx_id')
             ->selectRaw('COALESCE(t.refunded_amount, 0) as refunded_amount')
-            ->selectRaw('COALESCE(SUM('.NetSales::itemNetExpr('ti').'), 0) as item_net')
+            ->selectRaw('COALESCE(SUM(' . NetSales::itemNetExpr('ti') . '), 0) as item_net')
             ->groupBy('tx_id', 'refunded_amount');
 
         $totalRevenue = (int) round((float) (DB::query()
             ->fromSub($sub, 'x')
-            ->selectRaw('COALESCE(SUM('.NetSales::netPerTransactionExpr('x.item_net', 'x.refunded_amount').'), 0) as revenue')
+            ->selectRaw('COALESCE(SUM(' . NetSales::netPerTransactionExpr('x.item_net', 'x.refunded_amount') . '), 0) as revenue')
             ->value('revenue') ?? 0));
 
         // 4. Rata-rata Omzet
@@ -332,9 +332,9 @@ class TransactionsPage extends Component
         $from = $this->fromDate;
         $to = $this->toDate;
 
-        $filename = 'SR_'.$from;
+        $filename = 'SR_' . $from;
         if ($from !== $to) {
-            $filename .= '_'.$to;
+            $filename .= '_' . $to;
         }
         $filename .= '.csv';
 
@@ -399,8 +399,87 @@ class TransactionsPage extends Component
             });
 
             fclose($handle);
-
         }, $filename);
+    }
+
+    protected function getCancelledTableHistory(): array
+    {
+        $cabangId = auth()->user()->cabang_id;
+
+        // Ambil transaksi yang di-void penuh (cancel table)
+        $voidedTransactions = Transaction::query()
+            ->where('cabang_id', $cabangId)
+            ->where('payment_status', 'void')
+            ->whereNotNull('voided_at')
+            ->whereNotNull('void_reason')
+            ->with([
+                'diningTable:id,table_number',
+                'transactionItems.product:id,name',
+                'transactionItems.variant:id,name',
+            ])
+            ->when($this->fromDate, fn($q) => $q->whereDate('voided_at', '>=', $this->fromDate))
+            ->when($this->toDate, fn($q) => $q->whereDate('voided_at', '<=', $this->toDate))
+            ->orderByDesc('voided_at')
+            ->limit(50)
+            ->get();
+
+        // Ambil event cancel_table dari TransactionEvent untuk data approved_by
+        $transactionIds = $voidedTransactions->pluck('id')->all();
+
+        $cancelEvents = TransactionEvent::query()
+            ->whereIn('transaction_id', $transactionIds)
+            ->where('action', 'cancel_table')
+            ->with('actor:id,name')
+            ->get()
+            ->keyBy('transaction_id');
+
+        // Ambil nama kasir dari activity_log (causer yang melakukan void)
+        // Sekaligus ambil dari voided_by jika ada di transaksi
+        $cashierIds = $voidedTransactions
+            ->pluck('voided_by_user_id')
+            ->filter()
+            ->unique()
+            ->all();
+
+        $cashiers = \App\Models\User::query()
+            ->whereIn('id', $cashierIds)
+            ->pluck('name', 'id');
+
+        return $voidedTransactions->map(function (Transaction $trx) use ($cancelEvents, $cashiers) {
+            $event     = $cancelEvents->get($trx->id);
+            $eventMeta = $event ? (array) $event->meta : [];
+
+            // Kasir yang melakukan void diambil dari event meta, fallback ke relasi User
+            $cashierName   = $event?->actor?->name
+                ?? $cashiers->get($trx->voided_by_user_id)
+                ?? '-';
+
+            // Yang approve (manager PIN) dari meta event
+            $approvedBy    = $eventMeta['approved_by_name'] ?? '-';
+
+            // Ambil item-item transaksi (hanya parent, bukan child paket)
+            $items = $trx->transactionItems
+                ->whereNull('parent_transaction_item_id')
+                ->map(fn(TransactionItem $item) => [
+                    'name'  => $item->product?->name ?? 'Produk',
+                    'qty'   => (int) $item->quantity,
+                    'price' => (int) $item->price,
+                ])
+                ->values()
+                ->all();
+
+            return [
+                'transaction_id'   => $trx->id,
+                'transaction_code' => $trx->code,
+                'table_number'     => $trx->diningTable?->table_number ?? null,
+                'voided_at'        => $trx->voided_at?->format('d/m/Y H:i') ?? '-',
+                'cashier'          => $cashierName,
+                'approved_by'      => $approvedBy,
+                'void_reason'      => $trx->void_reason ?? '-',
+                'total'            => (int) $trx->total,
+                'items'            => $items,
+            ];
+        })->all();
     }
 
     public function render(): View
@@ -437,6 +516,7 @@ class TransactionsPage extends Component
             'grossAmount' => $stats['grossAmount'],
             'voidItems' => $this->getVoidItemsHistory(),
             'deletedItemLogs' => $deletedItemLogs,
+            'cancelledTables'   => $this->getCancelledTableHistory(),
         ])->layout('layouts.app', ['title' => $this->title]);
     }
 }
