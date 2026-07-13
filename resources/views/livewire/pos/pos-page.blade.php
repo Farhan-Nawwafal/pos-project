@@ -363,9 +363,9 @@
                                 </button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
-                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="w-3.5 h-3.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
                                         <polyline points="5 9 2 12 5 15"></polyline>
                                         <polyline points="9 5 12 2 15 5"></polyline>
                                         <polyline points="15 19 12 22 9 19"></polyline>
@@ -378,9 +378,9 @@
                                     Move Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="w-3.5 h-3.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
                                         <polyline points="19 5 22 8 19 11"></polyline>
                                         <line x1="2" y1="8" x2="22" y2="8"></line>
 
@@ -425,9 +425,9 @@
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="w-3.5 h-3.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
                                         <polyline points="5 9 2 12 5 15"></polyline>
                                         <polyline points="9 5 12 2 15 5"></polyline>
                                         <polyline points="15 19 12 22 9 19"></polyline>
@@ -438,9 +438,9 @@
                                     Move Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="w-3.5 h-3.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
                                         <polyline points="19 5 22 8 19 11"></polyline>
                                         <line x1="2" y1="8" x2="22" y2="8"></line>
 
@@ -467,14 +467,17 @@
                                     Cancel Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
                                     </svg>
                                     Link Table</button>
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
-                                    <img src="/assets/icons/printer.png" width="14" height="14" alt="Up">
+                                    <img src="/assets/icons/printer.png" width="14" height="14"
+                                        alt="Up">
                                     Checker</button>
                             </div>
                         @endif
@@ -502,11 +505,12 @@
                     <div class="flex items-center gap-1">
                         <div class="w-[70%]">
                             <input type="text" placeholder="Promotion Description"
-                                class="w-full h-8 px-2 border border-gray-300 bg-white text-xs rounded-sm transition shadow-sm outline-none" />
+                                wire:model="promotionDescription" readonly
+                                class="w-full h-8 px-2 border border-gray-300 bg-gray-50 text-xs rounded-sm transition shadow-sm outline-none cursor-not-allowed font-medium text-gray-700" />
                         </div>
                         <div class="w-[30%]">
-                            <button type="button"
-                                class="w-full flex items-center justify-center h-8 gap-2 font-bold text-white text-xs  bg-brand-500 shadow-sm">
+                            <button type="button" wire:click="$set('promotionModalOpen', true)"
+                                class="w-full flex items-center justify-center h-8 gap-2 font-bold text-white text-xs bg-brand-500 hover:bg-brand-600 rounded-sm transition shadow-sm active:scale-95">
                                 <img src="/assets/icons/star.png" width="13" height="13" alt="Up">
                                 <span>Add Promotion</span>
                             </button>
@@ -620,8 +624,11 @@
                                         <button type="button" wire:click="saveAsPending"
                                             @disabled(count($cartItems) === 0)
                                             class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs  bg-brand-500 shadow-sm">
-                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <svg width="15" height="15" viewBox="0 0 24 24"
+                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
                                                 <rect x="3" y="16" width="18" height="6" rx="2" />
                                                 <circle cx="17" cy="19" r="1" fill="white" />
                                                 <circle cx="20" cy="19" r="1" fill="white" />
@@ -635,7 +642,8 @@
                                     <div class="col-span-2">
                                         <button type="button" wire:click="printBill"
                                             class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs  bg-brand-500 shadow-sm">
-                                            <img src="/assets/icons/printer.png" width="14" height="14" alt="Up">
+                                            <img src="/assets/icons/printer.png" width="14" height="14"
+                                                alt="Up">
                                             <span>Print Bill</span>
                                         </button>
                                     </div>
@@ -644,8 +652,11 @@
                                         <button type="button" wire:click="saveAsPending"
                                             @disabled(count($cartItems) === 0)
                                             class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs  bg-brand-500 shadow-sm">
-                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <svg width="15" height="15" viewBox="0 0 24 24"
+                                                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
                                                 <rect x="3" y="16" width="18" height="6" rx="2" />
                                                 <circle cx="17" cy="19" r="1" fill="white" />
                                                 <circle cx="20" cy="19" r="1" fill="white" />
@@ -666,17 +677,20 @@
                                     </button>
                                     <button type="button" wire:click="openSplitBill"
                                         class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs bg-brand-500 shadow-sm">
-                                        <svg width="14" height="14" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="12" y="8" width="40" height="48" rx="4" ry="4" />
+                                        <svg width="14" height="14" viewBox="0 0 64 64" fill="none"
+                                            stroke="currentColor" stroke-width="5" stroke-linecap="round"
+                                            stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="12" y="8" width="40" height="48" rx="4"
+                                                ry="4" />
 
-                                        <polyline points="20 18 25 23 32 16" />
-                                        <polyline points="20 28 25 33 32 26" />
-                                        <polyline points="20 38 25 43 32 36" />
+                                            <polyline points="20 18 25 23 32 16" />
+                                            <polyline points="20 28 25 33 32 26" />
+                                            <polyline points="20 38 25 43 32 36" />
 
-                                        <line x1="38" y1="18" x2="46" y2="18" />
-                                        <line x1="38" y1="28" x2="46" y2="28" />
-                                        <line x1="38" y1="38" x2="46" y2="38" />
-                                        <line x1="20" y1="48" x2="46" y2="48" />
+                                            <line x1="38" y1="18" x2="46" y2="18" />
+                                            <line x1="38" y1="28" x2="46" y2="28" />
+                                            <line x1="38" y1="38" x2="46" y2="38" />
+                                            <line x1="20" y1="48" x2="46" y2="48" />
                                         </svg>
                                         Split Bill
                                     </button>
@@ -684,7 +698,8 @@
                                         class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs bg-brand-500
                                         shadow-sm">
 
-                                        <img src="/assets/icons/dollar-symbol.png" width="12" height="12" alt="Payment" class="filter invert">
+                                        <img src="/assets/icons/dollar-symbol.png" width="12" height="12"
+                                            alt="Payment" class="filter invert">
 
                                         Payment
                                     </button>
@@ -938,14 +953,16 @@
 
                                 <div class="flex justify-between">
                                     <span>Subtotal</span>
-                                    <span class="tabular-nums font-medium text-gray-900">{{ number_format($subtotal, 0, ',', '.') }}</span>
+                                    <span
+                                        class="tabular-nums font-medium text-gray-900">{{ number_format($subtotal, 0, ',', '.') }}</span>
                                 </div>
 
                                 {{-- Service Charge (Tetap utuh dari subtotal asli) --}}
                                 @if (!$isQuickService && $serviceAmount > 0)
                                     <div class="flex justify-between">
                                         <span>Service Charge</span>
-                                        <span class="tabular-nums text-gray-900">{{ number_format($serviceAmount, 0, ',', '.') }}</span>
+                                        <span
+                                            class="tabular-nums text-gray-900">{{ number_format($serviceAmount, 0, ',', '.') }}</span>
                                     </div>
                                 @endif
 
@@ -953,7 +970,8 @@
                                 @if ($taxAmount > 0)
                                     <div class="flex justify-between">
                                         <span>PB1</span>
-                                        <span class="tabular-nums text-gray-900">{{ number_format($taxAmount, 0, ',', '.') }}</span>
+                                        <span
+                                            class="tabular-nums text-gray-900">{{ number_format($taxAmount, 0, ',', '.') }}</span>
                                     </div>
                                 @endif
 
@@ -961,7 +979,8 @@
                                 @if ($currentCompliment > 0)
                                     <div class="flex justify-between text-red-600 font-bold">
                                         <span>Compliment</span>
-                                        <span class="tabular-nums">-{{ number_format($currentCompliment, 0, ',', '.') }}</span>
+                                        <span
+                                            class="tabular-nums">-{{ number_format($currentCompliment, 0, ',', '.') }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -971,11 +990,18 @@
                             {{-- GRAND TOTAL (Bold + Double Height) --}}
                             @php
                                 // Perhitungan murni Grand Total utuh restoran dikurangi potongan compliment secara absolut
-                                $rawGrandTotal = ($subtotal + (!$isQuickService ? $serviceAmount : 0) + $taxAmount) - $currentCompliment;
+                                // $rawGrandTotal =
+                                //     $subtotal +
+                                //     (!$isQuickService ? $serviceAmount : 0) +
+                                //     $taxAmount -
+                                //     $currentCompliment;
 
-                                $grandTotal = $roundingBase > 0
-                                    ? (int) (round($rawGrandTotal / $roundingBase) * $roundingBase)
-                                    : $rawGrandTotal;
+                                // $grandTotal =
+                                //     $roundingBase > 0
+                                //         ? (int) (round($rawGrandTotal / $roundingBase) * $roundingBase)
+                                //         : $rawGrandTotal;
+                                $currentCompliment = (int) ($this->appliedComplimentAmount ?? 0);
+                                $grandTotal = max(0, $total - $currentCompliment);
 
                                 $statusText = match ($paymentMethod === 'paid' ? 'paid' : 'pending') {
                                     'paid' => '--- Thank You ---',
@@ -1015,19 +1041,22 @@
                                 </svg>
                             </button>
                             <button type="button"
-                                class="col-span-2 w-full h-10 flex items-center justify-center gap-2  text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
-                                <img src="/assets/icons/gift.png" width="13" height="13" alt="Up">
+                                class="col-span-2 w-full h-10 flex items-center justify-center gap-2 font-bold text-white rounded-xs bg-brand-500 shadow-sm text-xs tracking-wider transition-colors duration-200"
+                                wire:click="$set('purchaseVoucherModalOpen', true)">
+                                <img src="/assets/icons/gift.png" width="15" height="15" alt="Up">
                                 Purchase Voucher
                             </button>
                         </div>
                         <button type="button" wire:click="savePayment"
-                            class="w-full flex items-center justify-center h-10  text-white rounded-xs bg-brand-500 shadow-sm transition text-xs active:scale-95">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <rect x="3" y="16" width="18" height="6" rx="2" />
-                                                <circle cx="17" cy="19" r="1" fill="white" />
-                                                <circle cx="20" cy="19" r="1" fill="white" />
-                                            </svg>
+                            class="w-full flex items-center justify-center h-10 font-bold text-white rounded-xs bg-brand-500 shadow-sm transition active:scale-95">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <rect x="3" y="16" width="18" height="6" rx="2" />
+                                <circle cx="17" cy="19" r="1" fill="white" />
+                                <circle cx="20" cy="19" r="1" fill="white" />
+                            </svg>
                             Save Payment
                         </button>
                     </div>
@@ -1365,33 +1394,33 @@
                                             </div>
                                         @endif
 
-                                    @if ($checkoutStep === 3)
-                                        <div class="space-y-4">
-                                            {{-- Card Info Ringkasan --}}
-                                            <div
-                                                class="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800">
-                                                <div class="flex justify-between items-start ">
-                                                    <div>
-                                                        <p
-                                                            class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">
-                                                            Menu</p>
-                                                        <p class="text-xl font-black text-blue-900 dark:text-white">
-                                                            {{ $customerName }}
-                                                        </p>
+                                        @if ($checkoutStep === 3)
+                                            <div class="space-y-4">
+                                                {{-- Card Info Ringkasan --}}
+                                                <div
+                                                    class="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800">
+                                                    <div class="flex justify-between items-start ">
+                                                        <div>
+                                                            <p
+                                                                class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">
+                                                                Menu</p>
+                                                            <p class="text-xl font-black text-blue-900 dark:text-white">
+                                                                {{ $customerName }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="text-right">
+                                                            <p
+                                                                class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">
+                                                                Status</p>
+                                                            <span @class([
+                                                                'px-2 py-1 rounded text-[10px] font-bold uppercase',
+                                                                'bg-orange-100 text-orange-700' => !$isFinalPayment,
+                                                                'bg-[#3C8DBC]/10 text-[#3C8DBC] border border-[#3C8DBC]/20' => $isFinalPayment,
+                                                            ])>
+                                                                {{ $isFinalPayment ? 'Pelunasan / Bayar' : 'Dine In' }}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <div class="text-right">
-                                                        <p
-                                                            class="text-xs text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wider">
-                                                            Status</p>
-                                                        <span @class([
-                                                            'px-2 py-1 rounded text-[10px] font-bold uppercase',
-                                                            'bg-orange-100 text-orange-700' => !$isFinalPayment,
-                                                            'bg-[#3C8DBC]/10 text-[#3C8DBC] border border-[#3C8DBC]/20' => $isFinalPayment,
-                                                        ])>
-                                                            {{ $isFinalPayment ? 'Pelunasan / Bayar' : 'Dine In' }}
-                                                        </span>
-                                                    </div>
-                                                </div>
 
                                                     <div
                                                         class="pt-4 border-t border-blue-200 dark:border-blue-700 flex justify-between items-center">
@@ -1635,27 +1664,28 @@
                                                 </button>
                                             @endif
 
-                                        @if ($checkoutStep < 3)
-                                            <button type="button" wire:click="nextStep"
-                                                class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex h-11 items-center justify-center rounded-lg px-4 text-sm font-semibold text-white transition">
-                                                Lanjut
-                                            </button>
-                                        @else
-                                            <button type="button" wire:click="checkout" wire:loading.attr="disabled" @class([
-                                                'flex-[2] px-6 py-3 rounded-xl font-black transition text-lg text-white shadow-lg',
-                                                'bg-[#3C8DBC] ' => $isFinalPayment, // Jika Bayar - Header Blue
-                                                'bg-blue-600' => !$isFinalPayment, // Jika Booking
-                                            ])>
-                                                {{ $isFinalPayment ? 'Lunasi Sekarang' : 'Kirim Ke Dapur' }}
-                                            </button>
-                                        @endif
+                                            @if ($checkoutStep < 3)
+                                                <button type="button" wire:click="nextStep"
+                                                    class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex h-11 items-center justify-center rounded-lg px-4 text-sm font-semibold text-white transition">
+                                                    Lanjut
+                                                </button>
+                                            @else
+                                                <button type="button" wire:click="checkout" wire:loading.attr="disabled"
+                                                    @class([
+                                                        'flex-[2] px-6 py-3 rounded-xl font-black transition text-lg text-white shadow-lg',
+                                                        'bg-[#3C8DBC] ' => $isFinalPayment, // Jika Bayar - Header Blue
+                                                        'bg-blue-600' => !$isFinalPayment, // Jika Booking
+                                                    ])>
+                                                    {{ $isFinalPayment ? 'Lunasi Sekarang' : 'Kirim Ke Dapur' }}
+                                                </button>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endteleport
         @endif
 
@@ -1777,7 +1807,8 @@
     @endif
     @if ($selectTableModalOpen)
         @teleport('body')
-            <div class="fixed inset-0 z-[100005] flex items-center justify-center p-4" aria-modal="true" role="dialog">
+            <div class="fixed inset-0 z-[100005] flex items-center justify-center p-4" aria-modal="true"
+                role="dialog">
 
                 {{-- Backdrop Gelap Transparan --}}
                 <div class="absolute inset-0 bg-black/40 transition-opacity"
@@ -1789,7 +1820,8 @@
                     class="relative w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-xl dark:bg-gray-900 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
 
                     {{-- 1. HEADER MODAL --}}
-                    <div class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
+                    <div
+                        class="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
                         <h3 class="text-base font-bold text-gray-800 dark:text-white">
                             Book Table ({{ 'Table ' . $tableToSelectLabel ?? 'Table 1' }})
                         </h3>
@@ -1815,11 +1847,12 @@
                                 class="w-full h-11 border border-gray-300 rounded-lg bg-white px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:bg-gray-900 dark:text-white dark:border-gray-700"
                                 placeholder="1" />
 
-                        {{-- Baris Elemen Tombol Cepat (Persis di Bawah Input Sesuai Gambar POS) --}}
-                        <div class="flex items-center gap-1.5 my-2 rounded-lg w-full overflow-x-auto custom-scrollbar">
-                            {{-- Tombol Kurang (<) --}} <button type="button" wire:click="decrementPax"
-                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-sm text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
-                                &lt;
+                            {{-- Baris Elemen Tombol Cepat (Persis di Bawah Input Sesuai Gambar POS) --}}
+                            <div
+                                class="flex items-center gap-1.5 my-2 rounded-lg w-full overflow-x-auto custom-scrollbar">
+                                {{-- Tombol Kurang (<) --}} <button type="button" wire:click="decrementPax"
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 transition shrink-0 font-bold active:scale-95 shadow-xs">
+                                    &lt;
                                 </button>
 
                                 {{-- Deretan Angka Pax Shortcut 1 sampai 5 --}}
@@ -1849,12 +1882,12 @@
                                 Sales Mode: <span class="text-gray-800 dark:text-white font-bold">Dine In</span>
                             </span>
 
-                        {{-- Button Status Aktif Dine In --}}
-                        <button type="button"
-                            class="h-11 px-6 font-bold text-xs rounded-lg border-2 border-[#3C8DBC] bg-blue-50 text-[#3C8DBC] dark:bg-blue-950/30 dark:text-blue-400 transition cursor-default">
-                            Dine In
-                        </button>
-                    </div>
+                            {{-- Button Status Aktif Dine In --}}
+                            <button type="button"
+                                class="h-11 px-6 font-bold text-xs rounded-lg border-2 border-[#3C8DBC] bg-blue-50 text-[#3C8DBC] dark:bg-blue-950/30 dark:text-blue-400 transition cursor-default">
+                                Dine In
+                            </button>
+                        </div>
 
                     </div>
 
@@ -2992,6 +3025,322 @@
                     </button>
                 </div>
 
+                </div>
+            </div>
+        @endteleport
+    @endif
+    {{-- PROMOTION MODAL --}}
+    @if ($promotionModalOpen)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" x-data
+            x-on:keydown.escape.window="$wire.set('promotionModalOpen', false)">
+            <div class="bg-white rounded-md shadow-xl w-[700px] max-h-[90vh] flex flex-col overflow-hidden">
+
+                {{-- Header --}}
+                <div class="bg-[#4a90a4] px-5 py-3">
+                    <h2 class="text-white font-semibold text-base">Promotion List</h2>
+                </div>
+
+                {{-- Search & Filter --}}
+                <div class="flex items-center gap-3 px-5 py-3 border-b border-gray-200">
+                    <div class="relative flex-1">
+                        <input type="text" wire:model.live.debounce.300ms="promotionSearch"
+                            placeholder="Search...."
+                            class="w-full h-9 pl-3 pr-8 border border-gray-300 rounded text-xs outline-none focus:border-brand-400" />
+                        <svg class="absolute right-2 top-2.5 w-4 h-4 text-gray-400" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                        </svg>
+                    </div>
+                    <div class="w-48">
+                        <select wire:model.live="promotionTypeFilter"
+                            class="w-full h-9 px-2 border border-gray-300 rounded text-xs outline-none focus:border-brand-400 bg-white">
+                            <option value="">Promotion Type</option>
+                            <option value="public">Public</option>
+                            <option value="member">Member</option>
+                        </select>
+                    </div>
+                </div>
+
+                {{-- Table --}}
+                <div class="flex-1 overflow-y-auto">
+                    <table class="w-full text-xs">
+                        <thead class="sticky top-0 bg-white border-b border-gray-200">
+                            <tr>
+                                <th class="text-left px-4 py-2 font-semibold text-gray-700 whitespace-nowrap">End Date
+                                </th>
+                                <th class="text-left px-4 py-2 font-semibold text-gray-700 whitespace-nowrap">
+                                    Promotion Name</th>
+                                <th class="text-left px-4 py-2 font-semibold text-gray-700 whitespace-nowrap">Type
+                                </th>
+                                <th class="text-left px-4 py-2 font-semibold text-gray-700 whitespace-nowrap">Min.
+                                    Subtotal</th>
+                                <th class="text-left px-4 py-2 font-semibold text-gray-700 whitespace-nowrap">Discount
+                                </th>
+                                <th class="text-left px-4 py-2 font-semibold text-gray-700 whitespace-nowrap">Payment
+                                    Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($this->promotions as $promo)
+                                <tr wire:click="selectPromotion({{ $promo->id }})"
+                                    class="border-b border-gray-100 cursor-pointer transition
+                               {{ $selectedPromotionId === $promo->id ? 'bg-blue-50 border-l-2 border-l-brand-500' : 'hover:bg-gray-50' }}">
+                                    <td class="px-4 py-3 text-gray-600 whitespace-nowrap">
+                                        {{ $promo->end_date ? \Carbon\Carbon::parse($promo->end_date)->format('d-m-Y H:i') : '-' }}
+                                    </td>
+                                    <td class="px-4 py-3 font-medium text-gray-800">{{ $promo->name }}</td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="px-2 py-0.5 rounded text-xs font-medium
+                                {{ $promo->type === 'public' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
+                                            {{ ucfirst($promo->type) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-600">
+                                        {{ number_format($promo->min_subtotal, 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-600">
+                                        {{ $promo->discount_label }}
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-600">
+                                        {{ $promo->payment_method ?? '-' }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-4 py-8 text-center text-gray-400">
+                                        Tidak ada promosi tersedia
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Pagination --}}
+                <div
+                    class="flex items-center justify-end px-5 py-2 border-t border-gray-100 text-xs text-gray-500 gap-2">
+                    @if ($this->promotions->hasPages())
+                        <span>{{ $this->promotions->firstItem() }} - {{ $this->promotions->lastItem() }} of
+                            {{ $this->promotions->total() }}</span>
+                        <button wire:click="$set('promotionPage', 1)"
+                            {{ $this->promotions->onFirstPage() ? 'disabled' : '' }}
+                            class="px-1 disabled:opacity-40">|&lt;</button>
+                        <button wire:click="previousPromotionPage"
+                            {{ $this->promotions->onFirstPage() ? 'disabled' : '' }}
+                            class="px-1 disabled:opacity-40">&lt;</button>
+                        <button wire:click="nextPromotionPage"
+                            {{ $this->promotions->hasMorePages() ? '' : 'disabled' }}
+                            class="px-1 disabled:opacity-40">&gt;</button>
+                        <button wire:click="$set('promotionPage', {{ $this->promotions->lastPage() }})"
+                            {{ $this->promotions->hasMorePages() ? '' : 'disabled' }}
+                            class="px-1 disabled:opacity-40">&gt;|</button>
+                    @endif
+                </div>
+
+                {{-- Footer --}}
+                <div class="flex items-center justify-between px-5 py-3 border-t border-gray-200 bg-gray-50">
+                    <button type="button" wire:click="$set('promotionModalOpen', false)"
+                        class="px-4 py-1.5 border border-red-400 text-red-500 text-xs rounded hover:bg-red-50 transition">
+                        Close
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" wire:click="removePromotion"
+                            class="flex items-center gap-1 px-4 py-1.5 bg-gray-200 text-gray-500 text-xs rounded transition
+                           {{ $selectedPromotionId ? 'hover:bg-gray-300 cursor-pointer' : 'opacity-50 cursor-not-allowed' }}"
+                            {{ $selectedPromotionId ? '' : 'disabled' }}>
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Remove Promotion
+                        </button>
+                        <button type="button" wire:click="applyPromotion"
+                            class="flex items-center gap-1 px-4 py-1.5 bg-gray-200 text-gray-500 text-xs rounded transition
+                           {{ $selectedPromotionId ? 'hover:bg-green-500 hover:text-white cursor-pointer' : 'opacity-50 cursor-not-allowed' }}"
+                            {{ $selectedPromotionId ? '' : 'disabled' }}>
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            Apply
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    @endif
+    @if ($purchaseVoucherModalOpen)
+        @teleport('body')
+            <div class="fixed inset-0 z-[100035] flex items-center justify-center p-4">
+                <div class="absolute inset-0 bg-black/40" wire:click="$set('purchaseVoucherModalOpen', false)"></div>
+
+                <div
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
+
+                    {{-- HEADER --}}
+                    <div class="bg-[#337ab7] px-5 py-3 text-white shrink-0">
+                        <h3 class="text-base font-bold tracking-wide">Purchase Voucher</h3>
+                    </div>
+
+                    {{-- TAB --}}
+                    <div class="flex border-b border-gray-200 shrink-0">
+                        <button type="button"
+                            class="flex-1 py-2.5 text-xs font-bold bg-[#337ab7] text-white border-b-2 border-[#337ab7]">
+                            List Voucher Offline
+                        </button>
+                        <button type="button"
+                            class="flex-1 py-2.5 text-xs font-bold text-gray-500 hover:bg-gray-50 transition">
+                            Selected Vouchers ({{ count($selectedVouchers) }})
+                        </button>
+                    </div>
+
+                    {{-- SEARCH BAR --}}
+                    <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-200 shrink-0">
+                        <input type="text" wire:model.live.debounce.300ms="voucherSearchInput"
+                            placeholder="Search by Voucher ID"
+                            class="flex-1 h-9 px-3 border border-gray-300 rounded text-xs outline-none focus:border-[#337ab7]" />
+                        <button type="button"
+                            class="h-9 px-4 bg-gray-600 hover:bg-gray-700 text-white text-xs font-bold rounded flex items-center gap-1.5 transition active:scale-95">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                            </svg>
+                            Search
+                        </button>
+                        <button type="button" wire:click="clearAllSelectedVouchers"
+                            class="h-9 px-4 bg-[#DD4B39] hover:bg-red-600 text-white text-xs font-bold rounded flex items-center gap-1.5 transition active:scale-95">
+                            Clear All Selected
+                        </button>
+                    </div>
+
+                    {{-- LIST VOUCHER --}}
+                    <div class="flex-1 overflow-y-auto">
+                        @if ($this->availableVouchers->isEmpty())
+                            <div class="h-full flex items-center justify-center py-20 text-sm text-gray-400">
+                                No voucher found
+                            </div>
+                        @else
+                            <table class="w-full text-xs">
+                                <thead class="sticky top-0 bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th class="w-10 px-3 py-2"></th>
+                                        <th class="text-left px-3 py-2 font-semibold text-gray-700">Voucher ID</th>
+                                        <th class="text-left px-3 py-2 font-semibold text-gray-700">Campaign</th>
+                                        <th class="text-left px-3 py-2 font-semibold text-gray-700">Nominal</th>
+                                        <th class="text-left px-3 py-2 font-semibold text-gray-700">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    @foreach ($this->availableVouchers as $vc)
+                                        @php
+                                            $isHabis =
+                                                $vc->usage_limit_total !== null &&
+                                                $vc->times_redeemed >= $vc->usage_limit_total;
+                                        @endphp
+                                        <tr wire:click="toggleSelectVoucher({{ $vc->id }})"
+                                            class="cursor-pointer transition hover:bg-gray-50
+                        {{ in_array($vc->id, $selectedVouchers) ? 'bg-blue-50' : '' }}">
+
+                                            <td class="px-3 py-2 text-center">
+                                                <input type="checkbox" readonly
+                                                    {{ in_array($vc->id, $selectedVouchers) ? 'checked' : '' }}
+                                                    class="rounded border-gray-300 text-[#337ab7] pointer-events-none" />
+                                            </td>
+
+                                            <td class="px-3 py-2 font-mono font-bold text-gray-800">
+                                                {{ $vc->code }}
+                                            </td>
+
+                                            <td class="px-3 py-2 text-gray-600">
+                                                {{ $vc->campaign?->name ?? '-' }}
+                                            </td>
+
+                                            <td class="px-3 py-2 text-gray-600">
+                                                @if ($vc->campaign)
+                                                    @if ($vc->campaign->discount_type === 'percent')
+                                                        {{ $vc->campaign->discount_value }}%
+                                                        @if ($vc->campaign->max_discount_amount)
+                                                            <span class="text-gray-400 text-[10px]">
+                                                                (Max Rp
+                                                                {{ number_format($vc->campaign->max_discount_amount, 0, ',', '.') }})
+                                                            </span>
+                                                        @endif
+                                                    @else
+                                                        Rp {{ number_format($vc->campaign->discount_value, 0, ',', '.') }}
+                                                    @endif
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+
+                                            <td class="px-3 py-2">
+                                                <span
+                                                    class="px-2 py-0.5 rounded text-[10px] font-bold
+                                {{ $isHabis ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
+                                                    {{ $isHabis ? 'Habis' : 'Available' }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
+
+                    {{-- PAGINATION --}}
+                    <div
+                        class="flex items-center justify-end gap-2 px-4 py-2 border-t border-gray-200 text-xs text-gray-500 shrink-0">
+                        @php $vouchers = $this->availableVouchers; @endphp
+                        <span>{{ $vouchers->total() > 0 ? $vouchers->firstItem() . ' - ' . $vouchers->lastItem() : '0' }}
+                            of {{ $vouchers->total() }}</span>
+                        <button wire:click="$set('voucherListPage', 1)" @disabled($vouchers->onFirstPage())
+                            class="w-7 h-7 flex items-center justify-center border rounded disabled:opacity-30 hover:bg-gray-50">|‹</button>
+                        <button wire:click="$set('voucherListPage', {{ max(1, $voucherListPage - 1) }})"
+                            @disabled($vouchers->onFirstPage())
+                            class="w-7 h-7 flex items-center justify-center border rounded disabled:opacity-30 hover:bg-gray-50">‹</button>
+                        <button
+                            wire:click="$set('voucherListPage', {{ min($vouchers->lastPage(), $voucherListPage + 1) }})"
+                            @disabled(!$vouchers->hasMorePages())
+                            class="w-7 h-7 flex items-center justify-center border rounded disabled:opacity-30 hover:bg-gray-50">›</button>
+                        <button wire:click="$set('voucherListPage', {{ $vouchers->lastPage() }})"
+                            @disabled(!$vouchers->hasMorePages())
+                            class="w-7 h-7 flex items-center justify-center border rounded disabled:opacity-30 hover:bg-gray-50">›|</button>
+                    </div>
+
+                    {{-- PAGINATION --}}
+                    <div
+                        class="flex items-center justify-end gap-2 px-4 py-2 border-t border-gray-200 text-xs text-gray-500 shrink-0">
+                        <span>{{ $this->availableVouchers->firstItem() ?? 0 }} of
+                            {{ $this->availableVouchers->total() }}</span>
+                        <button wire:click="$set('voucherListPage', 1)" @disabled($this->availableVouchers->onFirstPage())
+                            class="w-7 h-7 flex items-center justify-center border rounded disabled:opacity-30 hover:bg-gray-50">|‹</button>
+                        <button wire:click="$set('voucherListPage', {{ max(1, $voucherListPage - 1) }})"
+                            @disabled($this->availableVouchers->onFirstPage())
+                            class="w-7 h-7 flex items-center justify-center border rounded disabled:opacity-30 hover:bg-gray-50">‹</button>
+                        <button
+                            wire:click="$set('voucherListPage', {{ min($this->availableVouchers->lastPage(), $voucherListPage + 1) }})"
+                            @disabled(!$this->availableVouchers->hasMorePages())
+                            class="w-7 h-7 flex items-center justify-center border rounded disabled:opacity-30 hover:bg-gray-50">›</button>
+                        <button wire:click="$set('voucherListPage', {{ $this->availableVouchers->lastPage() }})"
+                            @disabled(!$this->availableVouchers->hasMorePages())
+                            class="w-7 h-7 flex items-center justify-center border rounded disabled:opacity-30 hover:bg-gray-50">›|</button>
+                    </div>
+
+                    {{-- FOOTER --}}
+                    <div
+                        class="flex items-center justify-end gap-2 px-4 py-3 border-t border-gray-200 bg-gray-50 shrink-0">
+                        <button type="button" wire:click="$set('purchaseVoucherModalOpen', false)"
+                            class="h-10 px-5 bg-[#DD4B39] text-white text-xs font-bold rounded flex items-center gap-1.5 transition active:scale-95">
+                            ✖ Cancel
+                        </button>
+                        <button type="button" wire:click="applyPurchaseVoucher"
+                            class="h-10 px-6 bg-[#337ab7] hover:bg-blue-700 text-white text-xs font-bold rounded flex items-center gap-1.5 transition active:scale-95">
+                            ✔ Apply
+                        </button>
+                    </div>
                 </div>
             </div>
         @endteleport

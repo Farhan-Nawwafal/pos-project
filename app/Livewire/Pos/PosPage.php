@@ -9,6 +9,7 @@ use App\Models\DiningTable;
 use App\Models\Member;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Promotion;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Models\TransactionEvent;
@@ -250,6 +251,25 @@ class PosPage extends Component
     // --- STATE UNTUK OTHER COST PAYMENT METHOD ---
     public bool $otherCostModalOpen = false;
     public string $otherCostNotes = '';
+
+    // State Manajemen Modal & Pilihan Promosi
+    public bool $promotionModalOpen = false;
+    public string $promotionSearch = '';
+    public string $promotionTypeFilter = '';
+    public int $promotionPage = 1;
+    public ?int $selectedPromotionId = null;
+    public ?int $appliedPromotionId = null;
+
+    // Properti Penampung Nilai Akhir & Teks Tampilan POS
+    public string $promotionDescription = '';
+    public float $appliedDiscountAmount = 0; // Nominal potongan harga
+    public int $promotionDiscountAmount = 0;
+
+    // --- STATE PURCHASE VOUCHER ---
+    public bool $purchaseVoucherModalOpen = false;
+    public string $voucherSearchInput = '';
+    public array $selectedVouchers = [];
+    public int $voucherListPage = 1;
 
     public function openQuickService()
     {
@@ -1474,6 +1494,10 @@ class PosPage extends Component
         $this->appliedComplimentAmount = 0;
         $this->appliedComplimentNotes = null;
 
+        $this->appliedPromotionId = null;
+        $this->promotionDiscountAmount = 0;
+        $this->selectedPromotionId = null;
+
         if ($previousOrderType === 'take_away') {
             // Balik ke waitlist Quick Service
             $this->orderType = 'take_away';
@@ -1593,6 +1617,8 @@ class PosPage extends Component
                 'tax_percentage' => $this->taxRate,
                 'tax_amount' => $this->taxAmount,
                 'total' => $this->total,
+                'promotion_id' => $this->appliedPromotionId ?: null,
+                'promotion_discount_amount' => $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0,
                 'updated_at' => now(),
             ]);
 
@@ -1650,8 +1676,11 @@ class PosPage extends Component
 
         $validated = $this->validate($rules);
         $trxId = null;
+        $promoIdValue = $this->appliedPromotionId ?: null;
+        $promoDiscountValue = $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0;
 
-        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId) {
+        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId, $promoIdValue, $promoDiscountValue) {
+
             $cabangId = auth()->user()->cabang_id ?? 1;
             $cashReceivedValue = $isFinalPayment && $this->paymentMethod === 'cash'
                 ? (int) preg_replace('/\D+/', '', (string)$this->cashReceived)
@@ -1671,12 +1700,14 @@ class PosPage extends Component
                     'cabang_id' => $cabangId,
                     'code' => Transaction::generateUniqueCode(),
                     'member_id' => $parentTrx->member_id,
+                    'promotion_id' => $promoIdValue,
                     'channel' => 'pos',
                     'name' => $parentTrx->name . ' (' . $splitBillData['name'] . ')',
                     'phone' => $parentTrx->phone,
                     'order_type' => $parentTrx->order_type,
                     'dining_table_id' => null, // Dikosongkan agar meja aslinya tidak lepas status terisi
                     'subtotal' => $this->subtotal,
+                    'promotion_discount_amount' => $promoDiscountValue,
                     'service_percentage' => $this->serviceRate,
                     'service_amount' => $this->serviceAmount,
                     'tax_percentage' => $this->taxRate,
@@ -1791,12 +1822,14 @@ class PosPage extends Component
                     'code' => $trx->code ?? Transaction::generateUniqueCode(),
                     'cabang_id' => $cabangId,
                     'member_id' => $this->memberId,
+                    'promotion_id' => $promoIdValue,
                     'name' => $this->customerName,
                     'phone' => $this->customerPhone,
                     'order_type' => $this->orderType,
                     'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
                     'pax' => $this->numberOfPax,
                     'subtotal' => $this->subtotal,
+                    'promotion_discount_amount' => $promoDiscountValue,
                     'service_percentage' => $this->serviceRate,
                     'service_amount' => $this->serviceAmount,
                     'voucher_discount_amount' => $this->voucherDiscountAmount,
@@ -1809,9 +1842,7 @@ class PosPage extends Component
                     'rounding_amount' => $this->roundingAmount,
                     'cash_received' => $cashReceivedValue,
                     'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
-                    'total' => $isFinalPayment
-                        ? ($this->subtotal + $this->serviceAmount + $this->taxAmount)
-                        : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
+                    'total' => $this->total,
                     'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
                     'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
                     'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
@@ -1977,6 +2008,8 @@ class PosPage extends Component
         $this->customerName = (string) $trx->name;
         $this->customerPhone = $trx->phone;
         $this->cartLocked = (string) $trx->channel === 'self_order';
+        $this->appliedPromotionId = $trx->promotion_id ? (int) $trx->promotion_id : null;
+        $this->promotionDiscountAmount = (int) ($trx->promotion_discount_amount ?? 0);
         $this->lockedMemberId = $this->cartLocked ? $this->memberId : null;
         $this->lockedCustomerName = $this->cartLocked ? $this->customerName : null;
         $this->lockedCustomerPhone = $this->cartLocked ? $this->customerPhone : null;
@@ -2180,6 +2213,8 @@ class PosPage extends Component
                     'code' => Transaction::generateUniqueCode(),
                     'cabang_id' => $cabangId, // Field wajib dari skema tabel kamu
                     'member_id' => $this->memberId,
+                    'promotion_id' => $this->appliedPromotionId ?: null,
+                    'promotion_discount_amount' => $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0,
                     'channel' => 'pos',
                     'name' => $finalCustomerName,
                     'phone' => $validated['customerPhone'] !== '' ? $validated['customerPhone'] : null,
@@ -2219,6 +2254,8 @@ class PosPage extends Component
                 $trx->update([
                     'member_id' => $this->memberId,
                     'name' => $finalCustomerName,
+                    'promotion_id' => $this->appliedPromotionId ?: null,
+                    'promotion_discount_amount' => $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0,
                     'phone' => $validated['customerPhone'] !== '' ? $validated['customerPhone'] : null,
                     'order_type' => $this->orderType,
                     'dining_table_id' => $this->orderType === 'dine_in' ? $this->selectedTableId : null,
@@ -2417,8 +2454,10 @@ class PosPage extends Component
 
         $trxId = null;
         $previousPaymentStatus = null;
+        $promoIdValue = $this->appliedPromotionId ?: null;
+        $promoDiscountValue = $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0;
 
-        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId, &$previousPaymentStatus) {
+        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId, &$previousPaymentStatus, $promoIdValue, $promoDiscountValue) {
             $trx = $this->editingTransactionId
                 ? Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first()
                 : new Transaction();
@@ -2441,14 +2480,16 @@ class PosPage extends Component
             $trx->fill([
                 'code' => $trx->code ?? Transaction::generateUniqueCode(),
                 'member_id' => $this->memberId,
+                'promotion_id' => $promoIdValue,
                 'name' => $this->customerName,
                 'phone' => $this->customerPhone,
                 'order_type' => $this->orderType,
                 'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
                 'subtotal' => $this->subtotal,
+                'promotion_discount_amount' => $promoDiscountValue,
                 'service_percentage' => $this->serviceRate,
                 'service_amount' => $this->serviceAmount,
-                'total' => $isFinalPayment ? ($this->subtotal + $this->serviceAmount + $this->taxAmount) : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
+                'total' => $this->total,
                 'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
                 'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
                 'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
@@ -3177,6 +3218,7 @@ class PosPage extends Component
 
     private function recalculateTotals(): void
     {
+        // === 1. HITUNG SUBTOTAL ASLI ===
         $subtotal = 0;
         foreach ($this->cartItems as $item) {
             $qty = (int) ($item['quantity'] ?? 0);
@@ -3185,22 +3227,18 @@ class PosPage extends Component
                 $subtotal += $qty * $price;
             }
         }
-
         $this->subtotal = max(0, $subtotal);
 
-        $this->discountTotalAmount = max(0, $this->voucherDiscountAmount + $this->manualDiscountAmount + $this->pointDiscountAmount);
-        $netSubtotal = max(0, $this->subtotal - $this->discountTotalAmount);
-        $this->netSubtotal = $netSubtotal;
-
-        // $this->serviceAmount = (int) round($netSubtotal * ((float) ($this->serviceRate ?? 0) / 100));
-        $this->serviceAmount = (int) round($netSubtotal * ((float) ($this->serviceRate ?? 0) / 100));
-
-        if ($this->orderType === 'take_away') {
-            $this->serviceAmount = 0;
-        } else {
-            $this->serviceAmount = (int) round($netSubtotal * ((float) ($this->serviceRate ?? 0) / 100));
+        // === 2. KALKULASI DISKON PROMOSI BARU ===
+        $this->promotionDiscountAmount = 0;
+        if ($this->appliedPromotionId) {
+            $promo = \App\Models\Promotion::active()->find($this->appliedPromotionId);
+            if ($promo) {
+                $this->promotionDiscountAmount = (int) $promo->calculateDiscount($this->subtotal);
+            }
         }
 
+        // === 3. KALKULASI VOUCHER BAWAAN ===
         $this->voucherValid = false;
         $this->voucherDiscountAmount = 0;
         $this->voucherMessage = '';
@@ -3247,24 +3285,24 @@ class PosPage extends Component
             }
         }
 
+        // === 4. KALKULASI MANUAL DISKON BAWAAN ===
         $this->manualDiscountAmount = 0;
-
         $manualType = $this->manualDiscountType ? (string) $this->manualDiscountType : null;
         $manualValue = $this->manualDiscountValue === null ? null : (int) $this->manualDiscountValue;
 
         if ($manualType !== null && $manualValue !== null && $manualValue > 0) {
-            $base = max(0, $this->subtotal - $this->voucherDiscountAmount);
+            // Kurangi subtotal dengan voucher & promosi agar manual diskon tidak tumpang tindih berlebih
+            $base = max(0, $this->subtotal - $this->voucherDiscountAmount - $this->promotionDiscountAmount);
 
             if ($manualType === 'percent') {
                 $pct = max(0, min(100, $manualValue));
                 $this->manualDiscountAmount = (int) round($base * ($pct / 100));
             } elseif ($manualType === 'fixed_amount') {
                 $this->manualDiscountAmount = min($base, max(0, $manualValue));
-            } else {
-                $this->manualDiscountAmount = 0;
             }
         }
 
+        // === 5. KALKULASI POINT REWARD BAWAAN ===
         $this->pointDiscountAmount = 0;
         $this->pointsToRedeem = 0;
 
@@ -3273,32 +3311,44 @@ class PosPage extends Component
             $this->pointDiscountAmount = max(0, (int) $this->lockedPointDiscountAmount);
             $this->redeemPoints = $this->pointsToRedeem > 0;
         } elseif ($this->redeemPoints && $this->memberPoints >= $this->minRedemptionPoints && $this->pointRedemptionValue > 0) {
-            $baseForPoints = max(0, $this->subtotal - $this->voucherDiscountAmount - $this->manualDiscountAmount);
+            // Kurangi dengan seluruh diskon terdahulu termasuk promosi baru
+            $baseForPoints = max(0, $this->subtotal - $this->voucherDiscountAmount - $this->manualDiscountAmount - $this->promotionDiscountAmount);
             if ($baseForPoints > 0) {
-                // Calculate max points needed to cover the base amount
                 $maxPointsNeeded = (int) floor($baseForPoints / $this->pointRedemptionValue);
-
-                // Use the lesser of member points or max needed
                 $pointsToUse = min($this->memberPoints, $maxPointsNeeded);
 
                 $this->pointsToRedeem = $pointsToUse;
                 $this->pointDiscountAmount = (int) ($pointsToUse * $this->pointRedemptionValue);
-
-                // Cap at base amount just in case rounding causes issues
                 $this->pointDiscountAmount = min($this->pointDiscountAmount, $baseForPoints);
             }
         }
 
-        $this->discountTotalAmount = max(0, $this->voucherDiscountAmount + $this->manualDiscountAmount + $this->pointDiscountAmount);
+        // === 6. AKUMULASI SELURUH DISKON YANG SUDAH VALID ===
+        $this->discountTotalAmount = max(
+            0,
+            $this->voucherDiscountAmount +
+                $this->manualDiscountAmount +
+                $this->pointDiscountAmount +
+                $this->promotionDiscountAmount
+        );
+
         $netSubtotal = max(0, $this->subtotal - $this->discountTotalAmount);
         $this->netSubtotal = $netSubtotal;
 
-        // $taxBase = $this->discountAppliesBeforeTax ? $netSubtotal : $this->subtotal;
+        // Hitung Service Charge berdasarkan sisa netSubtotal setelah dipotong semua diskon resmi
+        if ($this->orderType === 'take_away') {
+            $this->serviceAmount = 0;
+        } else {
+            $this->serviceAmount = (int) round($netSubtotal * ((float) ($this->serviceRate ?? 0) / 100));
+        }
+
+        // Hitung Ulang Pajak (Tax) & Grand Total Akhir
         $taxBase = $netSubtotal + $this->serviceAmount;
         $this->taxAmount = (int) round($taxBase * ((float) ($this->taxRate) / 100));
 
         $rawTotal = $netSubtotal + $this->serviceAmount + $this->taxAmount;
 
+        // Logika Pembulatan (Rounding Base) bawaan sistem kasir kamu
         if ($this->roundingBase <= 0) {
             $this->roundingAmount = 0;
             $this->total = $rawTotal;
@@ -3740,6 +3790,122 @@ class PosPage extends Component
         $this->otherCostModalOpen = false;
 
         $this->dispatch('toast', type: 'success', message: 'Other Cost berhasil diterapkan.');
+    }
+
+    public function getPromotionsProperty()
+    {
+        return Promotion::query()
+            ->active()
+            ->forBranch(auth()->user()->cabang_id ?? null)
+            ->when(
+                $this->promotionSearch,
+                fn($q) =>
+                $q->where('name', 'like', '%' . $this->promotionSearch . '%')
+            )
+            ->when(
+                $this->promotionTypeFilter,
+                fn($q) =>
+                $q->where('type', $this->promotionTypeFilter)
+            )
+            ->orderBy('end_date')
+            ->paginate(5, ['*'], 'page', $this->promotionPage);
+    }
+
+    public function selectPromotion($promoId)
+    {
+        $this->selectedPromotionId = $promoId;
+    }
+
+    public function applyPromotion()
+    {
+        if (!$this->selectedPromotionId) return;
+
+        $promo = Promotion::find($this->selectedPromotionId);
+        if (!$promo) return;
+
+        // Hitung subtotal keranjang belanja saat ini
+        $currentSubtotal = 0;
+        foreach ($this->cartItems as $item) {
+            $currentSubtotal += ($item['quantity'] * $item['price']);
+        }
+
+        // Validasi syarat minimal belanja promosi tersebut
+        if ($currentSubtotal < $promo->min_subtotal) {
+            $this->dispatch('alert', [
+                'type' => 'error',
+                'message' => 'Minimal belanja untuk promo ini adalah Rp ' . number_format($promo->min_subtotal, 0, ',', '.')
+            ]);
+            return;
+        }
+
+        // Hitung nominal potongan menggunakan helper dari Model Promotion yang sudah kita buat sebelumnya
+        $this->appliedPromotionId = $promo->id;
+        $this->promotionDiscountAmount = (int) $promo->calculateDiscount($currentSubtotal);
+
+        // Tutup Modal & Hitung Ulang Total Akhir Belanja
+        $this->promotionModalOpen = false;
+        $this->recalculateTotals();
+    }
+
+    public function removePromotion()
+    {
+        $this->appliedPromotionId = null;
+        $this->promotionDiscountAmount = 0;
+        $this->selectedPromotionId = null;
+        $this->promotionModalOpen = false;
+        $this->recalculateTotals();
+    }
+
+    // Logika Halaman Paginasi Modal
+    public function previousPromotionPage(): void
+    {
+        if ($this->promotionPage > 1) $this->promotionPage--;
+    }
+    public function nextPromotionPage(): void
+    {
+        $this->promotionPage++;
+    }
+
+    public function getAvailableVouchersProperty()
+    {
+        $term = trim($this->voucherSearchInput);
+
+        return \App\Models\VoucherCode::query()
+            ->where('is_active', true)
+            // Belum pernah diredeeem sama sekali ATAU masih ada sisa limit
+            ->where(function ($q) {
+                $q->whereNull('usage_limit_total')
+                    ->orWhereColumn('times_redeemed', '<', 'usage_limit_total');
+            })
+            // Belum ada redemption di tabel voucher_redemptions
+            ->whereDoesntHave('redemptions')
+            ->when($term !== '', fn($q) => $q->where('code', 'like', "%{$term}%"))
+            ->with('campaign:id,name,discount_type,discount_value')
+            ->orderBy('code')
+            ->paginate(10, ['*'], 'page', $this->voucherListPage);
+    }
+
+    public function toggleSelectVoucher(int $voucherId): void
+    {
+        if (in_array($voucherId, $this->selectedVouchers)) {
+            $this->selectedVouchers = array_values(
+                array_filter($this->selectedVouchers, fn($id) => $id !== $voucherId)
+            );
+        } else {
+            $this->selectedVouchers[] = $voucherId;
+        }
+    }
+
+    public function clearAllSelectedVouchers(): void
+    {
+        $this->selectedVouchers = [];
+    }
+
+    public function applyPurchaseVoucher(): void
+    {
+        // Logika apply voucher yang dibeli — sesuaikan dengan kebutuhan bisnis
+        $this->purchaseVoucherModalOpen = false;
+        $this->dispatch('toast', type: 'success', message: 'Voucher berhasil dipilih.');
     }
 
     public function render(): View
