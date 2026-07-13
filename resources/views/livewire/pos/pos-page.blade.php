@@ -5,25 +5,44 @@
             class="flex flex-col flex-none  bg-white dark:bg-gray-900 p-5 border border-gray-200 dark:border-gray-800 shadow-sm">
 
             {{-- HEADER SELECTION --}}
-            <div class="flex flex-wrap items-center gap-2 mb-2 flex-shrink-0">
-                <button type="button" wire:click="chooseOrderType('take_away')"
-                    class="px-10 py-4 text-xs uppercase font-bold bg-brand-500 border border-gray-300 rounded-sm text-white ">
-                    Quick Service
-                </button>
+            <!-- Kontainer Induk Baru: Membuat kedua grup elemen sejajar kiri-kanan dan vertikal di tengah -->
+            <div class="flex items-center justify-between w-full mb-1 flex-shrink-0">
+                
+                <!-- Grup Tombol Menu (Kiri) -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" wire:click="chooseOrderType('take_away')"
+                        class="px-10 py-4 text-xs uppercase font-bold bg-brand-500 border border-gray-300 rounded-sm text-white ">
+                        Quick Service
+                    </button>
 
-                <button type="button" wire:click="$set('tableRange', '1-50')" @class([
-                    'px-15 py-4 text-xs font-bold rounded-sm transition-all',
-                    'bg-brand-500 text-white border border-brand-600', // Selalu biru
-                ])>1 -
-                    50</button>
+                    <button type="button" wire:click="$set('tableRange', '1-50')" @class([
+                        'px-15 py-4 text-xs font-bold rounded-sm transition-all',
+                        'bg-brand-500 text-white border border-brand-600',
+                    ])>1 - 50</button>
 
-                <button type="button" wire:click="$set('tableRange', '51-100')" @class([
-                    'px-15 py-4 text-xs font-bold rounded-sm transition-all',
-                    'bg-brand-500 text-white border border-brand-600', // Selalu biru
-                ])>51 -
-                    100</button>
+                    <button type="button" wire:click="$set('tableRange', '51-100')" @class([
+                        'px-15 py-4 text-xs font-bold rounded-sm transition-all',
+                        'bg-brand-500 text-white border border-brand-600',
+                    ])>51 - 100</button>
+                </div>
+
+                <!-- Grup Navigasi Halaman (Kanan) -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-gray-500">Page 1 of 1</span>
+                    <button type="button"
+                        class="w-9 h-9 flex items-center justify-center bg-brand-500 text-white rounded">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <button type="button"
+                        class="w-9 h-9 flex items-center justify-center bg-brand-500 text-white rounded">‹</button>
+                    <button type="button"
+                        class="w-9 h-9 flex items-center justify-center bg-brand-500 text-white rounded">›</button>
+                </div>
+
             </div>
-
             {{-- KONTEN UTAMA (LIST TABLE) --}}
             <div class="flex-none min-h-0 overflow-y-auto  border border-gray-200 pb-8 pr-14 pl-3 ">
                 <div class="grid grid-cols-10 gap-3 md:gap-3 lg:gap-6 xl:gap-20">
