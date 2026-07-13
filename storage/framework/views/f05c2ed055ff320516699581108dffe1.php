@@ -2,7 +2,7 @@
     
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType === 'dine_in' && !$selectedTableId): ?>
         <div
-            class="flex flex-col flex-1 min-h-0 bg-white dark:bg-gray-900 p-2 border border-gray-200 dark:border-gray-800 shadow-sm">
+            class="flex flex-col flex-1 min-h-0 bg-white dark:bg-gray-900 p-2 border border-gray-200  shadow-sm">
 
             
             <div class="flex flex-wrap items-center gap-2 mb-2 flex-shrink-0">
@@ -22,6 +22,19 @@
                     'bg-brand-500 text-white border border-brand-600', // Selalu biru
                 ]); ?>">51 -
                     100</button>
+                <div class="flex items-center gap-2 ml-auto">
+                    <span class="text-xs text-gray-500">Page 1 of 1</span>
+                    <button type="button" class="w-9 h-9 flex items-center justify-center bg-[#3C8DBC] text-white rounded">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <button type="button"
+                        class="w-9 h-9 flex items-center justify-center bg-[#3C8DBC] text-white rounded">‹</button>
+                    <button type="button"
+                        class="w-9 h-9 flex items-center justify-center bg-[#3C8DBC] text-white rounded">›</button>
+                </div>
             </div>
 
             
@@ -879,28 +892,36 @@
                                     <?php echo e(cache('setting')?->company_name ?? 'ALAS BU YANTI'); ?>
 
                                 </p>
-                                <p class="text-[10px] text-gray-700 leading-snug px-2">
+                                <p class="text-[10px] text-black leading-snug px-2">
                                     <?php echo e(auth()->user()->cabang?->address ?? (cache('setting')?->address ?? 'Jl. Raya Ciawi Prapatan No.6')); ?>
 
                                 </p>
                                 <p class="text-[10px] text-gray-500 pb-1">Selamat Datang :)</p>
                             </div>
 
-                            <div class="border-b border-dashed border-gray-300 my-2"></div>
+                            <div class="border-b border-dashed border-black my-2"></div>
 
                             
-                            <div class="space-y-0.5 text-[10px] text-gray-700">
+                            <div class="space-y-0.5 text-[10px] text-black">
+                                <div class="flex"><span class="w-20 shrink-0">No</span><span>:
+                                        <?php echo e(now()->format('d-m-Y')); ?></span></div>
                                 <div class="flex"><span class="w-20 shrink-0">Date</span><span>:
                                         <?php echo e(now()->format('d-m-Y')); ?></span></div>
-                                <div class="flex"><span class="w-20 shrink-0">Info</span><span>:
+                                <div class="flex"><span class="w-20 shrink-0">Server</span><span>:
+                                        <?php echo e(auth()->user()->name); ?></span></div>        
+                                <div class="flex"><span class="w-20 shrink-0">Table</span><span>:
                                         <?php echo e($infoText); ?></span></div>
+                                <div class="flex"><span class="w-20 shrink-0">Pax</span><span>:
+                                        <?php echo e($purposeText); ?></span></div>        
                                 <div class="flex"><span class="w-20 shrink-0">Purpose</span><span>:
                                         <?php echo e($purposeText); ?></span></div>
                                 <div class="flex"><span class="w-20 shrink-0">Cashier</span><span>:
                                         <?php echo e(auth()->user()->name); ?></span></div>
+                                <div class="flex"><span class="w-20 shrink-0">Print</span><span>:
+                                        0</span></div>        
                             </div>
 
-                            <div class="border-b border-dashed border-gray-300 my-2"></div>
+                            <div class="border-b border-dashed border-black my-2"></div>
 
                             
                             <div class="space-y-1.5">
@@ -925,37 +946,65 @@
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                             </div>
 
-                            <div class="border-b border-dashed border-gray-300 my-2"></div>
+                            <div class="border-b border-dashed border-black my-2"></div>
 
                             
                             <?php $totalQtyStruk = collect($cartItems)->sum('quantity'); ?>
-                            <div class="space-y-1 text-gray-700">
-                                <p class="text-[10px] text-gray-600"><?php echo e($totalQtyStruk); ?> items</p>
-
+                            <div class="space-y-1 text-black">
+                                <p class="text-[10px] text-black"><?php echo e($totalQtyStruk); ?> items</p>
+                                <div class="border-b border-dashed border-black my-2"></div>
                                 <div class="flex justify-between">
                                     <span>Subtotal</span>
                                     <span
-                                        class="tabular-nums font-medium text-gray-900"><?php echo e(number_format($subtotal, 0, ',', '.')); ?></span>
+                                        class="tabular-nums  text-black"><?php echo e(number_format($subtotal, 0, ',', '.')); ?></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Delivery Cost</span>
+                                    <span
+                                        class="tabular-nums  text-black">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Order Fee</span>
+                                    <span
+                                        class="tabular-nums  text-black">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Menu Discount</span>
+                                    <span
+                                        class="tabular-nums  text-black">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Bill Discount</span>
+                                    <span
+                                        class="tabular-nums  text-black">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Service Charge</span>
+                                    <span
+                                        class="tabular-nums  text-black"><?php echo e(number_format($serviceAmount, 0, ',', '.')); ?></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>PB1 Total</span>
+                                    <span
+                                        class="tabular-nums  text-black"><?php echo e(number_format($taxAmount, 0, ',', '.')); ?></span>
                                 </div>
 
+                                <div class="border-b border-dashed border-black my-2"></div>
+                                <div class="flex justify-between">
+                                    <span>Billing Total</span>
+                                    <span
+                                        class="tabular-nums  text-black">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Voucher Purchase</span>
+                                    <span
+                                        class="tabular-nums  text-black">0</span>
+                                </div>
                                 
-                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!$isQuickService && $serviceAmount > 0): ?>
-                                    <div class="flex justify-between">
-                                        <span>Service Charge</span>
-                                        <span
-                                            class="tabular-nums text-gray-900"><?php echo e(number_format($serviceAmount, 0, ',', '.')); ?></span>
-                                    </div>
-                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-
-                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($taxAmount > 0): ?>
-                                    <div class="flex justify-between">
-                                        <span>PB1</span>
-                                        <span class="tabular-nums text-gray-900"><?php echo e(number_format($taxAmount, 0, ',', '.')); ?></span>
-                                    </div>
-                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                                
                             </div>
 
-                            <div class="border-b border-dashed border-gray-300 my-2"></div>
+                            
 
                             
                             <?php
@@ -973,14 +1022,14 @@
                             ?>
 
                             <div class="flex justify-between items-center text-gray-900">
-                                <span class="text-sm font-black uppercase tracking-wider">Grand Total</span>
-                                <span class="text-lg font-black tabular-nums text-brand-600">
+                                <span class="text-[10px] tracking-wider">Grand Total</span>
+                                <span class="text-[10px] tabular-nums text-black">
                                     Rp <?php echo e(number_format($grandTotal, 0, ',', '.')); ?>
 
                                 </span>
                             </div>
 
-                            <div class="border-b border-dashed border-gray-300 my-2"></div>
+                            <div class="border-b border-dashed border-black my-2"></div>
 
                             <div class="text-center text-[10px] font-semibold text-gray-600 pt-1 tracking-wide">
                                 <?php echo e($statusText); ?>
@@ -1047,11 +1096,11 @@
                 <div class="fixed inset-0 bg-black/50" wire:click="$set('checkoutModalOpen', false)"></div>
                 <div class="relative flex min-h-full items-center justify-center p-4 sm:items-center">
                     <div
-                        class="relative flex w-full max-w-2xl max-h-[85vh] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-800 dark:bg-gray-900">
+                        class="relative flex w-full max-w-2xl max-h-[85vh] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl ">
                         <div class="min-h-0 flex flex-1 flex-col">
                             <div class="min-h-0 flex flex-col">
                                 <div
-                                    class="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                                    class="flex items-center justify-between border-b border-gray-200 px-6 py-4 >
                                     <div>
                                         <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Checkout -
                                             Langkah <?php echo e($checkoutStep); ?>/3</h3>
@@ -1073,7 +1122,7 @@
 
                                 <div class="min-h-0 flex-1 overflow-y-auto p-6 pb-24">
                                     <div
-                                        class="rounded-2xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-950 mb-6">
+                                        class="rounded-2xl border border-gray-200 bg-gray-50 p-4  mb-6">
                                         <div class="grid grid-cols-2 gap-3 sm:grid-cols-5">
                                             <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">Subtotal</p>

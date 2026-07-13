@@ -11,7 +11,7 @@ export default {
         "./app/Livewire/**/*.php",
     ],
     safelist: ["z-[99999]", "z-[100000]", "z-[100001]"],
-    darkMode: "class",
+    
     theme: {
         extend: {
             fontFamily: {
