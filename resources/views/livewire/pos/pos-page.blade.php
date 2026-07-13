@@ -275,7 +275,8 @@
                                 <div class="relative flex-1">
                                     <div
                                         class="absolute inset-y-0 left-0 flex items-center pl-2 px-2 pointer-events-none bg-gray-200 border border-gray-300">
-                                        <img src="/assets/icons/search.png" alt="Search" class="w-3 h-3 opacity-50 dark:invert">
+                                        <img src="/assets/icons/search.png" alt="Search"
+                                            class="w-3 h-3 opacity-50 dark:invert">
                                     </div>
                                     <input wire:model.live.debounce.300ms="search" type="text"
                                         placeholder="Information will be printed on checker printout"
@@ -284,14 +285,15 @@
                                 <button type="button"
                                     class="w-12 h-8 flex items-center justify-center bg-brand-500 border transition rounded-r-sm"
                                     title="Refresh">
-                                    <img src="/assets/icons/resett.png" width="15" height="15" alt="Up">
+                                    <img src="/assets/icons/resett.png" width="15" height="15"
+                                        alt="Up">
                                 </button>
                                 <div class="flex items-center gap-2 shrink-0">
                                     <div class="flex items-center justify-between h-11 px-2 gap-3">
                                         <button type="button" wire:click="previousPage"
                                             class="p-2.5 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                                class="w-3 h-3 ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                fill="currentColor" class="w-3 h-3 ">
                                                 <path d="M9 4L2 12L9 20V15H22V9H9V4Z" />
                                             </svg>
                                         </button>
@@ -300,8 +302,8 @@
                                         </span>
                                         <button type="button" wire:click="nextPage"
                                             class="p-2.5 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                                class="w-3 h-3 rotate-180">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                fill="currentColor" class="w-3 h-3 rotate-180">
                                                 <path d="M9 4L2 12L9 20V15H22V9H9V4Z" />
                                             </svg>
                                         </button>
@@ -318,7 +320,11 @@
                         {{-- Grid Produk --}}
                         @php
                             $perPage = 16;
-                            $displayProducts = array_slice($this->productCards, ($productPage - 1) * $perPage, $perPage);
+                            $displayProducts = array_slice(
+                                $this->productCards,
+                                ($productPage - 1) * $perPage,
+                                $perPage,
+                            );
                         @endphp
                         <div wire:init="loadVariantStockStatuses"
                             class="grid grid-cols-4 gap-1.5 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white p-2 ">
@@ -336,7 +342,8 @@
                                         <p class="text-xs text-white line-clamp-2 leading-snug">
                                             {{ $product['name'] }}
                                         </p>
-                                        <p class="text-xs text-white/90">({{ number_format($finalPrice, 0, ',', '.') }})
+                                        <p class="text-xs text-white/90">
+                                            ({{ number_format($finalPrice, 0, ',', '.') }})
                                         </p>
                                     </div>
                                 </button>
@@ -353,7 +360,8 @@
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200 hover:text-gray-600">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <rect x="3" y="3" width="8" height="8" rx="2" />
                                         <rect x="13" y="3" width="8" height="8" rx="2" />
                                         <rect x="3" y="13" width="8" height="8" rx="2" />
@@ -415,7 +423,8 @@
                             <div class="grid grid-cols-3 w-full gap-1">
                                 <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200 ">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <rect x="3" y="3" width="8" height="8" rx="2" />
                                         <rect x="13" y="3" width="8" height="8" rx="2" />
                                         <rect x="3" y="13" width="8" height="8" rx="2" />
@@ -672,7 +681,8 @@
                                 <div class="grid grid-cols-3 w-full divide-x divide-black/20 ">
                                     <button type="button" wire:click="printBill"
                                         class="w-full flex items-center justify-center h-10 gap-2 font-bold text-white text-xs  bg-brand-500 shadow-sm">
-                                        <img src="/assets/icons/printer.png" width="14" height="14" alt="Up">
+                                        <img src="/assets/icons/printer.png" width="14" height="14"
+                                            alt="Up">
                                         <span>Print Bill</span>
                                     </button>
                                     <button type="button" wire:click="openSplitBill"
@@ -717,116 +727,124 @@
                 <div class="md:col-span-9 space-y-1">
                     {{-- LAPIS ATAS: BARIS 1 (INFO TABLE, MEMBER & BUTTON PROFILE) --}}
                     <div>
-    {{-- Baris Label (Table & Member) --}}
-    <div class="grid grid-cols-14 gap-1.5 mb-1">
-        <div class="col-span-2">
-            <h3 class="text-xs font-black tracking-wide text-gray-700 dark:text-gray-300">
-                Table
-            </h3>
-        </div>
-        <div class="col-span-12">
-            <h3 class="text-xs font-black tracking-wide text-black dark:text-white">
-                Member
-            </h3>
-        </div>
-    </div>
+                        {{-- Baris Label (Table & Member) --}}
+                        <div class="grid grid-cols-14 gap-1.5 mb-1">
+                            <div class="col-span-2">
+                                <h3 class="text-xs font-black tracking-wide text-gray-700 dark:text-gray-300">
+                                    Table
+                                </h3>
+                            </div>
+                            <div class="col-span-12">
+                                <h3 class="text-xs font-black tracking-wide text-black dark:text-white">
+                                    Member
+                                </h3>
+                            </div>
+                        </div>
 
-    {{-- Baris Input & Tombol --}}
-    <div class="flex items-center gap-1">
-        <div class="relative flex-1 flex gap-1.5 grid grid-cols-12">
-            {{-- Bagian Table --}}
-            <div class="col-span-2">
-                <span class="h-8 w-full flex items-center bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white px-2 text-sm font-bold rounded-sm border border-gray-300 dark:border-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
-                    {{ collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? 'Walk-In' }}
-                </span>
-            </div>
-            {{-- Bagian Member Input --}}
-            <div class="col-span-10">
-                <input type="text" readonly wire:model="customerName"
-                    class="w-full h-8 border border-gray-300 rounded-sm bg-gray-50 px-4 text-sm dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700 cursor-not-allowed" />
-            </div>
-        </div>
-
-        {{-- Bagian Tombol Aksi --}}
-        <div class="flex items-center gap-1 shrink-0">
-            <button type="button" wire:click="$set('editMemberModalOpen', true)"
-                class="h-8 px-5 bg-brand-500 text-white text-xs font-semibold rounded-sm border transition flex items-center justify-center">
-                <img src="/assets/icons/contact.png" alt="Search" class="w-5 h-5">
-            </button>
-            <button type="button"
-                class="h-8 px-3 flex items-center justify-center bg-brand-500 text-white text-xs font-semibold rounded-sm transition shadow-sm whitespace-nowrap">
-                Check Online Payment
-            </button>
-        </div>
-    </div>
-</div>
-
-                    {{-- LAPIS TENGAH: BARIS 2 (JUDUL SELECT PAYMENT METHOD) --}}
-                <div class=" border bg-gray-100 rounded-sm">
-                    <div class="flex items-center justify-between p-2 ">
-                        <h3 class="text-md font-semibold tracking-wide text-gray-700 dark:text-gray-300">Select
-                            Payment Method</h3>
-                        <div class="flex items-center ">
-                            <div class="flex items-center justify-between h-9  gap-1">
-                                <div class="flex items-center justify-between h-11 gap-3">
-                                    <button type="button" wire:click="previousPage"
-                                        class="p-3 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                            fill="currentColor" class="w-3 h-3 ">
-                                            <path d="M9 4L2 12L9 20V15H22V9H9V4Z" />
-                                        </svg>
-                                    </button>
+                        {{-- Baris Input & Tombol --}}
+                        <div class="flex items-center gap-1">
+                            <div class="relative flex-1 flex gap-1.5 grid grid-cols-12">
+                                {{-- Bagian Table --}}
+                                <div class="col-span-2">
+                                    <span
+                                        class="h-8 w-full flex items-center bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white px-2 text-sm font-bold rounded-sm border border-gray-300 dark:border-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
+                                        {{ collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? 'Walk-In' }}
+                                    </span>
                                 </div>
-                                <span class="text-xs font-bold text-gray-800 whitespace-nowrap">{{ $paymentPage }} of 1</span>
-                                <div class="flex items-center justify-between h-11 px-2 gap-3">
-                                    <button type="button" wire:click="previousPage"
-                                        class="p-3 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                            fill="currentColor" class="w-3 h-3 rotate-180">
-                                            <path d="M9 4L2 12L9 20V15H22V9H9V4Z" />
-                                        </svg>
-                                    </button>
+                                {{-- Bagian Member Input --}}
+                                <div class="col-span-10">
+                                    <input type="text" readonly wire:model="customerName"
+                                        class="w-full h-8 border border-gray-300 rounded-sm bg-gray-50 px-4 text-sm dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700 cursor-not-allowed" />
                                 </div>
+                            </div>
+
+                            {{-- Bagian Tombol Aksi --}}
+                            <div class="flex items-center gap-1 shrink-0">
+                                <button type="button" wire:click="$set('editMemberModalOpen', true)"
+                                    class="h-8 px-5 bg-brand-500 text-white text-xs font-semibold rounded-sm border transition flex items-center justify-center">
+                                    <img src="/assets/icons/contact.png" alt="Search" class="w-5 h-5">
+                                </button>
+                                <button type="button"
+                                    class="h-8 px-3 flex items-center justify-center bg-brand-500 text-white text-xs font-semibold rounded-sm transition shadow-sm whitespace-nowrap">
+                                    Check Online Payment
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    {{-- GRID KARTU PEMBAYARAN --}}
-                    <div
-                        class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-b-sm p-2 pb-40 ">
-                        @php
-                            $methods = [
-                                ['id' => 'promo', 'name' => 'ADD PROMO', 'color' => '#F29C12', 'text' => '#FFFFFF'],
-                                ['id' => 'cash', 'name' => 'CASH', 'color' => '#3C8DBC', 'text' => '#FFFFFF'],
-                                ['id' => 'card', 'name' => 'CARD', 'color' => '#3C8DBC', 'text' => '#FFFFFF'],
-                                [
-                                    'id' => 'compliment',
-                                    'name' => 'COMPLIMENT',
-                                    'color' => '#3C8DBC',
-                                    'text' => '#FFFFFF',
-                                ],
-                                ['id' => 'other', 'name' => 'OTHER COST', 'color' => '#3C8DBC', 'text' => '#FFFFFF'],
-                            ];
-                        @endphp
-                        @foreach ($methods as $method)
-                            <button type="button"
-                                @if ($method['id'] === 'compliment') wire:click="$set('complimentModalOpen', true)"
+                    {{-- LAPIS TENGAH: BARIS 2 (JUDUL SELECT PAYMENT METHOD) --}}
+                    <div class=" border bg-gray-100 rounded-sm">
+                        <div class="flex items-center justify-between p-2 ">
+                            <h3 class="text-md font-semibold tracking-wide text-gray-700 dark:text-gray-300">Select
+                                Payment Method</h3>
+                            <div class="flex items-center ">
+                                <div class="flex items-center justify-between h-9  gap-1">
+                                    <div class="flex items-center justify-between h-11 gap-3">
+                                        <button type="button" wire:click="previousPage"
+                                            class="p-3 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                fill="currentColor" class="w-3 h-3 ">
+                                                <path d="M9 4L2 12L9 20V15H22V9H9V4Z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <span
+                                        class="text-xs font-bold text-gray-800 whitespace-nowrap">{{ $paymentPage }}
+                                        of 1</span>
+                                    <div class="flex items-center justify-between h-11 px-2 gap-3">
+                                        <button type="button" wire:click="previousPage"
+                                            class="p-3 rounded-sm text-white bg-brand-500 border border-gray-300 rounded-lg transition">
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                fill="currentColor" class="w-3 h-3 rotate-180">
+                                                <path d="M9 4L2 12L9 20V15H22V9H9V4Z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- GRID KARTU PEMBAYARAN --}}
+                        <div
+                            class="grid grid-cols-6 gap-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white shadow-sm rounded-b-sm p-2 pb-40 ">
+                            @php
+                                $methods = [
+                                    ['id' => 'promo', 'name' => 'ADD PROMO', 'color' => '#F29C12', 'text' => '#FFFFFF'],
+                                    ['id' => 'cash', 'name' => 'CASH', 'color' => '#3C8DBC', 'text' => '#FFFFFF'],
+                                    ['id' => 'card', 'name' => 'CARD', 'color' => '#3C8DBC', 'text' => '#FFFFFF'],
+                                    [
+                                        'id' => 'compliment',
+                                        'name' => 'COMPLIMENT',
+                                        'color' => '#3C8DBC',
+                                        'text' => '#FFFFFF',
+                                    ],
+                                    [
+                                        'id' => 'other',
+                                        'name' => 'OTHER COST',
+                                        'color' => '#3C8DBC',
+                                        'text' => '#FFFFFF',
+                                    ],
+                                ];
+                            @endphp
+                            @foreach ($methods as $method)
+                                <button type="button"
+                                    @if ($method['id'] === 'compliment') wire:click="$set('complimentModalOpen', true)"
                             @elseif ($method['id'] === 'card') wire:click="openCardPaymentModal" @elseif ($method['id'] === 'other')
                                 wire:click="openOtherCostModal" @else
                                     wire:click="$set('paymentMethod', '{{ $method['id'] }}'); $set('selectedPaymentLabel', '{{ $method['name'] }} Payment'); $set('paymentModalOpen', true);" @endif
-                                class="group flex min-h-[150px] w-full flex-col items-center justify-center overflow-hidden rounded-xs border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
-                                style="background-color: {{ $method['color'] }};">
-                                <div class="text-center p-3 w-full h-full flex items-center justify-center">
-                                    <p class="text-xs font-black uppercase leading-snug tracking-wider"
-                                        style="color: {{ $method['text'] }}">
-                                        {{ $method['name'] }}
-                                    </p>
-                                </div>
-                            </button>
-                        @endforeach
+                                    class="group flex min-h-[150px] w-full flex-col items-center justify-center overflow-hidden rounded-xs border border-transparent shadow-sm hover:shadow-md hover:brightness-105 transition active:scale-95"
+                                    style="background-color: {{ $method['color'] }};">
+                                    <div class="text-center p-3 w-full h-full flex items-center justify-center">
+                                        <p class="text-xs font-black uppercase leading-snug tracking-wider"
+                                            style="color: {{ $method['text'] }}">
+                                            {{ $method['name'] }}
+                                        </p>
+                                    </div>
+                                </button>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
                     {{-- RINGKASAN DATA VOUCHER / OUTSTANDING --}}
                     <div class="grid grid-cols-2  gap-1  bg-gray-50 p-2 rounded-sm border border-gray-200 ">
                         <div class="space-y-1 ">
@@ -907,14 +925,20 @@
 
                             {{-- INFO (Label kiri, value menempel setelah titik dua) --}}
                             <div class="space-y-0.5 text-[10px] text-gray-700">
+                                <div class="flex"><span class="w-20 shrink-0">No</span><span>:
+                                        {{ $this->receiptCode }}</span></div>
                                 <div class="flex"><span class="w-20 shrink-0">Date</span><span>:
                                         {{ now()->format('d-m-Y') }}</span></div>
-                                <div class="flex"><span class="w-20 shrink-0">Info</span><span>:
-                                        {{ $infoText }}</span></div>
-                                <div class="flex"><span class="w-20 shrink-0">Purpose</span><span>:
-                                        {{ $purposeText }}</span></div>
+                                <div class="flex"><span class="w-20 shrink-0">Server</span><span>:
+                                        {{ auth()->user()->name }}</span></div>
+                                <div class="flex"><span class="w-20 shrink-0">Table</span><span>:
+                                        {{ $isDineIn ? $tableLabel : '-' }}</span></div>
+                                <div class="flex"><span class="w-20 shrink-0">Pax</span><span>:
+                                        {{ $numberOfPax }}</span></div>
                                 <div class="flex"><span class="w-20 shrink-0">Cashier</span><span>:
                                         {{ auth()->user()->name }}</span></div>
+                                <div class="flex"><span class="w-20 shrink-0">Print</span><span>:
+                                        0</span></div>
                             </div>
 
                             <div class="border-b border-dashed border-gray-300 my-2"></div>
@@ -945,39 +969,56 @@
                             {{-- TOTALS --}}
                             @php
                                 $totalQtyStruk = collect($cartItems)->sum('quantity');
-                                // Menarik data compliment murni dari backend secara aman
                                 $currentCompliment = (int) ($this->appliedComplimentAmount ?? 0);
                             @endphp
                             <div class="space-y-1 text-gray-700">
                                 <p class="text-[10px] text-gray-600">{{ $totalQtyStruk }} items</p>
 
-                                <div class="flex justify-between">
+                                <div class="flex justify-end gap-2">
                                     <span>Subtotal</span>
                                     <span
                                         class="tabular-nums font-medium text-gray-900">{{ number_format($subtotal, 0, ',', '.') }}</span>
                                 </div>
 
-                                {{-- Service Charge (Tetap utuh dari subtotal asli) --}}
+                                <div class="flex justify-end gap-2">
+                                    <span>Delivery Cost</span>
+                                    <span class="tabular-nums text-gray-900">0</span>
+                                </div>
+
+                                <div class="flex justify-end gap-2">
+                                    <span>Order Fee</span>
+                                    <span class="tabular-nums text-gray-900">0</span>
+                                </div>
+
+                                @if ($discountTotalAmount > 0)
+                                    <div class="flex justify-end gap-2">
+                                        <span>Menu Discount</span>
+                                        <span
+                                            class="tabular-nums text-gray-900">-{{ number_format($discountTotalAmount, 0, ',', '.') }}</span>
+                                    </div>
+                                @endif
+
+                                {{-- Service Charge --}}
                                 @if (!$isQuickService && $serviceAmount > 0)
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-end gap-2">
                                         <span>Service Charge</span>
                                         <span
                                             class="tabular-nums text-gray-900">{{ number_format($serviceAmount, 0, ',', '.') }}</span>
                                     </div>
                                 @endif
 
-                                {{-- Pajak PB1 (Tetap utuh dari subtotal asli) --}}
+                                {{-- Pajak PB1 --}}
                                 @if ($taxAmount > 0)
-                                    <div class="flex justify-between">
-                                        <span>PB1</span>
+                                    <div class="flex justify-end gap-2">
+                                        <span>PB1 Total</span>
                                         <span
                                             class="tabular-nums text-gray-900">{{ number_format($taxAmount, 0, ',', '.') }}</span>
                                     </div>
                                 @endif
 
-                                {{-- BARIS COMPLIMENT: Muncul otomatis sebagai pengurang jika ada data compliment aktif --}}
+                                {{-- Compliment --}}
                                 @if ($currentCompliment > 0)
-                                    <div class="flex justify-between text-red-600 font-bold">
+                                    <div class="flex justify-end gap-2 text-red-600 font-bold">
                                         <span>Compliment</span>
                                         <span
                                             class="tabular-nums">-{{ number_format($currentCompliment, 0, ',', '.') }}</span>
@@ -987,19 +1028,23 @@
 
                             <div class="border-b border-dashed border-gray-300 my-2"></div>
 
+                            {{-- BILLING TOTAL & VOUCHER PURCHASE --}}
+                            <div class="space-y-1 text-gray-700">
+                                <div class="flex justify-end gap-2">
+                                    <span>Billing Total</span>
+                                    <span
+                                        class="tabular-nums font-medium text-gray-900">{{ number_format($total, 0, ',', '.') }}</span>
+                                </div>
+                                <div class="flex justify-end gap-2">
+                                    <span>Voucher Purchase</span>
+                                    <span class="tabular-nums text-gray-900">0</span>
+                                </div>
+                            </div>
+
+                            <div class="border-b border-dashed border-gray-300 my-2"></div>
+
                             {{-- GRAND TOTAL (Bold + Double Height) --}}
                             @php
-                                // Perhitungan murni Grand Total utuh restoran dikurangi potongan compliment secara absolut
-                                // $rawGrandTotal =
-                                //     $subtotal +
-                                //     (!$isQuickService ? $serviceAmount : 0) +
-                                //     $taxAmount -
-                                //     $currentCompliment;
-
-                                // $grandTotal =
-                                //     $roundingBase > 0
-                                //         ? (int) (round($rawGrandTotal / $roundingBase) * $roundingBase)
-                                //         : $rawGrandTotal;
                                 $currentCompliment = (int) ($this->appliedComplimentAmount ?? 0);
                                 $grandTotal = max(0, $total - $currentCompliment);
 
@@ -1010,7 +1055,7 @@
                                 };
                             @endphp
 
-                            <div class="flex justify-between items-center text-gray-900">
+                            <div class="flex justify-end items-center gap-2 text-gray-900">
                                 <span class="text-sm font-black uppercase tracking-wider">Grand Total</span>
                                 <span class="text-lg font-black tabular-nums text-brand-600">
                                     Rp {{ number_format(max(0, $grandTotal), 0, ',', '.') }}
@@ -1670,8 +1715,8 @@
                                                     Lanjut
                                                 </button>
                                             @else
-                                                <button type="button" wire:click="checkout" wire:loading.attr="disabled"
-                                                    @class([
+                                                <button type="button" wire:click="checkout"
+                                                    wire:loading.attr="disabled" @class([
                                                         'flex-[2] px-6 py-3 rounded-xl font-black transition text-lg text-white shadow-lg',
                                                         'bg-[#3C8DBC] ' => $isFinalPayment, // Jika Bayar - Header Blue
                                                         'bg-blue-600' => !$isFinalPayment, // Jika Booking
@@ -1692,16 +1737,17 @@
         {{-- MODAL VOID ITEM --}}
         @if ($voidItemModalOpen)
             @teleport('body')
-            <div class="fixed inset-0 z-[100001] flex items-center justify-center p-4">
-                {{-- Backdrop dengan Blur --}}
-                <div class="absolute inset-0 bg-gray-900/60 " wire:click="$set('voidItemModalOpen', false)">
-                </div>
+                <div class="fixed inset-0 z-[100001] flex items-center justify-center p-4">
+                    {{-- Backdrop dengan Blur --}}
+                    <div class="absolute inset-0 bg-gray-900/60 " wire:click="$set('voidItemModalOpen', false)">
+                    </div>
 
                     <div
                         class="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-gray-900 border border-gray-100 dark:border-gray-800 animate-in fade-in zoom-in duration-200">
 
                         {{-- Header dengan Warna Merah Lembut --}}
-                        <div class="bg-red-50 dark:bg-red-900/20 px-6 py-5 border-b border-red-100 dark:border-red-900/30">
+                        <div
+                            class="bg-red-50 dark:bg-red-900/20 px-6 py-5 border-b border-red-100 dark:border-red-900/30">
                             <div class="flex items-center gap-3 text-red-600 dark:text-red-400">
                                 <div class="p-2 bg-red-100 dark:bg-red-800/40 rounded-full">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1719,28 +1765,29 @@
                                 $itemToVoid = $cartItems[$voidItemIndex] ?? null;
                             @endphp
 
-                        @if ($itemToVoid)
-                            <div
-                                class="mb-5 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700/50">
-                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Item yang
-                                    dipilih:</p>
-                                <div class="flex justify-between items-center">
-                                    <div>
-                                        <p class="text-sm font-black text-gray-800 dark:text-white uppercase">
-                                            {{ $itemToVoid['name'] }}
-                                        </p>
-                                        <p class="text-xs text-gray-500">
-                                            {{ $itemToVoid['variant_name'] ?? 'Porsi Standar' }}
-                                        </p>
-                                    </div>
-                                    <div class="text-right">
-                                        <span
-                                            class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-sm">{{ $itemToVoid['quantity'] }}
-                                            item</span>
+                            @if ($itemToVoid)
+                                <div
+                                    class="mb-5 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700/50">
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Item
+                                        yang
+                                        dipilih:</p>
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm font-black text-gray-800 dark:text-white uppercase">
+                                                {{ $itemToVoid['name'] }}
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                {{ $itemToVoid['variant_name'] ?? 'Porsi Standar' }}
+                                            </p>
+                                        </div>
+                                        <div class="text-right">
+                                            <span
+                                                class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded-sm">{{ $itemToVoid['quantity'] }}
+                                                item</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
                             <div class="space-y-5">
                                 {{-- Input Alasan --}}
@@ -1857,12 +1904,13 @@
 
                                 {{-- Deretan Angka Pax Shortcut 1 sampai 5 --}}
                                 @foreach ([1, 2, 3, 4, 5] as $amt)
-                                    <button type="button" wire:click="$set('numberOfPax', {{ $amt }})" @class([
-                                        'w-10 h-10 flex items-center justify-center text-sm font-bold rounded-sm transition shrink-0 active:scale-95',
-                                        'bg-brand-500 text-white shadow-xs' => $numberOfPax == $amt,
-                                        'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 shadow-xs' =>
-                                            $numberOfPax != $amt,
-                                    ])>
+                                    <button type="button" wire:click="$set('numberOfPax', {{ $amt }})"
+                                        @class([
+                                            'w-10 h-10 flex items-center justify-center text-sm font-bold rounded-sm transition shrink-0 active:scale-95',
+                                            'bg-brand-500 text-white shadow-xs' => $numberOfPax == $amt,
+                                            'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 shadow-xs' =>
+                                                $numberOfPax != $amt,
+                                        ])>
                                         {{ $amt }}
                                     </button>
                                 @endforeach
@@ -1925,9 +1973,9 @@
             <div class="fixed inset-0 z-[100010] flex items-center justify-center p-4 animate-in fade-in duration-100"
                 aria-modal="true" role="dialog">
 
-            {{-- Backdrop Gelap Transparan --}}
-            <div class="absolute inset-0 bg-black/40 " wire:click="$set('paymentModalOpen', false)">
-            </div>
+                {{-- Backdrop Gelap Transparan --}}
+                <div class="absolute inset-0 bg-black/40 " wire:click="$set('paymentModalOpen', false)">
+                </div>
 
                 {{-- Box Card Modal --}}
                 <div
@@ -2054,167 +2102,163 @@
     {{-- MODAL REKAYASA TAMPILAN SPLIT BILL --}}
     @if ($splitBillModalOpen)
         @teleport('body')
-        <div class="fixed inset-0 z-[100015] flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-gray-900/50 " wire:click="$set('splitBillModalOpen', false)">
-            </div>
-
-            <div
-                class="relative w-full max-w-2xl h-[50vh] flex flex-col overflow-hidden rounded-sm bg-white shadow-2xl   animate-in ">
-
-                {{-- HEADER MODAL --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
-                    <h3 class="text-base font-bold tracking-wide">Split Bill</h3>
+            <div class="fixed inset-0 z-[100015] flex items-center justify-center p-4">
+                <div class="absolute inset-0 bg-gray-900/50 " wire:click="$set('splitBillModalOpen', false)">
                 </div>
+
+                <div
+                    class="relative w-full max-w-2xl h-[50vh] flex flex-col overflow-hidden rounded-sm bg-white shadow-2xl   animate-in ">
+
+                    {{-- HEADER MODAL --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white">
+                        <h3 class="text-base font-bold tracking-wide">Split Bill</h3>
+                    </div>
 
                     {{-- BODY CONTAINER --}}
                     <div class="flex-1 flex min-h-0 divide-x divide-gray-200 dark:divide-gray-800">
 
-                    {{-- SISI KIRI: SISA MENU TRANSAKSI UTAMA --}}
-                    <div class="w-1/2 flex flex-col p-3 bg-gray-50 dark:bg-gray-950/40">
-                        <div
-                            class="flex border-b border-gray-200 bg-gray-200 dark:bg-gray-800 px-3 py-2 font-bold text-xs text-gray-700 dark:text-gray-300">
-                            <span class="w-12 text-center">Qty</span>
-                            <span class="flex-1 pl-4">Menu</span>
-                        </div>
+                        {{-- SISI KIRI: SISA MENU TRANSAKSI UTAMA --}}
+                        <div class="w-1/2 flex flex-col p-3 bg-gray-50 dark:bg-gray-950/40">
+                            <div
+                                class="flex border-b border-gray-200 bg-gray-200 dark:bg-gray-800 px-3 py-2 font-bold text-xs text-gray-700 dark:text-gray-300">
+                                <span class="w-12 text-center">Qty</span>
+                                <span class="flex-1 pl-4">Menu</span>
+                            </div>
 
-                        <div class="flex-1 overflow-y-auto  mt-1 custom-scrollbar">
-                            @foreach ($cartItems as $cIdx => $cItem)
-                                @if ($cItem['quantity'] > 0)
-                                    {{-- Hanya tampilkan jika Qty sisa > 0 --}}
-                                    <div
-                                        class="flex items-center justify-between p-1  rounded-lg shadow-xs">
-                                        <div class="flex items-center flex-1 min-w-0">
-                                            <span
-                                                class="w-8 text-center text-xs  text-gray-800 dark:text-white">{{ $cItem['quantity'] }}</span>
-                                            <div class="pl-4 truncate">
-                                                <p class="text-[10px]  text-gray-800 dark:text-white ">
-                                                    {{ $cItem['name'] }}
-                                                </p>
-                                                <p class="text-[10px] text-gray-600 font-bold ">
-                                                    @ {{ number_format($cItem['price'], 0, ',', '.') }} | Total:
-                                                    {{ number_format($cItem['quantity'] * $cItem['price'], 0, ',', '.') }}
-                                                </p>
+                            <div class="flex-1 overflow-y-auto  mt-1 custom-scrollbar">
+                                @foreach ($cartItems as $cIdx => $cItem)
+                                    @if ($cItem['quantity'] > 0)
+                                        {{-- Hanya tampilkan jika Qty sisa > 0 --}}
+                                        <div class="flex items-center justify-between p-1  rounded-lg shadow-xs">
+                                            <div class="flex items-center flex-1 min-w-0">
+                                                <span
+                                                    class="w-8 text-center text-xs  text-gray-800 dark:text-white">{{ $cItem['quantity'] }}</span>
+                                                <div class="pl-4 truncate">
+                                                    <p class="text-[10px]  text-gray-800 dark:text-white ">
+                                                        {{ $cItem['name'] }}
+                                                    </p>
+                                                    <p class="text-[10px] text-gray-600 font-bold ">
+                                                        @ {{ number_format($cItem['price'], 0, ',', '.') }} | Total:
+                                                        {{ number_format($cItem['quantity'] * $cItem['price'], 0, ',', '.') }}
+                                                    </p>
+                                                </div>
                                             </div>
+                                            <button type="button" wire:click="moveItemToSplit({{ $cIdx }})"
+                                                class="w-12 h-8 flex items-center justify-center bg-[#3C8DBC] text-white rounded font-bold shadow-xs text-sm">
+                                                +
+                                            </button>
                                         </div>
-                                        <button type="button" wire:click="moveItemToSplit({{ $cIdx }})"
-                                            class="w-12 h-8 flex items-center justify-center bg-[#3C8DBC] text-white rounded font-bold shadow-xs text-sm">
-                                            +
-                                        </button>
-                                    </div>
-                                @endif
-                            @endforeach
+                                    @endif
+                                @endforeach
+                            </div>
+                            <div class="pt-3">
+                                <button type="button"
+                                    class="px-4 stream h-9 bg-[#3C8DBC] text-white text-xs rounded shadow-sm flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="w-4 h-4 shrink-0" alt="Pencil">
+                                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                                        <path d="m15 5 3 3" />
+                                    </svg>
+                                    <span>Rename Bill</span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="pt-3">
-                            <button type="button"
-        class="px-4 stream h-9 bg-[#3C8DBC] text-white text-xs rounded shadow-sm flex items-center gap-2">
-    <svg xmlns="http://www.w3.org/2000/svg"
-         viewBox="0 0 24 24"
-         fill="none"
-         stroke="currentColor"
-         stroke-width="2"
-         stroke-linecap="round"
-         stroke-linejoin="round"
-         class="w-4 h-4 shrink-0"
-         alt="Pencil">
-        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
-        <path d="m15 5 3 3"/>
-    </svg>
-    <span>Rename Bill</span>
-</button>
-                        </div>
-                    </div>
 
                         {{-- SISI KANAN: TABS BILL DAN DAFTAR ITEM YANG DIPINDAH --}}
                         <div class="w-1/2 flex flex-col p-4 bg-white dark:bg-gray-900">
 
-                        {{-- ATAS: TAB NAVIGATION --}}
-                        <div
-                            class="flex flex-wrap border-b border-gray-200 dark:border-gray-800 gap-1 overflow-x-auto shrink-0 custom-scrollbar">
-                            @foreach ($splitBills as $bIdx => $bill)
-                                @php $itemCount = collect($bill['items'])->sum('quantity'); @endphp
-                                <button type="button" wire:click="$set('activeSplitTab', {{ $bIdx }})" @class([
-                                    'px-4 py-2 text-xs font-bold transition-all border-b-2 -mb-[1px]',
-                                    'border-[#3C8DBC] text-[#3C8DBC]' => $activeSplitTab == $bIdx,
-                                    'border-transparent text-gray-400 hover:text-gray-600' =>
-                                        $activeSplitTab != $bIdx,
-                                ])>
-                                    {{ $bill['name'] }} ({{ $itemCount }})
-                                </button>
-                            @endforeach
-                        </div>
-
-                        {{-- TENGAH: ISI ITEM DI DALAM TAB YANG SEDANG AKTIF --}}
-                        <div class="flex-1 overflow-y-auto  mt-1 custom-scrollbar">
-                            @if (isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0)
-                                @foreach ($splitBills[$activeSplitTab]['items'] as $sIdx => $sItem)
-                                    <div
-                                        class="flex items-center justify-between p-1  rounded-lg">
-                                        <div class="min-w-0 flex-1">
-                                            <p class="text-[8px]  text-gray-800 dark:text-white uppercase">
-                                                {{ $sItem['name'] }}
-                                            </p>
-                                            <p class="text-[8px] text-gray-500 font-bold mt-0.5">{{ $sItem['quantity'] }}x | @
-                                                {{ number_format($sItem['price'], 0, ',', '.') }}
-                                            </p>
-                                        </div>
-                                        <button type="button" wire:click="removeSplitItem({{ $activeSplitTab }}, {{ $sIdx }})"
-                                            class="text-xs text-red-500 hover:text-red-700 font-bold px-2">
-                                            X Batalkan
-                                        </button>
-                                    </div>
+                            {{-- ATAS: TAB NAVIGATION --}}
+                            <div
+                                class="flex flex-wrap border-b border-gray-200 dark:border-gray-800 gap-1 overflow-x-auto shrink-0 custom-scrollbar">
+                                @foreach ($splitBills as $bIdx => $bill)
+                                    @php $itemCount = collect($bill['items'])->sum('quantity'); @endphp
+                                    <button type="button" wire:click="$set('activeSplitTab', {{ $bIdx }})"
+                                        @class([
+                                            'px-4 py-2 text-xs font-bold transition-all border-b-2 -mb-[1px]',
+                                            'border-[#3C8DBC] text-[#3C8DBC]' => $activeSplitTab == $bIdx,
+                                            'border-transparent text-gray-400 hover:text-gray-600' =>
+                                                $activeSplitTab != $bIdx,
+                                        ])>
+                                        {{ $bill['name'] }} ({{ $itemCount }})
+                                    </button>
                                 @endforeach
-                            @else
-                                <div class="h-full flex items-center justify-center text-xs text-gray-400 italic">
-                                    Belum ada menu di {{ $splitBills[$activeSplitTab]['name'] ?? 'Bill ini' }}. Klik
-                                    tombol (+) di kiri untuk memindahkan.
-                                </div>
-                            @endif
-                        </div>
+                            </div>
 
-                        {{-- BAWAH SISI KANAN: TOMBOL DELETE BILL --}}
-                        <div class="pt-3 flex justify-end">
-                            <button type="button" wire:click="deleteSplitBill({{ $activeSplitTab }})"
-                                class="px-4 h-9 bg-[#DD4B39] text-white text-xs rounded shadow-sm flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="w-3.5 h-3.5">
+                            {{-- TENGAH: ISI ITEM DI DALAM TAB YANG SEDANG AKTIF --}}
+                            <div class="flex-1 overflow-y-auto  mt-1 custom-scrollbar">
+                                @if (isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0)
+                                    @foreach ($splitBills[$activeSplitTab]['items'] as $sIdx => $sItem)
+                                        <div class="flex items-center justify-between p-1  rounded-lg">
+                                            <div class="min-w-0 flex-1">
+                                                <p class="text-[8px]  text-gray-800 dark:text-white uppercase">
+                                                    {{ $sItem['name'] }}
+                                                </p>
+                                                <p class="text-[8px] text-gray-500 font-bold mt-0.5">
+                                                    {{ $sItem['quantity'] }}x | @
+                                                    {{ number_format($sItem['price'], 0, ',', '.') }}
+                                                </p>
+                                            </div>
+                                            <button type="button"
+                                                wire:click="removeSplitItem({{ $activeSplitTab }}, {{ $sIdx }})"
+                                                class="text-xs text-red-500 hover:text-red-700 font-bold px-2">
+                                                X Batalkan
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="h-full flex items-center justify-center text-xs text-gray-400 italic">
+                                        Belum ada menu di {{ $splitBills[$activeSplitTab]['name'] ?? 'Bill ini' }}. Klik
+                                        tombol (+) di kiri untuk memindahkan.
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- BAWAH SISI KANAN: TOMBOL DELETE BILL --}}
+                            <div class="pt-3 flex justify-end">
+                                <button type="button" wire:click="deleteSplitBill({{ $activeSplitTab }})"
+                                    class="px-4 h-9 bg-[#DD4B39] text-white text-xs rounded shadow-sm flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
                                         <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                        <path
+                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
                                         </path>
                                         <line x1="8" y1="5" x2="8" y2="20"></line>
                                         <line x1="11" y1="5" x2="11" y2="20"></line>
                                         <line x1="13" y1="5" x2="13" y2="20"></line>
                                         <line x1="16" y1="5" x2="16" y2="20"></line>
                                     </svg>
-                                Delete Bill
-                            </button>
-                            @if (isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0)
-                                <button type="button" wire:click="paySplitBill({{ $activeSplitTab }})"
-                                    class="px-4 h-9 bg-green-500  text-white text-xs font-black rounded shadow-sm flex items-center gap-1 uppercase tracking-wider">
-                                    Pay This Bill (Rp
-                                    {{ number_format(collect($splitBills[$activeSplitTab]['items'])->sum(fn($i) => $i['quantity'] * $i['price']), 0, ',', '.') }})
+                                    Delete Bill
                                 </button>
-                            @endif
+                                @if (isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0)
+                                    <button type="button" wire:click="paySplitBill({{ $activeSplitTab }})"
+                                        class="px-4 h-9 bg-green-500  text-white text-xs font-black rounded shadow-sm flex items-center gap-1 uppercase tracking-wider">
+                                        Pay This Bill (Rp
+                                        {{ number_format(collect($splitBills[$activeSplitTab]['items'])->sum(fn($i) => $i['quantity'] * $i['price']), 0, ',', '.') }})
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- FOOTER MODAL UTAMA --}}
+                    <div
+                        class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950 px-5 py-3 flex items-center justify-between shrink-0">
+                        <button type="button" wire:click="addSplitBill"
+                            class="h-10 px-4 bg-[#3C8DBC]  text-white text-xs  rounded-lg shadow-sm flex items-center gap-1">
+                            + Add Bill
+                        </button>
+
+                        <div class="flex items-center gap-2">
+                            <button type="button" wire:click="$set('splitBillModalOpen', false)"
+                                class="h-10 px-5 bg-[#DD4B39] text-white text-xs rounded-lg shadow-sm flex items-center gap-1">
+                                ✖ Close
+                            </button>
                         </div>
                     </div>
-
-                    </div>
-
-                {{-- FOOTER MODAL UTAMA --}}
-                <div
-                    class="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950 px-5 py-3 flex items-center justify-between shrink-0">
-                    <button type="button" wire:click="addSplitBill"
-                        class="h-10 px-4 bg-[#3C8DBC]  text-white text-xs  rounded-lg shadow-sm flex items-center gap-1">
-                        + Add Bill
-                    </button>
-
-                    <div class="flex items-center gap-2">
-                        <button type="button" wire:click="$set('splitBillModalOpen', false)"
-                            class="h-10 px-5 bg-[#DD4B39] text-white text-xs rounded-lg shadow-sm flex items-center gap-1">
-                            ✖ Close
-                        </button>
-                    </div>
-                </div>
 
                 </div>
             </div>
@@ -2306,10 +2350,10 @@
                 <div
                     class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans">
 
-                {{-- HEADER MODAL --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
-                    <h3 class="text-base font-bold tracking-wide">Quick Service</h3>
-                </div>
+                    {{-- HEADER MODAL --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white">
+                        <h3 class="text-base font-bold tracking-wide">Quick Service</h3>
+                    </div>
 
                     {{-- KONTEN UTAMA MODAL --}}
                     <div class="p-6 space-y-6">
@@ -2324,21 +2368,22 @@
                                     class="w-32 h-10 border border-gray-300 rounded text-center text-lg font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white dark:text-gray-900" />
                             </div>
 
-                        {{-- Row Stepper Buttons --}}
-                        <div class="flex items-center justify-center gap-1">
-                            {{-- Button Minus (<) --}} <button type="button" wire:click="decrementPax"
-                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
-                                &lt;
+                            {{-- Row Stepper Buttons --}}
+                            <div class="flex items-center justify-center gap-1">
+                                {{-- Button Minus (<) --}} <button type="button" wire:click="decrementPax"
+                                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                    &lt;
                                 </button>
 
                                 {{-- Deretan Angka Shortcut 1-5 --}}
                                 @foreach ([1, 2, 3, 4, 5] as $paxAmt)
-                                    <button type="button" wire:click="$set('numberOfPax', {{ $paxAmt }})" @class([
-                                        'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
-                                        'bg-[#3C8DBC] text-white' => $numberOfPax == $paxAmt,
-                                        'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
-                                            $numberOfPax != $paxAmt,
-                                    ])>
+                                    <button type="button" wire:click="$set('numberOfPax', {{ $paxAmt }})"
+                                        @class([
+                                            'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
+                                            'bg-[#3C8DBC] text-white' => $numberOfPax == $paxAmt,
+                                            'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
+                                                $numberOfPax != $paxAmt,
+                                        ])>
                                         {{ $paxAmt }}
                                     </button>
                                 @endforeach
@@ -2355,58 +2400,61 @@
                         <div class="space-y-2">
                             <label class="block text-sm font-bold text-gray-700">Sales Mode</label>
 
-                        <div class="grid grid-cols-3 gap-2">
-                            {{-- Button DINE IN --}}
-                            <button type="button" wire:click="$set('quickServiceSalesMode', 'dine_in')" @class([
-                                'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
-                                'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
-                                    $quickServiceSalesMode === 'dine_in',
-                                'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
-                                    $quickServiceSalesMode !== 'dine_in',
-                            ])>
-                                Dine In
-                            </button>
+                            <div class="grid grid-cols-3 gap-2">
+                                {{-- Button DINE IN --}}
+                                <button type="button" wire:click="$set('quickServiceSalesMode', 'dine_in')"
+                                    @class([
+                                        'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                        'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
+                                            $quickServiceSalesMode === 'dine_in',
+                                        'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                            $quickServiceSalesMode !== 'dine_in',
+                                    ])>
+                                    Dine In
+                                </button>
 
-                            {{-- Button GOFOOD --}}
-                            <button type="button" wire:click="$set('quickServiceSalesMode', 'gofood')" @class([
-                                'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
-                                'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
-                                    $quickServiceSalesMode === 'gofood',
-                                'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
-                                    $quickServiceSalesMode !== 'gofood',
-                            ])>
-                                GoFood
-                            </button>
+                                {{-- Button GOFOOD --}}
+                                <button type="button" wire:click="$set('quickServiceSalesMode', 'gofood')"
+                                    @class([
+                                        'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                        'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
+                                            $quickServiceSalesMode === 'gofood',
+                                        'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                            $quickServiceSalesMode !== 'gofood',
+                                    ])>
+                                    GoFood
+                                </button>
 
-                            {{-- Button TAKEAWAY --}}
-                            <button type="button" wire:click="$set('quickServiceSalesMode', 'take_away')" @class([
-                                'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
-                                'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
-                                    $quickServiceSalesMode === 'take_away',
-                                'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
-                                    $quickServiceSalesMode !== 'take_away',
-                            ])>
-                                Takeaway
-                            </button>
+                                {{-- Button TAKEAWAY --}}
+                                <button type="button" wire:click="$set('quickServiceSalesMode', 'take_away')"
+                                    @class([
+                                        'h-11 border text-xs font-bold rounded transition active:scale-95 shadow-xs uppercase tracking-wider',
+                                        'border-[#3C8DBC] bg-blue-50 text-[#3C8DBC]' =>
+                                            $quickServiceSalesMode === 'take_away',
+                                        'border-gray-200 bg-white text-gray-600 hover:bg-gray-50' =>
+                                            $quickServiceSalesMode !== 'take_away',
+                                    ])>
+                                    Takeaway
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
                         <hr class="border-gray-200">
 
-                    {{-- FOOTER BUTTONS ACTION MODAL --}}
-                    <div class="flex justify-end items-center gap-2 pt-2">
-                        <button type="button" wire:click="$set('scanInputModalOpen', true)"
-                            class="h-10 px-4 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
-                            📋 Scan / Input
-                        </button>
+                        {{-- FOOTER BUTTONS ACTION MODAL --}}
+                        <div class="flex justify-end items-center gap-2 pt-2">
+                            <button type="button" wire:click="$set('scanInputModalOpen', true)"
+                                class="h-10 px-4 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1 active:scale-95 transition">
+                                📋 Scan / Input
+                            </button>
 
-                        {{-- Tombol Final Apply --}}
-                        <button type="button"
-                            wire:click="$set('orderType', '{{ $quickServiceSalesMode }}'); $set('quickServiceModalOpen', false); $set('showQuickServiceWaitlist', false);"
-                            class="h-10 px-6 bg-gray-300 hover:bg-[#3C8DBC] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
-                            ✓ Apply
-                        </button>
-                    </div>
+                            {{-- Tombol Final Apply --}}
+                            <button type="button"
+                                wire:click="$set('orderType', '{{ $quickServiceSalesMode }}'); $set('quickServiceModalOpen', false); $set('showQuickServiceWaitlist', false);"
+                                class="h-10 px-6 bg-gray-300 hover:bg-[#3C8DBC] hover:text-white text-gray-700 text-xs font-black rounded shadow-sm flex items-center gap-1 active:scale-95 transition uppercase tracking-wider">
+                                ✓ Apply
+                            </button>
+                        </div>
 
                     </div>
                 </div>
@@ -2423,38 +2471,39 @@
                 <div
                     class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl overflow-hidden border border-gray-200 animate-in fade-in zoom-in-95 duration-150 font-sans text-gray-800">
 
-                {{-- HEADER dengan Panah Kembali --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white flex items-center gap-3">
-                    <button type="button" wire:click="$set('scanInputModalOpen', false)"
-                        class="text-white hover:text-white/80 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                            stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                        </svg>
-                    </button>
-                    <h3 class="text-base font-bold tracking-wide">Scan/Input</h3>
-                </div>
-
-                {{-- KONTEN --}}
-                <div class="p-6 space-y-2">
-                    <label class="block text-sm font-bold text-gray-700">Input Order ID</label>
-                    <p class="text-sm font-semibold italic text-[#3C8DBC]">
-                        Only paid transaction of ESB Order QS that can be input
-                    </p>
-
-                    <div class="flex items-stretch gap-2 pt-1">
-                        <input type="text" wire:model.defer="esbOrderIdInput"
-                            class="flex-1 h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                            placeholder="Please input Order ID ESB Order" />
-                        <button type="button" wire:click="applyEsbOrderScan"
-                            class="h-11 px-6 bg-[#3C8DBC]  text-white text-sm font-bold rounded shadow-sm transition active:scale-95 shrink-0">
-                            Apply
+                    {{-- HEADER dengan Panah Kembali --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white flex items-center gap-3">
+                        <button type="button" wire:click="$set('scanInputModalOpen', false)"
+                            class="text-white hover:text-white/80 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                            </svg>
                         </button>
+                        <h3 class="text-base font-bold tracking-wide">Scan/Input</h3>
                     </div>
-                    @error('esbOrderIdInput')
-                        <span class="text-xs font-bold text-red-500 block">{{ $message }}</span>
-                    @enderror
-                </div>
+
+                    {{-- KONTEN --}}
+                    <div class="p-6 space-y-2">
+                        <label class="block text-sm font-bold text-gray-700">Input Order ID</label>
+                        <p class="text-sm font-semibold italic text-[#3C8DBC]">
+                            Only paid transaction of ESB Order QS that can be input
+                        </p>
+
+                        <div class="flex items-stretch gap-2 pt-1">
+                            <input type="text" wire:model.defer="esbOrderIdInput"
+                                class="flex-1 h-11 border border-gray-300 rounded px-4 text-sm focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                placeholder="Please input Order ID ESB Order" />
+                            <button type="button" wire:click="applyEsbOrderScan"
+                                class="h-11 px-6 bg-[#3C8DBC]  text-white text-sm font-bold rounded shadow-sm transition active:scale-95 shrink-0">
+                                Apply
+                            </button>
+                        </div>
+                        @error('esbOrderIdInput')
+                            <span class="text-xs font-bold text-red-500 block">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                 </div>
             </div>
@@ -2466,14 +2515,14 @@
                 {{-- Backdrop --}}
                 <div class="absolute inset-0 bg-black/40" wire:click="$set('phoneNumberModalOpen', false)"></div>
 
-            {{-- Box Modal --}}
-            <div
-                class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                {{-- Box Modal --}}
+                <div
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-150">
 
-                {{-- HEADER --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
-                    <h3 class="text-base font-bold tracking-wide">Customer Phone Number</h3>
-                </div>
+                    {{-- HEADER --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white">
+                        <h3 class="text-base font-bold tracking-wide">Customer Phone Number</h3>
+                    </div>
 
                     {{-- KONTEN --}}
                     <div class="p-6 space-y-2">
@@ -2488,19 +2537,19 @@
 
                     <hr class="border-gray-200">
 
-                {{-- FOOTER --}}
-                <div class="px-5 py-3 flex justify-end items-center gap-2">
-                    <button type="button" wire:click="$set('phoneNumberModalOpen', false)"
-                        class="h-10 px-5 border border-[#DD4B39] text-red-500 text-xs font-bold rounded hover:bg-red-50 transition active:scale-95">
-                        Cancel
-                    </button>
-                    <button type="button" wire:click="$set('phoneNumberModalOpen', false)"
-                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm transition active:scale-95">
-                        Apply
-                    </button>
+                    {{-- FOOTER --}}
+                    <div class="px-5 py-3 flex justify-end items-center gap-2">
+                        <button type="button" wire:click="$set('phoneNumberModalOpen', false)"
+                            class="h-10 px-5 border border-[#DD4B39] text-red-500 text-xs font-bold rounded hover:bg-red-50 transition active:scale-95">
+                            Cancel
+                        </button>
+                        <button type="button" wire:click="$set('phoneNumberModalOpen', false)"
+                            class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm transition active:scale-95">
+                            Apply
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         @endteleport
     @endif
     @if ($editMemberModalOpen)
@@ -2509,20 +2558,20 @@
                 {{-- Backdrop --}}
                 <div class="absolute inset-0 bg-black/40" wire:click="$set('editMemberModalOpen', false)"></div>
 
-            {{-- Box Modal --}}
-            <div
-                class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden  animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[85vh]">
+                {{-- Box Modal --}}
+                <div
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden  animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[85vh]">
 
-                {{-- HEADER --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
-                    <h3 class="text-base font-bold tracking-wide">
-                        Edit Member
-                        @if ($selectedTableId)
-                            ({{ 'Table' }}
-                            {{ collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? '' }})
-                        @endif
-                    </h3>
-                </div>
+                    {{-- HEADER --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
+                        <h3 class="text-base font-bold tracking-wide">
+                            Edit Member
+                            @if ($selectedTableId)
+                                ({{ 'Table' }}
+                                {{ collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? '' }})
+                            @endif
+                        </h3>
+                    </div>
 
                     {{-- KONTEN --}}
                     <div class="p-5 space-y-3 flex-1 overflow-y-auto">
@@ -2541,25 +2590,27 @@
                             @endif
                         </div>
 
-                    {{-- Search Bar --}}
-                    <div class="flex items-stretch gap-0 border border-gray-300 rounded overflow-hidden">
-                        <div class="px-3 flex items-center bg-gray-50 border-r border-gray-300">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
-                            </svg>
+                        {{-- Search Bar --}}
+                        <div class="flex items-stretch gap-0 border border-gray-300 rounded overflow-hidden">
+                            <div class="px-3 flex items-center bg-gray-50 border-r border-gray-300">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                                </svg>
+                            </div>
+                            <input type="text" wire:model.live.debounce.300ms="memberSearch"
+                                class="flex-1 h-11 px-3 text-sm outline-none border-0"
+                                placeholder="Search Regular Member" />
+                            <button type="button" wire:click="$set('memberSearch', '')"
+                                class="w-12 bg-[#337ab7] hover:bg-blue-700 text-white flex items-center justify-center transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                </svg>
+                            </button>
                         </div>
-                        <input type="text" wire:model.live.debounce.300ms="memberSearch"
-                            class="flex-1 h-11 px-3 text-sm outline-none border-0" placeholder="Search Regular Member" />
-                        <button type="button" wire:click="$set('memberSearch', '')"
-                            class="w-12 bg-[#337ab7] hover:bg-blue-700 text-white flex items-center justify-center transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                                stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                            </svg>
-                        </button>
-                    </div>
 
                         {{-- List Member --}}
                         <div class="min-h-[180px]">
@@ -2572,27 +2623,28 @@
                                     ->values();
                             @endphp
 
-                        @if ($pagedMembers->isEmpty())
-                            <div class="h-[180px] flex items-center justify-center text-sm text-gray-500">
-                                No member found
-                            </div>
-                        @else
-                            <div class="divide-y divide-gray-100  rounded">
-                                @foreach ($pagedMembers as $m)
-                                    <button type="button" wire:click="$set('memberId', {{ (int) $m->id }})" @class([
-                                        'w-full text-left px-4 py-2.5 text-sm transition',
-                                        'bg-blue-50 text-[#3C8DBC] font-bold' => $memberId == $m->id,
-                                        'hover:bg-gray-50 text-gray-700' => $memberId != $m->id,
-                                    ])>
-                                        {{ $m->name }}
-                                        @if ($m->phone)
-                                            <span class="text-xs text-gray-400 ml-1">({{ $m->phone }})</span>
-                                        @endif
-                                    </button>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
+                            @if ($pagedMembers->isEmpty())
+                                <div class="h-[180px] flex items-center justify-center text-sm text-gray-500">
+                                    No member found
+                                </div>
+                            @else
+                                <div class="divide-y divide-gray-100  rounded">
+                                    @foreach ($pagedMembers as $m)
+                                        <button type="button" wire:click="$set('memberId', {{ (int) $m->id }})"
+                                            @class([
+                                                'w-full text-left px-4 py-2.5 text-sm transition',
+                                                'bg-blue-50 text-[#3C8DBC] font-bold' => $memberId == $m->id,
+                                                'hover:bg-gray-50 text-gray-700' => $memberId != $m->id,
+                                            ])>
+                                            {{ $m->name }}
+                                            @if ($m->phone)
+                                                <span class="text-xs text-gray-400 ml-1">({{ $m->phone }})</span>
+                                            @endif
+                                        </button>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
 
                         {{-- Pagination --}}
                         <div class="flex items-center justify-end gap-3 text-xs text-gray-500">
@@ -2625,19 +2677,19 @@
                         </div>
                     </div>
 
-                {{-- FOOTER --}}
-                <div class="px-5 py-3 border-t border-gray-100 flex justify-between items-center shrink-0">
-                    <button type="button" wire:click="clearRegularMember"
-                        class="h-10 px-4 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✖ Clear Regular Member
-                    </button>
-                    <button type="button" wire:click="$set('editMemberModalOpen', false)"
-                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✓ Apply
-                    </button>
+                    {{-- FOOTER --}}
+                    <div class="px-5 py-3 border-t border-gray-100 flex justify-between items-center shrink-0">
+                        <button type="button" wire:click="clearRegularMember"
+                            class="h-10 px-4 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✖ Clear Regular Member
+                        </button>
+                        <button type="button" wire:click="$set('editMemberModalOpen', false)"
+                            class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✓ Apply
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         @endteleport
     @endif
     @if ($deliveryCostModalOpen)
@@ -2646,14 +2698,14 @@
                 {{-- Backdrop --}}
                 <div class="absolute inset-0 bg-black/40" wire:click="$set('deliveryCostModalOpen', false)"></div>
 
-            {{-- Box Modal --}}
-            <div
-                class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
+                {{-- Box Modal --}}
+                <div
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
 
-                {{-- HEADER --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
-                    <h3 class="text-base font-bold tracking-wide">Delivery Cost</h3>
-                </div>
+                    {{-- HEADER --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white">
+                        <h3 class="text-base font-bold tracking-wide">Delivery Cost</h3>
+                    </div>
 
                     {{-- KONTEN --}}
                     <div class="p-6 space-y-4">
@@ -2682,15 +2734,15 @@
                         </div>
                     </div>
 
-                {{-- FOOTER --}}
-                <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center">
-                    <button type="button" wire:click="$set('deliveryCostModalOpen', false)"
-                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✓ Apply
-                    </button>
+                    {{-- FOOTER --}}
+                    <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center">
+                        <button type="button" wire:click="$set('deliveryCostModalOpen', false)"
+                            class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✓ Apply
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         @endteleport
     @endif
     @if ($editTableModalOpen)
@@ -2699,19 +2751,19 @@
                 {{-- Backdrop --}}
                 <div class="absolute inset-0 bg-black/40" wire:click="$set('editTableModalOpen', false)"></div>
 
-            {{-- Box Modal --}}
-            <div
-                class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
+                {{-- Box Modal --}}
+                <div
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
 
-                {{-- HEADER --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
-                    <h3 class="text-base font-bold tracking-wide">
-                        Edit Table
-                        @if ($selectedTableId)
-                            ({{ collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? '' }})
-                        @endif
-                    </h3>
-                </div>
+                    {{-- HEADER --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white">
+                        <h3 class="text-base font-bold tracking-wide">
+                            Edit Table
+                            @if ($selectedTableId)
+                                ({{ collect($this->tables)->firstWhere('id', $selectedTableId)['label'] ?? '' }})
+                            @endif
+                        </h3>
+                    </div>
 
                     {{-- KONTEN --}}
                     <div class="p-6 space-y-3">
@@ -2723,43 +2775,44 @@
                                 class="w-32 h-10 border border-gray-300 rounded text-center text-lg font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white text-gray-900" />
                         </div>
 
-                    {{-- Row Stepper Buttons --}}
-                    <div class="flex items-center justify-center gap-1">
-                        <button type="button" wire:click="decrementPax"
-                            class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
-                            &lt;
-                        </button>
-
-                        @foreach ([1, 2, 3, 4, 5] as $paxAmt)
-                            <button type="button" wire:click="$set('numberOfPax', {{ $paxAmt }})" @class([
-                                'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
-                                'bg-[#3C8DBC] text-white' => $numberOfPax == $paxAmt,
-                                'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
-                                    $numberOfPax != $paxAmt,
-                            ])>
-                                {{ $paxAmt }}
+                        {{-- Row Stepper Buttons --}}
+                        <div class="flex items-center justify-center gap-1">
+                            <button type="button" wire:click="decrementPax"
+                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                &lt;
                             </button>
-                        @endforeach
 
-                        <button type="button" wire:click="incrementPax"
-                            class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
-                            &gt;
+                            @foreach ([1, 2, 3, 4, 5] as $paxAmt)
+                                <button type="button" wire:click="$set('numberOfPax', {{ $paxAmt }})"
+                                    @class([
+                                        'w-10 h-10 flex items-center justify-center text-sm font-bold rounded transition shadow-sm active:scale-95',
+                                        'bg-[#3C8DBC] text-white' => $numberOfPax == $paxAmt,
+                                        'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50' =>
+                                            $numberOfPax != $paxAmt,
+                                    ])>
+                                    {{ $paxAmt }}
+                                </button>
+                            @endforeach
+
+                            <button type="button" wire:click="incrementPax"
+                                class="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded text-[#3C8DBC] hover:bg-gray-50 font-bold transition shadow-sm active:scale-95">
+                                &gt;
+                            </button>
+                        </div>
+                        @error('numberOfPax')
+                            <span class="text-xs font-bold text-red-500 block text-center">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    {{-- FOOTER --}}
+                    <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center">
+                        <button type="button" wire:click="applyEditTablePax"
+                            class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✓ Apply
                         </button>
                     </div>
-                    @error('numberOfPax')
-                        <span class="text-xs font-bold text-red-500 block text-center">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                {{-- FOOTER --}}
-                <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center">
-                    <button type="button" wire:click="applyEditTablePax"
-                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✓ Apply
-                    </button>
                 </div>
             </div>
-        </div>
         @endteleport
     @endif
     @if ($complimentModalOpen)
@@ -2768,14 +2821,14 @@
                 {{-- Backdrop --}}
                 <div class="absolute inset-0 bg-black/40" wire:click="$set('complimentModalOpen', false)"></div>
 
-            {{-- Box Modal --}}
-            <div
-                class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
+                {{-- Box Modal --}}
+                <div
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
 
-                {{-- HEADER --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white">
-                    <h3 class="text-base font-bold tracking-wide">Complimentary</h3>
-                </div>
+                    {{-- HEADER --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white">
+                        <h3 class="text-base font-bold tracking-wide">Complimentary</h3>
+                    </div>
 
                     {{-- KONTEN --}}
                     <div class="p-6 space-y-5">
@@ -2797,22 +2850,24 @@
                                     placeholder="0" />
                             </div>
 
-                        <div class="space-y-1.5">
-                            <label class="block text-xs font-bold text-gray-700">Compliment Amount</label>
-                            <div class="flex items-stretch gap-1">
-                                <input type="text" wire:model.live.debounce.300ms="complimentAmount" inputmode="numeric"
-                                    class="flex-1 h-11 border border-gray-300 rounded px-4 text-sm text-right focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
-                                    placeholder="0" />
-                                <button type="button" wire:click="$set('complimentAmount', '{{ $total }}')"
-                                    class="h-11 px-3 bg-[#3C8DBC]  text-white text-xs font-bold rounded shrink-0 transition active:scale-95">
-                                    Get Outstanding
-                                </button>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-gray-700">Compliment Amount</label>
+                                <div class="flex items-stretch gap-1">
+                                    <input type="text" wire:model.live.debounce.300ms="complimentAmount"
+                                        inputmode="numeric"
+                                        class="flex-1 h-11 border border-gray-300 rounded px-4 text-sm text-right focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white"
+                                        placeholder="0" />
+                                    <button type="button"
+                                        wire:click="$set('complimentAmount', '{{ $total }}')"
+                                        class="h-11 px-3 bg-[#3C8DBC]  text-white text-xs font-bold rounded shrink-0 transition active:scale-95">
+                                        Get Outstanding
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    @error('complimentAmount')
-                        <span class="text-xs font-bold text-red-500 block">{{ $message }}</span>
-                    @enderror
+                        @error('complimentAmount')
+                            <span class="text-xs font-bold text-red-500 block">{{ $message }}</span>
+                        @enderror
 
                         {{-- Compliment Notes --}}
                         <div class="space-y-1.5">
@@ -2836,19 +2891,19 @@
                         </div>
                     </div>
 
-                {{-- FOOTER --}}
-                <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center gap-2">
-                    <button type="button" wire:click="$set('complimentModalOpen', false)"
-                        class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✖ Cancel
-                    </button>
-                    <button type="button" wire:click="applyCompliment"
-                        class="h-10 px-6 bg-gray-300 hover:bg-[#3C8DBC] hover:text-white text-gray-500 hover:text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✓ Apply
-                    </button>
+                    {{-- FOOTER --}}
+                    <div class="px-5 py-3 border-t border-gray-100 flex justify-end items-center gap-2">
+                        <button type="button" wire:click="$set('complimentModalOpen', false)"
+                            class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✖ Cancel
+                        </button>
+                        <button type="button" wire:click="applyCompliment"
+                            class="h-10 px-6 bg-gray-300 hover:bg-[#3C8DBC] hover:text-white text-gray-500 hover:text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✓ Apply
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         @endteleport
     @endif
     @if ($cardDetailModalOpen)
@@ -2857,14 +2912,14 @@
                 {{-- Backdrop --}}
                 <div class="absolute inset-0 bg-black/40" wire:click="$set('cardDetailModalOpen', false)"></div>
 
-            {{-- Box Modal --}}
-            <div
-                class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
+                {{-- Box Modal --}}
+                <div
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden  animate-in fade-in zoom-in-95 duration-150">
 
-                {{-- HEADER MODAL (fix, tidak ikut scroll) --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
-                    <h3 class="text-base font-bold tracking-wide">Card Payment</h3>
-                </div>
+                    {{-- HEADER MODAL (fix, tidak ikut scroll) --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
+                        <h3 class="text-base font-bold tracking-wide">Card Payment</h3>
+                    </div>
 
                     {{-- KONTEN UTAMA FORM (scrollable) --}}
                     <div class="p-6 space-y-4 text-gray-800 overflow-y-auto flex-1">
@@ -2877,21 +2932,21 @@
                                     class="w-full h-11 border border-gray-300 rounded px-4 text-sm text-right bg-gray-100 text-gray-600 cursor-not-allowed" />
                             </div>
 
-                        <div class="space-y-1.5 min-w-0">
-                            <label class="block text-sm font-bold text-gray-700">Card Amount</label>
-                            <div class="flex items-stretch gap-1">
-                                <input type="text" wire:model.live="cardAmount" inputmode="numeric"
-                                    class="flex-1 min-w-0 h-11 border border-brand-500 rounded px-4 text-sm text-right focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white" />
-                                <button type="button" wire:click="setCardOutstandingAmount"
-                                    class="h-11 px-3 bg-[#3C8DBC]  text-white text-xs font-bold rounded shrink-0 transition active:scale-95">
-                                    Get Outstanding
-                                </button>
+                            <div class="space-y-1.5 min-w-0">
+                                <label class="block text-sm font-bold text-gray-700">Card Amount</label>
+                                <div class="flex items-stretch gap-1">
+                                    <input type="text" wire:model.live="cardAmount" inputmode="numeric"
+                                        class="flex-1 min-w-0 h-11 border border-brand-500 rounded px-4 text-sm text-right focus:border-brand-500 focus:ring-1 focus:ring-brand-500 bg-white" />
+                                    <button type="button" wire:click="setCardOutstandingAmount"
+                                        class="h-11 px-3 bg-[#3C8DBC]  text-white text-xs font-bold rounded shrink-0 transition active:scale-95">
+                                        Get Outstanding
+                                    </button>
+                                </div>
+                                @error('cardAmount')
+                                    <span class="text-xs font-bold text-red-500 block">{{ $message }}</span>
+                                @enderror
                             </div>
-                            @error('cardAmount')
-                                <span class="text-xs font-bold text-red-500 block">{{ $message }}</span>
-                            @enderror
                         </div>
-                    </div>
 
                         {{-- BARIS 2: Card Number & Verification Code --}}
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -2950,17 +3005,18 @@
                         </div>
                     </div>
 
-                {{-- FOOTER CONTROLS (fix, tidak ikut scroll) --}}
-                <div class="px-5 py-3 flex justify-end items-center gap-2 bg-gray-50 border-t border-gray-200 shrink-0">
-                    <button type="button" wire:click="$set('cardDetailModalOpen', false)"
-                        class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✖ Cancel
-                    </button>
-                    <button type="button" wire:click="applyCardPayment"
-                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✓ Apply
-                    </button>
-                </div>
+                    {{-- FOOTER CONTROLS (fix, tidak ikut scroll) --}}
+                    <div
+                        class="px-5 py-3 flex justify-end items-center gap-2 bg-gray-50 border-t border-gray-200 shrink-0">
+                        <button type="button" wire:click="$set('cardDetailModalOpen', false)"
+                            class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✖ Cancel
+                        </button>
+                        <button type="button" wire:click="applyCardPayment"
+                            class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✓ Apply
+                        </button>
+                    </div>
 
                 </div>
             </div>
@@ -2972,14 +3028,14 @@
                 {{-- Backdrop --}}
                 <div class="absolute inset-0 bg-black/40" wire:click="$set('otherCostModalOpen', false)"></div>
 
-            {{-- Box Modal --}}
-            <div
-                class="relative bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden overflow-x-hidden animate-in fade-in zoom-in-95 duration-150">
+                {{-- Box Modal --}}
+                <div
+                    class="relative bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto max-h-[90vh] flex flex-col overflow-hidden overflow-x-hidden animate-in fade-in zoom-in-95 duration-150">
 
-                {{-- HEADER MODAL --}}
-                <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
-                    <h3 class="text-base font-bold tracking-wide">Other Cost - Non Sales</h3>
-                </div>
+                    {{-- HEADER MODAL --}}
+                    <div class="bg-[#3C8DBC] px-5 py-3 text-white shrink-0">
+                        <h3 class="text-base font-bold tracking-wide">Other Cost - Non Sales</h3>
+                    </div>
 
                     {{-- KONTEN UTAMA --}}
                     <div class="p-6 space-y-4 text-gray-800 overflow-y-auto flex-1">
@@ -3013,17 +3069,18 @@
                         </div>
                     </div>
 
-                {{-- FOOTER --}}
-                <div class="px-5 py-3 flex justify-end items-center gap-2 bg-gray-50 border-t border-gray-200 shrink-0">
-                    <button type="button" wire:click="$set('otherCostModalOpen', false)"
-                        class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✖ Cancel
-                    </button>
-                    <button type="button" wire:click="applyOtherCost"
-                        class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
-                        ✓ Apply
-                    </button>
-                </div>
+                    {{-- FOOTER --}}
+                    <div
+                        class="px-5 py-3 flex justify-end items-center gap-2 bg-gray-50 border-t border-gray-200 shrink-0">
+                        <button type="button" wire:click="$set('otherCostModalOpen', false)"
+                            class="h-10 px-5 bg-[#DD4B39]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✖ Cancel
+                        </button>
+                        <button type="button" wire:click="applyOtherCost"
+                            class="h-10 px-6 bg-[#3C8DBC]  text-white text-xs font-bold rounded shadow-sm flex items-center gap-1.5 transition active:scale-95">
+                            ✓ Apply
+                        </button>
+                    </div>
 
                 </div>
             </div>

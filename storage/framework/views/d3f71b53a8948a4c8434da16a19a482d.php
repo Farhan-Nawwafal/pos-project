@@ -315,6 +315,28 @@
 <?php $component = $__componentOriginalaf938e6bcabbd07203c0496bcf7fb5a6; ?>
 <?php unset($__componentOriginalaf938e6bcabbd07203c0496bcf7fb5a6); ?>
 <?php endif; ?>
+        <?php if (isset($component)) { $__componentOriginald0632d888e924a9aad947cb636203844 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald0632d888e924a9aad947cb636203844 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ecommerce.cancel-table-history','data' => ['cancelledTables' => $cancelledTables]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ecommerce.cancel-table-history'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['cancelledTables' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($cancelledTables)]); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald0632d888e924a9aad947cb636203844)): ?>
+<?php $attributes = $__attributesOriginald0632d888e924a9aad947cb636203844; ?>
+<?php unset($__attributesOriginald0632d888e924a9aad947cb636203844); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald0632d888e924a9aad947cb636203844)): ?>
+<?php $component = $__componentOriginald0632d888e924a9aad947cb636203844; ?>
+<?php unset($__componentOriginald0632d888e924a9aad947cb636203844); ?>
+<?php endif; ?>
 
         <div class="mt-8">
             <div
