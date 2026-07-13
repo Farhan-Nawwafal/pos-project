@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Transaction;
 
+use App\Helpers\DataLabelHelper;
 use App\Models\Transaction;
+use App\Models\TransactionEvent;
 use App\Models\TransactionItem;
 use App\Services\Printing\PosPrintPayloadService;
 use App\Support\Finance\NetSales;
@@ -12,7 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\TransactionEvent;
 use Spatie\Activitylog\Models\Activity;
 
 class TransactionsPage extends Component
@@ -22,7 +23,9 @@ class TransactionsPage extends Component
     public string $title = 'Riwayat Transaksi';
 
     public string $searchNumber = '';
+
     public string $searchCustomer = '';
+
     public string $searchTable = '';
 
     public ?string $fromDate = null;
@@ -154,32 +157,32 @@ class TransactionsPage extends Component
 
             // Search Code
             ->when($this->searchNumber !== '', function (Builder $query) {
-                $query->where('code', 'like', '%' . $this->searchNumber . '%');
+                $query->where('code', 'like', '%'.$this->searchNumber.'%');
             })
-            
+
             // Seacrh Nama Pelanggan
             ->when($this->searchCustomer !== '', function (Builder $query) use ($canViewPii) {
-                $term = '%' . $this->searchCustomer . '%';
+                $term = '%'.$this->searchCustomer.'%';
                 $query->where(function (Builder $q) use ($term, $canViewPii) {
                     $q->where('name', 'like', $term);
-                    
+
                     if ($canViewPii) {
                         $q->orWhere('phone', 'like', $term)
-                          ->orWhere('email', 'like', $term);
+                            ->orWhere('email', 'like', $term);
                     }
                 });
             })
-            
+
             // Search No Meja
             ->when($this->searchTable !== '', function (Builder $query) {
                 $query->whereHas('dining_table_id', function (Builder $q) {
-                    $q->where('name', 'like', '%' . $this->searchTable . '%');
+                    $q->where('name', 'like', '%'.$this->searchTable.'%');
                 });
             })
 
-            ->when($this->paymentStatus !== '', fn(Builder $query) => $query->where('payment_status', $this->paymentStatus))
-            ->when($this->paymentMethod !== '', fn(Builder $query) => $query->where('payment_method', $this->paymentMethod))
-            ->when($this->orderType !== '', fn(Builder $query) => $query->where('order_type', $this->orderType));
+            ->when($this->paymentStatus !== '', fn (Builder $query) => $query->where('payment_status', $this->paymentStatus))
+            ->when($this->paymentMethod !== '', fn (Builder $query) => $query->where('payment_method', $this->paymentMethod))
+            ->when($this->orderType !== '', fn (Builder $query) => $query->where('order_type', $this->orderType));
 
         if ($this->fromDate) {
             $query->whereDate('created_at', '>=', $this->fromDate);
@@ -199,8 +202,8 @@ class TransactionsPage extends Component
             ->distinct()
             ->orderBy('payment_status')
             ->pluck('payment_status')
-            ->map(fn($value) => (string) $value)
-            ->filter(fn($value) => $value !== '')
+            ->map(fn ($value) => (string) $value)
+            ->filter(fn ($value) => $value !== '')
             ->values()
             ->all();
     }
@@ -212,8 +215,8 @@ class TransactionsPage extends Component
             ->distinct()
             ->orderBy('payment_method')
             ->pluck('payment_method')
-            ->map(fn($value) => (string) $value)
-            ->filter(fn($value) => $value !== '')
+            ->map(fn ($value) => (string) $value)
+            ->filter(fn ($value) => $value !== '')
             ->values()
             ->all();
     }
@@ -249,12 +252,12 @@ class TransactionsPage extends Component
             ->whereIn('t.id', $transactionIds)
             ->selectRaw('t.id as tx_id')
             ->selectRaw('COALESCE(t.refunded_amount, 0) as refunded_amount')
-            ->selectRaw('COALESCE(SUM(' . NetSales::itemNetExpr('ti') . '), 0) as item_net')
+            ->selectRaw('COALESCE(SUM('.NetSales::itemNetExpr('ti').'), 0) as item_net')
             ->groupBy('tx_id', 'refunded_amount');
 
         $totalRevenue = (int) round((float) (DB::query()
             ->fromSub($sub, 'x')
-            ->selectRaw('COALESCE(SUM(' . NetSales::netPerTransactionExpr('x.item_net', 'x.refunded_amount') . '), 0) as revenue')
+            ->selectRaw('COALESCE(SUM('.NetSales::netPerTransactionExpr('x.item_net', 'x.refunded_amount').'), 0) as revenue')
             ->value('revenue') ?? 0));
 
         // 4. Rata-rata Omzet
@@ -311,15 +314,93 @@ class TransactionsPage extends Component
 
         return $events->map(function ($event) {
             $meta = (array) $event->meta;
+
             return [
                 'product_name' => $meta['item_name'] ?? '-',
-                'variant'      => $meta['variant'] ?? '-',
-                'reason'       => $meta['reason'] ?? '-',
-                'actor'        => $event->actor?->name ?? 'System',
-                'code'         => $event->transaction?->code ?? '-',
-                'created_at'   => optional($event->created_at)->format('d M, H:i') ?? '-',
+                'variant' => $meta['variant'] ?? '-',
+                'reason' => $meta['reason'] ?? '-',
+                'actor' => $event->actor?->name ?? 'System',
+                'code' => $event->transaction?->code ?? '-',
+                'created_at' => optional($event->created_at)->format('d M, H:i') ?? '-',
             ];
         })->all();
+    }
+
+    public function exportData()
+    {
+        // Logika Penamaan File
+        $from = $this->fromDate;
+        $to = $this->toDate;
+
+        $filename = 'SR_'.$from;
+        if ($from !== $to) {
+            $filename .= '_'.$to;
+        }
+        $filename .= '.csv';
+
+        // Ambil query dasar dengan semua filter yang sedang aktif
+        $query = $this->baseQuery()
+            ->with(['member', 'diningTable', 'cashier'])
+            ->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
+
+        //  VALIDASI (Cek apakah ada datanya)
+        if ($query->count() === 0) {
+            // Tampilkan warning/error toast dan hentikan proses export
+            $this->dispatch('toast', type: 'error', message: 'Tidak ada transaksi yang dapat di-export.');
+
+            return;
+        }
+
+        // Kembalikan Response berupa Stream Download CSV
+        return response()->streamDownload(function () use ($query) {
+            $handle = fopen('php://output', 'w');
+
+            // Header Kolom CSV
+            fputcsv($handle, [
+                'Transaction Number',
+                'Date',
+                'Customer',
+                'Table',
+                'Visit Purpose',
+                'Grand Total',
+                'Status',
+                'Payment Method',
+                'Payment Time',
+                'Payment By',
+            ]);
+
+            // Ambil data per chunk (500 data)
+            $query->chunk(500, function ($transactions) use ($handle) {
+                foreach ($transactions as $trx) {
+
+                    $customer = (string) ($trx->member?->name ?? ($trx->name ?? '-'));
+                    $table = $trx->dining_table_id ? $trx->dining_table_id : 'Quick Service';
+                    $purpose = $trx->order_type === 'dine_in' ? 'Dine in' : 'Take away';
+
+                    $paymentStatusLabel = DataLabelHelper::enum((string) ($trx->payment_status ?? ''), 'payment_status');
+                    $paymentMethodLabel = DataLabelHelper::enum((string) ($trx->payment_method ?? ''), 'payment_method');
+
+                    $paymentTime = $trx->paid_at ? $trx->paid_at->format('H:i:s') : '-';
+                    $paymentBy = $trx->cashier?->name ?? '-';
+
+                    fputcsv($handle, [
+                        $trx->code,
+                        optional($trx->created_at)->format('d-m-Y'),
+                        $customer,
+                        $table,
+                        $purpose,
+                        (int) $trx->total,
+                        $paymentStatusLabel,
+                        $paymentMethodLabel,
+                        $paymentTime,
+                        $paymentBy,
+                    ]);
+                }
+            });
+
+            fclose($handle);
+
+        }, $filename);
     }
 
     public function render(): View
