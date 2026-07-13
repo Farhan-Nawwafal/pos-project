@@ -15,9 +15,7 @@
     <link rel="icon" href="{{ asset('assets/images/logoesb.png') }}" type="image/png">
     <link rel="manifest" href="{{ route('admin.manifest') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Robotodisplay=swap" rel="stylesheet">
+    
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -145,9 +143,9 @@ window.addEventListener('resize', checkResponsive);" class="antialiased">
         @include('layouts.backdrop')
         <livewire:layouts.sidebar />
 
-        <div class="flex-1 transition-all duration-300 ease-in-out relative z-10 ml-0"
+        <div class="flex-1 transition-all  relative "
             :class="{
-                'lg:ml-[60px]': true,
+                'lg:ml-[50px]': true,
                 'lg:ml-[0px] :ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
                 'sm:translate-x-[0px]': $store.sidebar.isExpanded,
                 'translate-x-0': !$store.sidebar.isExpanded
@@ -280,8 +278,7 @@ window.addEventListener('resize', checkResponsive);" class="antialiased">
     </div>
 
     <!-- Modal Baru: ESB Order Report -->
-    @include('livewire.transactions.esb-order-modal')
-
+    
     @persist('toast-center')
         <x-common.toast-center />
     @endpersist

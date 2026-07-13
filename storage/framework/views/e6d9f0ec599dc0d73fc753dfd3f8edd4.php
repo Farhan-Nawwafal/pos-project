@@ -1,6 +1,6 @@
 <div>
     <aside id="sidebar"
-        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-[#212C32] text-[#212C32] h-screen transition-all duration-300 ease-in-out z-[9999]   shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
+        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-[#212C32] text-[#212C32] h-screen z-[9999] shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
         x-data="{
             openSubmenus: {},
             init() {
@@ -59,7 +59,7 @@
                 return window.location.pathname.startsWith(path);
             }
         }" :class="{
-            'lg:w-[60px] lg:translate-x-0': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
+            'lg:w-[50px] lg:translate-x-0': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen,
             'w-[290px] translate-x-0 lg:w-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered || $store
                 .sidebar.isMobileOpen,
@@ -107,7 +107,66 @@
 
                     <span class="flex items-center justify-center"
                         :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 '">
-                        <img src="/assets/icons/map.png" alt="Search" class="w-4 h-4  ">
+                        <svg width="16" height="16" viewBox="0 0 1488 1206" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Border luar -->
+                        <rect
+                            x="110"
+                            y="110"
+                            width="1267"
+                            height="986"
+                            stroke="white"
+                            stroke-width="70"
+                        />
+
+                        <!-- Kotak kiri -->
+                        <rect
+                            x="336.5"
+                            y="320.5"
+                            width="566"
+                            height="348"
+                            stroke="white"
+                            stroke-width="70"
+                        />
+
+                        <!-- Sudut kiri atas -->
+                        <rect
+                            width="193"
+                            height="192"
+                            fill="white"
+                        />
+
+                        <!-- Sudut kanan atas -->
+                        <rect
+                            x="1295"
+                            width="193"
+                            height="192"
+                            fill="white"
+                        />
+
+                        <!-- Sudut kiri bawah -->
+                        <rect
+                            y="1014"
+                            width="193"
+                            height="192"
+                            fill="white"
+                        />
+
+                        <!-- Sudut kanan bawah -->
+                        <rect
+                            x="1295"
+                            y="1014"
+                            width="193"
+                            height="192"
+                            fill="white"
+                        />
+
+                        <!-- Bentuk kanan -->
+                        <path
+                            d="M1171.5 534H904V668H580V907.5H1171.5V534Z"
+                            stroke="white"
+                            stroke-width="43"
+                        />
+                    </svg>
                     </span>
 
                     <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
