@@ -6,6 +6,7 @@ use App\Http\Controllers\TableQrController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ShiftLogController;
 use App\Http\Middleware\CheckTableNumber;
+use App\Http\Controllers\ShiftReportController;
 use App\Livewire\Auth\InitialSetupPage;
 use App\Livewire\Auth\SignInPage;
 use App\Livewire\DashboardPage;
@@ -89,6 +90,8 @@ if (is_string($landingDomain) && $landingDomain !== '') {
 
 // Progres IDIN day start/end: 2024-06-20
 Route::get('/day-start-end', DayStartEndPage::class)->name('day-start-end.index');
+// Tambahkan ini di dalam group middleware auth kamu
+Route::get('/print-shift-out', [ShiftReportController::class, 'print'])->name('print.shift.out');
 
 Route::get('/t/{code}', TableQrController::class)->name('tables.qr');
 Route::prefix('order')->name('self-order.')->group(function () {

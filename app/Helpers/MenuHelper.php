@@ -37,6 +37,12 @@ class MenuHelper
                 // 'permission' => 'day-start-end.manage', // Pastikan permission ini didaftarkan di Spatie
             ],
             [
+                'name' => 'Print Shift Out',
+                'path' => self::path('print.shift.out'),
+                'icon' => 'printer',
+                // 'permission' => 'day-start-end.manage', // Pastikan permission ini didaftarkan di Spatie
+            ],
+            [
                 'name' => 'Shift Log',
                 'icon' => 'default',
                 'path' => self::path('shift-logs.index'),

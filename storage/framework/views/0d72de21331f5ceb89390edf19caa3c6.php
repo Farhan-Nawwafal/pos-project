@@ -1,7 +1,7 @@
 <div class="w-full bg-white">
 
-    {{-- Header --}}
-    <div class="flex items-center justify-between px-4 py-3 bg-gray-100 ">
+    
+    <div class="flex items-center justify-between px-4 py-3 bg-gray-100 border border-gray-300">
         <span class="text-sm font-semibold text-gray-800">Current Shift</span>
         <div class="flex items-center gap-2">
             <button type="button" wire:click="endShift"
@@ -13,7 +13,7 @@
                 </svg>
                 End Shift
             </button>
-            <a href="{{ route('print.shift.out') }}" target="_blank"
+            <a href="<?php echo e(route('print.shift.out')); ?>" target="_blank"
                 class="flex items-center gap-1.5 px-4 py-2 bg-[#428bca] hover:bg-[#3071a9] text-white text-xs font-semibold rounded transition-colors no-underline">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2">
@@ -34,14 +34,15 @@
         </div>
     </div>
 
-    {{-- Form Fields --}}
+    
     <div class="px-4 pt-4 pb-2">
 
-        @if(session()->has('success'))
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(session()->has('success')): ?>
             <div class="p-3 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
-                {{ session('success') }}
+                <?php echo e(session('success')); ?>
+
             </div>
-        @endif
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
         <div class="grid grid-cols-3 gap-4 mb-3">
 
@@ -50,7 +51,7 @@
                     Outlet
                 </label>
 
-                <input type="text" readonly value="{{ optional($currentUser->cabang)->name ?? '-' }}"
+                <input type="text" readonly value="<?php echo e(optional($currentUser->cabang)->name ?? '-'); ?>"
                     class="w-full text-sm border-gray-300 bg-gray-50 rounded px-2 py-1">
             </div>
 
@@ -59,7 +60,7 @@
                     Started By
                 </label>
 
-                <input type="text" readonly value="{{ $currentUser->name }}"
+                <input type="text" readonly value="<?php echo e($currentUser->name); ?>"
                     class="w-full text-sm border-gray-300 bg-gray-50 rounded px-2 py-1">
             </div>
 
@@ -68,9 +69,9 @@
                     Starting Shift
                 </label>
 
-                <input type="text" readonly value="{{ $currentShift
+                <input type="text" readonly value="<?php echo e($currentShift
     ? $currentShift->started_at->format('d-m-Y H:i:s')
-    : ($currentUser->last_login_at?->format('d-m-Y H:i:s') ?? '-') }}"
+    : ($currentUser->last_login_at?->format('d-m-Y H:i:s') ?? '-')); ?>"
                     class="w-full text-sm border-gray-300 bg-gray-50 rounded px-2 py-1">
             </div>
 
@@ -84,7 +85,7 @@
 
             <div class="w-1/3">
 
-                <input type="text" readonly value="{{ number_format($currentShift->starting_cash ?? 0, 0, ',', '.') }}"
+                <input type="text" readonly value="<?php echo e(number_format($currentShift->starting_cash ?? 0, 0, ',', '.')); ?>"
                     class="w-full text-sm border-gray-300 bg-gray-50 rounded px-2 py-1">
 
             </div>
@@ -93,8 +94,8 @@
 
     </div>
 
-    {{-- Shift Detail Section --}}
-    {{-- Shift Detail Section --}}
+    
+    
     <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Shift Detail</span>
@@ -109,17 +110,19 @@
             <tbody>
                 <tr>
                     <td class="px-4 py-4 text-gray-800 font-medium">
-                        {{ $currentShift && $currentShift->ended_at ? \Carbon\Carbon::parse($currentShift->ended_at)->format('d-m-Y H:i:s') : '-' }}
+                        <?php echo e($currentShift && $currentShift->ended_at ? \Carbon\Carbon::parse($currentShift->ended_at)->format('d-m-Y H:i:s') : '-'); ?>
+
                     </td>
                     <td class="px-4 py-4 text-gray-800 font-medium">
-                        {{ $currentShift && $currentShift->endedBy ? $currentShift->endedBy->name : '-' }}
+                        <?php echo e($currentShift && $currentShift->endedBy ? $currentShift->endedBy->name : '-'); ?>
+
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    {{-- Sales Recapitulation Section --}}
+    
     <div class="mb-6 mx-4">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Sales Recapitulation</span>
@@ -129,122 +132,137 @@
                 <tr>
                     <td class="px-4 py-2 text-gray-700">Sales Total</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($salesTotal, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($salesTotal, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Discount</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($discount, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($discount, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">ManualDiscount</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($manualDiscount, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($manualDiscount, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Voucher Discount</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($voucherDiscount, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($voucherDiscount, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Point Discount</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($pointDiscount, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($pointDiscount, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Service Charge</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($serviceCharge, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($serviceCharge, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Tax</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($tax, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($tax, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Payment Fee</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($paymentFee, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($paymentFee, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Rounding</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($rounding, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($rounding, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Refunded</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($refundedAmount, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($refundedAmount, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="font-bold">
                     <td class="px-4 py-2 text-gray-700">Net Sales</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        Rp {{ number_format($netSales, 0, ',', '.') }}
+                        Rp <?php echo e(number_format($netSales, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
 
                 <tr class="border-b border-gray-200">
                     <td class="px-4 py-2 text-gray-700">Number Of Bills</td>
                     <td class="px-4 py-2 text-right text-gray-700">
-                        {{ $numberOfBills }}
+                        <?php echo e($numberOfBills); ?>
+
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    {{-- Sales Payment Recapitulation --}}
+    
     <div class="mb-6 mx-4">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Sales Payment Recapitulation</span>
         </div>
         <table class="w-full border-collapse border border-gray-300 text-sm bg-white rounded-b">
             <tbody>
-                @forelse($paymentRecaps as $payment)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $paymentRecaps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $payment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                     <tr class="border-b border-gray-200">
-                        <td class="px-4 py-2 text-gray-700 uppercase">{{ $payment->payment_method ?? 'TIDAK DIKETAHUI' }}
+                        <td class="px-4 py-2 text-gray-700 uppercase"><?php echo e($payment->payment_method ?? 'TIDAK DIKETAHUI'); ?>
+
                         </td>
                         <td class="px-4 py-2 text-right text-gray-700">
-                            {{ number_format($payment->total_amount, 0, ',', '.') }}
+                            <?php echo e(number_format($payment->total_amount, 0, ',', '.')); ?>
+
                         </td>
                     </tr>
-                @empty
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     <tr class="border-b border-gray-200">
                         <td colspan="2" class="px-4 py-2 text-center text-gray-500 italic">Belum ada transaksi pembayaran.
                         </td>
                     </tr>
-                @endforelse
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 <tr class="bg-gray-50">
                     <td class="px-4 py-2 font-bold text-gray-900 uppercase">Total</td>
                     <td class="px-4 py-2 text-right font-bold text-gray-900">
-                        {{ number_format($totalPayment, 0, ',', '.') }}
+                        <?php echo e(number_format($totalPayment, 0, ',', '.')); ?>
+
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    {{-- Sales Menu Section (Yang Awalnya Hardcoded Sekarang Dinamis) --}}
+    
     <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Sales Menu</span>
@@ -262,35 +280,39 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($salesByMenus as $item)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $salesByMenus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                     <trclass="border-b border-gray-200">
-                        {{-- Menggunakan $item->product->name sesuai dengan relasi model --}}
-                        <td class="px-4 py-2 text-gray-700">{{ $item->product->name ?? 'Produk Dihapus' }}</td>
-                        <td class="px-4 py-2 text-center text-gray-700">{{ $item->total_qty }}</td>
+                        
+                        <td class="px-4 py-2 text-gray-700"><?php echo e($item->product->name ?? 'Produk Dihapus'); ?></td>
+                        <td class="px-4 py-2 text-center text-gray-700"><?php echo e($item->total_qty); ?></td>
                         <td class="px-4 py-2 text-right text-gray-700">Rp
-                            {{ number_format($item->subtotal, 0, ',', '.') }}
+                            <?php echo e(number_format($item->subtotal, 0, ',', '.')); ?>
+
                         </td>
                         <td class="px-4 py-2 text-right text-gray-700">Rp
-                            {{ number_format($item->manual_discount, 0, ',', '.') }}
+                            <?php echo e(number_format($item->manual_discount, 0, ',', '.')); ?>
+
                         </td>
                         <td class="px-4 py-2 text-right text-gray-700">Rp
-                            {{ number_format($item->voucher_discount, 0, ',', '.') }}
+                            <?php echo e(number_format($item->voucher_discount, 0, ',', '.')); ?>
+
                         </td>
                         <td class="px-4 py-2 text-right text-gray-700">Rp
-                            {{ number_format($item->menu_discount + $item->voucher_discount, 0, ',', '.') }}
+                            <?php echo e(number_format($item->menu_discount + $item->voucher_discount, 0, ',', '.')); ?>
+
                         </td>
                         </tr>
-                @empty
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     <tr>
                         <td colspan="3" class="text-center italic text-gray-500 py-4">Tidak ada data penjualan menu.
                         </td>
                     </tr>
-                @endforelse
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </tbody>
         </table>
     </div>
 
-    {{-- Non Sales By Menu Section --}}
+    
     <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Non Sales By Menu</span>
@@ -311,7 +333,7 @@
         </table>
     </div>
 
-    {{-- Custom Menu Sales Section --}}
+    
     <div class="mx-4 mb-4 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Custom Menu Sales</span>
@@ -325,24 +347,25 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($customMenus as $custom)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $customMenus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $custom): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                     <tr class="border-b border-gray-200">
-                        <td class="px-4 py-2 text-gray-700">{{ $custom->item_name ?? 'Item Kustom' }}</td>
-                        <td class="px-4 py-2 text-center text-gray-700">{{ $custom->total_qty }}</td>
+                        <td class="px-4 py-2 text-gray-700"><?php echo e($custom->item_name ?? 'Item Kustom'); ?></td>
+                        <td class="px-4 py-2 text-center text-gray-700"><?php echo e($custom->total_qty); ?></td>
                         <td class="px-4 py-2 text-right text-gray-700">Rp
-                            {{ number_format($custom->total_amount, 0, ',', '.') }}
+                            <?php echo e(number_format($custom->total_amount, 0, ',', '.')); ?>
+
                         </td>
                     </tr>
-                @empty
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     <tr class="border-b border-gray-200">
                         <td colspan="3" class="px-4 py-2 text-center text-gray-500 italic">Tidak ada custom menu.</td>
                     </tr>
-                @endforelse
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </tbody>
         </table>
     </div>
 
-    {{-- Sales By Table Section --}}
+    
     <div class="mx-4 mb-10 border border-gray-300 rounded overflow-hidden bg-white">
         <div class="px-4 py-2 bg-[#428bca]">
             <span class="text-sm font-semibold text-white">Sales By Table Section</span>
@@ -356,24 +379,26 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($tableSections as $section)
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $tableSections; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $section): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                     <tr class="border-b border-gray-200">
-                        {{-- Panggil section_name yang kita buat di join query --}}
-                        <td class="px-4 py-2 text-gray-700">Meja {{ $section->table_number }}</td>
+                        
+                        <td class="px-4 py-2 text-gray-700">Meja <?php echo e($section->table_number); ?></td>
                         <td class="px-4 py-2 text-right text-gray-700 font-medium">
-                            {{ number_format($section->bill, 0, ',', '.') }}
+                            <?php echo e(number_format($section->bill, 0, ',', '.')); ?>
+
                         </td>
                         <td class="px-4 py-2 text-right text-gray-700 font-medium">Rp
-                            {{ number_format($section->value, 0, ',', '.') }}
+                            <?php echo e(number_format($section->value, 0, ',', '.')); ?>
+
                         </td>
                     </tr>
-                @empty
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     <tr>
                         <td colspan="2" class="text-center italic">Tidak ada transaksi meja</td>
                     </tr>
-                @endforelse
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </tbody>
         </table>
     </div>
 
-</div>
+</div><?php /**PATH C:\Users\Idin Naufal Hakim\Desktop\project\pos-project\resources\views/components/day-start-end/day-start-end-page.blade.php ENDPATH**/ ?>

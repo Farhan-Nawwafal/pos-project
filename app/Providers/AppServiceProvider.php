@@ -11,6 +11,9 @@ use App\Observers\TransactionObserver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event; // Tambahkan ini
+use Illuminate\Auth\Events\Login;     // Tambahkan ini
+use App\Listeners\CreateShiftOnLogin; // Tambahkan ini
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (! function_exists('generate_qr_code') && file_exists(app_path('helpers.php'))) {
+        if (!function_exists('generate_qr_code') && file_exists(app_path('helpers.php'))) {
             require_once app_path('helpers.php');
         }
     }
@@ -72,5 +75,10 @@ class AppServiceProvider extends ServiceProvider
                 'canAccessPos' => $user?->can('pos.access') ?? false,
             ]);
         });
+        
+        Event::listen(
+            Login::class,
+            CreateShiftOnLogin::class,
+        );
     }
 }
