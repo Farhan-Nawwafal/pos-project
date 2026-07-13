@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Transaction extends Model
@@ -42,6 +43,8 @@ class Transaction extends Model
         'cash_received',
         'cash_change',
         'refunded_amount',
+        'compliment_amount',
+        'compliment_notes',
         'total',
         'checkout_link',
         'self_order_token',
@@ -74,6 +77,8 @@ class Transaction extends Model
         'kitchen_processed_at',
         'kitchen_processed_by_user_id',
         'payment_processed_by',
+        'promotion_id',
+        'promotion_discount_amount',
     ];
 
     protected function casts(): array
@@ -198,5 +203,10 @@ class Transaction extends Model
     public function cashier()
     {
         return $this->belongsTo(User::class, 'payment_processed_by');
+    }
+
+    public function cardPayment(): HasOne
+    {
+        return $this->hasOne(CardPayment::class);
     }
 }

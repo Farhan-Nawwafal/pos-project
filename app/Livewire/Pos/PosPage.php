@@ -3,11 +3,13 @@
 namespace App\Livewire\Pos;
 
 use App\Events\SelfOrderPaymentUpdated;
+use App\Models\CardPayment;
 use App\Models\Category;
 use App\Models\DiningTable;
 use App\Models\Member;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Promotion;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Models\TransactionEvent;
@@ -145,6 +147,8 @@ class PosPage extends Component
 
     public string $customerName = '';
 
+    public string $orderNotes = '';
+
     public ?string $customerPhone = null;
 
     public string $paymentMethod = 'cash';
@@ -190,6 +194,8 @@ class PosPage extends Component
 
     public $showModal = false;
 
+    public $finalCustomerName = '';
+
     // --- STATE UNTUK PHONE NUMBER ---
     public bool $phoneNumberModalOpen = false;
 
@@ -219,6 +225,7 @@ class PosPage extends Component
     // --- STATE UNTUK CANCEL TABLE ---
     public bool $cancelTableModalOpen = false; // Mengontrol buka/tutup modal cancel table
     public string $cancelTableReason = '';      // Menampung input alasan pembatalan
+    public string $cancelTablePin = '';
 
     public bool $showQuickServiceWaitlist = true;
     public bool $quickServiceModalOpen = false; // Mengontrol munculnya modal Quick Service otomatis
@@ -238,10 +245,31 @@ class PosPage extends Component
     public ?string $complimentPercentage = null;
     public ?string $complimentAmount = null;
     public string $complimentNotes = '';
+    public int $appliedComplimentAmount = 0;
+    public ?string $appliedComplimentNotes = null;
 
     // --- STATE UNTUK OTHER COST PAYMENT METHOD ---
     public bool $otherCostModalOpen = false;
     public string $otherCostNotes = '';
+
+    // State Manajemen Modal & Pilihan Promosi
+    public bool $promotionModalOpen = false;
+    public string $promotionSearch = '';
+    public string $promotionTypeFilter = '';
+    public int $promotionPage = 1;
+    public ?int $selectedPromotionId = null;
+    public ?int $appliedPromotionId = null;
+
+    // Properti Penampung Nilai Akhir & Teks Tampilan POS
+    public string $promotionDescription = '';
+    public float $appliedDiscountAmount = 0; // Nominal potongan harga
+    public int $promotionDiscountAmount = 0;
+
+    // --- STATE PURCHASE VOUCHER ---
+    public bool $purchaseVoucherModalOpen = false;
+    public string $voucherSearchInput = '';
+    public array $selectedVouchers = [];
+    public int $voucherListPage = 1;
 
     public function openQuickService()
     {
@@ -708,6 +736,10 @@ class PosPage extends Component
 
     public function selectQuickServicePending(int $transactionId): void
     {
+        $trx = Transaction::query()->find($transactionId);
+        if ($trx && $trx->order_type === 'take_away') {
+            $this->orderNotes = $trx->name !== 'Quick Service' ? $trx->name : '';
+        }
         $this->loadPending($transactionId);
         $this->showQuickServiceWaitlist = false;
     }
@@ -1447,11 +1479,24 @@ class PosPage extends Component
 
         $this->checkoutStep = 1;
 
-        $this->cardBankName = null;
-        $this->cardAccountName = null;
-        $this->cardAmount = null;
-        $this->cardNumber = null;
-        $this->cardVerificationCode = null;
+        $this->cardAmount = '';
+        $this->cardNumber = '';
+        $this->cardVerificationCode = '';
+        $this->cardBankName = '';
+        $this->cardAccountName = '';
+        $this->cardSelfOrderId = '';
+
+        $this->orderNotes = '';
+
+        $this->complimentAmount = '';
+        $this->complimentPercentage = '';
+        $this->complimentNotes = '';
+        $this->appliedComplimentAmount = 0;
+        $this->appliedComplimentNotes = null;
+
+        $this->appliedPromotionId = null;
+        $this->promotionDiscountAmount = 0;
+        $this->selectedPromotionId = null;
 
         if ($previousOrderType === 'take_away') {
             // Balik ke waitlist Quick Service
@@ -1572,6 +1617,8 @@ class PosPage extends Component
                 'tax_percentage' => $this->taxRate,
                 'tax_amount' => $this->taxAmount,
                 'total' => $this->total,
+                'promotion_id' => $this->appliedPromotionId ?: null,
+                'promotion_discount_amount' => $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0,
                 'updated_at' => now(),
             ]);
 
@@ -1616,8 +1663,12 @@ class PosPage extends Component
             $rules['paymentMethod'] = ['required', 'string', 'max:50'];
             if ($this->paymentMethod === 'cash') {
                 $rawCash = (int) preg_replace('/\D+/', '', (string)($this->cashReceived ?? '0'));
-                if ($rawCash < $this->total) {
-                    $this->addError('cashReceived', 'Uang diterima kurang dari total tagihan.');
+
+                // SANGAT PENTING: Hitung sisa bersih wajib bayar kasir setelah dikurangi subsidi compliment
+                $netTotalWajibBayar = $this->total - (int)$this->appliedComplimentAmount;
+
+                if ($rawCash < $netTotalWajibBayar) {
+                    $this->addError('cashReceived', 'Uang diterima kurang dari sisa tagihan.');
                     return;
                 }
             }
@@ -1625,16 +1676,22 @@ class PosPage extends Component
 
         $validated = $this->validate($rules);
         $trxId = null;
+        $promoIdValue = $this->appliedPromotionId ?: null;
+        $promoDiscountValue = $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0;
 
-        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId) {
+        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId, $promoIdValue, $promoDiscountValue) {
+
             $cabangId = auth()->user()->cabang_id ?? 1;
             $cashReceivedValue = $isFinalPayment && $this->paymentMethod === 'cash'
                 ? (int) preg_replace('/\D+/', '', (string)$this->cashReceived)
                 : null;
 
+            // AMBIL LANGSUNG DARI PROPERTI PENAMPUNG INDEPENDEN
+            $complimentAmountValue = (int) $this->appliedComplimentAmount;
+            $complimentNotesValue = $this->appliedComplimentNotes;
+
             if ($this->isSplitPaymentMode) {
                 // JALUR KELUARAN: SPLIT BILL PAYMENT
-
                 $parentTrx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
                 $splitBillData = $this->splitBills[$this->currentSplitBillIndex];
 
@@ -1643,19 +1700,21 @@ class PosPage extends Component
                     'cabang_id' => $cabangId,
                     'code' => Transaction::generateUniqueCode(),
                     'member_id' => $parentTrx->member_id,
+                    'promotion_id' => $promoIdValue,
                     'channel' => 'pos',
                     'name' => $parentTrx->name . ' (' . $splitBillData['name'] . ')',
                     'phone' => $parentTrx->phone,
                     'order_type' => $parentTrx->order_type,
                     'dining_table_id' => null, // Dikosongkan agar meja aslinya tidak lepas status terisi
                     'subtotal' => $this->subtotal,
+                    'promotion_discount_amount' => $promoDiscountValue,
                     'service_percentage' => $this->serviceRate,
                     'service_amount' => $this->serviceAmount,
                     'tax_percentage' => $this->taxRate,
                     'tax_amount' => $this->taxAmount,
                     'cash_received' => $cashReceivedValue,
                     'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
-                    'total' => $this->total,
+                    'total' => $this->total + $complimentAmountValue, // Mengembalikan ke angka utuh asli (200k)
                     'payment_method' => $this->paymentMethod,
                     'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
                     'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
@@ -1678,6 +1737,20 @@ class PosPage extends Component
                         'price' => $item['price'],
                         'subtotal' => $item['quantity'] * $item['price'],
                         'note' => $item['note'] ?? null,
+                    ]);
+                }
+
+                if ($this->paymentMethod === 'card') {
+                    $cardAmountValue = (int) preg_replace('/\D+/', '', (string)$this->cardAmount);
+                    CardPayment::create([
+                        'transaction_id' => $newTrx->id, // Menggunakan ID invoice split baru
+                        'cabang_id' => $cabangId,
+                        'amount' => $cardAmountValue > 0 ? $cardAmountValue : $newTrx->total,
+                        'card_number' => $this->cardNumber,
+                        'verification_code' => $this->cardVerificationCode,
+                        'bank_name' => $this->cardBankName,
+                        'account_name' => $this->cardAccountName,
+                        'self_order_id' => $this->cardSelfOrderId ?: null,
                     ]);
                 }
 
@@ -1725,6 +1798,20 @@ class PosPage extends Component
 
                 // Bersihkan tab split bill yang selesai dibayar ini dari memori kasir
                 unset($this->splitBills[$this->currentSplitBillIndex]);
+
+                // REKAM SPATIE LOG JIKA INI PEMBAYARAN COMPLIMENT
+                if ($complimentAmountValue > 0) {
+                    activity()
+                        ->performedOn($newTrx)
+                        ->causedBy(auth()->user())
+                        ->event('payment_compliment')
+                        ->withProperties([
+                            'cabang_id' => $cabangId,
+                            'compliment_amount' => $complimentAmountValue,
+                            'notes' => $this->complimentNotes
+                        ])
+                        ->log("Pembayaran Compliment diterapkan pada transaksi split #{$newTrx->id} sebesar Rp " . number_format($complimentAmountValue, 0, ',', '.') . " dengan alasan: {$this->complimentNotes}");
+                }
             } else {
                 // JALUR KELUARAN: TRANSAKSI NORMAL (ASLI)
                 $trx = $this->editingTransactionId
@@ -1735,23 +1822,27 @@ class PosPage extends Component
                     'code' => $trx->code ?? Transaction::generateUniqueCode(),
                     'cabang_id' => $cabangId,
                     'member_id' => $this->memberId,
+                    'promotion_id' => $promoIdValue,
                     'name' => $this->customerName,
                     'phone' => $this->customerPhone,
                     'order_type' => $this->orderType,
                     'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
                     'pax' => $this->numberOfPax,
                     'subtotal' => $this->subtotal,
+                    'promotion_discount_amount' => $promoDiscountValue,
                     'service_percentage' => $this->serviceRate,
                     'service_amount' => $this->serviceAmount,
                     'voucher_discount_amount' => $this->voucherDiscountAmount,
                     'manual_discount_amount' => $this->manualDiscountAmount,
                     'discount_total_amount' => $isFinalPayment ? $this->discountTotalAmount : 0,
+                    'compliment_amount' => $complimentAmountValue,
+                    'compliment_notes' => $complimentAmountValue > 0 ? $complimentNotesValue : null,
                     'tax_percentage' => $this->taxRate,
                     'tax_amount' => $this->taxAmount,
                     'rounding_amount' => $this->roundingAmount,
                     'cash_received' => $cashReceivedValue,
                     'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
-                    'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
+                    'total' => $this->total,
                     'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
                     'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
                     'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
@@ -1778,6 +1869,22 @@ class PosPage extends Component
                     ]);
                 }
 
+                if ($isFinalPayment && $this->paymentMethod === 'card') {
+                    $cardAmountValue = (int) preg_replace('/\D+/', '', (string)$this->cardAmount);
+                    CardPayment::updateOrCreate(
+                        ['transaction_id' => $trx->id],
+                        [
+                            'cabang_id' => $cabangId,
+                            'amount' => $cardAmountValue > 0 ? $cardAmountValue : $this->total,
+                            'card_number' => $this->cardNumber,
+                            'verification_code' => $this->cardVerificationCode,
+                            'bank_name' => $this->cardBankName,
+                            'account_name' => $this->cardAccountName,
+                            'self_order_id' => $this->cardSelfOrderId ?: null,
+                        ]
+                    );
+                }
+
                 if ($isDineIn) {
                     $targetTableId = $this->selectedTableId ?? $trx->dining_table_id;
                     if ($isFinalPayment) {
@@ -1792,6 +1899,18 @@ class PosPage extends Component
                 }
 
                 $trxId = (int) $trx->id;
+                if ($complimentAmountValue > 0) {
+                    activity()
+                        ->performedOn($trx)
+                        ->causedBy(auth()->user())
+                        ->event('payment_compliment')
+                        ->withProperties([
+                            'cabang_id' => $cabangId,
+                            'compliment_amount' => $complimentAmountValue,
+                            'notes' => $this->complimentNotes
+                        ])
+                        ->log("Pembayaran Compliment diterapkan pada transaksi normal #{$trx->id} sebesar Rp " . number_format($complimentAmountValue, 0, ',', '.') . " dengan alasan: {$this->complimentNotes}");
+                }
             }
         });
 
@@ -1889,6 +2008,8 @@ class PosPage extends Component
         $this->customerName = (string) $trx->name;
         $this->customerPhone = $trx->phone;
         $this->cartLocked = (string) $trx->channel === 'self_order';
+        $this->appliedPromotionId = $trx->promotion_id ? (int) $trx->promotion_id : null;
+        $this->promotionDiscountAmount = (int) ($trx->promotion_discount_amount ?? 0);
         $this->lockedMemberId = $this->cartLocked ? $this->memberId : null;
         $this->lockedCustomerName = $this->cartLocked ? $this->customerName : null;
         $this->lockedCustomerPhone = $this->cartLocked ? $this->customerPhone : null;
@@ -2046,10 +2167,21 @@ class PosPage extends Component
         }
 
         $trxId = null;
-        $validated = $this->validate([
-            'customerName' => ['required', 'string', 'max:255'],
+        // Jika take_away, customerName tidak wajib required dari input customer modal karena diganti Order Notes
+        $validationRules = [
+            'customerName' => $this->orderType === 'take_away' ? ['nullable', 'string', 'max:255'] : ['required', 'string', 'max:255'],
             'customerPhone' => ['nullable', 'string', 'max:50'],
-        ]);
+        ];
+        $validated = $this->validate($validationRules);
+
+        if ($this->orderType === 'take_away') {
+            // Jika input Order Notes diisi, pakai itu. Jika tidak, pakai customerName modal, jika kosong baru 'Quick Service'
+            $finalCustomerName = !empty(trim((string)$this->orderNotes))
+                ? trim((string)$this->orderNotes)
+                : (!empty($validated['customerName']) ? $validated['customerName'] : 'Quick Service');
+        } else {
+            $finalCustomerName = $validated['customerName'];
+        }
 
         $manualTypeForPermission = $this->manualDiscountType !== null ? trim((string) $this->manualDiscountType) : '';
         $manualValueForPermission = $this->manualDiscountValue === null ? 0 : (int) $this->manualDiscountValue;
@@ -2064,7 +2196,7 @@ class PosPage extends Component
             return;
         }
 
-        DB::transaction(function () use ($validated, $voucherCampaignId, $voucherCodeId, $voucherCode, &$trxId) {
+        DB::transaction(function () use ($finalCustomerName, $validated, $voucherCampaignId, $voucherCodeId, $voucherCode, &$trxId) {
             $trx = $this->editingTransactionId
                 ? Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first()
                 : null;
@@ -2081,8 +2213,10 @@ class PosPage extends Component
                     'code' => Transaction::generateUniqueCode(),
                     'cabang_id' => $cabangId, // Field wajib dari skema tabel kamu
                     'member_id' => $this->memberId,
+                    'promotion_id' => $this->appliedPromotionId ?: null,
+                    'promotion_discount_amount' => $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0,
                     'channel' => 'pos',
-                    'name' => $validated['customerName'],
+                    'name' => $finalCustomerName,
                     'phone' => $validated['customerPhone'] !== '' ? $validated['customerPhone'] : null,
                     'email' => null,
                     'order_type' => $this->orderType,
@@ -2119,7 +2253,9 @@ class PosPage extends Component
             } else {
                 $trx->update([
                     'member_id' => $this->memberId,
-                    'name' => $validated['customerName'],
+                    'name' => $finalCustomerName,
+                    'promotion_id' => $this->appliedPromotionId ?: null,
+                    'promotion_discount_amount' => $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0,
                     'phone' => $validated['customerPhone'] !== '' ? $validated['customerPhone'] : null,
                     'order_type' => $this->orderType,
                     'dining_table_id' => $this->orderType === 'dine_in' ? $this->selectedTableId : null,
@@ -2309,7 +2445,8 @@ class PosPage extends Component
         if ($isFinalPayment) {
             $rules['paymentMethod'] = ['required', 'string', 'max:50'];
             if ($this->paymentMethod === 'cash') {
-                $rules['cashReceived'] = ['required', 'numeric', 'min:' . $this->total];
+                $netTotalWajibBayar = $this->total - (int)$this->appliedComplimentAmount;
+                $rules['cashReceived'] = ['required', 'numeric', 'min:' . $netTotalWajibBayar];
             }
         }
 
@@ -2317,32 +2454,42 @@ class PosPage extends Component
 
         $trxId = null;
         $previousPaymentStatus = null;
+        $promoIdValue = $this->appliedPromotionId ?: null;
+        $promoDiscountValue = $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0;
 
-        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId, &$previousPaymentStatus) {
+        DB::transaction(function () use ($isDineIn, $isFinalPayment, $validated, &$trxId, &$previousPaymentStatus, $promoIdValue, $promoDiscountValue) {
             $trx = $this->editingTransactionId
                 ? Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first()
                 : new Transaction();
 
             $previousPaymentStatus = (string) $trx->payment_status;
+            $cabangId = auth()->user()->cabang_id ?? 1;
+
+            $complimentAmountValue = (int) $this->appliedComplimentAmount;
+            $complimentNotesValue = $this->appliedComplimentNotes;
 
             // Ambil nominal cash (bersihkan karakter non-digit jika ada)
             $cashReceivedValue = $isFinalPayment && $this->paymentMethod === 'cash'
                 ? (int) preg_replace('/\D+/', '', (string)$this->cashReceived)
                 : null;
 
+            $complimentAmountValue = $this->paymentMethod === 'compliment'
+                ? (int) preg_replace('/\D+/', '', (string)($this->complimentAmount ?? '0'))
+                : 0;
+
             $trx->fill([
                 'code' => $trx->code ?? Transaction::generateUniqueCode(),
                 'member_id' => $this->memberId,
+                'promotion_id' => $promoIdValue,
                 'name' => $this->customerName,
                 'phone' => $this->customerPhone,
                 'order_type' => $this->orderType,
                 'dining_table_id' => $isDineIn ? ($this->selectedTableId ?? $trx->dining_table_id) : null,
                 'subtotal' => $this->subtotal,
+                'promotion_discount_amount' => $promoDiscountValue,
                 'service_percentage' => $this->serviceRate,
-                'service_amount' => $isFinalPayment ? $this->serviceAmount : $this->serviceAmount,
-                'tax_percentage' => $this->taxRate,
-                'tax_amount' => $isFinalPayment ? $this->taxAmount : $this->taxAmount,
-                'total' => $isFinalPayment ? $this->total : ($this->subtotal + $this->serviceAmount + $this->taxAmount),
+                'service_amount' => $this->serviceAmount,
+                'total' => $this->total,
                 'payment_method' => $isFinalPayment ? $this->paymentMethod : 'pending',
                 'bank_name' => $this->paymentMethod === 'card' ? $this->cardBankName : null,
                 'account_name' => $this->paymentMethod === 'card' ? $this->cardAccountName : null,
@@ -2352,10 +2499,14 @@ class PosPage extends Component
                 'checkout_link' => '',
                 'external_id' => $trx->external_id ?? Transaction::generateUniqueCode(10),
                 'tax_percentage' => $this->taxRate,
-                'tax_amount' => $isFinalPayment ? $this->taxAmount : $this->taxAmount,
+                'tax_amount' => $this->taxAmount,
                 'discount_total_amount' => $isFinalPayment ? $this->discountTotalAmount : 0,
+
+                // TAMBAHAN KOLOM COMPLIMENT DI CHECKOUT DIRECT
+                'compliment_amount' => $complimentAmountValue,
+                'compliment_notes' => $complimentAmountValue > 0 ? $complimentNotesValue : null,
                 'cash_received' => $cashReceivedValue,
-                'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - $this->total) : null,
+                'cash_change' => ($isFinalPayment && $cashReceivedValue) ? ($cashReceivedValue - ($this->total - $complimentAmountValue)) : null,
             ]);
 
             $trx->save();
@@ -2372,6 +2523,24 @@ class PosPage extends Component
                 ]);
             }
 
+            if ($isFinalPayment && $this->paymentMethod === 'card') {
+                // Bersihkan nilai nominal cardAmount dari karakter non-digit jika ada formatting rupiah
+                $cardAmountValue = (int) preg_replace('/\D+/', '', (string)$this->cardAmount);
+
+                CardPayment::updateOrCreate(
+                    ['transaction_id' => $trx->id], // mencegah double records jika kasir melakukan re-checkout / edit payment
+                    [
+                        'cabang_id' => $cabangId,
+                        'amount' => $cardAmountValue > 0 ? $cardAmountValue : $this->total,
+                        'card_number' => $this->cardNumber,
+                        'verification_code' => $this->cardVerificationCode,
+                        'bank_name' => $this->cardBankName,
+                        'account_name' => $this->cardAccountName,
+                        'self_order_id' => $this->cardSelfOrderId ?: null,
+                    ]
+                );
+            }
+
             if ($isDineIn) {
                 $targetTableId = $this->selectedTableId ?? $trx->dining_table_id;
                 if ($isFinalPayment && !$this->isSplitPaymentMode) {
@@ -2384,6 +2553,18 @@ class PosPage extends Component
             }
 
             $trxId = (int) $trx->id;
+            if ($complimentAmountValue > 0) {
+                activity()
+                    ->performedOn($trx)
+                    ->causedBy(auth()->user())
+                    ->event('payment_compliment')
+                    ->withProperties([
+                        'cabang_id' => $cabangId,
+                        'compliment_amount' => $complimentAmountValue,
+                        'notes' => $complimentNotesValue
+                    ])
+                    ->log("Pembayaran Compliment diterapkan pada transaksi checkout direct #{$trx->id} sebesar Rp " . number_format($complimentAmountValue, 0, ',', '.') . " dengan alasan: {$complimentNotesValue}");
+            }
         });
 
         $this->dispatch('toast', type: 'success', message: $isFinalPayment ? 'Transaksi Lunas' : 'Pesanan Disimpan');
@@ -2603,29 +2784,61 @@ class PosPage extends Component
      */
     public function confirmCancel()
     {
-        // Validasi input alasan wajib diisi minimal 5 karakter
+        // 1. Validasi input alasan dan PIN wajib diisi
         $this->validate([
             'cancelTableReason' => 'required|string|min:5',
+            'cancelTablePin' => 'required|numeric',
         ], [
             'cancelTableReason.required' => 'Alasan pembatalan wajib diisi.',
             'cancelTableReason.min' => 'Alasan minimal harus 5 karakter.',
+            'cancelTablePin.required' => 'PIN otorisasi manager wajib diisi.',
+            'cancelTablePin.numeric' => 'PIN harus berupa angka.',
         ]);
 
         // JIKA PESANAN SUDAH PERNAH TERSIMPAN DI DATABASE (Meja Occupied)
         if ($this->editingTransactionId !== null) {
-            DB::transaction(function () {
+
+            // 2. Cari kandidat user manager/admin yang aktif untuk cek PIN
+            $candidates = \App\Models\User::query()
+                ->where('is_active', true)
+                ->whereNotNull('manager_pin')
+                ->get();
+
+            $validApprover = null;
+
+            // 3. Verifikasi PIN menggunakan Hash::check
+            foreach ($candidates as $candidate) {
+                if (\Illuminate\Support\Facades\Hash::check($this->cancelTablePin, $candidate->manager_pin)) {
+                    if ($candidate->can('transactions.void.approve') || $candidate->hasRole(['admin', 'owner'])) {
+                        $validApprover = $candidate;
+                        break;
+                    }
+                }
+            }
+
+            // 4. Jika PIN tidak cocok
+            if (!$validApprover) {
+                $this->addError('cancelTablePin', 'PIN salah atau user tidak memiliki otoritas approval.');
+                return;
+            }
+
+            // 5. Eksekusi Void Transaksi di Database
+            DB::transaction(function () use ($validApprover) {
                 $trx = Transaction::query()->whereKey($this->editingTransactionId)->lockForUpdate()->first();
 
                 if ($trx) {
-                    // 1. Kosongkan kembali status meja makan menjadi tersedia (Warna Biru)
-                    if ($trx->dining_table_id) {
-                        DB::table('dining_tables')->where('id', $trx->dining_table_id)->update([
+                    $cabangId = $trx->cabang_id;
+                    $tableId = $trx->dining_table_id;
+
+                    // TABEL 1: dining_tables -> Kembalikan status meja makan menjadi tersedia
+                    if ($tableId) {
+                        DB::table('dining_tables')->where('id', $tableId)->update([
                             'status' => 'available',
                             'occupied_at' => null
                         ]);
                     }
 
-                    // 2. Lakukan Soft Void (Isi kolom pembatalan audit tanpa menghapus data laporan)
+                    // TABEL 2: transactions -> Lakukan Soft Void sesuai kolom migrasimu
                     $trx->update([
                         'payment_status' => 'void',
                         'order_status' => 'void',
@@ -2634,19 +2847,39 @@ class PosPage extends Component
                         'void_reason' => $this->cancelTableReason,
                     ]);
 
-                    // Tambahkan log aktivitas jika tabel audit event tersedia
+                    // TABEL 3: transaction_events -> Rekam event pembatalan meja (Wajib bawa cabang_id)
                     if (class_exists(\App\Models\TransactionEvent::class)) {
                         TransactionEvent::create([
+                            'cabang_id' => $cabangId, // Sesuai kolom di migrasi transaction_events kamu
                             'transaction_id' => $trx->id,
                             'actor_user_id' => auth()->id(),
                             'action' => 'cancel_table',
-                            'meta' => ['reason' => $this->cancelTableReason]
+                            'meta' => [
+                                'reason' => $this->cancelTableReason,
+                                'approved_by_user_id' => $validApprover->id,
+                                'approved_by_name' => $validApprover->name,
+                                'grand_total_voided' => $trx->total ?? 0
+                            ]
                         ]);
                     }
+
+                    // TABEL 4: activity_log -> Spatie Activity Log (Membawa event custom)
+                    activity()
+                        ->performedOn($trx)
+                        ->causedBy(auth()->user())
+                        ->event('cancel_table') // Mengisi kolom 'event' di migrasi tambahan Spatie kamu
+                        ->withProperties([
+                            'cabang_id' => $cabangId,
+                            'approved_by_user_id' => $validApprover->id,
+                            'approved_by_name' => $validApprover->name,
+                            'reason' => $this->cancelTableReason,
+                            'total_voided' => $trx->total ?? 0
+                        ])
+                        ->log("User " . auth()->user()->name . " melakukan void penuh untuk transaksi #{$trx->id} pada Meja ID: {$tableId}. Diacc oleh Manager: {$validApprover->name} dengan alasan: {$this->cancelTableReason}");
                 }
             });
 
-            $this->dispatch('toast', type: 'success', message: 'Pesanan meja berhasil dibatalkan & di-audit.');
+            $this->dispatch('toast', type: 'success', message: 'Pesanan meja berhasil dibatalkan & di-audit oleh ' . $validApprover->name);
         } else {
             // JIKA TRANSAKSI BARU (Belum masuk database sama sekali)
             $this->dispatch('toast', type: 'success', message: 'Meja dilepas.');
@@ -2655,6 +2888,7 @@ class PosPage extends Component
         // Tutup modal, bersihkan keranjang, balikkan halaman ke denah meja
         $this->cancelTableModalOpen = false;
         $this->cancelTableReason = '';
+        $this->cancelTablePin = ''; // Reset input PIN setelah selesai
         $this->resetOrderForNewTransaction();
     }
 
@@ -2984,6 +3218,7 @@ class PosPage extends Component
 
     private function recalculateTotals(): void
     {
+        // === 1. HITUNG SUBTOTAL ASLI ===
         $subtotal = 0;
         foreach ($this->cartItems as $item) {
             $qty = (int) ($item['quantity'] ?? 0);
@@ -2992,22 +3227,18 @@ class PosPage extends Component
                 $subtotal += $qty * $price;
             }
         }
-
         $this->subtotal = max(0, $subtotal);
 
-        $this->discountTotalAmount = max(0, $this->voucherDiscountAmount + $this->manualDiscountAmount + $this->pointDiscountAmount);
-        $netSubtotal = max(0, $this->subtotal - $this->discountTotalAmount);
-        $this->netSubtotal = $netSubtotal;
-
-        // $this->serviceAmount = (int) round($netSubtotal * ((float) ($this->serviceRate ?? 0) / 100));
-        $this->serviceAmount = (int) round($netSubtotal * ((float) ($this->serviceRate ?? 0) / 100));
-
-        if ($this->orderType === 'take_away') {
-            $this->serviceAmount = 0;
-        } else {
-            $this->serviceAmount = (int) round($netSubtotal * ((float) ($this->serviceRate ?? 0) / 100));
+        // === 2. KALKULASI DISKON PROMOSI BARU ===
+        $this->promotionDiscountAmount = 0;
+        if ($this->appliedPromotionId) {
+            $promo = \App\Models\Promotion::active()->find($this->appliedPromotionId);
+            if ($promo) {
+                $this->promotionDiscountAmount = (int) $promo->calculateDiscount($this->subtotal);
+            }
         }
 
+        // === 3. KALKULASI VOUCHER BAWAAN ===
         $this->voucherValid = false;
         $this->voucherDiscountAmount = 0;
         $this->voucherMessage = '';
@@ -3054,24 +3285,24 @@ class PosPage extends Component
             }
         }
 
+        // === 4. KALKULASI MANUAL DISKON BAWAAN ===
         $this->manualDiscountAmount = 0;
-
         $manualType = $this->manualDiscountType ? (string) $this->manualDiscountType : null;
         $manualValue = $this->manualDiscountValue === null ? null : (int) $this->manualDiscountValue;
 
         if ($manualType !== null && $manualValue !== null && $manualValue > 0) {
-            $base = max(0, $this->subtotal - $this->voucherDiscountAmount);
+            // Kurangi subtotal dengan voucher & promosi agar manual diskon tidak tumpang tindih berlebih
+            $base = max(0, $this->subtotal - $this->voucherDiscountAmount - $this->promotionDiscountAmount);
 
             if ($manualType === 'percent') {
                 $pct = max(0, min(100, $manualValue));
                 $this->manualDiscountAmount = (int) round($base * ($pct / 100));
             } elseif ($manualType === 'fixed_amount') {
                 $this->manualDiscountAmount = min($base, max(0, $manualValue));
-            } else {
-                $this->manualDiscountAmount = 0;
             }
         }
 
+        // === 5. KALKULASI POINT REWARD BAWAAN ===
         $this->pointDiscountAmount = 0;
         $this->pointsToRedeem = 0;
 
@@ -3080,32 +3311,44 @@ class PosPage extends Component
             $this->pointDiscountAmount = max(0, (int) $this->lockedPointDiscountAmount);
             $this->redeemPoints = $this->pointsToRedeem > 0;
         } elseif ($this->redeemPoints && $this->memberPoints >= $this->minRedemptionPoints && $this->pointRedemptionValue > 0) {
-            $baseForPoints = max(0, $this->subtotal - $this->voucherDiscountAmount - $this->manualDiscountAmount);
+            // Kurangi dengan seluruh diskon terdahulu termasuk promosi baru
+            $baseForPoints = max(0, $this->subtotal - $this->voucherDiscountAmount - $this->manualDiscountAmount - $this->promotionDiscountAmount);
             if ($baseForPoints > 0) {
-                // Calculate max points needed to cover the base amount
                 $maxPointsNeeded = (int) floor($baseForPoints / $this->pointRedemptionValue);
-
-                // Use the lesser of member points or max needed
                 $pointsToUse = min($this->memberPoints, $maxPointsNeeded);
 
                 $this->pointsToRedeem = $pointsToUse;
                 $this->pointDiscountAmount = (int) ($pointsToUse * $this->pointRedemptionValue);
-
-                // Cap at base amount just in case rounding causes issues
                 $this->pointDiscountAmount = min($this->pointDiscountAmount, $baseForPoints);
             }
         }
 
-        $this->discountTotalAmount = max(0, $this->voucherDiscountAmount + $this->manualDiscountAmount + $this->pointDiscountAmount);
+        // === 6. AKUMULASI SELURUH DISKON YANG SUDAH VALID ===
+        $this->discountTotalAmount = max(
+            0,
+            $this->voucherDiscountAmount +
+                $this->manualDiscountAmount +
+                $this->pointDiscountAmount +
+                $this->promotionDiscountAmount
+        );
+
         $netSubtotal = max(0, $this->subtotal - $this->discountTotalAmount);
         $this->netSubtotal = $netSubtotal;
 
-        // $taxBase = $this->discountAppliesBeforeTax ? $netSubtotal : $this->subtotal;
+        // Hitung Service Charge berdasarkan sisa netSubtotal setelah dipotong semua diskon resmi
+        if ($this->orderType === 'take_away') {
+            $this->serviceAmount = 0;
+        } else {
+            $this->serviceAmount = (int) round($netSubtotal * ((float) ($this->serviceRate ?? 0) / 100));
+        }
+
+        // Hitung Ulang Pajak (Tax) & Grand Total Akhir
         $taxBase = $netSubtotal + $this->serviceAmount;
         $this->taxAmount = (int) round($taxBase * ((float) ($this->taxRate) / 100));
 
         $rawTotal = $netSubtotal + $this->serviceAmount + $this->taxAmount;
 
+        // Logika Pembulatan (Rounding Base) bawaan sistem kasir kamu
         if ($this->roundingBase <= 0) {
             $this->roundingAmount = 0;
             $this->total = $rawTotal;
@@ -3457,16 +3700,21 @@ class PosPage extends Component
             return;
         }
 
-        // Set paymentMethod jadi compliment, simpan info compliment ke property
+        // 1. Kunci nilai murni compliment ke properti independen
+        $this->appliedComplimentAmount = $amount;
+        $this->appliedComplimentNotes = $this->complimentNotes;
+
+        // 2. BERIKAN LABEL AGAR LOLOS VALIDASI REQUIRED PADA SAVEPAYMENT
         $this->paymentMethod = 'compliment';
-        $this->manualDiscountType = 'fixed_amount';
-        $this->manualDiscountValue = $amount;
-        $this->manualDiscountNote = 'Compliment: ' . $this->complimentNotes;
+
+        // 3. Reset diskon manual sistem lama agar pajak PB1 aman & tetap utuh
+        $this->manualDiscountType = null;
+        $this->manualDiscountValue = 0;
+        $this->manualDiscountNote = null;
 
         $this->recalculateTotals();
 
         $this->complimentModalOpen = false;
-
         $this->dispatch('toast', type: 'success', message: 'Compliment berhasil diterapkan.');
     }
 
@@ -3542,6 +3790,122 @@ class PosPage extends Component
         $this->otherCostModalOpen = false;
 
         $this->dispatch('toast', type: 'success', message: 'Other Cost berhasil diterapkan.');
+    }
+
+    public function getPromotionsProperty()
+    {
+        return Promotion::query()
+            ->active()
+            ->forBranch(auth()->user()->cabang_id ?? null)
+            ->when(
+                $this->promotionSearch,
+                fn($q) =>
+                $q->where('name', 'like', '%' . $this->promotionSearch . '%')
+            )
+            ->when(
+                $this->promotionTypeFilter,
+                fn($q) =>
+                $q->where('type', $this->promotionTypeFilter)
+            )
+            ->orderBy('end_date')
+            ->paginate(5, ['*'], 'page', $this->promotionPage);
+    }
+
+    public function selectPromotion($promoId)
+    {
+        $this->selectedPromotionId = $promoId;
+    }
+
+    public function applyPromotion()
+    {
+        if (!$this->selectedPromotionId) return;
+
+        $promo = Promotion::find($this->selectedPromotionId);
+        if (!$promo) return;
+
+        // Hitung subtotal keranjang belanja saat ini
+        $currentSubtotal = 0;
+        foreach ($this->cartItems as $item) {
+            $currentSubtotal += ($item['quantity'] * $item['price']);
+        }
+
+        // Validasi syarat minimal belanja promosi tersebut
+        if ($currentSubtotal < $promo->min_subtotal) {
+            $this->dispatch('alert', [
+                'type' => 'error',
+                'message' => 'Minimal belanja untuk promo ini adalah Rp ' . number_format($promo->min_subtotal, 0, ',', '.')
+            ]);
+            return;
+        }
+
+        // Hitung nominal potongan menggunakan helper dari Model Promotion yang sudah kita buat sebelumnya
+        $this->appliedPromotionId = $promo->id;
+        $this->promotionDiscountAmount = (int) $promo->calculateDiscount($currentSubtotal);
+
+        // Tutup Modal & Hitung Ulang Total Akhir Belanja
+        $this->promotionModalOpen = false;
+        $this->recalculateTotals();
+    }
+
+    public function removePromotion()
+    {
+        $this->appliedPromotionId = null;
+        $this->promotionDiscountAmount = 0;
+        $this->selectedPromotionId = null;
+        $this->promotionModalOpen = false;
+        $this->recalculateTotals();
+    }
+
+    // Logika Halaman Paginasi Modal
+    public function previousPromotionPage(): void
+    {
+        if ($this->promotionPage > 1) $this->promotionPage--;
+    }
+    public function nextPromotionPage(): void
+    {
+        $this->promotionPage++;
+    }
+
+    public function getAvailableVouchersProperty()
+    {
+        $term = trim($this->voucherSearchInput);
+
+        return \App\Models\VoucherCode::query()
+            ->where('is_active', true)
+            // Belum pernah diredeeem sama sekali ATAU masih ada sisa limit
+            ->where(function ($q) {
+                $q->whereNull('usage_limit_total')
+                    ->orWhereColumn('times_redeemed', '<', 'usage_limit_total');
+            })
+            // Belum ada redemption di tabel voucher_redemptions
+            ->whereDoesntHave('redemptions')
+            ->when($term !== '', fn($q) => $q->where('code', 'like', "%{$term}%"))
+            ->with('campaign:id,name,discount_type,discount_value')
+            ->orderBy('code')
+            ->paginate(10, ['*'], 'page', $this->voucherListPage);
+    }
+
+    public function toggleSelectVoucher(int $voucherId): void
+    {
+        if (in_array($voucherId, $this->selectedVouchers)) {
+            $this->selectedVouchers = array_values(
+                array_filter($this->selectedVouchers, fn($id) => $id !== $voucherId)
+            );
+        } else {
+            $this->selectedVouchers[] = $voucherId;
+        }
+    }
+
+    public function clearAllSelectedVouchers(): void
+    {
+        $this->selectedVouchers = [];
+    }
+
+    public function applyPurchaseVoucher(): void
+    {
+        // Logika apply voucher yang dibeli — sesuaikan dengan kebutuhan bisnis
+        $this->purchaseVoucherModalOpen = false;
+        $this->dispatch('toast', type: 'success', message: 'Voucher berhasil dipilih.');
     }
 
     public function render(): View

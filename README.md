@@ -145,3 +145,9 @@ Project memiliki perintah:
 
 Perintah ini akan menjalankan install composer, copy .env (jika belum ada), generate key, migrate, npm install, dan build asset.
 Setelah itu tetap jalankan seeder role/permission dan lakukan setup user owner jika belum ada user.
+
+J. UPDATE
+----------------------------
+1. Role Permission: php artisan db:seed --class=RolePermissionSeeder
+2. Membuat File Class Livewire php artisan make:livewire Promotions.PromotionsPage
+3. php artisan permission:cache-reset

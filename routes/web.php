@@ -6,6 +6,7 @@ use App\Http\Controllers\TableQrController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ShiftLogController;
 use App\Http\Middleware\CheckTableNumber;
+use App\Http\Controllers\ShiftReportController;
 use App\Livewire\Auth\InitialSetupPage;
 use App\Livewire\Auth\SignInPage;
 use App\Livewire\DashboardPage;
@@ -60,7 +61,8 @@ use App\Livewire\Cabang\CabangPage;
 
 // Progres IDIN day start/end: 2024-06-20
 use App\Livewire\DayStartEnd\DayStartEndPage;
-
+use App\Livewire\Promotions\PromotionFormPage;
+use App\Livewire\Promotions\PromotionsPage;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -88,6 +90,8 @@ if (is_string($landingDomain) && $landingDomain !== '') {
 
 // Progres IDIN day start/end: 2024-06-20
 Route::get('/day-start-end', DayStartEndPage::class)->name('day-start-end.index');
+// Tambahkan ini di dalam group middleware auth kamu
+Route::get('/print-shift-out', [ShiftReportController::class, 'print'])->name('print.shift.out');
 
 Route::get('/t/{code}', TableQrController::class)->name('tables.qr');
 Route::prefix('order')->name('self-order.')->group(function () {
@@ -306,6 +310,10 @@ if ($adminDomain !== '') {
             Route::get('/vouchers/redemptions', VoucherRedemptionsPage::class)->middleware('permission:vouchers.view')->name('vouchers.redemptions');
             Route::get('/vouchers/performance', VoucherPerformancePage::class)->middleware('permission:vouchers.view')->name('vouchers.performance');
 
+            Route::get('/promotions', PromotionsPage::class)->middleware('permission:promotions.view')->name('promotions.index');
+            Route::get('/promotions/create', PromotionFormPage::class)->name('promotions.create');
+            Route::get('/promotions/{promotion}/edit', PromotionFormPage::class)->name('promotions.edit');
+
             Route::get('/inventory/ingredients', IngredientsPage::class)->middleware('permission:inventory.ingredients.view|inventory.view')->name('ingredients.index');
             Route::get('/inventory/ingredients/{ingredient}/conversions', IngredientConversionsPage::class)->middleware('permission:inventory.ingredients.manage|inventory.manage')->name('ingredients.conversions');
             Route::get('/inventory/suppliers', SuppliersPage::class)->middleware('permission:inventory.suppliers.view|inventory.view')->name('suppliers.index');
@@ -507,6 +515,10 @@ if ($adminDomain !== '') {
             Route::get('/vouchers/redemptions', VoucherRedemptionsPage::class)->middleware('permission:vouchers.view')->name('vouchers.redemptions');
             Route::get('/vouchers/performance', VoucherPerformancePage::class)->middleware('permission:vouchers.view')->name('vouchers.performance');
 
+            Route::get('/promotions', PromotionsPage::class)->middleware('permission:promotions.view')->name('promotions.index');
+            Route::get('/promotions/create', PromotionFormPage::class)->name('promotions.create');
+            Route::get('/promotions/{promotion}/edit', PromotionFormPage::class)->name('promotions.edit');
+
             Route::get('/inventory/ingredients', IngredientsPage::class)->middleware('permission:inventory.ingredients.view|inventory.view')->name('ingredients.index');
             Route::get('/inventory/ingredients/{ingredient}/conversions', IngredientConversionsPage::class)->middleware('permission:inventory.ingredients.manage|inventory.manage')->name('ingredients.conversions');
             Route::get('/inventory/suppliers', SuppliersPage::class)->middleware('permission:inventory.suppliers.view|inventory.view')->name('suppliers.index');
@@ -535,8 +547,6 @@ if ($adminDomain !== '') {
             Route::get('/cabang', CabangPage::class)->middleware('permission:cabang.view|cabang.manage')->name('cabang.index');
 
             Route::get('/shift-logs', ShiftLogsPage::class)->name('shift-logs.index');
-
-            
         });
     });
 }
