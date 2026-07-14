@@ -1029,7 +1029,7 @@
 
 
                                 {{-- Pajak PB1 --}}
-                                @if ($taxAmount > 0)
+
                                     <div class="flex justify-end gap-2">
                                         <span>PB1 Total</span>
                                         <span
@@ -1047,22 +1047,7 @@
                                 @endif
                             </div>
 
-                            <div class="border-b border-dashed border-gray-300 my-2"></div>
-
-                            {{-- BILLING TOTAL & VOUCHER PURCHASE --}}
-                            <div class="space-y-1 text-gray-700">
-                                <div class="flex justify-end gap-2">
-                                    <span>Billing Total</span>
-                                    <span
-                                        class="tabular-nums font-medium text-gray-900">{{ number_format($total, 0, ',', '.') }}</span>
-                                </div>
-                                <div class="flex justify-end gap-2">
-                                    <span>Voucher Purchase</span>
-                                    <span class="tabular-nums text-gray-900">0</span>
-                                </div>
-                            </div>
-
-                             <div class="border-b border-dashed border-black my-1"></div>
+                            <div class="border-b border-dashed border-black my-1"></div>
 
                             {{-- BILLING TOTAL & VOUCHER PURCHASE --}}
                             <div class="text-gray-700">
@@ -1094,7 +1079,7 @@
                             <div class="flex justify-end items-center gap-2 text-black mb-5">
                                 <span class="text-[10px] tracking-wider">Grand Total</span>
                                 <span class="text-[10px] tabular-nums ">
-                                    Rp {{ number_format(max(0, $grandTotal), 0, ',', '.') }}
+                                    {{ number_format(max(0, $grandTotal), 0, ',', '.') }}
                                 </span>
                             </div>
 
