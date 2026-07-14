@@ -66,7 +66,7 @@ unset($__defined_vars, $__key, $__value); ?>
                 <div
                     class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-gray-900 border border-error-50 dark:border-gray-800 shadow-sm">
                     <div>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Reduksi Qty</p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Removed Item</p>
                         <p class="text-[9px] text-gray-400 mt-0.5">Item dikurangi</p>
                     </div>
                     <h4 class="text-base font-black text-orange-600 tabular-nums">
@@ -92,7 +92,7 @@ unset($__defined_vars, $__key, $__value); ?>
                 <div
                     class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-gray-900 border border-error-100 dark:border-gray-800 shadow-sm">
                     <div>
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Void Total Bill</p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Cancelled or Void</p>
                         <p class="text-[9px] text-gray-400 mt-0.5">Satu nota dibatalkan</p>
                     </div>
                     <h4 class="text-base font-black text-red-700 tabular-nums">

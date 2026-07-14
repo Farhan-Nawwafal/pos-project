@@ -36,33 +36,23 @@
 
     <script>
         document.addEventListener('alpine:init', () => {
+            // Mengunci store theme agar selalu mengembalikan mode 'light' dan menghapus class dark
             Alpine.store('theme', {
                 init() {
-                    const savedTheme = localStorage.getItem('theme');
-                    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' :
-                        'light';
-                    this.theme = savedTheme || systemTheme;
+                    localStorage.setItem('theme', 'light');
                     this.updateTheme();
                 },
                 theme: 'light',
-                toggle() {
-                    this.theme = this.theme === 'light' ? 'dark' : 'light';
-                    localStorage.setItem('theme', this.theme);
-                    this.updateTheme();
-                },
+                toggle() {}, // Kosongkan fungsi toggle agar tidak bekerja saat tidak sengaja dipanggil
                 updateTheme() {
-                    const html = document.documentElement;
-                    const body = document.body;
-                    if (this.theme === 'dark') {
-                        html.classList.add('dark');
-                        if (body) body.classList.add('dark', 'bg-gray-900');
-                    } else {
-                        html.classList.remove('dark');
-                        if (body) body.classList.remove('dark', 'bg-gray-900');
+                    document.documentElement.classList.remove('dark');
+                    if (document.body) {
+                        document.body.classList.remove('dark', 'bg-gray-900');
                     }
                 }
             });
 
+            // JANGAN DIHAPUS - Ini mengontrol menu navigasi (sidebar) Anda
             Alpine.store('sidebar', {
                 isEsbModalOpen: false,
                 toggleEsbModal() {
@@ -214,7 +204,7 @@ unset($__split);
         <div class="flex-1 transition-all  relative "
             :class="{
                 'lg:ml-[50px]': true,
-                'lg:ml-[0px] :ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+                'lg:ml-[0px] :ml-[2900px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
                 'sm:translate-x-[0px]': $store.sidebar.isExpanded,
                 'translate-x-0': !$store.sidebar.isExpanded
             }">

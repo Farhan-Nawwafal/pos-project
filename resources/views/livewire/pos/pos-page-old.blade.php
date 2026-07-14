@@ -484,7 +484,7 @@
                             @endphp
                             <button type="button" wire:click="addToCart({{ (int) ($product['id'] ?? 0) }})"
                                 class="group flex min-h-[60px] flex-col items-center justify-center overflow-hidden rounded-2xl border px-2 py-1.5 shadow-sm hover:shadow-md transition dark:bg-gray-900 dark:border-gray-800"
-                                style="background-color: #F29C12; ">
+                                style="background-color: #F39C12; ">
                                 <div class="relative">
                                     @if ($variantCount > 1)
                                         <div

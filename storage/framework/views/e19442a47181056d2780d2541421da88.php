@@ -61,7 +61,7 @@
         }" :class="{
             'lg:w-[50px] lg:translate-x-0': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen,
-            'w-[290px] translate-x-0 lg:w-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered || $store
+            'w-[260px] translate-x-0 lg:w-[260px]': $store.sidebar.isExpanded || $store.sidebar.isHovered || $store
                 .sidebar.isMobileOpen,
             'w-0 -translate-x-full': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen
