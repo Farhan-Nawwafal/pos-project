@@ -1036,7 +1036,7 @@
                                             class="tabular-nums text-black">{{ number_format($taxAmount, 0, ',', '.') }}</span>
                                     </div>
 
-
+                                @endif
                                 {{-- Compliment --}}
                                 @if ($currentCompliment > 0)
                                     <div class="flex justify-end gap-2 text-red-600 font-bold">

@@ -1049,7 +1049,7 @@
                                             class="tabular-nums text-black"><?php echo e(number_format($taxAmount, 0, ',', '.')); ?></span>
                                     </div>
 
-
+                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                 
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($currentCompliment > 0): ?>
                                     <div class="flex justify-end gap-2 text-red-600 font-bold">
