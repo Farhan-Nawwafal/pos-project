@@ -77,7 +77,7 @@
                                     }
                                 }" <?php endif; ?>
                                class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                            'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-[1]',
+                                            'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-[1] text-[8px]',
                                             'w-10 ', // <-- TAMBAHKAN UKURAN LEBAR & PADDING DI SINI
                                             'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' =>
                                                 $status === 'available',
@@ -89,7 +89,7 @@
                                                 $status === 'billed',
                                         ]); ?>"
                                                                         <span
-                                    class="text-xs group-hover:scale-110 transition-transform"><?php echo e($t['label']); ?></span>
+                                    class="text-[8px] group-hover:scale-110 transition-transform"><?php echo e($t['label']); ?></span>
                                 <span class="text-[8px] font-mono">
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(in_array($status, ['occupied', 'booked', 'billed'])): ?>
                                         <span x-text="display">00:00</span>
@@ -102,33 +102,44 @@
             </div>
 
             
-            <div class="flex-shrink-0 pt-8  ">
+            <div class="flex-shrink-0 pt-8">
+            <!-- Menggunakan items-center agar badge waktu dan keterangan status sejajar tinggi tengahnya -->
+            <div class="flex flex-wrap items-center gap-4">
+                
+                <!-- Group Waktu / Badge -->
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-1 text-xs font-bold bg-yellow-400 text-white "> > 0 minute</span>
-                    <span class="px-2.5 py-1 text-xs font-bold bg-[#DD4B39] text-white "> > 0 minute</span>
-                    <div class="flex flex-wrap items-center gap-x-45 gap-y-3">
-                        
+                    <span class="px-2.5 py-1 text-xs font-bold bg-yellow-400 text-white whitespace-nowrap">> 0 minute</span>
+                    <span class="px-2.5 py-1 text-xs font-bold bg-[#DD4B39] text-white whitespace-nowrap">> 0 minute</span>
+                </div>
 
-                        
-                        <div class="flex items-center gap-4 pl-40">
-                            <div class="w-4 h-4 bg-[#3C8DBC]  border-[#3C8DBC]"></div>
-                            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Available</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-4 h-4 bg-yellow-400  border-yellow-500"></div>
-                            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Booked</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-4 h-4 bg-[#DD4B39]  border-[#DD4B39]"></div>
-                            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Occupied</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-4 h-4 bg-green-500  border-green-600"></div>
-                            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Billed</span>
-                        </div>
+                
+
+                <!-- Group Keterangan Status (Menghapus gap-x-45 dan pl-40 yang merusak layout) -->
+                <div class="flex flex-wrap items-center gap-30 ml-5">
+                    
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-[#3C8DBC]"></div>
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Available</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-yellow-400"></div>
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Booked</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-[#DD4B39]"></div>
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Occupied</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-green-500"></div>
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Billed</span>
                     </div>
                 </div>
+
             </div>
+</div>
         </div>
         
     <?php elseif($orderType === 'take_away' && $showQuickServiceWaitlist): ?>
@@ -352,7 +363,7 @@
                             );
                         ?>
                         <div wire:init="loadVariantStockStatuses"
-                            class="grid grid-cols-4 gap-1.5 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 bg-white p-2 h-[475px]">
+                            class="grid grid-cols-4 gap-1.5 md:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 bg-white p-2 h-[475px]">
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $displayProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                 <?php
                                     $firstVariant = $product['variants'][0] ?? null;
