@@ -204,7 +204,7 @@ unset($__split);
         <div class="flex-1 transition-all  relative "
             :class="{
                 'lg:ml-[50px]': true,
-                'lg:ml-[0px] :ml-[2900px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
+                'lg:ml-[0px] :ml-[290px]': $store.sidebar.isExpanded || $store.sidebar.isHovered,
                 'sm:translate-x-[0px]': $store.sidebar.isExpanded,
                 'translate-x-0': !$store.sidebar.isExpanded
             }">
