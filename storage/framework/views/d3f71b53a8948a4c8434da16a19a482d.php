@@ -338,72 +338,67 @@
 <?php unset($__componentOriginald0632d888e924a9aad947cb636203844); ?>
 <?php endif; ?>
 
-        <div class="mt-8">
-            <div
-                class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Audit Deleted Items</h3>
-                    <span
-                        class="rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-bold text-orange-700">PENGAWASAN</span>
-                </div>
-                <div class="custom-scrollbar overflow-x-auto">
-                    <table class="w-full table-auto">
-                        <thead>
-                            <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
-                                <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 uppercase">Waktu</th>
-                                <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 uppercase">Kasir</th>
-                                <th class="px-5 py-4 text-left text-xs font-medium text-gray-500 uppercase">Produk</th>
-                                <th class="px-5 py-4 text-center text-xs font-medium text-gray-500 uppercase">Perubahan
-                                    Qty
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $deletedItemLogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                                <tr>
-                                    <td
-                                        class="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400 text-center">
-                                        <?php echo e($log->created_at->format('d/m/Y H:i')); ?>
-
-                                    </td>
-                                    <td
-                                        class="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-800 dark:text-white">
-                                        <?php echo e($log->causer->name ?? 'System'); ?>
-
-                                    </td>
-                                    <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                        <?php echo e($log->getExtraProperty('product')); ?>
-
-                                    </td>
-                                    <td class="px-5 py-4 text-center">
-                                        <div class="inline-flex items-center gap-2">
-                                            <span
-                                                class="text-gray-400 line-through"><?php echo e($log->getExtraProperty('old_qty')); ?></span>
-                                            <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                            </svg>
-                                            <span class="font-black text-orange-600 dark:text-orange-400 text-lg">
-                                                <?php echo e($log->getExtraProperty('new_qty')); ?>
-
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-                                <tr>
-                                    <td colspan="4" class="px-5 py-10 text-center text-gray-500">Tidak ada item
-                                        yang
-                                        dikurangi atau dihapus.</td>
-                                </tr>
-                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+       <div class="mb-5">
+    <!-- Mengubah overflow-hidden menjadi overflow-y-auto -->
+    <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    
+    <!-- Bagian Header Judul Card (Tetap di luar area scroll agar rapi) -->
+    <div class="flex items-center justify-between p-4 pb-2 sm:px-6 ">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Audit Deleted Items</h3>
+        <span class="rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-bold text-orange-700">PENGAWASAN</span>
     </div>
+
+    <!-- Area Konten Tabel dengan Batas Tinggi & Scroll Vertikal -->
+    <div class="overflow-y-auto max-h-50 custom-scrollbar px-4 pb-3 sm:px-6">
+        <table class="w-full table-auto overflow-x-auto border-collapse">
+            <thead>
+                <tr class="border-b border-gray-200 dark:border-gray-800">
+                    <!-- KUNCI UTAMA: sticky, top-0, z-10, dan bg warna agar text body tidak menumpuk di belakangnya -->
+                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-950 px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase">Waktu</th>
+                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-950 px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase">Kasir</th>
+                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-950 px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase">Produk</th>
+                    <th class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-950 px-5 py-3 text-center text-xs font-bold text-gray-500 uppercase">Perubahan Qty</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $deletedItemLogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                    <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-900/20 transition-colors">
+                        <td class="px-5 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400 text-center">
+                            <?php echo e($log->created_at->format('d/m/Y H:i')); ?>
+
+                        </td>
+                        <td class="px-5 py-4 whitespace-nowrap text-sm font-bold text-gray-800 dark:text-white">
+                            <?php echo e($log->causer->name ?? 'System'); ?>
+
+                        </td>
+                        <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
+                            <?php echo e($log->getExtraProperty('product')); ?>
+
+                        </td>
+                        <td class="px-5 py-4 text-center">
+                            <div class="inline-flex items-center gap-2">
+                                <span class="text-gray-400 line-through"><?php echo e($log->getExtraProperty('old_qty')); ?></span>
+                                <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                                <span class="font-black text-orange-600 dark:text-orange-400 text-lg">
+                                    <?php echo e($log->getExtraProperty('new_qty')); ?>
+
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                    <tr>
+                        <td colspan="4" class="px-5 py-10 text-center text-gray-500 bg-white dark:bg-transparent">
+                            Tidak ada item yang dikurangi atau dihapus.
+                        </td>
+                    </tr>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
     <div x-show="activeTab === 'online'" style="display: none;" x-transition.opacity.duration.300ms
         class="grid grid-cols-1 gap-6">

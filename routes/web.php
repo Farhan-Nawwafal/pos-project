@@ -63,6 +63,7 @@ use App\Livewire\Cabang\CabangPage;
 use App\Livewire\DayStartEnd\DayStartEndPage;
 use App\Livewire\Promotions\PromotionFormPage;
 use App\Livewire\Promotions\PromotionsPage;
+use App\Livewire\Transaction\CancelTableDetailPage;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -283,6 +284,10 @@ if ($adminDomain !== '') {
             Route::get('/transactions', TransactionsPage::class)->middleware('permission:transactions.view')->name('transactions.index');
             Route::get('/transactions/{transaction}', TransactionShowPage::class)->middleware('permission:transactions.details')->name('transactions.show');
 
+            Route::get('/transactions/{transaction}/cancel-detail', CancelTableDetailPage::class)
+                ->middleware('permission:transactions.view')
+                ->name('transactions.cancel-detail');
+
             Route::get('/products', ProductsPage::class)->middleware('permission:products.view')->name('products.index');
             Route::get('/products/create', ProductFormPage::class)->middleware('permission:products.create')->name('products.create');
             Route::get('/products/{product}/edit', ProductFormPage::class)->middleware('permission:products.edit')->name('products.edit');
@@ -487,6 +492,10 @@ if ($adminDomain !== '') {
 
             Route::get('/transactions', TransactionsPage::class)->middleware('permission:transactions.view')->name('transactions.index');
             Route::get('/transactions/{transaction}', TransactionShowPage::class)->middleware('permission:transactions.details')->name('transactions.show');
+
+            Route::get('/transactions/{transaction}/cancel-detail', CancelTableDetailPage::class)
+                ->middleware('permission:transactions.view')
+                ->name('transactions.cancel-detail');
 
             Route::get('/products', ProductsPage::class)->middleware('permission:products.view')->name('products.index');
             Route::get('/products/create', ProductFormPage::class)->middleware('permission:products.create')->name('products.create');
