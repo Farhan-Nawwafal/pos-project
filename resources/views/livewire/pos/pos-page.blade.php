@@ -44,8 +44,8 @@
 
             </div>
             {{-- KONTEN UTAMA (LIST TABLE) --}}
-            <div class="flex-none min-h-0 overflow-y-auto  border border-gray-200 pb-8 pr-14 pl-3 ">
-                <div class="grid grid-cols-10 gap-3 md:gap-3 lg:gap-6 xl:gap-20">
+            <div class="flex items-center justify-between min-h-0 overflow-y-auto  border border-gray-200 pb-8 pr-14 pl-3 ">
+                <div class="grid grid-cols-10 gap-3 md:gap-2 lg:gap-18 xl:gap-22">
                     @foreach ($this->tables as $t)
                         @php
                             $tableNumber = (int) filter_var($t['label'], FILTER_SANITIZE_NUMBER_INT);
@@ -76,18 +76,19 @@
                                         }, 1000);
                                     }
                                 }" @endif
-                                @class([
-                                    'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-[1]',
-                                    'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' =>
-                                        $status === 'available',
-                                    'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' =>
-                                        $status === 'booked',
-                                    'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#DD4B39] text-white' =>
-                                        $status === 'occupied',
-                                    'bg-green-500 border-green-600 hover:bg-green-600 text-white' =>
-                                        $status === 'billed',
-                                ])>
-                                <span
+                               @class([
+                                            'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-[1]',
+                                            'w-10 ', // <-- TAMBAHKAN UKURAN LEBAR & PADDING DI SINI
+                                            'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' =>
+                                                $status === 'available',
+                                            'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' =>
+                                                $status === 'booked',
+                                            'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#DD4B39] text-white' =>
+                                                $status === 'occupied',
+                                            'bg-green-500 border-green-600 hover:bg-green-600 text-white' =>
+                                                $status === 'billed',
+                                        ])
+                                                                        <span
                                     class="text-xs group-hover:scale-110 transition-transform">{{ $t['label'] }}</span>
                                 <span class="text-[8px] font-mono">
                                     @if (in_array($status, ['occupied', 'booked', 'billed']))
