@@ -44,18 +44,13 @@
 
             </div>
             {{-- KONTEN UTAMA (LIST TABLE) --}}
-            <div class="flex items-center justify-between min-h-0 overflow-y-auto  border border-gray-200 pb-8 pr-14 pl-3 ">
-                <div class="grid grid-cols-10 gap-3 md:gap-2 lg:gap-18 xl:gap-22">
+            <div class="w-full h-full min-h-0 border border-gray-200 p-3 overflow-hidden">
+                <div class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full">
                     @foreach ($this->tables as $t)
                         @php
                             $tableNumber = (int) filter_var($t['label'], FILTER_SANITIZE_NUMBER_INT);
-
-                            // Default ke 1-50 jika belum di-set
                             [$min, $max] = explode('-', $tableRange ?? '1-50');
-
                             $shouldShow = $tableNumber >= (int) $min && $tableNumber <= (int) $max;
-
-                            // Set status (asumsi status dikirim dari backend: available, booked, occupied, billed)
                             $status = strtolower($t['status'] ?? 'available');
                         @endphp
 
@@ -76,21 +71,16 @@
                                         }, 1000);
                                     }
                                 }" @endif
-                               @class([
-                                            'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-[1] text-[8px]',
-                                            'w-10 ', // <-- TAMBAHKAN UKURAN LEBAR & PADDING DI SINI
-                                            'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' =>
-                                                $status === 'available',
-                                            'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' =>
-                                                $status === 'booked',
-                                            'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#DD4B39] text-white' =>
-                                                $status === 'occupied',
-                                            'bg-green-500 border-green-600 hover:bg-green-600 text-white' =>
-                                                $status === 'billed',
-                                        ])
-                                                                        <span
-                                    class="text-[8px] group-hover:scale-110 transition-transform">{{ $t['label'] }}</span>
-                                <span class="text-[8px] font-mono">
+                                @class([
+                                    'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-square w-full',
+                                    'text-[clamp(6px,1.2vw,10px)]', // font ikut menyesuaikan ukuran box
+                                    'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' => $status === 'available',
+                                    'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' => $status === 'booked',
+                                    'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#DD4B39] text-white' => $status === 'occupied',
+                                    'bg-green-500 border-green-600 hover:bg-green-600 text-white' => $status === 'billed',
+                                ])>
+                                <span class="group-hover:scale-110 transition-transform">{{ $t['label'] }}</span>
+                                <span class="font-mono">
                                     @if (in_array($status, ['occupied', 'booked', 'billed']))
                                         <span x-text="display">00:00</span>
                                     @endif
@@ -99,7 +89,7 @@
                         @endif
                     @endforeach
                 </div>
-            </div>
+</div>
 
             {{-- 3. FOOTER LEGEND --}}
             <div class="flex-shrink-0 pt-8">
@@ -115,7 +105,7 @@
                 {{-- Waktu --}}
 
                 <!-- Group Keterangan Status (Menghapus gap-x-45 dan pl-40 yang merusak layout) -->
-                <div class="flex flex-wrap items-center gap-30 ml-5">
+                <div class="flex flex-wrap items-center gap-50 ml-5">
                     {{-- Keterangan Status --}}
                     <div class="flex items-center gap-2">
                         <div class="w-4 h-4 bg-[#3C8DBC]"></div>
@@ -660,6 +650,7 @@
 
                                 {{-- 1. KONDISI JIKA DINE IN (Mengambil sisa 2 kolom di baris pertama) --}}
                                 @if ($orderType === 'dine_in')
+                                
                                     <div class="col-span-2">
                                         <button type="button" wire:click="saveAsPending"
                                             @disabled(count($cartItems) === 0)
@@ -676,6 +667,49 @@
                                             <span>Save Order</span>
                                         </button>
                                     </div>
+                                </div>    
+                                <div class="grid grid-cols-3 w-full divide-x divide-black/20 ">
+                                    <div class="col-span-1">
+                                    <button type="button" wire:click="printBill"
+                                        class="w-full flex items-center justify-center h-10 gap-2  text-white text-xs  bg-brand-500 shadow-sm">
+                                        <img src="/assets/icons/printer.png" width="14" height="14"
+                                            alt="Up">
+                                        <span>Print Bill</span>
+                                    </button>
+                                    </div>
+                                    <div class="col-span-1">
+                                    <button type="button" wire:click="openSplitBill"
+                                        class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm">
+                                        <svg width="14" height="14" viewBox="0 0 64 64" fill="none"
+                                            stroke="currentColor" stroke-width="5" stroke-linecap="round"
+                                            stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="12" y="8" width="40" height="48" rx="4"
+                                                ry="4" />
+
+                                            <polyline points="20 18 25 23 32 16" />
+                                            <polyline points="20 28 25 33 32 26" />
+                                            <polyline points="20 38 25 43 32 36" />
+
+                                            <line x1="38" y1="18" x2="46" y2="18" />
+                                            <line x1="38" y1="28" x2="46" y2="28" />
+                                            <line x1="38" y1="38" x2="46" y2="38" />
+                                            <line x1="20" y1="48" x2="46" y2="48" />
+                                        </svg>
+                                        Split Bill
+                                    </button>
+                                    </div>
+                                    <div class="col-span-1">
+                                    <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
+                                        class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500
+                                        shadow-sm">
+
+                                        <img src="/assets/icons/dollar-symbol.png" width="12" height="12"
+                                            alt="Payment" class="filter invert">
+
+                                        Payment
+                                    </button>
+                                    </div>
+                            
 
                                     {{-- 2. KONDISI JIKA TAKE AWAY --}}
                                 @elseif ($orderType === 'take_away')
@@ -708,44 +742,7 @@
                             </div>
 
                             {{-- BARIS 2: Hanya Muncul Saat Mengedit Pesanan --}}
-                            @if ($isEditing)
-                                <div class="grid grid-cols-3 w-full divide-x divide-black/20 ">
-                                    <button type="button" wire:click="printBill"
-                                        class="w-full flex items-center justify-center h-10 gap-2  text-white text-xs  bg-brand-500 shadow-sm">
-                                        <img src="/assets/icons/printer.png" width="14" height="14"
-                                            alt="Up">
-                                        <span>Print Bill</span>
-                                    </button>
-                                    <button type="button" wire:click="openSplitBill"
-                                        class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm">
-                                        <svg width="14" height="14" viewBox="0 0 64 64" fill="none"
-                                            stroke="currentColor" stroke-width="5" stroke-linecap="round"
-                                            stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="12" y="8" width="40" height="48" rx="4"
-                                                ry="4" />
-
-                                            <polyline points="20 18 25 23 32 16" />
-                                            <polyline points="20 28 25 33 32 26" />
-                                            <polyline points="20 38 25 43 32 36" />
-
-                                            <line x1="38" y1="18" x2="46" y2="18" />
-                                            <line x1="38" y1="28" x2="46" y2="28" />
-                                            <line x1="38" y1="38" x2="46" y2="38" />
-                                            <line x1="20" y1="48" x2="46" y2="48" />
-                                        </svg>
-                                        Split Bill
-                                    </button>
-                                    <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
-                                        class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500
-                                        shadow-sm">
-
-                                        <img src="/assets/icons/dollar-symbol.png" width="12" height="12"
-                                            alt="Payment" class="filter invert">
-
-                                        Payment
-                                    </button>
-                                </div>
-                            @endif
+                            
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 <div>
     <aside id="sidebar"
-        class="fixed flex flex-col mt-0 top-0 px-0 left-0 bg-[#212C32] text-[#212C32] h-screen z-[9999] shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
+        class="fixed flex flex-col left-0 bg-[#212C32] text-[#212C32] h-screen z-[9999] shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
         x-data="{
             openSubmenus: {},
             init() {
@@ -173,7 +173,7 @@
                         x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
-                        class="ml-3 text-sm font-bold tracking-wide whitespace-nowrap"
+                        class="ml-5 text-sm font-bold tracking-wide whitespace-nowrap"
                         :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white' : 'text-gray-500 group-hover:text-white'">
                         Masuk Kasir
                     </span>
@@ -282,7 +282,7 @@
                                                 ]">
 
                                                 <!-- Icon -->
-                                                <span class="flex items-center justify-center w-8 h-8"
+                                                <span class="flex items-center justify-center w-4 h-4"
                                                     :class="isActive('<?php echo e($item['path']); ?>', <?php echo e(json_encode($item['exact'] ?? false)); ?>) ? 'menu-item-icon-active' : 'menu-item-icon-inactive'">
                                                     <?php echo \App\Helpers\MenuHelper::getIconSvg($item['icon']); ?>
 
