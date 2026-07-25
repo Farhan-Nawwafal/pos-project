@@ -67,7 +67,7 @@
                 .isMobileOpen
         }" 
         <!-- Logo Section -->
-        <div class="pt-1 pb-1 bg-white/10 flex items-center gap-3" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
+        <div class="pt-1 pb-1 bg-brand-500/25 flex items-center gap-3" :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
             'justify-center' :
             'justify-start'">
 
@@ -75,12 +75,12 @@
 
                 <!-- Logo FULL -->
                 <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                    x-transition class="dark:hidden" src="<?php echo e(asset('assets/images/esb-removebg.png')); ?>" alt="Logo"
-                    width="140" />
+                    x-transition class="dark:hidden m-2 "  src="<?php echo e(asset('assets/images/esblogo.png')); ?>" alt="Logo"
+                    width="65" />
 
                 <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                    x-transition class="hidden dark:block" src="<?php echo e(asset('assets/images/esb-removebg.png')); ?>"
-                    alt="Logo" width="140" />
+                    x-transition class="hidden dark:block m-2 " src="<?php echo e(asset('assets/images/esblogo.png')); ?>"
+                    alt="Logo" width="65" />
 
                 <!-- Logo ICON (WAJIB beda file) -->
                 
@@ -169,22 +169,29 @@
                         </svg>
                     </span>
 
+                    
                     <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                         x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
-                        class="ml-6.5 text-sm font-bold tracking-wide whitespace-nowrap"
-                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-gray-400 hover:text-white' : 'text-gray-400 group-hover:text-white hover:text-white'">
-                        Masuk Kasir
+                        class="ml-6.5 text-sm font-bold tracking-wide whitespace-nowrap transition-colors duration-200"
+                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') 
+                            ? 'text-white' 
+                            : 'text-gray-400 hover:text-white group-hover:text-white'">
+                        Table List
                     </span>
 
+                    
                     <div x-show="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) && showTooltip"
-                        x-cloak x-transition:enter="transition ease-out duration-200"
+                        x-cloak 
+                        x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
-                        class="absolute left-[4.5rem] z-[50] px-3 py-2 text-xs font-semibold text-white bg-gray-800 rounded-lg shadow-xl whitespace-nowrap">
-                        Masuk Kasir
-                        <div class="absolute w-2 h-2 bg-gray-500 rotate-45 -left-1 top-2.5"></div>
+                        class="absolute left-[4.5rem] z-[50] px-3 py-2 text-xs font-semibold bg-gray-800 rounded-lg shadow-xl whitespace-nowrap transition-colors duration-200"
+                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') ? 'text-white font-bold' : 'text-gray-300'">
+                        Table List
+                        
+                        <div class="absolute w-2 h-2 bg-gray-800 rotate-45 -left-1 top-2.5"></div>
                     </div>
                 </a>
             </div>
