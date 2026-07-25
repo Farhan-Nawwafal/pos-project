@@ -60,19 +60,19 @@
                 <thead>
                     <tr class="border-b border-gray-200 dark:divide-gray-800 dark:border-gray-800">
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Starting Shift</th>
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Started By</th>
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-right">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Starting Cash</th>
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Ending Shift</th>
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Ended By</th>
                         <th
                             class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-end">
@@ -86,42 +86,60 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $shiftLogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $shifts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $shift): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                         <tr class="hover:bg-gray-200 hover:dark:bg-gray-900">
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-center">
+                            <!-- Starting Shift -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
                                 <p>
-                                    <?php echo e($sl['starting_shift']); ?>
+                                    <?php echo e($shift->started_at ? $shift->started_at->format('d-m-Y H:i:s') : '-'); ?>
 
                                 </p>
                             </td>
-                            </td>
+
+                            <!-- Started By -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
-                                <p><?php echo e($sl['started_by']); ?></p>
+                                <p><?php echo e($shift->startedBy->name ?? 'System'); ?></p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                                <p><?php echo e(number_format((int) $sl['starting_cash'], 0, ',', '.')); ?></p>
+
+                            <!-- Starting Cash -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
+                                <p><?php echo e(number_format(0, 0, ',', '.')); ?></p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-center">
-                                <p><?php echo e($sl['ending_shift']); ?></p>
+
+                            <!-- Ending Shift -->
+                            <td class="px-2 py-2 text-xs font-normal">
+                                <p
+                                    class="<?php echo e($shift->ended_at ? 'text-gray-800 dark:text-white/90' : 'text-yellow-500 dark:text-yellow-400 font-bold'); ?>">
+                                    <?php echo e($shift->ended_at ? $shift->ended_at->format('d-m-Y H:i:s') : '-Currently Open-'); ?>
+
+                                </p>
                             </td>
+
+                            <!-- Ended By -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
-                                <p><?php echo e($sl['ended_by']); ?></p>
+                                <p><?php echo e($shift->endedBy->name ?? '-'); ?></p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                                <p><?php echo e(number_format((int) $sl['expected_cash'], 0, ',', '.')); ?></p>
+
+                            <!-- Expected Cash -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
+                                <p><?php echo e(number_format(0, 0, ',', '.')); ?></p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                                <p><?php echo e(number_format((int) $sl['actual_cash'], 0, ',', '.')); ?></p>
+
+                            <!-- Actual Cash -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
+                                <p><?php echo e(number_format(0, 0, ',', '.')); ?></p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                                <p><?php echo e(number_format((int) $sl['difference_total'], 0, ',', '.')); ?></p>
+
+                            <!-- Difference Total -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
+                                <p><?php echo e(number_format(0, 0, ',', '.')); ?></p>
                             </td>
                         </tr>
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                         <tr>
-                            <td colspan="<?php echo e($canActions ? 10 : 9); ?>" class="px-5 py-10">
-                                <p class="text-center text-sm font-normal text-gray-500 dark:text-gray-400">Transaksi tidak
-                                    ditemukan.</p>
+                            <td colspan="8" class="px-5 py-10">
+                                <p class="text-center text-sm font-normal text-gray-500 dark:text-gray-400">Data shift
+                                    tidak ditemukan.</p>
                             </td>
                         </tr>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -129,4 +147,5 @@
             </table>
         </div>
     </div>
-</div><?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/shift-logs/index.blade.php ENDPATH**/ ?>
+</div>
+<?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/shift-logs/index.blade.php ENDPATH**/ ?>

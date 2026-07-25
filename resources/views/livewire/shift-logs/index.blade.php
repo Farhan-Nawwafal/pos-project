@@ -12,8 +12,8 @@
 
                 <div class="flex flex-col gap-1.5 w-full xl:w-auto">
                     <div class="relative w-full">
-                        <x-common.date-range-picker-shift-log :from="$fromDate" :to="$toDate" wire-from-model="fromDate"
-                            wire-to-model="toDate" class="w-full" />
+                        <x-common.date-range-picker-shift-log :from="$fromDate" :to="$toDate"
+                            wire-from-model="fromDate" wire-to-model="toDate" class="w-full" />
                     </div>
                 </div>
 
@@ -40,19 +40,19 @@
                 <thead>
                     <tr class="border-b border-gray-200 dark:divide-gray-800 dark:border-gray-800">
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-center">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Starting Shift</th>
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Started By</th>
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-right">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Starting Cash</th>
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Ending Shift</th>
                         <th
-                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200">
+                            class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-start ">
                             Ended By</th>
                         <th
                             class="text-xs font-extrabold py-2 px-2 text-gray-900 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 text-end">
@@ -66,41 +66,58 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                    @forelse ($shiftLogs as $sl)
+                    @forelse ($shifts as $shift)
                         <tr class="hover:bg-gray-200 hover:dark:bg-gray-900">
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-center">
+                            <!-- Starting Shift -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
                                 <p>
-                                    {{ $sl['starting_shift'] }}
+                                    {{ $shift->started_at ? $shift->started_at->format('d-m-Y H:i:s') : '-' }}
                                 </p>
                             </td>
-                            </td>
+
+                            <!-- Started By -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $sl['started_by'] }}</p>
+                                <p>{{ $shift->startedBy->name ?? 'System' }}</p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                                <p>{{ number_format((int) $sl['starting_cash'], 0, ',', '.') }}</p>
+
+                            <!-- Starting Cash -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
+                                <p>{{ number_format(0, 0, ',', '.') }}</p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-center">
-                                <p>{{ $sl['ending_shift'] }}</p>
+
+                            <!-- Ending Shift -->
+                            <td class="px-2 py-2 text-xs font-normal">
+                                <p
+                                    class="{{ $shift->ended_at ? 'text-gray-800 dark:text-white/90' : 'text-yellow-500 dark:text-yellow-400 font-bold' }}">
+                                    {{ $shift->ended_at ? $shift->ended_at->format('d-m-Y H:i:s') : '-Currently Open-' }}
+                                </p>
                             </td>
+
+                            <!-- Ended By -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $sl['ended_by'] }}</p>
+                                <p>{{ $shift->endedBy->name ?? '-' }}</p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                                <p>{{ number_format((int) $sl['expected_cash'], 0, ',', '.') }}</p>
+
+                            <!-- Expected Cash -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
+                                <p>{{ number_format(0, 0, ',', '.') }}</p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                                <p>{{ number_format((int) $sl['actual_cash'], 0, ',', '.') }}</p>
+
+                            <!-- Actual Cash -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
+                                <p>{{ number_format(0, 0, ',', '.') }}</p>
                             </td>
-                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-end">
-                                <p>{{ number_format((int) $sl['difference_total'], 0, ',', '.') }}</p>
+
+                            <!-- Difference Total -->
+                            <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
+                                <p>{{ number_format(0, 0, ',', '.') }}</p>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ $canActions ? 10 : 9 }}" class="px-5 py-10">
-                                <p class="text-center text-sm font-normal text-gray-500 dark:text-gray-400">Transaksi tidak
-                                    ditemukan.</p>
+                            <td colspan="8" class="px-5 py-10">
+                                <p class="text-center text-sm font-normal text-gray-500 dark:text-gray-400">Data shift
+                                    tidak ditemukan.</p>
                             </td>
                         </tr>
                     @endforelse
