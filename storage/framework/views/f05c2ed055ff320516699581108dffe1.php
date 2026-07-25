@@ -45,50 +45,57 @@
             </div>
             
             <div class="w-full h-full min-h-0 border border-gray-200 p-3 overflow-hidden">
-    <div class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full">
-        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $this->tables; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-            <?php
-                $tableNumber = (int) filter_var($t['label'], FILTER_SANITIZE_NUMBER_INT);
-                [$min, $max] = explode('-', $tableRange ?? '1-50');
-                $shouldShow = $tableNumber >= (int) $min && $tableNumber <= (int) $max;
-                $status = strtolower($t['status'] ?? 'available');
-            ?>
+                <div class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full ">
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $this->tables; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                        <?php
+                            $tableNumber = (int) filter_var($t['label'], FILTER_SANITIZE_NUMBER_INT);
+                            [$min, $max] = explode('-', $tableRange ?? '1-50');
+                            $shouldShow = $tableNumber >= (int) $min && $tableNumber <= (int) $max;
+                            $status = strtolower($t['status'] ?? 'available');
+                        ?>
 
-            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($shouldShow): ?>
-                <button type="button" wire:click="openSelectTableModal(<?php echo e((int) $t['id']); ?>)"
-                    <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'table-item-'.e($t['id']).'-'.e($status).''; ?>wire:key="table-item-<?php echo e($t['id']); ?>-<?php echo e($status); ?>"
-                    <?php if(in_array($status, ['occupied', 'booked', 'billed']) && isset($t['occupied_at'])): ?> x-data="{
-                        start: new Date('<?php echo e($t['occupied_at']); ?>').getTime(),
-                        display: '00:00',
-                        init() {
-                            setInterval(() => {
-                                let diff = Math.floor((new Date().getTime() - this.start) / 1000);
-                                if (diff < 0) diff = 0;
-                                let h = Math.floor(diff / 3600);
-                                let m = Math.floor((diff % 3600) / 60);
-                                let s = diff % 60;
-                                this.display = (h > 0 ? h.toString().padStart(2, '0') + ':' : '') + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
-                            }, 1000);
-                        }
-                    }" <?php endif; ?>
-                    class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                        'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-square w-full',
-                        'text-[clamp(6px,1.2vw,10px)]', // font ikut menyesuaikan ukuran box
-                        'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' => $status === 'available',
-                        'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' => $status === 'booked',
-                        'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#DD4B39] text-white' => $status === 'occupied',
-                        'bg-green-500 border-green-600 hover:bg-green-600 text-white' => $status === 'billed',
-                    ]); ?>">
-                    <span class="group-hover:scale-110 transition-transform"><?php echo e($t['label']); ?></span>
-                    <span class="font-mono">
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(in_array($status, ['occupied', 'booked', 'billed'])): ?>
-                            <span x-text="display">00:00</span>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($shouldShow): ?>
+                            <?php
+                                $hasTimer = in_array($status, ['occupied', 'booked', 'billed']) && isset($t['occupied_at']);
+                            ?>
+                            <button type="button" wire:click="openSelectTableModal(<?php echo e((int) $t['id']); ?>)"
+                                <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'table-item-'.e($t['id']).''; ?>wire:key="table-item-<?php echo e($t['id']); ?>"
+                                <?php if($hasTimer): ?>
+                                x-data="{
+                                    start: new Date('<?php echo e($t['occupied_at']); ?>').getTime(),
+                                    display: '00:00',
+                                    init() {
+                                        setInterval(() => {
+                                            let diff = Math.floor((new Date().getTime() - this.start) / 1000);
+                                            if (diff < 0) diff = 0;
+                                            let h = Math.floor(diff / 3600);
+                                            let m = Math.floor((diff % 3600) / 60);
+                                            let s = diff % 60;
+                                            this.display = (h > 0 ? h.toString().padStart(2, '0') + ':' : '') + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
+                                        }, 1000);
+                                    }
+                                }"
+                                <?php else: ?>
+                                x-data="{}"
+                                <?php endif; ?>
+                                class="<?php echo \Illuminate\Support\Arr::toCssClasses([
+                                    'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-square w-full',
+                                    'text-[clamp(6px,1.2vw,10px)]', // font ikut menyesuaikan ukuran box
+                                    'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' => $status === 'available',
+                                    'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' => $status === 'booked',
+                                    'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#DD4B39] text-white' => $status === 'occupied',
+                                    'bg-green-500 border-green-600 hover:bg-green-600 text-white' => $status === 'billed',
+                                ]); ?>">
+                                <span class="group-hover:scale-110 transition-transform"><?php echo e($t['label']); ?></span>
+                                <span class="font-mono">
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(in_array($status, ['occupied', 'booked', 'billed'])): ?>
+                                        <span x-text="display">00:00</span>
+                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                                </span>
+                            </button>
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                    </span>
-                </button>
-            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-    </div>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                </div>
 </div>
 
             
@@ -105,28 +112,29 @@
                 
 
                 <!-- Group Keterangan Status (Menghapus gap-x-45 dan pl-40 yang merusak layout) -->
-                <div class="flex flex-wrap items-center gap-50 ml-5">
-                    
-                    <div class="flex items-center gap-2">
+                <div class="flex items-center justify-between gap-x-8 gap-y-3 ml-5 w-full max-w-4xl">
+    
+                    <div class="flex items-center gap-2 shrink-0">
                         <div class="w-4 h-4 bg-[#3C8DBC]"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Available</span>
                     </div>
-                    
-                    <div class="flex items-center gap-2">
+
+                    <div class="flex items-center gap-2 shrink-0">
                         <div class="w-4 h-4 bg-yellow-400"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Booked</span>
                     </div>
-                    
-                    <div class="flex items-center gap-2">
+
+                    <div class="flex items-center gap-2 shrink-0">
                         <div class="w-4 h-4 bg-[#DD4B39]"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Occupied</span>
                     </div>
-                    
-                    <div class="flex items-center gap-2">
+
+                    <div class="flex items-center gap-2 shrink-0">
                         <div class="w-4 h-4 bg-green-500"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Billed</span>
                     </div>
                 </div>
+                
 
             </div>
 </div>
@@ -569,7 +577,7 @@
                         <div class="flex-1 overflow-y-auto custom-scrollbar p-2">
                             <div class="space-y-2">
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $idx => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                                    <div class="flex items-start gap-3" <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'cart-item-'.e($idx).''; ?>wire:key="cart-item-<?php echo e($idx); ?>">
+                                    <div class="flex items-start gap-3" <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'cart-item-'.e($item['variant_id'] ?? $item['product_id'] ?? $idx).''; ?>wire:key="cart-item-<?php echo e($item['variant_id'] ?? $item['product_id'] ?? $idx); ?>">
                                         <div class="w-8 shrink-0 text-center">
                                             <span
                                                 class="text-[10px] font-black text-brand-500 tabular-nums"><?php echo e($item['quantity']); ?></span>
@@ -2466,7 +2474,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             <div class="flex-1 overflow-y-auto  mt-1 custom-scrollbar">
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0): ?>
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $splitBills[$activeSplitTab]['items']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sIdx => $sItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                                        <div class="flex items-center justify-between p-1  rounded-lg">
+                                        <div class="flex items-center justify-between p-1  rounded-lg" <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'split-bill-'.e($activeSplitTab).'-'.e($sItem['variant_id'] ?? $sItem['product_id'] ?? $sIdx).''; ?>wire:key="split-bill-<?php echo e($activeSplitTab); ?>-<?php echo e($sItem['variant_id'] ?? $sItem['product_id'] ?? $sIdx); ?>">
                                             <div class="min-w-0 flex-1">
                                                 <p class="text-[8px]  text-gray-800 dark:text-white uppercase">
                                                     <?php echo e($sItem['name']); ?>

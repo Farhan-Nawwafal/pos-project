@@ -45,7 +45,7 @@
             </div>
             {{-- KONTEN UTAMA (LIST TABLE) --}}
             <div class="w-full h-full min-h-0 border border-gray-200 p-3 overflow-hidden">
-                <div class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full">
+                <div class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full ">
                     @foreach ($this->tables as $t)
                         @php
                             $tableNumber = (int) filter_var($t['label'], FILTER_SANITIZE_NUMBER_INT);
@@ -55,9 +55,13 @@
                         @endphp
 
                         @if ($shouldShow)
+                            @php
+                                $hasTimer = in_array($status, ['occupied', 'booked', 'billed']) && isset($t['occupied_at']);
+                            @endphp
                             <button type="button" wire:click="openSelectTableModal({{ (int) $t['id'] }})"
-                                wire:key="table-item-{{ $t['id'] }}-{{ $status }}"
-                                @if (in_array($status, ['occupied', 'booked', 'billed']) && isset($t['occupied_at'])) x-data="{
+                                wire:key="table-item-{{ $t['id'] }}"
+                                @if ($hasTimer)
+                                x-data="{
                                     start: new Date('{{ $t['occupied_at'] }}').getTime(),
                                     display: '00:00',
                                     init() {
@@ -70,7 +74,10 @@
                                             this.display = (h > 0 ? h.toString().padStart(2, '0') + ':' : '') + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
                                         }, 1000);
                                     }
-                                }" @endif
+                                }"
+                                @else
+                                x-data="{}"
+                                @endif
                                 @class([
                                     'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-square w-full',
                                     'text-[clamp(6px,1.2vw,10px)]', // font ikut menyesuaikan ukuran box
@@ -105,28 +112,29 @@
                 {{-- Waktu --}}
 
                 <!-- Group Keterangan Status (Menghapus gap-x-45 dan pl-40 yang merusak layout) -->
-                <div class="flex flex-wrap items-center gap-50 ml-5">
-                    {{-- Keterangan Status --}}
-                    <div class="flex items-center gap-2">
+                <div class="flex items-center justify-between gap-x-8 gap-y-3 ml-5 w-full max-w-4xl">
+    {{-- Keterangan Status --}}
+                    <div class="flex items-center gap-2 shrink-0">
                         <div class="w-4 h-4 bg-[#3C8DBC]"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Available</span>
                     </div>
-                    
-                    <div class="flex items-center gap-2">
+
+                    <div class="flex items-center gap-2 shrink-0">
                         <div class="w-4 h-4 bg-yellow-400"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Booked</span>
                     </div>
-                    
-                    <div class="flex items-center gap-2">
+
+                    <div class="flex items-center gap-2 shrink-0">
                         <div class="w-4 h-4 bg-[#DD4B39]"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Occupied</span>
                     </div>
-                    
-                    <div class="flex items-center gap-2">
+
+                    <div class="flex items-center gap-2 shrink-0">
                         <div class="w-4 h-4 bg-green-500"></div>
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Billed</span>
                     </div>
                 </div>
+                
 
             </div>
 </div>
@@ -562,7 +570,7 @@
                         <div class="flex-1 overflow-y-auto custom-scrollbar p-2">
                             <div class="space-y-2">
                                 @forelse ($cartItems as $idx => $item)
-                                    <div class="flex items-start gap-3" wire:key="cart-item-{{ $idx }}">
+                                    <div class="flex items-start gap-3" wire:key="cart-item-{{ $item['variant_id'] ?? $item['product_id'] ?? $idx }}">
                                         <div class="w-8 shrink-0 text-center">
                                             <span
                                                 class="text-[10px] font-black text-brand-500 tabular-nums">{{ $item['quantity'] }}</span>
@@ -2219,7 +2227,7 @@
                             <div class="flex-1 overflow-y-auto  mt-1 custom-scrollbar">
                                 @if (isset($splitBills[$activeSplitTab]) && count($splitBills[$activeSplitTab]['items']) > 0)
                                     @foreach ($splitBills[$activeSplitTab]['items'] as $sIdx => $sItem)
-                                        <div class="flex items-center justify-between p-1  rounded-lg">
+                                        <div class="flex items-center justify-between p-1  rounded-lg" wire:key="split-bill-{{ $activeSplitTab }}-{{ $sItem['variant_id'] ?? $sItem['product_id'] ?? $sIdx }}">
                                             <div class="min-w-0 flex-1">
                                                 <p class="text-[8px]  text-gray-800 dark:text-white uppercase">
                                                     {{ $sItem['name'] }}

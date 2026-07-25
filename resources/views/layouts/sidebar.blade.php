@@ -97,7 +97,7 @@
         </div>
 
         @if ($canAccessPos)
-            <div class="pb-0 mt-3" x-data="{ showTooltip: false }"
+            <div class="pb-1 mt-3" x-data="{ showTooltip: false }"
                 x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen || window.innerWidth >= 1024">
 
                 <a href="{{ route('pos.index') }}" wire:navigate @mouseenter="showTooltip = true"
@@ -109,75 +109,75 @@
                 ]">
 
                     <span class="flex items-center justify-center"
-                        :class="isActive('{{ route('pos.index', [], false) }}') ? 'text-white' : 'text-gray-500 '">
-                        <svg width="16" height="16" viewBox="0 0 1488 1206" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Border luar -->
-                        <rect
-                            x="110"
-                            y="110"
-                            width="1267"
-                            height="986"
-                            stroke="white"
-                            stroke-width="70"
-                        />
+                        :class="isActive('{{ route('pos.index', [], false) }}') ? 'text-white' : 'text-gray-500'">
+                        <svg width="14" height="14" viewBox="0 0 1488 1206" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Border luar -->
+                            <rect
+                                x="110"
+                                y="110"
+                                width="1267"
+                                height="986"
+                                stroke="currentColor"
+                                stroke-width="70"
+                            />
 
-                        <!-- Kotak kiri -->
-                        <rect
-                            x="336.5"
-                            y="320.5"
-                            width="566"
-                            height="348"
-                            stroke="white"
-                            stroke-width="70"
-                        />
+                            <!-- Kotak kiri -->
+                            <rect
+                                x="336.5"
+                                y="320.5"
+                                width="566"
+                                height="348"
+                                stroke="currentColor"
+                                stroke-width="70"
+                            />
 
-                        <!-- Sudut kiri atas -->
-                        <rect
-                            width="193"
-                            height="192"
-                            fill="white"
-                        />
+                            <!-- Sudut kiri atas -->
+                            <rect
+                                width="193"
+                                height="192"
+                                fill="currentColor"
+                            />
 
-                        <!-- Sudut kanan atas -->
-                        <rect
-                            x="1295"
-                            width="193"
-                            height="192"
-                            fill="white"
-                        />
+                            <!-- Sudut kanan atas -->
+                            <rect
+                                x="1295"
+                                width="193"
+                                height="192"
+                                fill="currentColor"
+                            />
 
-                        <!-- Sudut kiri bawah -->
-                        <rect
-                            y="1014"
-                            width="193"
-                            height="192"
-                            fill="white"
-                        />
+                            <!-- Sudut kiri bawah -->
+                            <rect
+                                y="1014"
+                                width="193"
+                                height="192"
+                                fill="currentColor"
+                            />
 
-                        <!-- Sudut kanan bawah -->
-                        <rect
-                            x="1295"
-                            y="1014"
-                            width="193"
-                            height="192"
-                            fill="white"
-                        />
+                            <!-- Sudut kanan bawah -->
+                            <rect
+                                x="1295"
+                                y="1014"
+                                width="193"
+                                height="192"
+                                fill="currentColor"
+                            />
 
-                        <!-- Bentuk kanan -->
-                        <path
-                            d="M1171.5 534H904V668H580V907.5H1171.5V534Z"
-                            stroke="white"
-                            stroke-width="43"
-                        />
-                    </svg>
+                            <!-- Bentuk kanan -->
+                            <path
+                                d="M1171.5 534H904V668H580V907.5H1171.5V534Z"
+                                stroke="currentColor"
+                                stroke-width="43"
+                            />
+                        </svg>
                     </span>
 
                     <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
                         x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
-                        class="ml-5 text-sm font-bold tracking-wide whitespace-nowrap"
-                        :class="isActive('{{ route('pos.index', [], false) }}') ? 'text-white' : 'text-gray-500 group-hover:text-white'">
+                        class="ml-6.5 text-sm font-bold tracking-wide whitespace-nowrap"
+                        :class="isActive('{{ route('pos.index', [], false) }}') ? 'text-gray-400 hover:text-white' : 'text-gray-400 group-hover:text-white hover:text-white'">
                         Masuk Kasir
                     </span>
 
