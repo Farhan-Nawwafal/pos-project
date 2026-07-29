@@ -12,8 +12,28 @@
 
                 <div class="flex flex-col gap-1.5 w-full xl:w-auto">
                     <div class="relative w-full">
-                        <x-common.date-range-picker-shift-log :from="$fromDate" :to="$toDate"
-                            wire-from-model="fromDate" wire-to-model="toDate" class="w-full" />
+                        <?php if (isset($component)) { $__componentOriginale1aa5bf8429dc92b5f60f59d2b5c5d73 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginale1aa5bf8429dc92b5f60f59d2b5c5d73 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.common.date-range-picker-shift-log','data' => ['from' => $fromDate,'to' => $toDate,'wireFromModel' => 'fromDate','wireToModel' => 'toDate','class' => 'w-full']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('common.date-range-picker-shift-log'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['from' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($fromDate),'to' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($toDate),'wire-from-model' => 'fromDate','wire-to-model' => 'toDate','class' => 'w-full']); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginale1aa5bf8429dc92b5f60f59d2b5c5d73)): ?>
+<?php $attributes = $__attributesOriginale1aa5bf8429dc92b5f60f59d2b5c5d73; ?>
+<?php unset($__attributesOriginale1aa5bf8429dc92b5f60f59d2b5c5d73); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale1aa5bf8429dc92b5f60f59d2b5c5d73)): ?>
+<?php $component = $__componentOriginale1aa5bf8429dc92b5f60f59d2b5c5d73; ?>
+<?php unset($__componentOriginale1aa5bf8429dc92b5f60f59d2b5c5d73); ?>
+<?php endif; ?>
                     </div>
                 </div>
 
@@ -66,63 +86,66 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                    @forelse ($shifts as $shift)
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $shifts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $shift): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                         <tr class="hover:bg-gray-200 hover:dark:bg-gray-900">
                             <!-- Starting Shift -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
                                 <p>
-                                    {{ $shift->started_at ? $shift->started_at->format('d-m-Y H:i:s') : '-' }}
+                                    <?php echo e($shift->started_at ? $shift->started_at->format('d-m-Y H:i:s') : '-'); ?>
+
                                 </p>
                             </td>
 
                             <!-- Started By -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $shift->startedBy->name ?? 'System' }}</p>
+                                <p><?php echo e($shift->startedBy->name ?? 'System'); ?></p>
                             </td>
 
                             <!-- Starting Cash -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
-                                <p>{{ number_format(0, 0, ',', '.') }}</p>
+                                <p><?php echo e(number_format(0, 0, ',', '.')); ?></p>
                             </td>
 
                             <!-- Ending Shift -->
                             <td class="px-2 py-2 text-xs font-normal">
                                 <p
-                                    class="{{ $shift->ended_at ? 'text-gray-800 dark:text-white/90' : 'text-yellow-500 dark:text-yellow-400 font-bold' }}">
-                                    {{ $shift->ended_at ? $shift->ended_at->format('d-m-Y H:i:s') : '-Currently Open-' }}
+                                    class="<?php echo e($shift->ended_at ? 'text-gray-800 dark:text-white/90' : 'text-yellow-500 dark:text-yellow-400 font-bold'); ?>">
+                                    <?php echo e($shift->ended_at ? $shift->ended_at->format('d-m-Y H:i:s') : '-Currently Open-'); ?>
+
                                 </p>
                             </td>
 
                             <!-- Ended By -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90">
-                                <p>{{ $shift->endedBy->name ?? '-' }}</p>
+                                <p><?php echo e($shift->endedBy->name ?? '-'); ?></p>
                             </td>
 
                             <!-- Expected Cash -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
-                                <p>{{ number_format(0, 0, ',', '.') }}</p>
+                                <p><?php echo e(number_format(0, 0, ',', '.')); ?></p>
                             </td>
 
                             <!-- Actual Cash -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
-                                <p>{{ number_format(0, 0, ',', '.') }}</p>
+                                <p><?php echo e(number_format(0, 0, ',', '.')); ?></p>
                             </td>
 
                             <!-- Difference Total -->
                             <td class="px-2 py-2 text-xs font-normal text-gray-800 dark:text-white/90 text-right">
-                                <p>{{ number_format(0, 0, ',', '.') }}</p>
+                                <p><?php echo e(number_format(0, 0, ',', '.')); ?></p>
                             </td>
                         </tr>
-                    @empty
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                         <tr>
                             <td colspan="8" class="px-5 py-10">
                                 <p class="text-center text-sm font-normal text-gray-500 dark:text-gray-400">Data shift
                                     tidak ditemukan.</p>
                             </td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+<?php /**PATH D:\Shaall\PROJECT\pos-project\resources\views/livewire/shift-logs/index.blade.php ENDPATH**/ ?>

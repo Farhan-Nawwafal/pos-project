@@ -2,20 +2,36 @@
 
 namespace App\Livewire\ShiftLogs;
 
-use Livewire\Component;
+use App\Models\Shift;
 use Carbon\CarbonImmutable;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class ShiftLogsPage extends Component
 {
     use WithPagination;
 
+    public string $title = 'Shift Logs';
+
     public ?string $fromDate = null;
+
     public ?string $toDate = null;
+
     public string $rangePreset = 'today';
 
     // Variabel untuk menangkap ketikan dari search bar
     public string $searchNumber = '';
+
+    // Variabel untuk membatasi jumlah data per halaman
+    public int $perPage = 15;
+
+    public function mount(): void
+    {
+        // Set filter tanggal bawaan ke "Hari Ini" saat halaman pertama kali dibuka
+        $this->setRange('today');
+    }
 
     public function updatedFromDate(): void
     {
@@ -74,79 +90,53 @@ class ShiftLogsPage extends Component
         $this->resetPage();
     }
 
-    public function render()
+    protected function getShiftsQuery(): Builder
     {
-        // DUMMY SEBELUM QUERY
-        $allData = [
-            [
-                'starting_shift' => '13-05-2026 08:07:24',
-                'started_by' => 'KASIR',
-                'starting_cash' => 0,
-                'ending_shift' => '- Currently Open -',
-                'ended_by' => '-',
-                'expected_cash' => null,
-                'actual_cash' => null,
-                'difference_total' => null,
-            ],
-            [
-                'starting_shift' => '12-05-2026 09:34:27',
-                'started_by' => 'Faishal',
-                'starting_cash' => 0,
-                'ending_shift' => '12-05-2026 21:02:14',
-                'ended_by' => 'Faishal',
-                'expected_cash' => 1507700,
-                'actual_cash' => 1507700,
-                'difference_total' => 0,
-            ],
-            [
-                'starting_shift' => '11-05-2026 07:42:51',
-                'started_by' => 'Budi',
-                'starting_cash' => 0,
-                'ending_shift' => '11-05-2026 21:09:06',
-                'ended_by' => 'Budi',
-                'expected_cash' => 1640200,
-                'actual_cash' => 1640200,
-                'difference_total' => 0,
-            ],
-            [
-                'starting_shift' => '10-05-2026 09:21:47',
-                'started_by' => 'KASIR',
-                'starting_cash' => 0,
-                'ending_shift' => '10-05-2026 21:57:14',
-                'ended_by' => 'KASIR',
-                'expected_cash' => 2329700,
-                'actual_cash' => 2329700,
-                'difference_total' => 0,
-            ],
-            [
-                'starting_shift' => '09-05-2026 08:52:10',
-                'started_by' => 'Siti',
-                'starting_cash' => 0,
-                'ending_shift' => '09-05-2026 22:04:25',
-                'ended_by' => 'Siti',
-                'expected_cash' => 1379900,
-                'actual_cash' => 1379900,
-                'difference_total' => 0,
-            ]
-        ];
+        $query = Shift::query()
+            ->with(['startedBy', 'endedBy'])
+            // 1. Filter Wajib: Hanya ambil data sesuai cabang user yang login
+            ->where('cabang_id', auth()->user()->cabang_id);
 
-        // 2. Logika Search/Pencarian
-        $filteredData = $allData;
+        // 2. Filter Tanggal
+        if ($this->fromDate) {
+            $query->whereDate('started_at', '>=', $this->fromDate);
+        }
 
-        if (!empty($this->searchNumber)) {
-            // Ubah inputan menjadi huruf kecil agar pencarian tidak sensitif besar/kecil huruf
-            $search = strtolower($this->searchNumber);
+        if ($this->toDate) {
+            $query->whereDate('started_at', '<=', $this->toDate);
+        }
 
-            $filteredData = array_filter($allData, function ($row) use ($search) {
-                return str_contains(strtolower($row['starting_shift']), $search) ||
-                    str_contains(strtolower($row['ending_shift']), $search) ||
-                    str_contains(strtolower($row['started_by']), $search) ||
-                    str_contains(strtolower($row['ended_by']), $search);
+        // 3. Pencarian Multi-Kolom (Waktu mulai, waktu akhir, nama kasir buka, nama kasir tutup)
+        if (trim($this->searchNumber) !== '') {
+            $term = '%'.trim($this->searchNumber).'%';
+
+            $query->where(function (Builder $q) use ($term) {
+                // Cari di kolom waktu
+                $q->where('started_at', 'like', $term)
+                    ->orWhere('ended_at', 'like', $term)
+
+                  // Cari di tabel user (relasi startedBy)
+                    ->orWhereHas('startedBy', function (Builder $subQ) use ($term) {
+                        $subQ->where('name', 'like', $term);
+                    })
+
+                  // Cari di tabel user (relasi endedBy)
+                    ->orWhereHas('endedBy', function (Builder $subQ) use ($term) {
+                        $subQ->where('name', 'like', $term);
+                    });
             });
         }
 
+        // 4. Urutkan dari shift terbaru
+        return $query->orderBy('started_at', 'desc');
+    }
+
+    public function render(): View
+    {
+        $shifts = $this->getShiftsQuery()->paginate($this->perPage);
+
         return view('livewire.shift-logs.index', [
-            'shiftLogs' => $filteredData
-        ]);
+            'shifts' => $shifts,
+        ])->layout('layouts.app', ['title' => $this->title]);
     }
 }
