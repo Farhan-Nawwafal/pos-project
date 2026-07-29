@@ -17,7 +17,7 @@
                 class="flex lg:hidden items-center justify-center w-8 h-8 text-white rounded-lg hover:bg-white/20 transition-colors"
                 :class="{ 'bg-white/20': $store.sidebar.isMobileOpen }" @click="$store.sidebar.toggleExpanded()"
                 aria-label="Toggle Sidebar">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
@@ -39,7 +39,7 @@
             </div>
             <div class="flex items-center gap-1.5 text-white text-sm shrink-0">
                 <i class="bi bi-exclamation-triangle-fill"></i>
-                <button @click="$store.sidebar.toggleEsbModal()" class="hover:underline text-left truncate max-w-[150px] sm:max-w-none">
+                <button @click="$store.sidebar.toggleEsbModal()" class=" text-left truncate max-w-[150px] sm:max-w-none">
                     ESB Order Notification
                 </button>
             </div>
@@ -47,7 +47,7 @@
 
         <!-- ==================== ZONA TENGAH ==================== -->
         <!-- Notifikasi & Waktu Real-time (Akan mengalir rapi di tengah) -->
-        <div class="flex items-center justify-center gap-2 mx-4 grow overflow-hidden">
+        <div class="flex items-center justify-center gap-3 mx-3 grow overflow-hidden">
             <!-- Order Notification -->
             
 
@@ -57,14 +57,14 @@
 
         <!-- ==================== ZONA KANAN ==================== -->
         <!-- Info Cabang, Role, & Aksi Akun -->
-        <div class="flex items-center gap-1 shrink-0">
+        <div class="flex items-center gap-3 shrink-0">
             <!-- Info Cabang & Role -->
-            <div class="hidden lg:flex items-center gap-1 text-white text-sm">
-                 <i class="bi bi-bell-fill text-white shrink-0 cursor-pointer hover:opacity-80"></i>
+            <div class="hidden lg:flex items-center gap-2 text-white text-xs">
+                 <i class="bi bi-bell-fill text-white shrink-0 cursor-pointer  pr-1.5"></i>
 
             <!-- Live Clock (Akan otomatis disembunyikan di layar HP kecil agar tidak sesak) -->
             <div x-data="{ now: new Date() }" x-init="setInterval(() => now = new Date(), 1000)"
-                class="hidden md:flex items-center gap-2 text-sm text-white shrink-0">
+                class="hidden md:flex items-center gap-1 text-sm text-white shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                     stroke-linejoin="round" class="w-3.5 h-3.5">
@@ -82,7 +82,7 @@
                         {{ auth()->user()->cabang->name ?? '' }}
                     </span>
                 </div>
-                <div class="flex items-center gap-1  pl-2">
+                <div class="flex items-center gap-1">
                     <i class="bi bi-display"></i>
                     <span class="uppercase ">{{ auth()->user()->role }}</span>
                 </div>
@@ -92,10 +92,10 @@
             <form method="POST" action="{{ route('logout') }}" class="flex items-center">
                 @csrf
                 <button type="submit"
-                    class="flex items-center gap-1 text-white/90 hover:text-white text-sm py-1 transition-colors">
+                    class="flex items-center gap-1 text-white/90 hover:text-white text-xs py-1 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
-                        stroke-linejoin="round" class="w-4 h-4">
+                        stroke-linejoin="round" class="w-3 h-3">
                         <path d="M16.5 5.5 A 9 9 0 1 1 7.5 5.5"></path>
                         <line x1="12" y1="4" x2="12" y2="10"></line>
                     </svg>
@@ -106,13 +106,15 @@
             <!-- Profile Dropdown -->
             <div class="relative">
                 <button @click="isProfileOpen = !isProfileOpen" @click.away="isProfileOpen = false"
-                    class="flex items-center gap-1 text-white/90 text-sm font-medium py-1 transition-all">
-                    <img src="/assets/icons/men.png" alt="Profile" class="w-5 h-5  object-cover">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                        stroke-linejoin="round" class="w-3.5 h-3.5 transition-transform duration-200"
-                        :class="isProfileOpen ? 'rotate-180' : ''">
-                        <polyline points="6 9 12 15 18 9"></polyline>
+                    class="flex items-center gap-1 text-white/90 text-xs font-medium py-1 transition-all">
+                    <img src="/assets/icons/men.png" alt="Profile" class="w-3 h-3  object-cover">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-2 h-2">
+                        <!-- Segitiga luar (mengikuti warna teks/Tailwind) -->
+                        <polygon points="12,22 1,3 23,3" fill="currentColor" />
+                        
+                        <!-- Garis & Titik di dalam (selalu berwarna putih) -->
+                        <line x1="12" y1="7" x2="12" y2="13" stroke="white" stroke-width="2" stroke-linecap="round" />
+                        <circle cx="12" cy="16.5" r="1" fill="white" />
                     </svg>
                 </button>
 
@@ -126,11 +128,11 @@
                     class="absolute top-full right-0 mt-2 flex flex-col items-center w-44 bg-[#3C8DBC] border border-white/20 rounded-lg shadow-xl py-1 z-[100000] text-white text-center"
                     style="display: none;">
                     
-                    <div class="px-4 py-2 text-xs border-b border-white/20 w-full font-bold opacity-75">USER PROFILE</div>
-                    <a href="#" class="flex items-center justify-center w-full px-4 py-2 text-sm uppercase hover:bg-white/10 transition-colors">
+                    
+                    <a href="#" class="flex items-center justify-center w-full px-4 py-2 text-xs uppercase transition-colors">
                         <span>{{ auth()->user()->role }}</span>
                     </a>
-                    <a href="#" class="flex items-center justify-center w-full px-4 py-2 text-sm uppercase hover:bg-white/10 transition-colors">
+                    <a href="#" class="flex items-center justify-center w-full px-4 py-2 text-xs uppercase transition-colors">
                         <span>{{ auth()->user()->cabang->name ?? '' }}</span>
                     </a>
                 </div>
