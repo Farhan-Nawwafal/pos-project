@@ -44,7 +44,7 @@
 
             </div>
             {{-- KONTEN UTAMA (LIST TABLE) --}}
-            <div class="w-full h-full min-h-0 border border-gray-200 p-3 overflow-hidden">
+            <div class="w-full h-full min-h-[650px] border border-gray-200 p-3 overflow-hidden">
                 <div class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full ">
                     @foreach ($this->tables as $t)
                         @php
@@ -52,46 +52,53 @@
                             [$min, $max] = explode('-', $tableRange ?? '1-50');
                             $shouldShow = $tableNumber >= (int) $min && $tableNumber <= (int) $max;
                             $status = strtolower($t['status'] ?? 'available');
+                            $hasTimer = in_array($status, ['occupied', 'booked', 'billed']) && !empty($t['occupied_at']);
+                            // Ubah format tanggal agar aman di semua browser (Safari/Chrome/Firefox)
+                            $isoDate = $hasTimer ? date('c', strtotime($t['occupied_at'])) : null;
                         @endphp
 
                         @if ($shouldShow)
-                            @php
-                                $hasTimer = in_array($status, ['occupied', 'booked', 'billed']) && isset($t['occupied_at']);
-                            @endphp
-                            <button type="button" wire:click="openSelectTableModal({{ (int) $t['id'] }})"
+                            <button type="button" 
+                                wire:click.prevent="openSelectTableModal({{ (int) $t['id'] }})"
                                 wire:key="table-item-{{ $t['id'] }}"
-                                @if ($hasTimer)
                                 x-data="{
-                                    start: new Date('{{ $t['occupied_at'] }}').getTime(),
+                                    start: {{ $hasTimer ? "new Date('$isoDate').getTime()" : 'null' }},
                                     display: '00:00',
+                                    timer: null,
                                     init() {
-                                        setInterval(() => {
-                                            let diff = Math.floor((new Date().getTime() - this.start) / 1000);
-                                            if (diff < 0) diff = 0;
-                                            let h = Math.floor(diff / 3600);
-                                            let m = Math.floor((diff % 3600) / 60);
-                                            let s = diff % 60;
-                                            this.display = (h > 0 ? h.toString().padStart(2, '0') + ':' : '') + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0');
-                                        }, 1000);
+                                        if (!this.start) return;
+                                        this.updateTimer();
+                                        // Simpan ke atribut timer agar bisa dibersihkan saat elemen dihancurkan (mencegah leak)
+                                        this.timer = setInterval(() => this.updateTimer(), 1000);
+                                    },
+                                    updateTimer() {
+                                        let diff = Math.floor((new Date().getTime() - this.start) / 1000);
+                                        if (diff < 0) diff = 0;
+                                        let h = Math.floor(diff / 3600);
+                                        let m = Math.floor((diff % 3600) / 60);
+                                        let s = diff % 60;
+                                        this.display = (h > 0 ? h.toString().padStart(2, '0') + ':' : '') + 
+                                                    m.toString().padStart(2, '0') + ':' + 
+                                                    s.toString().padStart(2, '0');
+                                    },
+                                    destroy() {
+                                        if (this.timer) clearInterval(this.timer);
                                     }
                                 }"
-                                @else
-                                x-data="{}"
-                                @endif
                                 @class([
-                                    'flex flex-col items-center justify-center border transition-all shadow-sm group rounded-xs aspect-square w-full',
-                                    'text-[clamp(6px,1.2vw,10px)]', // font ikut menyesuaikan ukuran box
-                                    'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3C8CBC] text-white' => $status === 'available',
+                                    'flex flex-col items-center justify-center border transition-all duration-75 shadow-sm group rounded-xs aspect-square w-full active:scale-95 cursor-pointer select-none',
+                                    'text-[clamp(8px,1.2vw,11px)]',
+                                    'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3479A3] text-white' => $status === 'available',
                                     'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' => $status === 'booked',
-                                    'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#DD4B39] text-white' => $status === 'occupied',
+                                    'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#C23B2A] text-white' => $status === 'occupied',
                                     'bg-green-500 border-green-600 hover:bg-green-600 text-white' => $status === 'billed',
                                 ])>
-                                <span class="group-hover:scale-110 transition-transform">{{ $t['label'] }}</span>
-                                <span class="font-mono">
-                                    @if (in_array($status, ['occupied', 'booked', 'billed']))
-                                        <span x-text="display">00:00</span>
-                                    @endif
-                                </span>
+                                
+                                <span class="font-bold group-hover:scale-105 transition-transform">{{ $t['label'] }}</span>
+                                
+                                @if ($hasTimer)
+                                    <span class="font-mono text-[0.85em] opacity-90" x-text="display">00:00</span>
+                                @endif
                             </button>
                         @endif
                     @endforeach
@@ -718,53 +725,53 @@
                                     </button>
                                     </div>
                                     {{-- 2. KONDISI TAKE AWAY YANG SUDAH DI-SAVE ORDER (EDITING TRANSACTION) --}}
-    @elseif ($orderType === 'take_away' && $editingTransactionId !== null)
-        {{-- Mengisi sisa 2 kolom di baris atas --}}
-        <div class="col-span-2">
-            <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
-                class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    <rect x="3" y="16" width="18" height="6" rx="2" />
-                    <circle cx="17" cy="19" r="1" fill="white" />
-                    <circle cx="20" cy="19" r="1" fill="white" />
-                </svg>
-                <span>Update Order</span>
-            </button>
-        </div>
+                                    @elseif ($orderType === 'take_away' && $editingTransactionId !== null)
+                                        {{-- Mengisi sisa 2 kolom di baris atas --}}
+                                        <div class="col-span-2">
+                                            <button type="button" wire:click="saveAsPending" @disabled(count($cartItems) === 0)
+                                                class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 2v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <rect x="3" y="16" width="18" height="6" rx="2" />
+                                                    <circle cx="17" cy="19" r="1" fill="white" />
+                                                    <circle cx="20" cy="19" r="1" fill="white" />
+                                                </svg>
+                                                <span>Update Order</span>
+                                            </button>
+                                        </div>
 
-        {{-- Baris Bawah: Menampilkan Print Bill, Split Bill, dan Payment --}}
-        <div class="col-span-4 grid grid-cols-3 divide-x divide-black/20 border-t border-black/10">
-            <button type="button" wire:click="printBill"
-                class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm">
-                <img src="/assets/icons/printer.png" width="14" height="14" alt="Print">
-                <span>Print Bill</span>
-            </button>
+                                        {{-- Baris Bawah: Menampilkan Print Bill, Split Bill, dan Payment --}}
+                                        <div class="col-span-4 grid grid-cols-3 divide-x divide-black/20 border-t border-black/10">
+                                            <button type="button" wire:click="printBill"
+                                                class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm">
+                                                <img src="/assets/icons/printer.png" width="14" height="14" alt="Print">
+                                                <span>Print Bill</span>
+                                            </button>
 
-            <button type="button" wire:click="openSplitBill"
-                class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm">
-                <svg width="14" height="14" viewBox="0 0 64 64" fill="none" stroke="currentColor"
-                    stroke-width="5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="12" y="8" width="40" height="48" rx="4" ry="4" />
-                    <polyline points="20 18 25 23 32 16" />
-                    <polyline points="20 28 25 33 32 26" />
-                    <polyline points="20 38 25 43 32 36" />
-                    <line x1="38" y1="18" x2="46" y2="18" />
-                    <line x1="38" y1="28" x2="46" y2="28" />
-                    <line x1="38" y1="38" x2="46" y2="38" />
-                    <line x1="20" y1="48" x2="46" y2="48" />
-                </svg>
-                <span>Split Bill</span>
-            </button>
+                                            <button type="button" wire:click="openSplitBill"
+                                                class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm">
+                                                <svg width="14" height="14" viewBox="0 0 64 64" fill="none" stroke="currentColor"
+                                                    stroke-width="5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="12" y="8" width="40" height="48" rx="4" ry="4" />
+                                                    <polyline points="20 18 25 23 32 16" />
+                                                    <polyline points="20 28 25 33 32 26" />
+                                                    <polyline points="20 38 25 43 32 36" />
+                                                    <line x1="38" y1="18" x2="46" y2="18" />
+                                                    <line x1="38" y1="28" x2="46" y2="28" />
+                                                    <line x1="38" y1="38" x2="46" y2="38" />
+                                                    <line x1="20" y1="48" x2="46" y2="48" />
+                                                </svg>
+                                                <span>Split Bill</span>
+                                            </button>
 
-            <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
-                class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
-                <img src="/assets/icons/dollar-symbol.png" width="12" height="12" alt="Payment"
-                    class="filter invert">
-                <span>Payment</span>
-            </button>
-        </div>
+                                            <button type="button" wire:click="openCheckout" @disabled(count($cartItems) === 0)
+                                                class="w-full flex items-center justify-center h-10 gap-2 text-white text-xs bg-brand-500 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                                                <img src="/assets/icons/dollar-symbol.png" width="12" height="12" alt="Payment"
+                                                    class="filter invert">
+                                                <span>Payment</span>
+                                            </button>
+                                        </div>
 
                                     {{-- 2. KONDISI JIKA TAKE AWAY --}}
                                 @elseif ($orderType === 'take_away')

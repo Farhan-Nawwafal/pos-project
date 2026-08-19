@@ -978,3 +978,10 @@ pre[class*='language-'] {
     margin-right: -60px !important;
   }
 }
+
+/* Kunci halaman agar tidak bisa digeser kanan-kiri pada tablet/iPad */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
