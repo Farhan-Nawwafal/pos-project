@@ -2808,13 +2808,6 @@ class PosPage extends Component
 
     public function updatedCashReceived(): void
     {
-        $isCash = $this->paymentMethod === 'cash';
-        if (! $isCash) {
-            $this->cashChange = 0;
-
-            return;
-        }
-
         $cashReceived = (int) preg_replace('/\D+/', '', (string) ($this->cashReceived ?? '0'));
         $this->cashChange = max(0, $cashReceived - $this->total);
     }
