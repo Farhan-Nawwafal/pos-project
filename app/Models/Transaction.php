@@ -21,6 +21,7 @@ class Transaction extends Model
         'member_id',
         'channel',
         'name',
+        'additional_info',
         'phone',
         'email',
         'order_type',

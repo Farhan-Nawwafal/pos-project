@@ -149,6 +149,8 @@ class PosPage extends Component
 
     public string $orderNotes = '';
 
+    public string $additionalInfo = '';
+
     public ?string $customerPhone = null;
 
     public string $paymentMethod = 'cash';
@@ -239,6 +241,7 @@ class PosPage extends Component
     public ?string $cardBankName = null;
     public ?string $cardAccountName = null;
     public ?string $cardSelfOrderId = null;
+    public bool $cardSubMenuOpen = false;
 
     // --- STATE UNTUK COMPLIMENT PAYMENT METHOD ---
     public bool $complimentModalOpen = false;
@@ -271,15 +274,6 @@ class PosPage extends Component
     public array $selectedVouchers = [];
     public int $voucherListPage = 1;
 
-    public function openQuickService()
-    {
-        $this->showModal = true;
-    }
-
-    public function closeModal()
-    {
-        $this->showModal = false;
-    }
 
     public function mount(): void
     {
@@ -325,6 +319,21 @@ class PosPage extends Component
         }
 
         $this->recalculateTotals();
+    }
+
+    public function openQuickService()
+    {
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+    }
+
+    public function toggleCardSubMenu(): void
+    {
+        $this->cardSubMenuOpen = !$this->cardSubMenuOpen;
     }
 
     public function nextPage()
@@ -1332,22 +1341,37 @@ class PosPage extends Component
     {
         if ($this->cartLocked) {
             $this->dispatch('toast', type: 'error', message: 'Pesanan yang dimuat tidak dapat diubah.');
-
             return;
         }
 
-        if (! isset($this->cartItems[$index])) {
+        if (!isset($this->cartItems[$index])) {
             return;
         }
 
         $qty = (int) ($this->cartItems[$index]['quantity'] ?? 0);
 
-        // Proteksi: Jangan decrement jika quantity sudah 1
         if ($qty <= 1) {
-            return;   // atau bisa tambah toast jika ingin
+            return;
         }
 
+        $item = $this->cartItems[$index];
         $this->cartItems[$index]['quantity'] = $qty - 1;
+
+        // Audit log jika item sudah tersimpan di DB
+        if (isset($item['id']) && $this->editingTransactionId !== null) {
+            activity('deleted_item')
+                ->causedBy(auth()->user())
+                ->withProperties([
+                    'cabang_id' => auth()->user()->cabang_id,
+                    'product'   => $item['name'],
+                    'old_qty'   => $qty,
+                    'new_qty'   => $qty - 1,
+                    'price'     => (int) $item['price'],
+                    'type'      => 'reduced',
+                ])
+                ->log('Mengurangi jumlah item');
+        }
+
         $this->recalculateTotals();
     }
 
@@ -1476,6 +1500,7 @@ class PosPage extends Component
 
         $this->customerName = (string) ($setting->pos_default_customer_name ?? 'Walk-in');
         $this->customerPhone = null;
+        $this->additionalInfo = '';
 
         $this->checkoutStep = 1;
 
@@ -2006,6 +2031,7 @@ class PosPage extends Component
         $this->selectedTableId = $trx->dining_table_id === null ? null : (int) $trx->dining_table_id;
         $this->memberId = $trx->member_id === null ? null : (int) $trx->member_id;
         $this->customerName = (string) $trx->name;
+        $this->additionalInfo = (string) ($trx->additional_info ?? '');
         $this->customerPhone = $trx->phone;
         $this->cartLocked = (string) $trx->channel === 'self_order';
         $this->appliedPromotionId = $trx->promotion_id ? (int) $trx->promotion_id : null;
@@ -2217,6 +2243,7 @@ class PosPage extends Component
                     'promotion_discount_amount' => $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0,
                     'channel' => 'pos',
                     'name' => $finalCustomerName,
+                    'additional_info' => trim($this->additionalInfo) !== '' ? trim($this->additionalInfo) : null,
                     'phone' => $validated['customerPhone'] !== '' ? $validated['customerPhone'] : null,
                     'email' => null,
                     'order_type' => $this->orderType,
@@ -2254,6 +2281,7 @@ class PosPage extends Component
                 $trx->update([
                     'member_id' => $this->memberId,
                     'name' => $finalCustomerName,
+                    'additional_info' => trim($this->additionalInfo) !== '' ? trim($this->additionalInfo) : null,
                     'promotion_id' => $this->appliedPromotionId ?: null,
                     'promotion_discount_amount' => $this->appliedPromotionId ? (int) $this->promotionDiscountAmount : 0,
                     'phone' => $validated['customerPhone'] !== '' ? $validated['customerPhone'] : null,

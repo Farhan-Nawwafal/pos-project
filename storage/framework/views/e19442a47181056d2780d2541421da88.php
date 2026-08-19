@@ -1,14 +1,19 @@
+<?php app("livewire")->forceAssetInjection(); ?><div x-persist="<?php echo e('sidebar'); ?>">
 <div>
     <aside id="sidebar"
         class="fixed flex flex-col left-0 bg-[#212C32] text-[#212C32] h-screen z-[9999] shadow-2xl shadow-black/10 dark:shadow-black/20 overflow-hidden"
         x-data="{
             openSubmenus: {},
+            currentPath: window.location.pathname,
+
             init() {
                 this.initializeActiveMenus();
                 document.addEventListener('livewire:navigated', () => {
+                    this.currentPath = window.location.pathname;
                     this.initializeActiveMenus();
                 });
                 window.addEventListener('popstate', () => {
+                    this.currentPath = window.location.pathname;
                     this.initializeActiveMenus();
                 });
             },
@@ -30,12 +35,9 @@
             toggleSubmenu(groupIndex, itemIndex) {
                 const key = groupIndex + '-' + itemIndex;
                 const newState = !this.openSubmenus[key];
-
-                // Close all other submenus when opening a new one
                 if (newState) {
                     this.openSubmenus = {};
                 }
-
                 this.openSubmenus[key] = newState;
             },
             isSubmenuOpen(groupIndex, itemIndex) {
@@ -44,21 +46,22 @@
             },
             isActive(path, exact = false, exclude = []) {
                 if (path === '/' || path === '') {
-                    return window.location.pathname === '/';
+                    return this.currentPath === '/';
                 }
                 if (Array.isArray(exclude) && exclude.length > 0) {
                     for (const ex of exclude) {
-                        if (typeof ex === 'string' && ex !== '' && window.location.pathname.startsWith(ex)) {
+                        if (typeof ex === 'string' && ex !== '' && this.currentPath.startsWith(ex)) {
                             return false;
                         }
                     }
                 }
                 if (exact) {
-                    return window.location.pathname === path;
+                    return this.currentPath === path;
                 }
-                return window.location.pathname.startsWith(path);
+                return this.currentPath.startsWith(path);
             }
-        }" :class="{
+        }"
+        :class="{
             'lg:w-[50px] lg:translate-x-0': !$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar
                 .isMobileOpen,
             'w-[260px] translate-x-0 lg:w-[260px]': $store.sidebar.isExpanded || $store.sidebar.isHovered || $store
@@ -280,7 +283,7 @@
                                             </div>
                                         <?php else: ?>
                                             <!-- Simple Menu Item -->
-                                            <a href="<?php echo e($item['path']); ?>" wire:navigate 
+                                            <a href="<?php echo e($item['path']); ?>" wire:navigate.hover 
                                                 class="menu-item group w-full flex items-center transition-all duration-300" 
                                                 :class="[
                                                     isActive('<?php echo e($item['path']); ?>', <?php echo e(json_encode($item['exact'] ?? false)); ?>) ? 'menu-item-active' : 'menu-item-inactive',
@@ -519,4 +522,5 @@
         x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
     </div>
+</div>
 </div><?php /**PATH D:\farhan\projects\freelance\pos-restoran-v2\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
