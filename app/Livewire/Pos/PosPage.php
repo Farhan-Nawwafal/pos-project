@@ -274,6 +274,9 @@ class PosPage extends Component
     public array $selectedVouchers = [];
     public int $voucherListPage = 1;
 
+    // Sales List
+    public bool $showSalesList = false;
+
 
     public function mount(): void
     {
@@ -319,6 +322,24 @@ class PosPage extends Component
         }
 
         $this->recalculateTotals();
+    }
+
+    // Tambah method toggle
+    public function toggleSalesList(): void
+    {
+        $this->showSalesList = !$this->showSalesList;
+    }
+
+    // Tambah computed property
+    public function getSalesListProperty()
+    {
+        return Transaction::query()
+            ->with(['diningTable'])
+            ->where('payment_status', 'pending')
+            ->where('order_type', 'dine_in')
+            ->whereNotNull('dining_table_id')
+            ->orderBy('created_at')
+            ->get();
     }
 
     public function openQuickService()
@@ -1801,12 +1822,23 @@ class PosPage extends Component
                 // Hitung ulang totalan sisa tagihan di induk
                 $parentService = (int) round($newParentSubtotal * ($this->serviceRate / 100));
                 $parentTax = (int) round(($newParentSubtotal + $parentService) * ($this->taxRate / 100));
-                $parentTotal = $newParentSubtotal + $parentService + $parentTax;
+                $parentRawTotal = $newParentSubtotal + $parentService + $parentTax;
+
+                // Terapkan rounding yang sama seperti recalculateTotals()
+                if ($this->roundingBase <= 0) {
+                    $parentRounding = 0;
+                    $parentTotal = $parentRawTotal;
+                } else {
+                    $parentRounded = (int) (round($parentRawTotal / $this->roundingBase) * $this->roundingBase);
+                    $parentRounding = $parentRounded - $parentRawTotal;
+                    $parentTotal = $parentRawTotal + $parentRounding;
+                }
 
                 $parentTrx->update([
                     'subtotal' => $newParentSubtotal,
                     'service_amount' => $parentService,
                     'tax_amount' => $parentTax,
+                    'rounding_amount' => $parentRounding,
                     'total' => $parentTotal,
                 ]);
 
@@ -2610,18 +2642,22 @@ class PosPage extends Component
 
     public function printBill(): void
     {
-        // Cek apakah ada transaksi yang sedang diedit (meja terisi/pesanan sudah di-save)
-        if (! $this->editingTransactionId) {
+        if (!$this->editingTransactionId) {
             $this->dispatch('toast', type: 'error', message: 'Pesanan belum disimpan. Silakan klik "Pesan" atau "Simpan" terlebih dahulu.');
             return;
         }
 
-        // Ambil payload cetak menggunakan fungsi internal yang sudah ada di baris 1109
+        // Update status meja ke 'billed' saat Print Bill ditekan
+        if ($this->selectedTableId) {
+            DB::table('dining_tables')
+                ->where('id', $this->selectedTableId)
+                ->where('status', 'occupied')
+                ->update(['status' => 'billed']);
+        }
+
         $payload = $this->buildPrintPayload($this->editingTransactionId);
 
         if ($payload) {
-            // Dispatch event ke frontend untuk memunculkan modal print
-            // Kita gunakan context 'bill_check' supaya printer tahu ini struk sementara, bukan struk lunas
             $this->dispatch('pos-print-modal', payload: $payload, context: 'bill_check');
             $this->dispatch('toast', type: 'success', message: 'Permintaan cetak bill berhasil dikirim.');
         } else {

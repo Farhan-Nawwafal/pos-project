@@ -5,13 +5,12 @@
             class="flex flex-col flex-none  bg-white dark:bg-gray-900 p-5 border border-gray-200 dark:border-gray-800 shadow-sm">
 
             {{-- HEADER SELECTION --}}
-            <!-- Kontainer Induk Baru: Membuat kedua grup elemen sejajar kiri-kanan dan vertikal di tengah -->
             <div class="flex items-center justify-between w-full mb-1 flex-shrink-0">
 
                 <!-- Grup Tombol Menu (Kiri) -->
                 <div class="flex flex-wrap items-center gap-2">
                     <button type="button" wire:click="chooseOrderType('take_away')"
-                        class="px-10 py-4 text-xs uppercase font-bold bg-brand-500 border border-gray-300 rounded-sm text-white ">
+                        class="px-10 py-4 text-xs uppercase font-bold bg-brand-500 border border-gray-300 rounded-sm text-white">
                         Quick Service
                     </button>
 
@@ -31,7 +30,7 @@
                 <!-- Grup Navigasi Halaman (Kanan) -->
                 <div class="flex items-center gap-2">
                     <span class="text-xs text-gray-500">Page 1 of 1</span>
-                    <button type="button"
+                    <button type="button" wire:click="toggleSalesList"
                         class="w-9 h-9 flex items-center justify-center bg-brand-500 text-white rounded">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -45,71 +44,147 @@
                 </div>
 
             </div>
-            {{-- KONTEN UTAMA (LIST TABLE) --}}
+
+            {{-- KONTEN UTAMA --}}
             <div class="w-full h-full min-h-[650px] border border-gray-200 p-3 overflow-hidden">
-                <div
-                    class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full ">
-                    @foreach ($this->tables as $t)
-                        @php
-                            $tableNumber = (int) filter_var($t['label'], FILTER_SANITIZE_NUMBER_INT);
-                            [$min, $max] = explode('-', $tableRange ?? '1-50');
-                            $shouldShow = $tableNumber >= (int) $min && $tableNumber <= (int) $max;
-                            $status = strtolower($t['status'] ?? 'available');
-                            $hasTimer =
-                                in_array($status, ['occupied', 'booked', 'billed']) && !empty($t['occupied_at']);
-                            // Ubah format tanggal agar aman di semua browser (Safari/Chrome/Firefox)
-                            $isoDate = $hasTimer ? date('c', strtotime($t['occupied_at'])) : null;
-                        @endphp
 
-                        @if ($shouldShow)
-                            <button type="button" wire:click.prevent="openSelectTableModal({{ (int) $t['id'] }})"
-                                wire:key="table-item-{{ $t['id'] }}" x-data="{
-                                    start: {{ $hasTimer ? "new Date('$isoDate').getTime()" : 'null' }},
-                                    display: '00:00',
-                                    timer: null,
-                                    init() {
-                                        if (!this.start) return;
-                                        this.updateTimer();
-                                        // Simpan ke atribut timer agar bisa dibersihkan saat elemen dihancurkan (mencegah leak)
-                                        this.timer = setInterval(() => this.updateTimer(), 1000);
-                                    },
-                                    updateTimer() {
-                                        let diff = Math.floor((new Date().getTime() - this.start) / 1000);
-                                        if (diff < 0) diff = 0;
-                                        let h = Math.floor(diff / 3600);
-                                        let m = Math.floor((diff % 3600) / 60);
-                                        let s = diff % 60;
-                                        this.display = (h > 0 ? h.toString().padStart(2, '0') + ':' : '') +
-                                            m.toString().padStart(2, '0') + ':' +
-                                            s.toString().padStart(2, '0');
-                                    },
-                                    destroy() {
-                                        if (this.timer) clearInterval(this.timer);
-                                    }
-                                }"
-                                @class([
-                                    'flex flex-col items-center justify-center border transition-all duration-75 shadow-sm group rounded-xs aspect-square w-full active:scale-95 cursor-pointer select-none',
-                                    'text-[clamp(8px,1.2vw,11px)]',
-                                    'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3479A3] text-white' =>
-                                        $status === 'available',
-                                    'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' =>
-                                        $status === 'booked',
-                                    'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#C23B2A] text-white' =>
-                                        $status === 'occupied',
-                                    'bg-green-500 border-green-600 hover:bg-green-600 text-white' =>
-                                        $status === 'billed',
-                                ])>
+                @if ($showSalesList)
+                    {{-- SALES LIST VIEW --}}
+                    <div class="w-full h-full overflow-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-xs font-extrabold py-2 px-3 text-left text-gray-900 bg-gray-200"
+                                        colspan="7">
+                                        Sales List
+                                    </th>
+                                </tr>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-xs font-extrabold py-2 px-3 text-left text-gray-900 bg-gray-100">
+                                        Transaction Number
+                                    </th>
+                                    <th class="text-xs font-extrabold py-2 px-3 text-left text-gray-900 bg-gray-100">
+                                        Section
+                                    </th>
+                                    <th class="text-xs font-extrabold py-2 px-3 text-left text-gray-900 bg-gray-100">
+                                        Table
+                                    </th>
+                                    <th class="text-xs font-extrabold py-2 px-3 text-center text-gray-900 bg-gray-100">
+                                        Pax Total
+                                    </th>
+                                    <th class="text-xs font-extrabold py-2 px-3 text-left text-gray-900 bg-gray-100">
+                                        Member
+                                    </th>
+                                    <th class="text-xs font-extrabold py-2 px-3 text-left text-gray-900 bg-gray-100">
+                                        Additional Info
+                                    </th>
+                                    <th class="text-xs font-extrabold py-2 px-3 text-right text-gray-900 bg-gray-100">
+                                        Grand Total
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                @forelse($this->salesList as $trx)
+                                    @php
+                                        $tableLabel = $trx->diningTable?->table_number ?? '-';
+                                        $tableNum = (int) filter_var($tableLabel, FILTER_SANITIZE_NUMBER_INT);
+                                        $section = $tableNum >= 1 && $tableNum <= 50 ? '1 - 50' : '51 - 100';
+                                    @endphp
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="text-xs px-3 py-2 text-gray-800 font-mono">
+                                            {{ $trx->code }}
+                                        </td>
+                                        <td class="text-xs px-3 py-2 text-gray-800">
+                                            {{ $section }}
+                                        </td>
+                                        <td class="text-xs px-3 py-2 text-gray-800">
+                                            {{ $tableLabel }}
+                                        </td>
+                                        <td class="text-xs px-3 py-2 text-gray-800 text-center">
+                                            {{ $trx->pax ?? '-' }}
+                                        </td>
+                                        <td class="text-xs px-3 py-2 text-gray-800">
+                                            Non Member
+                                        </td>
+                                        <td class="text-xs px-3 py-2 text-gray-800">
+                                            {{ $trx->additional_info ?? '-' }}
+                                        </td>
+                                        <td class="text-xs px-3 py-2 text-gray-800 text-right">
+                                            Rp{{ number_format((int) $trx->total, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="px-5 py-10 text-center text-sm text-gray-500">
+                                            Tidak ada meja yang sedang aktif.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    {{-- GRID MEJA (DEFAULT) --}}
+                    <div
+                        class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full">
+                        @foreach ($this->tables as $t)
+                            @php
+                                $tableNumber = (int) filter_var($t['label'], FILTER_SANITIZE_NUMBER_INT);
+                                [$min, $max] = explode('-', $tableRange ?? '1-50');
+                                $shouldShow = $tableNumber >= (int) $min && $tableNumber <= (int) $max;
+                                $status = strtolower($t['status'] ?? 'available');
+                                $hasTimer =
+                                    in_array($status, ['occupied', 'booked', 'billed']) && !empty($t['occupied_at']);
+                                $isoDate = $hasTimer ? date('c', strtotime($t['occupied_at'])) : null;
+                            @endphp
 
-                                <span
-                                    class="font-bold group-hover:scale-105 transition-transform">{{ $t['label'] }}</span>
-
-                                @if ($hasTimer)
-                                    <span class="font-mono text-[0.85em] opacity-90" x-text="display">00:00</span>
-                                @endif
-                            </button>
-                        @endif
-                    @endforeach
-                </div>
+                            @if ($shouldShow)
+                                <button type="button" wire:click.prevent="openSelectTableModal({{ (int) $t['id'] }})"
+                                    wire:key="table-item-{{ $t['id'] }}" x-data="{
+                                        start: {{ $hasTimer ? "new Date('$isoDate').getTime()" : 'null' }},
+                                        display: '00:00',
+                                        timer: null,
+                                        init() {
+                                            if (!this.start) return;
+                                            this.updateTimer();
+                                            this.timer = setInterval(() => this.updateTimer(), 1000);
+                                        },
+                                        updateTimer() {
+                                            let diff = Math.floor((new Date().getTime() - this.start) / 1000);
+                                            if (diff < 0) diff = 0;
+                                            let h = Math.floor(diff / 3600);
+                                            let m = Math.floor((diff % 3600) / 60);
+                                            let s = diff % 60;
+                                            this.display = (h > 0 ? h.toString().padStart(2, '0') + ':' : '') +
+                                                m.toString().padStart(2, '0') + ':' +
+                                                s.toString().padStart(2, '0');
+                                        },
+                                        destroy() {
+                                            if (this.timer) clearInterval(this.timer);
+                                        }
+                                    }"
+                                    @class([
+                                        'flex flex-col items-center justify-center border transition-all duration-75 shadow-sm group rounded-xs aspect-square w-full active:scale-95 cursor-pointer select-none',
+                                        'text-[clamp(8px,1.2vw,11px)]',
+                                        'bg-[#3C8CBC] border-[#3C8CBC] hover:bg-[#3479A3] text-white' =>
+                                            $status === 'available',
+                                        'bg-yellow-400 border-yellow-500 hover:bg-yellow-500 text-white' =>
+                                            $status === 'booked',
+                                        'bg-[#DD4B39] border-[#DD4B39] hover:bg-[#C23B2A] text-white' =>
+                                            $status === 'occupied',
+                                        'bg-green-500 border-green-600 hover:bg-green-600 text-white' =>
+                                            $status === 'billed',
+                                    ])>
+                                    <span
+                                        class="font-bold group-hover:scale-105 transition-transform">{{ $t['label'] }}</span>
+                                    @if ($hasTimer)
+                                        <span class="font-mono text-[0.85em] opacity-90" x-text="display">00:00</span>
+                                    @endif
+                                </button>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
             {{-- 3. FOOTER LEGEND --}}

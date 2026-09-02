@@ -17,6 +17,8 @@ class DiningTable extends Model
         'table_number',
         'image',
         'qr_value',
+        'status',
+        'occupied_at',
     ];
 
     protected $casts = [
