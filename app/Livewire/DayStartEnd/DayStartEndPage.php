@@ -44,6 +44,8 @@ class DayStartEndPage extends Component
     public int $pendingSales = 0;
     public int $numberOfBills = 0;
     public int $totalPayment = 0;
+    public int $promotionDiscount = 0;
+    public int $complimentAmount = 0;
 
     /**
      * Report Data
@@ -148,6 +150,19 @@ class DayStartEndPage extends Component
         // Simpan jika nanti diperlukan
         $this->transactions = $transactions;
 
+        /*
+         * Void & Pending (Tambahkan filter hari ini juga)
+         */
+        $this->voidSales = Transaction::where('cabang_id', $this->currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
+            ->whereNotNull('voided_at')
+            ->sum('total');
+
+        $this->pendingSales = Transaction::where('cabang_id', $this->currentUser->cabang_id)
+            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
+            ->where('payment_status', 'pending')
+            ->sum('total');
+
         // Jika belum ada transaksi hari ini
         if ($transactions->isEmpty()) {
             $this->salesTotal = 0;
@@ -162,8 +177,8 @@ class DayStartEndPage extends Component
             $this->pb1 = 0;
             $this->linkedTotal = 0;
             $this->netSales = 0;
-            $this->voidSales = 0;
-            $this->pendingSales = 0;
+            // $this->voidSales = 0;
+            // $this->pendingSales = 0;
             $this->numberOfBills = 0;
 
             return;
@@ -178,6 +193,8 @@ class DayStartEndPage extends Component
         $this->manualDiscount = $transactions->sum('manual_discount_amount');
         $this->voucherDiscount = $transactions->sum('voucher_discount_amount');
         $this->pointDiscount = $transactions->sum('point_discount_amount');
+        $this->promotionDiscount = $transactions->sum('promotion_discount_amount');
+        $this->complimentAmount = $transactions->sum('compliment_amount');
         $this->serviceCharge = $transactions->sum('service_amount');
         $this->tax = $transactions->sum('tax_amount');
         $this->paymentFee = $transactions->sum('payment_fee_amount');
@@ -194,19 +211,6 @@ class DayStartEndPage extends Component
         $this->deliveryCost = 0;
         $this->platformFee = 0;
         $this->linkedTotal = 0;
-
-        /*
-         * Void & Pending (Tambahkan filter hari ini juga)
-         */
-        $this->voidSales = Transaction::where('cabang_id', $this->currentUser->cabang_id)
-            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
-            ->whereNotNull('voided_at')
-            ->sum('total');
-
-        $this->pendingSales = Transaction::where('cabang_id', $this->currentUser->cabang_id)
-            ->whereDate('created_at', Carbon::today()) // <-- Filter Hari Ini
-            ->where('payment_status', 'pending')
-            ->sum('total');
 
         // ===============================
         // Payment Recapitulation
@@ -231,7 +235,7 @@ class DayStartEndPage extends Component
         // ===============================
         // Sales By Menu
         // ===============================
-        // Tidak perlu ditambah whereDate karena id transaksinya ($transactionIds) 
+        // Tidak perlu ditambah whereDate karena id transaksinya ($transactionIds)
         // sudah difilter dari $baseQuery yang hanya mengambil hari ini.
 
         $transactionIds = $transactions->pluck('id');
@@ -352,5 +356,4 @@ class DayStartEndPage extends Component
     {
         return view('components.day-start-end.day-start-end-page');
     }
-
 }
