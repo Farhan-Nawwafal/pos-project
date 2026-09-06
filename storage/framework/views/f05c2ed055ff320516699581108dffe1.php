@@ -44,7 +44,7 @@
 
             </div>
             
-            <div class="w-full h-full min-h-[650px] border border-gray-200 p-3 overflow-hidden">
+            <div class="w-full h-full min-h-[540px] border border-gray-200 p-3 overflow-hidden">
                 <div class="grid grid-cols-10 gap-[16px] sm:gap-[24px] md:gap-[36px] lg:gap-[56px] xl:gap-[72px] h-full ">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $this->tables; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                         <?php
