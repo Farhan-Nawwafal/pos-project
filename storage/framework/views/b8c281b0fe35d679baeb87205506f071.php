@@ -46,7 +46,7 @@
             </div>
 
             
-            <div class="w-full h-full min-h-[650px] border border-gray-200 p-3 overflow-hidden">
+            <div class="w-full h-full min-h-[540px] border border-gray-200 p-3 overflow-hidden">
 
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($showSalesList): ?>
                     
@@ -498,7 +498,7 @@
                     
                     <div class="space-y-2">
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orderType === 'take_away'): ?>
-                            <div class="grid grid-cols-3 w-full gap-1">
+                            <div class="grid grid-cols-3 w-full gap-1 pointer-events-none">
                                 <button type="button"
                                     class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider transition-colors duration-200  ">
                                     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"
@@ -538,9 +538,9 @@
                                     </svg>
                                     Move Item</button>
                             </div>
-                            <div class="grid grid-cols-3 w-full pointer-events-none">
+                            <div class="grid grid-cols-3 w-full">
                                 <button type="button" wire:click="$set('cancelTableModalOpen', true)"
-                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-gray-400 rounded-xs bg-gray-200 shadow-sm text-xs tracking-wider">
+                                    class="w-full h-10 flex items-center justify-center gap-2 font-bold text-white rounded-xs  shadow-sm text-xs tracking-wider bg-[#DD4B39]">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -555,7 +555,7 @@
                                         <line x1="16" y1="5" x2="16" y2="20"></line>
                                     </svg>
 
-                                    Cancel Table
+                                    Cancel Order
                                 </button>
                             </div>
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
