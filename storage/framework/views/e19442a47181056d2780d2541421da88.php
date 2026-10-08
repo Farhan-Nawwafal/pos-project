@@ -86,7 +86,7 @@
                     alt="Logo" width="65" />
 
                 <!-- Logo ICON (WAJIB beda file) -->
-                
+
                 <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
                     x-transition src="<?php echo e(asset('assets/images/logoesb.png')); ?>" alt="Logo Icon" width="40" />
             </a>
@@ -104,7 +104,7 @@
                     @mouseleave="showTooltip = false"
                     class="relative flex items-center w-full px-3 py-1 transition-all duration-300 ease-in-out rounded-xl group focus:outline-none focus:ring-2 focus:ring-offset-2"
                     :class="[
-                    
+
                     (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'justify-center' : 'justify-start'
                 ]">
 
@@ -178,15 +178,15 @@
                         x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
                         class="ml-6.5 text-sm font-bold tracking-wide whitespace-nowrap transition-colors duration-200"
-                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>') 
-                            ? 'text-white' 
+                        :class="isActive('<?php echo e(route('pos.index', [], false)); ?>')
+                            ? 'text-white'
                             : 'text-gray-400 hover:text-white group-hover:text-white'">
                         Table List
                     </span>
 
                     
                     <div x-show="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) && showTooltip"
-                        x-cloak 
+                        x-cloak
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
@@ -234,15 +234,15 @@
                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(isset($item['subItems'])): ?>
                                             <!-- Menu Item with Submenu -->
                                             <button @click="toggleSubmenu(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>)"
-                                                class="menu-item group w-full flex items-center transition-all duration-300" 
+                                                class="menu-item group w-full flex items-center transition-all duration-300"
                                                 :class="[
                                                     isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) ? 'menu-item-active' : 'menu-item-inactive',
-                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 
+                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
                                                     'justify-center px-0' : 'justify-start px-3'
                                                 ]">
 
                                                 <!-- Icon -->
-                                                <span class="flex items-center justify-center w-4 h-4" 
+                                                <span class="flex items-center justify-center w-4 h-4"
                                                     :class="isSubmenuOpen(<?php echo e($groupIndex); ?>, <?php echo e($itemIndex); ?>) ? 'menu-item-icon-active' : 'menu-item-icon-inactive'">
                                                     <?php echo \App\Helpers\MenuHelper::getIconSvg($item['icon']); ?>
 
@@ -283,11 +283,11 @@
                                             </div>
                                         <?php else: ?>
                                             <!-- Simple Menu Item -->
-                                            <a href="<?php echo e($item['path']); ?>" wire:navigate.hover 
-                                                class="menu-item group w-full flex items-center transition-all duration-300" 
+                                            <a href="<?php echo e($item['path']); ?>" wire:navigate.hover
+                                                class="menu-item group w-full flex items-center transition-all duration-300"
                                                 :class="[
                                                     isActive('<?php echo e($item['path']); ?>', <?php echo e(json_encode($item['exact'] ?? false)); ?>) ? 'menu-item-active' : 'menu-item-inactive',
-                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 
+                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
                                                     'justify-center px-0' : 'justify-start px-3'
                                                 ]">
 
@@ -341,38 +341,6 @@
                         </p>
                     </div>
                     
-                </div>
-
-                <!-- END SHIFT BUTTON -->
-                <div class="mt-3 px-3">
-                    
-                            <button type="button" wire:click="processEndShift"
-                                wire:confirm="Yakin ingin menutup shift? Laporan akan dicetak dan Anda akan keluar dari aplikasi."
-                                class="relative group w-full flex items-center justify-center gap-1 py-2 px-1 text-sm font-semibold text-orange-600  rounded-lg transition-colors dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/30 dark:hover:bg-orange-500/20"
-                                x-data="{ showTooltip: false }" @mouseenter="showTooltip = true"
-                                @mouseleave="showTooltip = false">
-
-                                <svg class="w-4 h-4 flex-shrink-0" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-
-                                <span
-                                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                                    x-transition:enter="transition ease-out duration-300"
-                                    x-transition:enter-start="opacity-0 translate-x-1"
-                                    x-transition:enter-end="opacity-100 translate-x-0" class="whitespace-nowrap">Tutup
-                                    Shift</span>
-
-                                <!-- Tooltip for collapsed state -->
-                                <div x-show="showTooltip && !($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
-                                    x-transition:enter="transition ease-out duration-200"
-                                    x-transition:enter-start="opacity-0 translate-y-1"
-                                    x-transition:enter-end="opacity-100 translate-y-0"
-                                    class="absolute left-full ml-2 z-[50] px-3 py-2 text-xs font-semibold text-white bg-gray-800 rounded-lg shadow-xl whitespace-nowrap">
-                                    Tutup Shift
-                                    <div class="absolute w-2 h-2 bg-gray-800 -left-1 top-2 rotate-45"></div>
-                                </div>
-                            </button>
                 </div>
 
                 
@@ -478,33 +446,7 @@
         <?php
             $canGuides = auth()->user()?->can('guides.view') ?? false;
         ?>
-        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($canGuides): ?>
-            <div x-cloak x-show="$store.sidebar.isExpanded || $store.sidebar.isMobileOpen"
-                class="mx-auto mb-6 mt-4 w-full max-w-60 rounded-2xl border border-gray-200 bg-white px-4 py-5 dark:border-gray-800 dark:bg-white/[0.03]">
-                <div class="flex flex-col items-center justify-center gap-3 text-center">
-                    <span
-                        class="mt-0.5 hidden md:inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white">
-                        <svg class="h-1 w-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" />
-                        </svg>
-                    </span>
-                    <div class="min-w-0">
-                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-                            Butuh panduan cepat?
-                        </h3>
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                            Baca buku panduan untuk memahami penggunaan aplikasi.
-                        </p>
-                    </div>
-                </div>
-
-                <a href="<?php echo e(route('guides.index')); ?>" wire:navigate
-                    class="bg-brand-500 text-theme-sm hover:bg-brand-600 mt-4 flex items-center justify-center rounded-lg p-3 font-medium text-white">
-                    Buka Buku Panduan
-                </a>
-            </div>
-        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+        
     </aside>
 
     <div x-show="($store.sidebar.isExpanded || $store.sidebar.isMobileOpen) && window.innerWidth < 1024"
@@ -523,4 +465,5 @@
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
     </div>
 </div>
-</div><?php /**PATH D:\farhan\projects\freelance\pos-restoran-v2\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>
+</div>
+<?php /**PATH D:\farhan\projects\freelance\pos-restoran-v2\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>

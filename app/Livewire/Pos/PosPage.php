@@ -339,7 +339,19 @@ class PosPage extends Component
             ->where('order_type', 'dine_in')
             ->whereNotNull('dining_table_id')
             ->orderBy('created_at')
-            ->get();
+            ->get()
+            ->filter(function ($trx) {
+                $tableLabel = $trx->diningTable?->table_number ?? '';
+                $tableNum = (int) filter_var($tableLabel, FILTER_SANITIZE_NUMBER_INT);
+                [$min, $max] = explode('-', $this->tableRange ?? '1-50');
+                return $tableNum >= (int) $min && $tableNum <= (int) $max;
+            });
+    }
+
+    public function selectFromSalesList(int $transactionId): void
+    {
+        $this->showSalesList = false; // Tutup sales list view
+        $this->loadPending($transactionId);
     }
 
     public function openQuickService()

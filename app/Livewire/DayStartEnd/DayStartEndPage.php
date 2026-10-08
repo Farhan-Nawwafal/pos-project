@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Livewire\Attributes\On;
 
 class DayStartEndPage extends Component
 {
@@ -46,7 +47,13 @@ class DayStartEndPage extends Component
     public int $totalPayment = 0;
     public int $promotionDiscount = 0;
     public int $complimentAmount = 0;
+    public bool $isDayClosed = false;
+    public bool $showEndDayConfirm = false;
 
+    protected $listeners = [
+        'onEndDayPrintSuccess' => 'onEndDayPrintSuccess',
+        'onEndDayPrintFailed'  => 'onEndDayPrintFailed',
+    ];
     /**
      * Report Data
      */
@@ -108,7 +115,128 @@ class DayStartEndPage extends Component
 
         // sementara tanpa cek shift
         $this->calculateRecapitulation();
+        $this->checkDayClosed();
     }
+
+    public function checkDayClosed(): void
+    {
+        $this->isDayClosed = \App\Models\DayClosing::where('cabang_id', $this->currentUser->cabang_id)
+            ->where('closing_date', Carbon::today()->toDateString())
+            ->exists();
+    }
+
+    public function confirmEndDay(): void
+    {
+        if ($this->isDayClosed) {
+            $this->dispatch('endday-error', message: 'Hari ini sudah pernah di-End Day.');
+            return;
+        }
+
+        // Auto-close shift yang sudah lewat hari ini
+        \App\Models\Shift::where('cabang_id', $this->currentUser->cabang_id)
+            ->where('status', 'open')
+            ->whereDate('started_at', '<', Carbon::today()) // shift BUKAN hari ini
+            ->update([
+                'status'             => 'closed',
+                'ended_at'           => now(),
+                'ended_by_user_id'   => Auth::id(),
+            ]);
+
+        // Cek ulang, hanya shift hari ini
+        $openShift = \App\Models\Shift::where('cabang_id', $this->currentUser->cabang_id)
+            ->where('status', 'open')
+            ->whereDate('started_at', Carbon::today())
+            ->exists();
+
+        if ($openShift) {
+            $this->dispatch('endday-error', message: 'Masih ada shift hari ini yang belum ditutup. Lakukan End Shift terlebih dahulu.');
+            return;
+        }
+
+        $this->dispatch('endday-trigger-print', payload: $this->buildEndDayPayload());
+        $this->showEndDayConfirm = true;
+    }
+
+    /**
+     * Dipanggil dari JS setelah print BERHASIL.
+     */
+    #[On('onEndDayPrintSuccess')]
+    public function onEndDayPrintSuccess(): void
+    {
+        if ($this->isDayClosed) {
+            return;
+        }
+
+        \App\Models\DayClosing::create([
+            'cabang_id'         => $this->currentUser->cabang_id,
+            'closed_by_user_id' => Auth::id(),
+            'closing_date'      => Carbon::today()->toDateString(),
+            'closed_at'         => now(),
+            'total_net_sales'   => $this->netSales,
+            'total_bills'       => $this->numberOfBills,
+        ]);
+
+        $this->isDayClosed = true;
+        $this->showEndDayConfirm = false;
+
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+
+        $this->redirect(route('signin'), navigate: false);
+    }
+
+    /**
+     * Dipanggil dari JS jika print GAGAL.
+     */
+    #[On('onEndDayPrintFailed')]
+    public function onEndDayPrintFailed(string $reason = ''): void
+    {
+        $this->showEndDayConfirm = false;
+        $this->dispatch('endday-error', message: 'Cetak gagal: ' . ($reason ?: 'Printer tidak terhubung. End Day dibatalkan.'));
+    }
+
+    public function cancelEndDay(): void
+    {
+        $this->showEndDayConfirm = false;
+    }
+
+    /**
+     * Build data struk End Day untuk dikirim ke JS/printer.
+     */
+    private function buildEndDayPayload(): array
+    {
+        $setting = \App\Models\Setting::first(); // sesuaikan dengan model Setting kamu
+
+        return [
+            'store' => [
+                'name'    => $setting?->store_name ?? config('app.name'),
+                'address' => $setting?->address ?? '',
+                'phone'   => $setting?->phone ?? '',
+            ],
+            'closing' => [
+                'date'          => Carbon::today()->format('d-m-Y'),
+                'time'          => now()->format('H:i:s'),
+                'closed_by'     => $this->currentUser->name,
+                'outlet'        => $this->currentUser->cabang?->name ?? '-',
+                'net_sales'     => $this->netSales,
+                'total_bills'   => $this->numberOfBills,
+                'sales_total'   => $this->salesTotal,
+                'discount'      => $this->discount,
+                'service_charge' => $this->serviceCharge,
+                'tax'           => $this->tax,
+                'void_sales'    => $this->voidSales,
+            ],
+            'payment_recaps' => $this->paymentRecaps
+                ->map(fn($p) => [
+                    'method' => strtoupper($p->payment_method ?? '-'),
+                    'amount' => $p->total_amount,
+                ])
+                ->values()
+                ->toArray(),
+        ];
+    }
+
     public function endShift()
     {
         if (!$this->currentShift || $this->currentShift->status !== 'open') {

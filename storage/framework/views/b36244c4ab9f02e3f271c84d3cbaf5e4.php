@@ -22,17 +22,24 @@
                 </svg>
                 Print Shift Out
             </a>
-            <button type="button"
-                class="flex items-center gap-1.5 px-4 py-2 bg-[#428bca] hover:bg-[#3071a9] text-white text-xs font-semibold rounded transition-colors">
+            <button
+                type="button"
+                wire:click="confirmEndDay"
+                <?php if($isDayClosed): echo 'disabled'; endif; ?>
+                class="flex items-center gap-1.5 px-4 py-2 text-white text-xs font-semibold rounded transition-colors
+                    <?php echo e($isDayClosed ? 'bg-gray-400 cursor-not-allowed opacity-60' : 'bg-[#d9534f] hover:bg-[#c9302c]'); ?>">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                End Day
+                <?php echo e($isDayClosed ? 'Day Closed' : 'End Day'); ?>
+
             </button>
         </div>
     </div>
+
+
 
     
     <div class="px-4 pt-4 pb-2">
@@ -439,5 +446,292 @@
         </table>
     </div>
 
+
+<?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($showEndDayConfirm): ?>
+    <template x-teleport="<?php echo e('body'); ?>">
+        <div class="fixed inset-0 z-[100035] flex items-center justify-center p-4"
+             <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::$currentLoop['key'] = 'endday-modal'; ?>wire:key="endday-modal">
+            <div class="absolute inset-0 bg-black/40" wire:click="cancelEndDay"></div>
+
+            <div class="relative bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+
+                
+                <div class="bg-red-600 px-5 py-3 text-white">
+                    <h3 class="text-base font-bold tracking-wide">Konfirmasi End Day</h3>
+                </div>
+
+                
+                <div class="p-6">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-2">
+                                Sistem akan <strong>mencetak struk penutupan</strong> hari ini via printer Bluetooth.
+                            </p>
+                            <p class="text-sm text-red-600 font-semibold">
+                                ⚠ Setelah cetak berhasil, Anda akan otomatis <strong>logout</strong>
+                                dan transaksi baru tidak bisa masuk hari ini.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="endday-print-status"
+                        class="hidden mb-4 p-3 rounded text-sm text-center font-medium bg-blue-50 text-blue-700">
+                        Mengirim ke printer...
+                    </div>
+                </div>
+
+                
+                <div class="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-200 bg-gray-50">
+                    <button
+                        wire:click="cancelEndDay"
+                        class="h-9 px-5 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold rounded transition active:scale-95">
+                        ✖ Batal
+                    </button>
+                    <button
+                        id="endday-print-btn"
+                        onclick="handleEndDayPrint()"
+                        class="h-9 px-5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                        🖨 Cetak & End Day
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+
+<div
+    x-data="{ show: false, message: '' }"
+    x-on:endday-error.window="
+        message = $event.detail[0]?.message ?? $event.detail.message ?? 'Terjadi kesalahan';
+        show = true;
+        setTimeout(() => show = false, 5000)
+    "
+    x-show="show"
+    x-transition
+    class="fixed bottom-6 right-6 z-50 bg-red-600 text-white text-sm px-5 py-3 rounded-lg shadow-lg max-w-sm"
+    style="display:none;">
+    <span x-text="message"></span>
 </div>
+
+
+<script>
+async function handleEndDayPrint() {
+    const btn    = document.getElementById('endday-print-btn');
+    const status = document.getElementById('endday-print-status');
+
+    if (!btn) return;
+
+    // Disable tombol supaya tidak diklik dua kali
+    btn.disabled = true;
+    status.classList.remove('hidden');
+    status.textContent = 'Menghubungkan ke printer...';
+
+    try {
+        // 1. Ambil printer kasir dari PrinterManager
+        const kasirRole = _getKasirRole();
+        if (!kasirRole) {
+            throw new Error('Printer kasir belum dikonfigurasi.');
+        }
+
+        // 2. Pastikan printer siap
+        if (!window.PrinterManager?.isPrinterReady(kasirRole)) {
+            status.textContent = 'Menyambungkan printer...';
+            const reconnected = await window.PrinterManager?.reconnectRole(kasirRole);
+            if (!reconnected) {
+                throw new Error('Printer kasir tidak bisa terhubung. Pastikan printer menyala dan dekat.');
+            }
+        }
+
+        // 3. Generate data struk End Day
+        status.textContent = 'Mencetak struk...';
+        const payload = _getEndDayPayload();
+        const receiptData = _buildEndDayReceipt(payload);
+
+        // 4. Kirim ke PrintQueue dan tunggu selesai
+        await _printAndWait(kasirRole, receiptData);
+
+        // 5. Print sukses → beritahu Livewire
+        status.textContent = '✅ Berhasil! Logging out...';
+        status.classList.remove('bg-blue-50', 'text-blue-700');
+        status.classList.add('bg-green-50', 'text-green-700');
+
+        // Beri jeda sebentar supaya kasir bisa lihat status
+        await new Promise(r => setTimeout(r, 1200));
+
+        Livewire.dispatch('onEndDayPrintSuccess');
+
+    } catch (err) {
+        console.error('[EndDay] Print error:', err);
+        btn.disabled = false;
+        status.classList.remove('hidden', 'bg-blue-50', 'text-blue-700');
+        status.classList.add('bg-red-50', 'text-red-700');
+        status.textContent = '❌ ' + (err.message || 'Cetak gagal.');
+
+        // Beritahu Livewire gagal → modal ditutup, toast muncul
+        Livewire.dispatch('onEndDayPrintFailed', { reason: err.message || '' });
+    }
+}
+
+/**
+ * Ambil payload yang sudah di-dispatch dari Livewire (disimpan sementara di window).
+ */
+function _getEndDayPayload() {
+    return window._endDayPayload || {};
+}
+
+/**
+ * Cari role printer kasir dari PrinterManager.
+ */
+function _getKasirRole() {
+    const sources = window.PrinterManager?.sources || [];
+    const kasirSource = sources.find(s => String(s.type).toLowerCase() === 'kasir');
+    return kasirSource ? kasirSource.role : null;
+}
+
+/**
+ * Build ESC/POS bytes untuk struk End Day.
+ * Pakai ReceiptTemplates pattern yang sudah ada di project.
+ */
+function _buildEndDayReceipt(payload) {
+    // Karena ReceiptTemplates.customerCopy butuh format order tertentu,
+    // kita pakai raw ESC/POS langsung untuk End Day
+    const lines = [];
+    const c = payload.closing || {};
+    const store = payload.store || {};
+
+    const center = (text, width = 32) => {
+        const pad = Math.max(0, Math.floor((width - text.length) / 2));
+        return ' '.repeat(pad) + text;
+    };
+    const line = (left, right, width = 32) => {
+        const gap = Math.max(1, width - left.length - right.length);
+        return left + ' '.repeat(gap) + right;
+    };
+    const divider = '-'.repeat(32);
+
+    const encode = (text) => new TextEncoder().encode(text + '\n');
+
+    const ESC = 0x1B;
+    const GS  = 0x1D;
+
+    // ESC/POS commands
+    const INIT       = new Uint8Array([ESC, 0x40]);
+    const ALIGN_C    = new Uint8Array([ESC, 0x61, 0x01]);
+    const ALIGN_L    = new Uint8Array([ESC, 0x61, 0x00]);
+    const BOLD_ON    = new Uint8Array([ESC, 0x45, 0x01]);
+    const BOLD_OFF   = new Uint8Array([ESC, 0x45, 0x00]);
+    const SIZE_BIG   = new Uint8Array([GS,  0x21, 0x11]);
+    const SIZE_NORM  = new Uint8Array([GS,  0x21, 0x00]);
+    const FEED_CUT   = new Uint8Array([ESC, 0x64, 0x05, GS, 0x56, 0x41, 0x10]);
+
+    const fmt = (n) => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+
+    const chunks = [
+        INIT,
+        ALIGN_C, SIZE_BIG, BOLD_ON,
+        encode(store.name || 'END OF DAY'),
+        SIZE_NORM, BOLD_OFF,
+        encode(store.address || ''),
+        encode(store.phone || ''),
+        ALIGN_L,
+        encode(divider),
+        BOLD_ON, encode('LAPORAN PENUTUPAN HARI'), BOLD_OFF,
+        encode(divider),
+        encode(line('Tanggal', c.date || '')),
+        encode(line('Waktu',   c.time || '')),
+        encode(line('Kasir',   c.closed_by || '')),
+        encode(line('Outlet',  c.outlet || '')),
+        encode(divider),
+        BOLD_ON, encode('REKAP PENJUALAN'), BOLD_OFF,
+        encode(line('Sales Total',    fmt(c.sales_total))),
+        encode(line('Diskon',         fmt(c.discount))),
+        encode(line('Service Charge', fmt(c.service_charge))),
+        encode(line('Pajak',          fmt(c.tax))),
+        encode(line('Void Sales',     fmt(c.void_sales))),
+        encode(divider),
+        BOLD_ON,
+        encode(line('NET SALES', fmt(c.net_sales))),
+        encode(line('Jumlah Bill', String(c.total_bills || 0))),
+        BOLD_OFF,
+        encode(divider),
+    ];
+
+    // Payment recaps
+    if (Array.isArray(payload.payment_recaps) && payload.payment_recaps.length > 0) {
+        chunks.push(BOLD_ON, encode('METODE PEMBAYARAN'), BOLD_OFF);
+        payload.payment_recaps.forEach(p => {
+            chunks.push(encode(line(p.method || '-', fmt(p.amount))));
+        });
+        chunks.push(encode(divider));
+    }
+
+    chunks.push(
+        ALIGN_C,
+        encode(''),
+        encode('*** END OF DAY ***'),
+        encode('Terima kasih'),
+        encode(''),
+        FEED_CUT
+    );
+
+    // Gabungkan semua chunk jadi satu Uint8Array
+    const total = chunks.reduce((sum, c) => sum + c.length, 0);
+    const result = new Uint8Array(total);
+    let offset = 0;
+    chunks.forEach(c => { result.set(c, offset); offset += c.length; });
+
+    return result;
+}
+
+/**
+ * Tambahkan ke PrintQueue dan tunggu sampai job selesai (resolve/reject).
+ */
+function _printAndWait(printerRole, data) {
+    return new Promise((resolve, reject) => {
+        // Listen event sukses/gagal dari PrintQueue
+        // BARU — sesuai PrintQueue
+        const onSuccess = (e) => {
+            if (e.detail?.printerRole !== printerRole) return;
+            cleanup();
+            resolve();
+        };
+        const onFailed = (e) => {
+            if (e.detail?.printerRole !== printerRole) return;
+            cleanup();
+            reject(new Error(e.detail?.message || 'Print gagal'));
+        };
+        const cleanup = () => {
+            window.removeEventListener('printer-job-success', onSuccess);
+            window.removeEventListener('printer-job-failed',  onFailed);
+        };
+
+        window.addEventListener('printer-job-success', onSuccess);
+        window.addEventListener('printer-job-failed',  onFailed);
+
+        // Timeout 30 detik
+        setTimeout(() => {
+            cleanup();
+            reject(new Error('Timeout: printer tidak merespons dalam 30 detik.'));
+        }, 30000);
+
+        window.PrintQueue.add({ printerRole, data });
+    });
+}
+
+// Tangkap payload dari Livewire dispatch
+document.addEventListener('livewire:initialized', () => {
+    Livewire.on('endday-trigger-print', (data) => {
+        window._endDayPayload = Array.isArray(data) ? data[0] : (data?.payload ?? data);
+    });
+});
+</script>
+</div>
+
 <?php /**PATH D:\farhan\projects\freelance\pos-restoran-v2\resources\views/components/day-start-end/day-start-end-page.blade.php ENDPATH**/ ?>

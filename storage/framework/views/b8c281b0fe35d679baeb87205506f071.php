@@ -15,16 +15,16 @@
                     </button>
 
                     <button type="button" wire:click="$set('tableRange', '1-50')" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                        'px-15 py-4 text-xs font-bold rounded-sm transition-all',
-                        'bg-brand-500 text-white border border-brand-600',
-                    ]); ?>">1 -
-                        50</button>
+                        'px-15 py-4 text-xs font-bold rounded-xs transition-all',
+                        'bg-brand-500 text-white border border-brand-600' => $tableRange === '1-50',
+                        'bg-[#3C8DBC] text-white' => $tableRange !== '1-50',
+                    ]); ?>">1 - 50</button>
 
                     <button type="button" wire:click="$set('tableRange', '51-100')" class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                        'px-15 py-4 text-xs font-bold rounded-sm transition-all',
-                        'bg-brand-500 text-white border border-brand-600',
-                    ]); ?>">51 -
-                        100</button>
+                        'px-15 py-4 text-xs font-bold rounded-xs transition-all',
+                        'bg-brand-500 text-white border border-brand-600' => $tableRange === '51-100',
+                        'bg-[#3C8DBC] text-white' => $tableRange !== '51-100',
+                    ]); ?>">51 - 100</button>
                 </div>
 
                 <!-- Grup Navigasi Halaman (Kanan) -->
@@ -90,7 +90,7 @@
                                         $tableNum = (int) filter_var($tableLabel, FILTER_SANITIZE_NUMBER_INT);
                                         $section = $tableNum >= 1 && $tableNum <= 50 ? '1 - 50' : '51 - 100';
                                     ?>
-                                    <tr class="hover:bg-gray-50">
+                                    <tr class="hover:bg-gray-50" wire:click="selectFromSalesList(<?php echo e((int) $trx->id); ?>)">
                                         <td class="text-xs px-3 py-2 text-gray-800 font-mono">
                                             <?php echo e($trx->code); ?>
 
@@ -122,7 +122,7 @@
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                     <tr>
                                         <td colspan="7" class="px-5 py-10 text-center text-sm text-gray-500">
-                                            Tidak ada meja yang sedang aktif.
+                                            Tidak ada meja aktif di range <?php echo e($tableRange); ?>.
                                         </td>
                                     </tr>
                                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>

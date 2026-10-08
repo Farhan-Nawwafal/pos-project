@@ -89,7 +89,7 @@
                     alt="Logo" width="65" />
 
                 <!-- Logo ICON (WAJIB beda file) -->
-                
+
                 <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
                     x-transition src="{{ asset('assets/images/logoesb.png') }}" alt="Logo Icon" width="40" />
             </a>
@@ -107,7 +107,7 @@
                     @mouseleave="showTooltip = false"
                     class="relative flex items-center w-full px-3 py-1 transition-all duration-300 ease-in-out rounded-xl group focus:outline-none focus:ring-2 focus:ring-offset-2"
                     :class="[
-                    
+
                     (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 'justify-center' : 'justify-start'
                 ]">
 
@@ -181,15 +181,15 @@
                         x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
                         class="ml-6.5 text-sm font-bold tracking-wide whitespace-nowrap transition-colors duration-200"
-                        :class="isActive('{{ route('pos.index', [], false) }}') 
-                            ? 'text-white' 
+                        :class="isActive('{{ route('pos.index', [], false) }}')
+                            ? 'text-white'
                             : 'text-gray-400 hover:text-white group-hover:text-white'">
                         Table List
                     </span>
 
                     {{-- Tooltip (Muncul Saat Sidebar Di-collapse) --}}
                     <div x-show="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) && showTooltip"
-                        x-cloak 
+                        x-cloak
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
@@ -237,15 +237,15 @@
                                         @if (isset($item['subItems']))
                                             <!-- Menu Item with Submenu -->
                                             <button @click="toggleSubmenu({{ $groupIndex }}, {{ $itemIndex }})"
-                                                class="menu-item group w-full flex items-center transition-all duration-300" 
+                                                class="menu-item group w-full flex items-center transition-all duration-300"
                                                 :class="[
                                                     isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ? 'menu-item-active' : 'menu-item-inactive',
-                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 
+                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
                                                     'justify-center px-0' : 'justify-start px-3'
                                                 ]">
 
                                                 <!-- Icon -->
-                                                <span class="flex items-center justify-center w-4 h-4" 
+                                                <span class="flex items-center justify-center w-4 h-4"
                                                     :class="isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ? 'menu-item-icon-active' : 'menu-item-icon-inactive'">
                                                     {!! \App\Helpers\MenuHelper::getIconSvg($item['icon']) !!}
                                                 </span>
@@ -283,11 +283,11 @@
                                             </div>
                                         @else
                                             <!-- Simple Menu Item -->
-                                            <a href="{{ $item['path'] }}" wire:navigate.hover 
-                                                class="menu-item group w-full flex items-center transition-all duration-300" 
+                                            <a href="{{ $item['path'] }}" wire:navigate.hover
+                                                class="menu-item group w-full flex items-center transition-all duration-300"
                                                 :class="[
                                                     isActive('{{ $item['path'] }}', {{ json_encode($item['exact'] ?? false) }}) ? 'menu-item-active' : 'menu-item-inactive',
-                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ? 
+                                                    (!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
                                                     'justify-center px-0' : 'justify-start px-3'
                                                 ]">
 
@@ -344,38 +344,6 @@
                                 d="M16 7a4 4 0 11-8 0 4 4 0 01 8 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     </div> --}}
-                </div>
-
-                <!-- END SHIFT BUTTON -->
-                <div class="mt-3 px-3">
-                    {{-- Ubah <a> menjadi <button> dan tambahkan wire:click --}}
-                            <button type="button" wire:click="processEndShift"
-                                wire:confirm="Yakin ingin menutup shift? Laporan akan dicetak dan Anda akan keluar dari aplikasi."
-                                class="relative group w-full flex items-center justify-center gap-1 py-2 px-1 text-sm font-semibold text-orange-600  rounded-lg transition-colors dark:bg-orange-500/10 dark:text-orange-400 dark:border-orange-500/30 dark:hover:bg-orange-500/20"
-                                x-data="{ showTooltip: false }" @mouseenter="showTooltip = true"
-                                @mouseleave="showTooltip = false">
-
-                                <svg class="w-4 h-4 flex-shrink-0" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-
-                                <span
-                                    x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                                    x-transition:enter="transition ease-out duration-300"
-                                    x-transition:enter-start="opacity-0 translate-x-1"
-                                    x-transition:enter-end="opacity-100 translate-x-0" class="whitespace-nowrap">Tutup
-                                    Shift</span>
-
-                                <!-- Tooltip for collapsed state -->
-                                <div x-show="showTooltip && !($store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen)"
-                                    x-transition:enter="transition ease-out duration-200"
-                                    x-transition:enter-start="opacity-0 translate-y-1"
-                                    x-transition:enter-end="opacity-100 translate-y-0"
-                                    class="absolute left-full ml-2 z-[50] px-3 py-2 text-xs font-semibold text-white bg-gray-800 rounded-lg shadow-xl whitespace-nowrap">
-                                    Tutup Shift
-                                    <div class="absolute w-2 h-2 bg-gray-800 -left-1 top-2 rotate-45"></div>
-                                </div>
-                            </button>
                 </div>
 
                 {{-- Pastikan Form Logout ini ada di dalam file yang sama (di bawah) --}}
@@ -481,7 +449,7 @@
         @php
             $canGuides = auth()->user()?->can('guides.view') ?? false;
         @endphp
-        @if ($canGuides)
+        {{-- @if ($canGuides)
             <div x-cloak x-show="$store.sidebar.isExpanded || $store.sidebar.isMobileOpen"
                 class="mx-auto mb-6 mt-4 w-full max-w-60 rounded-2xl border border-gray-200 bg-white px-4 py-5 dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="flex flex-col items-center justify-center gap-3 text-center">
@@ -507,7 +475,7 @@
                     Buka Buku Panduan
                 </a>
             </div>
-        @endif
+        @endif --}}
     </aside>
 
     <div x-show="($store.sidebar.isExpanded || $store.sidebar.isMobileOpen) && window.innerWidth < 1024"

@@ -21,17 +21,19 @@ if (!window.PrintQueue) {
                     const role = job?.printerRole;
                     const meta = {
                         printerRole: role,
-                        bytes: typeof job?.data === 'string' ? job.data.length : null,
+                        bytes:
+                            typeof job?.data === "string"
+                                ? job.data.length
+                                : null,
                         timestamp: new Date().toISOString(),
                     };
-                    console.info('[PrintQueue] add', meta);
-                } catch (e) {
-                }
+                    console.info("[PrintQueue] add", meta);
+                } catch (e) {}
             }
             this.queue.push({
                 ...job,
                 retries: 0,
-                timestamp: Date.now()
+                timestamp: Date.now(),
             });
             this.processNext();
         }
@@ -47,47 +49,65 @@ if (!window.PrintQueue) {
             try {
                 if (window.PRINTER_DEBUG) {
                     try {
-                        console.info('[PrintQueue] processing', {
+                        console.info("[PrintQueue] processing", {
                             printerRole: job?.printerRole,
                             retries: job?.retries ?? 0,
-                            queuedAt: job?.timestamp ? new Date(job.timestamp).toISOString() : null,
+                            queuedAt: job?.timestamp
+                                ? new Date(job.timestamp).toISOString()
+                                : null,
                         });
-                    } catch (e) {
-                    }
+                    } catch (e) {}
                 }
 
-                if (typeof job?.data === 'function') {
+                if (typeof job?.data === "function") {
                     job.data = job.data();
                 }
-                if (job?.data && typeof job.data.then === 'function') {
+                if (job?.data && typeof job.data.then === "function") {
                     job.data = await job.data;
                 }
                 await window.PrinterManager.processJob(job);
+                window.dispatchEvent(
+                    new CustomEvent("printer-job-success", {
+                        detail: { printerRole: job.printerRole },
+                    }),
+                );
             } catch (error) {
-                console.error('[PrintQueue] job failed', error);
-                const message = String(error?.message || '');
-                const code = String(error?.code || '');
-                const name = String(error?.name || '');
+                console.error("[PrintQueue] job failed", error);
+                const message = String(error?.message || "");
+                const code = String(error?.code || "");
+                const name = String(error?.name || "");
                 const isConnectivity =
-                    code === 'MISSING_CONFIG' ||
-                    code === 'PERMISSION_LOST' ||
-                    code === 'AUTO_RECONNECT_LIMIT' ||
-                    message.includes('Bluetooth') ||
-                    message.includes('Printer not connected') ||
-                    message.includes('no longer in range') ||
-                    name === 'NetworkError';
+                    code === "MISSING_CONFIG" ||
+                    code === "PERMISSION_LOST" ||
+                    code === "AUTO_RECONNECT_LIMIT" ||
+                    message.includes("Bluetooth") ||
+                    message.includes("Printer not connected") ||
+                    message.includes("no longer in range") ||
+                    name === "NetworkError";
 
                 if (isConnectivity) {
-                    window.dispatchEvent(new CustomEvent('printer-job-failed', {
-                        detail: { printerRole: job.printerRole, message: message || 'Gagal mencetak karena printer offline.' }
-                    }));
+                    window.dispatchEvent(
+                        new CustomEvent("printer-job-failed", {
+                            detail: {
+                                printerRole: job.printerRole,
+                                message:
+                                    message ||
+                                    "Gagal mencetak karena printer offline.",
+                            },
+                        }),
+                    );
                 } else if (job.retries < this.maxRetries) {
                     job.retries++;
                     this.queue.push(job); // Re-queue at the end (or unshift for immediate retry)
                 } else {
-                    window.dispatchEvent(new CustomEvent('printer-job-failed', {
-                        detail: { printerRole: job.printerRole, message: `Gagal mencetak setelah ${this.maxRetries}x percobaan.` }
-                    }));
+                    window.dispatchEvent(
+                        new CustomEvent("printer-job-failed", {
+                            detail: {
+                                printerRole: job.printerRole,
+                                message: `Gagal mencetak setelah ${this.maxRetries}x percobaan.`,
+                            },
+                        }),
+                    );
                 }
             } finally {
                 this.isProcessing = false;

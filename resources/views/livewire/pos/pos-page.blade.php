@@ -15,16 +15,16 @@
                     </button>
 
                     <button type="button" wire:click="$set('tableRange', '1-50')" @class([
-                        'px-15 py-4 text-xs font-bold rounded-sm transition-all',
-                        'bg-brand-500 text-white border border-brand-600',
-                    ])>1 -
-                        50</button>
+                        'px-15 py-4 text-xs font-bold rounded-xs transition-all',
+                        'bg-brand-500 text-white border border-brand-600' => $tableRange === '1-50',
+                        'bg-[#3C8DBC] text-white' => $tableRange !== '1-50',
+                    ])>1 - 50</button>
 
                     <button type="button" wire:click="$set('tableRange', '51-100')" @class([
-                        'px-15 py-4 text-xs font-bold rounded-sm transition-all',
-                        'bg-brand-500 text-white border border-brand-600',
-                    ])>51 -
-                        100</button>
+                        'px-15 py-4 text-xs font-bold rounded-xs transition-all',
+                        'bg-brand-500 text-white border border-brand-600' => $tableRange === '51-100',
+                        'bg-[#3C8DBC] text-white' => $tableRange !== '51-100',
+                    ])>51 - 100</button>
                 </div>
 
                 <!-- Grup Navigasi Halaman (Kanan) -->
@@ -90,7 +90,7 @@
                                         $tableNum = (int) filter_var($tableLabel, FILTER_SANITIZE_NUMBER_INT);
                                         $section = $tableNum >= 1 && $tableNum <= 50 ? '1 - 50' : '51 - 100';
                                     @endphp
-                                    <tr class="hover:bg-gray-50">
+                                    <tr class="hover:bg-gray-50" wire:click="selectFromSalesList({{ (int) $trx->id }})">
                                         <td class="text-xs px-3 py-2 text-gray-800 font-mono">
                                             {{ $trx->code }}
                                         </td>
@@ -116,7 +116,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="7" class="px-5 py-10 text-center text-sm text-gray-500">
-                                            Tidak ada meja yang sedang aktif.
+                                            Tidak ada meja aktif di range {{ $tableRange }}.
                                         </td>
                                     </tr>
                                 @endforelse
