@@ -4,7 +4,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ReportExcelController;
 use App\Http\Controllers\TableQrController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\ShiftLogController;
+// use App\Http\Controllers\ShiftLogController;
 use App\Http\Middleware\CheckTableNumber;
 use App\Http\Controllers\ShiftReportController;
 use App\Livewire\Auth\InitialSetupPage;
@@ -64,6 +64,7 @@ use App\Livewire\DayStartEnd\DayStartEndPage;
 use App\Livewire\Promotions\PromotionFormPage;
 use App\Livewire\Promotions\PromotionsPage;
 use App\Livewire\Transaction\CancelTableDetailPage;
+use App\Livewire\Reports\VoidReportPage;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -345,6 +346,12 @@ if ($adminDomain !== '') {
             Route::get('/roles/create', RoleForm::class)->middleware('permission:roles.manage')->name('roles.create');
             Route::get('/roles/{role}/edit', RoleForm::class)->middleware('permission:roles.manage')->name('roles.edit');
             Route::get('/cabang', CabangPage::class)->middleware('permission:cabang.view|cabang.manage')->name('cabang.index');
+
+            Route::get('/reports/void', VoidReportPage::class)
+                ->name('reports.void')
+                ->middleware('permission:reports.sales');
+
+            Route::get('/shift-logs', ShiftLogsPage::class)->name('shift-logs.index');
         });
     });
 } else {
@@ -554,6 +561,10 @@ if ($adminDomain !== '') {
             Route::get('/roles/create', RoleForm::class)->middleware('permission:roles.manage')->name('roles.create');
             Route::get('/roles/{role}/edit', RoleForm::class)->middleware('permission:roles.manage')->name('roles.edit');
             Route::get('/cabang', CabangPage::class)->middleware('permission:cabang.view|cabang.manage')->name('cabang.index');
+
+            Route::get('/reports/void', VoidReportPage::class)
+                ->name('reports.void')
+                ->middleware('permission:reports.sales');
 
             Route::get('/shift-logs', ShiftLogsPage::class)->name('shift-logs.index');
         });

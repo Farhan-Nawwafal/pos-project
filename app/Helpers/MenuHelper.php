@@ -151,6 +151,11 @@ class MenuHelper
                         'path' => self::path('reports.member-performance'),
                         'permission' => 'reports.performance',
                     ],
+                    [
+                        'name'       => 'Laporan Void',
+                        'path'       => self::path('reports.void'),
+                        'permission' => 'reports.sales', // atau 'reports.sales' jika mau pakai permission existing
+                    ],
                 ],
             ],
             [

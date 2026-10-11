@@ -116,6 +116,14 @@ class Transaction extends Model
         ];
     }
 
+    /**
+     * Relasi ke User / Kasir yang memproses transaksi
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'payment_processed_by');
+    }
+
     public function cabang()
     {
         return $this->belongsTo(Cabang::class);
@@ -209,5 +217,17 @@ class Transaction extends Model
     public function cardPayment(): HasOne
     {
         return $this->hasOne(CardPayment::class);
+    }
+
+    // Relasi ke user yang melakukan void
+    public function voidedBy(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'voided_by_user_id');
+    }
+
+    // Relasi ke item transaksi — SESUAIKAN nama method & model jika berbeda
+    public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\TransactionItem::class);
     }
 }

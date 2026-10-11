@@ -233,7 +233,7 @@
                             <!-- Menu Items -->
                             <ul class="flex flex-col gap-1 w-full">
                                 @foreach ($menuGroup['items'] as $itemIndex => $item)
-                                    <li class="w-full flex justify-center">
+                                    <li class="w-full flex flex-col justify-center">
                                         @if (isset($item['subItems']))
                                             <!-- Menu Item with Submenu -->
                                             <button @click="toggleSubmenu({{ $groupIndex }}, {{ $itemIndex }})"
@@ -273,10 +273,13 @@
                                                 <ul class="mt-2 space-y-1 ml-9">
                                                     @foreach ($item['subItems'] as $subItem)
                                                         <li>
-                                                            <a href="{{ $subItem['path'] }}" wire:navigate class="menu-dropdown-item"
-                                                                :class="isActive('{{ $subItem['path'] }}', {{ json_encode($subItem['exact'] ?? false) }}, {{ json_encode($subItem['exclude'] ?? []) }}) ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">
-                                                                {{ $subItem['name'] }}
-                                                            </a>
+                                                            <a href="{{ $subItem['path'] }}" wire:navigate
+                                                            class="menu-dropdown-item block w-full transition-colors duration-200 hover:bg-transparent"
+                                                            :class="isActive('{{ $subItem['path'] }}', {{ json_encode($subItem['exact'] ?? false) }}, {{ json_encode($subItem['exclude'] ?? []) }})
+                                                                ? 'menu-dropdown-item-active text-white'
+                                                                : 'menu-dropdown-item-inactive text-gray-400 hover:text-white'">
+                                                            {{ $subItem['name'] }}
+                                                        </a>
                                                         </li>
                                                     @endforeach
                                                 </ul>
