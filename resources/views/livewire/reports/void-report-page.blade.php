@@ -16,12 +16,59 @@
                     </svg>
                 </button>
             </div>
-            <button class="flex items-center gap-2 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                </svg>
-                Ekspor Laporan
-            </button>
+            {{-- ───────────── BUTTON EKSPOR LAPORAN DENGAN DROPDOWN ───────────── --}}
+            <div class="relative" x-data="{ openExport: false }" @click.outside="openExport = false">
+                <button
+                    @click="openExport = !openExport"
+                    type="button"
+                    class="flex items-center gap-2 px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    <span>Ekspor Laporan</span>
+                    <svg class="w-3.5 h-3.5 transition-transform" :class="{ 'rotate-180': openExport }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                {{-- Dropdown Options --}}
+                <div
+                    x-show="openExport"
+                    x-cloak
+                    x-transition:enter="transition ease-out duration-100"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-75"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 py-1.5 z-50 overflow-hidden"
+                >
+                    <button
+                        wire:click="exportPdf"
+                        @click="openExport = false"
+                        type="button"
+                        class="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400 transition-colors text-left"
+                    >
+                        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="font-semibold">Ekspor ke PDF</span>
+                    </button>
+
+                    <button
+                        wire:click="exportExcel"
+                        @click="openExport = false"
+                        type="button"
+                        class="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-left border-t border-gray-100 dark:border-gray-700/60"
+                    >
+                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        </svg>
+                        <span class="font-semibold">Ekspor ke Excel (CSV)</span>
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
             <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -350,7 +397,9 @@
         >
             <option value="">Semua Jenis Order</option>
             @foreach($this->orderTypes as $type)
-                <option value="{{ $type }}">{{ $type }}</option>
+                <option value="{{ $type }}">
+                    {{ $type === 'dine_in' ? 'Dine In' : ($type === 'take_away' ? 'Take Away' : $type) }}
+                </option>
             @endforeach
         </select>
     </div>
@@ -416,7 +465,15 @@
                                 Rp {{ number_format($transaction->subtotal ?? 0, 2, ',', '.') }}
                             </td>
                             <td class="px-4 py-4 whitespace-nowrap text-xs">
-                                <span class="text-teal-500">{{ $transaction->order_type ?? '-' }}</span>
+                                <span class="text-teal-500">
+                                    @if($transaction->order_type === 'dine_in')
+                                        Dine In
+                                    @elseif($transaction->order_type === 'take_away')
+                                        Take Away
+                                    @else
+                                        {{ $transaction->order_type ?? '-' }}
+                                    @endif
+                                </span>
                             </td>
                             <td class="px-4 py-4 whitespace-nowrap text-xs">
                                 @php $meja = $this->getMejaName($transaction) @endphp
@@ -651,8 +708,15 @@
                                     <span>{{ $selectedTransaction->member?->name ?? $selectedTransaction->name ?? '-' }}</span>
 
                                     <span class="text-gray-500 dark:text-gray-400">Tipe Pesanan</span>
-                                    <span class="capitalize">{{ str_replace('_', ' ', $selectedTransaction->order_type ?? '-') }}</span>
-
+                                    <span>
+                                        @if($selectedTransaction->order_type === 'dine_in')
+                                            Dine In
+                                        @elseif($selectedTransaction->order_type === 'take_away')
+                                            Take Away
+                                        @else
+                                            {{ $selectedTransaction->order_type ?? '-' }}
+                                        @endif
+                                    </span>
                                     <span class="text-gray-500 dark:text-gray-400">Jumlah Pax</span>
                                     <span>{{ $selectedTransaction->pax ?? 1 }} Person</span>
                                 </div>
